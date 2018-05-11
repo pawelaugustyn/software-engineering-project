@@ -14,10 +14,11 @@ namespace ScrumIt.Models
         public UserRoles Role { get; set; } = UserRoles.Guest;
         
 
-        public static void LoginAs(string username, string password)
+        public static bool LoginAs(string username, string password)
         {
             var state = AppStateProvider.Instance;
             state.CurrentUser = UserAccess.LoginAs(username, password);
+            return state.CurrentUser.UserId > 0;
         }
         
 

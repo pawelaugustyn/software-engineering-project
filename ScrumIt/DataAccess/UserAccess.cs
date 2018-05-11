@@ -13,6 +13,10 @@ namespace ScrumIt.DataAccess
         public static UserModel LoginAs(string username, string password)
         {
             var currentUser = new UserModel();
+            // W ten sposob robimy polaczenie z baza danych
+            // korzystajac z using zapewniamy, ze wychodzac z tego bloku
+            // wywolamy metode Dispose z klasy Connection, czyli
+            // zamkniemy poprawnie polaczenie
             using (var conn = new Connection())
             {
                 var cmd = new NpgsqlCommand("select * from users where username=@username and pass=@pass limit 1;")

@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Windows.Forms;
-using MaterialSkin;
-using MaterialSkin.Controls;
 using ScrumIt.Models;
 
 namespace ScrumIt.Forms
