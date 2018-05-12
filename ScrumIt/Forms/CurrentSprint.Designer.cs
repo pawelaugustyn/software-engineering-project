@@ -38,19 +38,11 @@ namespace ScrumIt.Forms
             this.historyComboBox = new System.Windows.Forms.ComboBox();
             this.properiesComboBox = new System.Windows.Forms.ComboBox();
             this.scrumBoardPanel = new System.Windows.Forms.Panel();
-            this.taskPanel = new System.Windows.Forms.Panel();
-            this.taskNameTextBox = new MetroFramework.Controls.MetroTextBox();
-            this.userPhotoPictureBox = new System.Windows.Forms.PictureBox();
-            this.taskTimeLabel = new MetroFramework.Controls.MetroLabel();
-            this.taskDescriptionButton = new MetroFramework.Controls.MetroButton();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
             this.button1 = new System.Windows.Forms.Button();
             this.labelTest = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.tableLayoutPanel1.SuspendLayout();
-            this.scrumBoardPanel.SuspendLayout();
-            this.taskPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.userPhotoPictureBox)).BeginInit();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -151,68 +143,13 @@ namespace ScrumIt.Forms
             // 
             // scrumBoardPanel
             // 
-            this.scrumBoardPanel.Controls.Add(this.taskPanel);
-            this.scrumBoardPanel.Location = new System.Drawing.Point(23, 166);
+            this.scrumBoardPanel.AutoScroll = true;
+            this.scrumBoardPanel.Location = new System.Drawing.Point(23, 198);
+            this.scrumBoardPanel.MinimumSize = new System.Drawing.Size(1295, 0);
             this.scrumBoardPanel.Name = "scrumBoardPanel";
-            this.scrumBoardPanel.Size = new System.Drawing.Size(1295, 477);
+            this.scrumBoardPanel.Size = new System.Drawing.Size(1295, 445);
             this.scrumBoardPanel.TabIndex = 3;
             this.scrumBoardPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
-            // 
-            // taskPanel
-            // 
-            this.taskPanel.BackColor = System.Drawing.Color.White;
-            this.taskPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.taskPanel.Controls.Add(this.panel1);
-            this.taskPanel.Controls.Add(this.taskNameTextBox);
-            this.taskPanel.Controls.Add(this.userPhotoPictureBox);
-            this.taskPanel.Controls.Add(this.taskTimeLabel);
-            this.taskPanel.Controls.Add(this.taskDescriptionButton);
-            this.taskPanel.Location = new System.Drawing.Point(21, 64);
-            this.taskPanel.Name = "taskPanel";
-            this.taskPanel.Size = new System.Drawing.Size(384, 79);
-            this.taskPanel.TabIndex = 0;
-            // 
-            // taskNameTextBox
-            // 
-            this.taskNameTextBox.BackColor = System.Drawing.Color.White;
-            this.taskNameTextBox.CustomBackground = true;
-            this.taskNameTextBox.Location = new System.Drawing.Point(85, 3);
-            this.taskNameTextBox.Multiline = true;
-            this.taskNameTextBox.Name = "taskNameTextBox";
-            this.taskNameTextBox.Size = new System.Drawing.Size(270, 68);
-            this.taskNameTextBox.TabIndex = 5;
-            this.taskNameTextBox.Text = "Nazwa tasku ktora moze okazac sie dluuuuuuga";
-            // 
-            // userPhotoPictureBox
-            // 
-            this.userPhotoPictureBox.Image = global::ScrumIt.Properties.Resources.image;
-            this.userPhotoPictureBox.Location = new System.Drawing.Point(13, 3);
-            this.userPhotoPictureBox.Name = "userPhotoPictureBox";
-            this.userPhotoPictureBox.Size = new System.Drawing.Size(66, 68);
-            this.userPhotoPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.userPhotoPictureBox.TabIndex = 4;
-            this.userPhotoPictureBox.TabStop = false;
-            // 
-            // taskTimeLabel
-            // 
-            this.taskTimeLabel.AutoSize = true;
-            this.taskTimeLabel.FontSize = MetroFramework.MetroLabelSize.Small;
-            this.taskTimeLabel.FontWeight = MetroFramework.MetroLabelWeight.Regular;
-            this.taskTimeLabel.Location = new System.Drawing.Point(360, 56);
-            this.taskTimeLabel.Name = "taskTimeLabel";
-            this.taskTimeLabel.Size = new System.Drawing.Size(13, 15);
-            this.taskTimeLabel.TabIndex = 3;
-            this.taskTimeLabel.Text = "5";
-            this.taskTimeLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // taskDescriptionButton
-            // 
-            this.taskDescriptionButton.Location = new System.Drawing.Point(361, 3);
-            this.taskDescriptionButton.Name = "taskDescriptionButton";
-            this.taskDescriptionButton.Size = new System.Drawing.Size(12, 22);
-            this.taskDescriptionButton.TabIndex = 0;
-            this.taskDescriptionButton.Text = "?";
-            this.taskDescriptionButton.Theme = MetroFramework.MetroThemeStyle.Light;
             // 
             // button1
             // 
@@ -235,17 +172,18 @@ namespace ScrumIt.Forms
             // 
             // panel1
             // 
-            this.panel1.BackColor = System.Drawing.Color.Red;
-            this.panel1.Location = new System.Drawing.Point(-1, -1);
+            this.panel1.Location = new System.Drawing.Point(23, 163);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(10, 79);
-            this.panel1.TabIndex = 1;
+            this.panel1.Size = new System.Drawing.Size(1292, 35);
+            this.panel1.TabIndex = 7;
+            this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint_1);
             // 
             // CurrentSprint
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1366, 768);
+            this.Controls.Add(this.panel1);
             this.Controls.Add(this.labelTest);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.scrumBoardPanel);
@@ -254,11 +192,8 @@ namespace ScrumIt.Forms
             this.Name = "CurrentSprint";
             this.Style = MetroFramework.MetroColorStyle.Teal;
             this.Text = "currentSprint";
+            this.Load += new System.EventHandler(this.CurrentSprint_Load);
             this.tableLayoutPanel1.ResumeLayout(false);
-            this.scrumBoardPanel.ResumeLayout(false);
-            this.taskPanel.ResumeLayout(false);
-            this.taskPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.userPhotoPictureBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -273,14 +208,9 @@ namespace ScrumIt.Forms
         private System.Windows.Forms.ComboBox properiesComboBox;
         private System.Windows.Forms.Panel scrumBoardPanel;
         private MetroFramework.Controls.MetroButton addTaskButton;
-        private System.Windows.Forms.Panel taskPanel;
-        private System.Windows.Forms.PictureBox userPhotoPictureBox;
-        private MetroFramework.Controls.MetroLabel taskTimeLabel;
-        private MetroFramework.Controls.MetroButton taskDescriptionButton;
         private System.Windows.Forms.ColorDialog colorDialog1;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label labelTest;
-        private MetroFramework.Controls.MetroTextBox taskNameTextBox;
         private System.Windows.Forms.Panel panel1;
     }
 }
