@@ -1,4 +1,5 @@
-﻿using System.Security.Cryptography;
+﻿using System.Collections.Generic;
+using System.Security.Cryptography;
 using System.Text;
 using Npgsql;
 using ScrumIt.DataAccess;
@@ -34,11 +35,19 @@ namespace ScrumIt.Models
             return UserAccess.GetUserById(userid);
         }
 
-        public static UserModel GetUserByLastName(string lastname)
+        public static List<UserModel> GetUsersByLastName(string lastname)
         {
-            return UserAccess.GetUserByLastName(lastname);
+            return UserAccess.GetUsersByLastName(lastname);
+        }
+        public static UserModel GetUserByLogin(string login)
+        {
+            return UserAccess.GetUserByLogin(login);
         }
 
+        public static List<UserModel> GetUsersByProjectId(int projectid)
+        {
+            return UserAccess.GetUsersByProjectId(projectid);
+        }
     }
 
     public enum UserRoles
