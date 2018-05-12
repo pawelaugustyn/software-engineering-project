@@ -29,7 +29,7 @@ namespace ScrumIt.DataAccess
                 {
                     while (reader.Read())
                     {
-                        currentUser = new UserModel()
+                        currentUser = new UserModel
                         {
                             UserId = (int)reader[0],
                             Username = (string)reader[1],
@@ -42,6 +42,66 @@ namespace ScrumIt.DataAccess
                 }
             }
             return currentUser;
+        }
+
+        public static UserModel GetUserById(int userid)
+        {
+            var user = new UserModel();
+            using (var conn = new Connection())
+            {
+                var cmd = new NpgsqlCommand("select * from users where uid=@uid limit 1;")
+                {
+                    Connection = conn.Conn
+                };
+                cmd.Parameters.AddWithValue("uid", userid);
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        user = new UserModel
+                        {
+                            UserId = (int)reader[0],
+                            Username = (string)reader[1],
+                            Firstname = (string)reader[3],
+                            Lastname = (string)reader[4],
+                            Role = (UserRoles)reader[5]
+                        };
+                        break;
+                    }
+                }
+            }
+
+            return user;
+        }
+
+        public static UserModel GetUserByLastName(string lastname)
+        {
+            var user = new UserModel();
+            using (var conn = new Connection())
+            {
+                var cmd = new NpgsqlCommand("select * from users where lower(lastname) like '@lastname%' limit 1;")
+                {
+                    Connection = conn.Conn
+                };
+                cmd.Parameters.AddWithValue("lastname", lastname);
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        user = new UserModel
+                        {
+                            UserId = (int)reader[0],
+                            Username = (string)reader[1],
+                            Firstname = (string)reader[3],
+                            Lastname = (string)reader[4],
+                            Role = (UserRoles)reader[5]
+                        };
+                        break;
+                    }
+                }
+            }
+
+            return user;
         }
 
         private static string EncryptMd5(string input)
