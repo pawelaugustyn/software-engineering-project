@@ -123,18 +123,13 @@ namespace ScrumIt.Forms
 
             for (var i = 0; i < taskList.Length; i++)
             {
-                createTaskPanel(taskList, i);
+                createTaskPanel(taskList[i], i);
             }
         }
 
         private void panel1_Paint(object sender, PaintEventArgs e)
         {
-            //prepareLayout(e);
-        }
-
-        private void addTaskButton_Click(object sender, System.EventArgs e)
-        {
-            //przekierowanie do formsa task
+            prepareLayout(e);
         }
 
         private void createTaskPanel(dynamic taskList, int index)
@@ -148,7 +143,7 @@ namespace ScrumIt.Forms
             {
                 BackColor = System.Drawing.Color.White,
                 BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle,
-                Location = new System.Drawing.Point(width / 60, height / 10 + index * 90),
+                Location = new System.Drawing.Point(width / 30, height / 24 + index * 90),
                 Name = taskPanelName,
                 Size = new System.Drawing.Size(384, 80),
                 TabIndex = 0,
@@ -157,8 +152,7 @@ namespace ScrumIt.Forms
             taskPanel.MouseDown += panel_MouseDown;
             taskPanel.MouseMove += panel_MouseMove;
             taskPanel.MouseUp += panel_MouseUp;
-
-
+            
             var taskNameTextBox = new MetroTextBox()
             {
                 BackColor = Color.White,
@@ -168,13 +162,13 @@ namespace ScrumIt.Forms
                 Name = "taskNameTextBox",
                 Size = new Size(340, 43),
                 TabIndex = 5,
-                Text = taskList[index].taskName
+                Text = taskList.taskName
 
             };
 
             var priorityPanel = new Panel
             {
-                BackColor = getPriorityColor(taskList[index].taskPriority),
+                BackColor = getPriorityColor(taskList.taskPriority),
                 Location = new System.Drawing.Point(-1, -1),
                 Name = "priorityPanel",
                 Size = new System.Drawing.Size(10, 79),
@@ -187,25 +181,28 @@ namespace ScrumIt.Forms
                 Name = "taskDescriptionButton",
                 Size = new System.Drawing.Size(12, 22),
                 TabIndex = 0,
-                Text = "?",
+                Text = "?"
             };
-            taskDescriptionButton.Click += taskDescriptionButton_Click;
+            taskDescriptionButton.Click += delegate (object sender, EventArgs e)
+            {
+                taskDescriptionButton_Click(sender, e, taskList.taskDescription);
+            };
 
             var taskTimeLabel = new MetroLabel
             {
                 AutoSize = true,
                 FontSize = MetroFramework.MetroLabelSize.Small,
                 FontWeight = MetroFramework.MetroLabelWeight.Regular,
-                Location = new System.Drawing.Point(360, 56),
+                Location = new System.Drawing.Point(360, 30),
                 Name = "taskTimeLabel",
                 Size = new System.Drawing.Size(13, 15),
                 TabIndex = 3,
-                Text = (taskList[index].estimatedTime).ToString(),
+                Text = (taskList.estimatedTime).ToString(),
                 TextAlign = System.Drawing.ContentAlignment.MiddleRight
 
             };
 
-            var userPhotos = taskList[index].users;
+            var userPhotos = taskList.users;
             var pictureBoxes = new List<PictureBox>();
             var location = 15;
             foreach (var user in userPhotos)
@@ -223,11 +220,19 @@ namespace ScrumIt.Forms
                 };
                 pictureBoxes.Add(pictureBox);
                 location += 29;
-                //pictureBox.MouseDown += panel_MouseDown;
-                //pictureBox.MouseMove += panel_MouseMove;
-                //pictureBox.MouseUp += panel_MouseUp;
             }
 
+            var changeColorButton = new Button
+            {
+                Location = new System.Drawing.Point(355, 50),
+                Name = "changeColorButton",
+                Size = new System.Drawing.Size(22, 22),
+                TabIndex = 0,
+                BackColor = Color.Red
+            };
+            changeColorButton.Click += delegate(object sender, EventArgs e)
+            {
+                changeColorButton_Click(sender, e, taskPanel, taskNameTextBox); };
 
             taskPanel.Controls.Add(priorityPanel);
             foreach (var pictureBox in pictureBoxes)
@@ -237,79 +242,73 @@ namespace ScrumIt.Forms
             taskPanel.Controls.Add(taskNameTextBox);
             taskPanel.Controls.Add(taskTimeLabel);
             taskPanel.Controls.Add(taskDescriptionButton);
+            taskPanel.Controls.Add(changeColorButton);
             scrumBoardPanel.Controls.Add(taskPanel);
         }
-
-        bool selected = false;
-
+        
         private Point MouseDownLocation;
+        private Point MouseUpLocation;
         private void panel_MouseDown(object sender, MouseEventArgs e)
         {
-            //selected = true;
             if (e.Button == MouseButtons.Left)
             {
                 MouseDownLocation = e.Location;
             }
         }
 
-        private Point previousLocation;
-
         private void panel_MouseMove(object sender, MouseEventArgs e)
         {
+            var width = scrumBoardPanel.ClientRectangle.Width;
             if (e.Button == MouseButtons.Left)
             {
-                ((Panel) sender).Location = new Point(e.X + ((Panel) sender).Location.X - MouseDownLocation.X,
-                    ((Panel) sender).Location.Y);
+                MouseUpLocation = new Point(e.X + ((Panel)sender).Location.X - MouseDownLocation.X,
+                    ((Panel)sender).Location.Y);
+                ((Panel)sender).Location = MouseUpLocation;
             }
         }
 
         private void panel_MouseUp(object sender, MouseEventArgs e)
         {
             var width = scrumBoardPanel.ClientRectangle.Width;
-
-
-            // selected = false;
-
-
-            if (e.Location.X > 0 && e.Location.X < width / 6)
+            if (MouseUpLocation.X < width / 4)
             {
-                ((Panel)sender).Location = new Point(width / 60, ((Panel)sender).Location.Y);
+                ((Panel)sender).Location = new Point(width / 30, ((Panel)sender).Location.Y);
             }
 
-            if (e.Location.X > width / 6 && e.Location.X < width / 3)
+            if (MouseUpLocation.X > width / 4 && MouseUpLocation.X < 7 * width / 12)
             {
-                ((Panel)sender).Location = new Point(width / 60 + width / 3, ((Panel)sender).Location.Y);
+                ((Panel)sender).Location = new Point(width / 30 + width / 3, ((Panel)sender).Location.Y);
             }
-            if (e.Location.X > width / 3 && e.Location.X < width)
+            if (MouseUpLocation.X > 7 * width / 12)
             {
-                ((Panel)sender).Location = new Point(width / 60 + 2 * width / 3, ((Panel)sender).Location.Y);
+                ((Panel)sender).Location = new Point(width / 30 + 2 * width / 3, ((Panel)sender).Location.Y);
             }
-
         }
 
 
-        private void button1_Click(object sender, EventArgs e)
+        private Color panelColor = ColorTranslator.FromHtml("#4AC1C1");
+        private void changeColorButton_Click(object sender, EventArgs e, Panel taskPanel, MetroTextBox textBox)
         {
             var color = new Color();
             if (colorDialog1.ShowDialog() == DialogResult.OK)
             {
                 color = colorDialog1.Color;
             }
-
-            labelTest.Text = ToHexValue(color);
-            labelTest.BackColor = ColorTranslator.FromHtml("#FF0000");
+            taskPanel.BackColor = color;
+            textBox.BackColor = color;
+            //labelTest.Text = ToHexValue(color);
+            //labelTest.BackColor = ColorTranslator.FromHtml("#FF0000");
         }
 
-        private void taskDescriptionButton_Click(object sender, EventArgs e)
+        private void taskDescriptionButton_Click(object sender, EventArgs e, string description)
         {
-
-            MessageBox.Show("Dziala");
+            MessageBox.Show(description);
         }
 
         private void panel1_Paint_1(object sender, PaintEventArgs e)
         {
             var borderSize = 2;
-            var panelColor = ColorTranslator.FromHtml("#00aba9");
+            //var panelColor = ColorTranslator.FromHtml("#00aba9");
             var height = scrumBoardPanel.ClientRectangle.Height;
             var width = scrumBoardPanel.ClientRectangle.Width;
             var toDoLabel = new MetroLabel
@@ -318,14 +317,13 @@ namespace ScrumIt.Forms
                 Size = new Size(width / 3, height / 12 - borderSize),
                 Location = new Point(borderSize, borderSize),
                 TextAlign = ContentAlignment.MiddleCenter,
-                FontWeight = MetroLabelWeight.Bold,
                 CustomForeColor = true,
                 CustomBackground = true,
                 ForeColor = Color.White,
                 BackColor = panelColor,
                 FontSize = MetroLabelSize.Tall
             };
-            scrumBoardPanel.Controls.Add(toDoLabel);
+            headerPanel.Controls.Add(toDoLabel);
 
             var inProgressLabel = new MetroLabel
             {
@@ -333,44 +331,40 @@ namespace ScrumIt.Forms
                 Size = new Size(width / 3, height / 12 - borderSize),
                 Location = new Point(width / 3 + borderSize, borderSize),
                 TextAlign = ContentAlignment.MiddleCenter,
-                FontWeight = MetroLabelWeight.Bold,
                 CustomForeColor = true,
                 CustomBackground = true,
                 ForeColor = Color.White,
                 BackColor = panelColor,
                 FontSize = MetroLabelSize.Tall
             };
-            scrumBoardPanel.Controls.Add(inProgressLabel);
+            headerPanel.Controls.Add(inProgressLabel);
 
             var completedLabel = new MetroLabel
             {
                 Text = "Completed",
-                Size = new Size(width / 3, height / 12 - borderSize),
+                Size = new Size(width / 3 + 15, height / 12 - borderSize),
                 Location = new Point(2 * width / 3 + borderSize, borderSize),
                 TextAlign = ContentAlignment.MiddleCenter,
-                FontWeight = MetroLabelWeight.Bold,
                 CustomForeColor = true,
                 CustomBackground = true,
                 ForeColor = Color.White,
                 BackColor = panelColor,
                 FontSize = MetroLabelSize.Tall
             };
-            scrumBoardPanel.Controls.Add(completedLabel);
+            headerPanel.Controls.Add(completedLabel);
         }
 
         private void prepareLayout(PaintEventArgs e)
         {
             var borderSize = 2;
-            var panelColor = ColorTranslator.FromHtml("#00aba9");
             var height = scrumBoardPanel.ClientRectangle.Height;
             var width = scrumBoardPanel.ClientRectangle.Width;
             Pen greyPen = new Pen(panelColor, borderSize);
             Graphics g = e.Graphics;
 
-            g.DrawLine(greyPen, width / 3, borderSize, width / 3, height);
-            g.DrawLine(greyPen, 2 * width / 3, borderSize, 2 * width / 3, height);
+            g.DrawLine(greyPen, width / 3, 0, width / 3, height);
+            g.DrawLine(greyPen, 2 * width / 3, 0, 2 * width / 3, height);
             g.Dispose();
-
         }
 
         private Color getPriorityColor(string priority)
@@ -398,5 +392,9 @@ namespace ScrumIt.Forms
                    color.B.ToString("X2");
         }
 
+        private void bottomPanel_Paint(object sender, PaintEventArgs e)
+        {
+            bottomPanel.BackColor = panelColor;
+        }
     }
 }
