@@ -152,7 +152,12 @@ namespace ScrumIt.Forms
                 Name = taskPanelName,
                 Size = new System.Drawing.Size(384, 80),
                 TabIndex = 0,
+                Dock = DockStyle.None
             };
+            taskPanel.MouseDown += panel_MouseDown;
+            taskPanel.MouseMove += panel_MouseMove;
+            taskPanel.MouseUp += panel_MouseUp;
+
 
             var taskNameTextBox = new MetroTextBox()
             {
@@ -218,7 +223,11 @@ namespace ScrumIt.Forms
                 };
                 pictureBoxes.Add(pictureBox);
                 location += 29;
+                //pictureBox.MouseDown += panel_MouseDown;
+                //pictureBox.MouseMove += panel_MouseMove;
+                //pictureBox.MouseUp += panel_MouseUp;
             }
+
 
             taskPanel.Controls.Add(priorityPanel);
             foreach (var pictureBox in pictureBoxes)
@@ -230,6 +239,54 @@ namespace ScrumIt.Forms
             taskPanel.Controls.Add(taskDescriptionButton);
             scrumBoardPanel.Controls.Add(taskPanel);
         }
+
+        bool selected = false;
+
+        private Point MouseDownLocation;
+        private void panel_MouseDown(object sender, MouseEventArgs e)
+        {
+            //selected = true;
+            if (e.Button == MouseButtons.Left)
+            {
+                MouseDownLocation = e.Location;
+            }
+        }
+
+        private Point previousLocation;
+
+        private void panel_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                ((Panel) sender).Location = new Point(e.X + ((Panel) sender).Location.X - MouseDownLocation.X,
+                    ((Panel) sender).Location.Y);
+            }
+        }
+
+        private void panel_MouseUp(object sender, MouseEventArgs e)
+        {
+            var width = scrumBoardPanel.ClientRectangle.Width;
+
+
+            // selected = false;
+
+
+            if (e.Location.X > 0 && e.Location.X < width / 6)
+            {
+                ((Panel)sender).Location = new Point(width / 60, ((Panel)sender).Location.Y);
+            }
+
+            if (e.Location.X > width / 6 && e.Location.X < width / 3)
+            {
+                ((Panel)sender).Location = new Point(width / 60 + width / 3, ((Panel)sender).Location.Y);
+            }
+            if (e.Location.X > width / 3 && e.Location.X < width)
+            {
+                ((Panel)sender).Location = new Point(width / 60 + 2 * width / 3, ((Panel)sender).Location.Y);
+            }
+
+        }
+
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -258,7 +315,7 @@ namespace ScrumIt.Forms
             var toDoLabel = new MetroLabel
             {
                 Text = "To Do",
-                Size = new Size(width / 3 , height / 12 - borderSize),
+                Size = new Size(width / 3, height / 12 - borderSize),
                 Location = new Point(borderSize, borderSize),
                 TextAlign = ContentAlignment.MiddleCenter,
                 FontWeight = MetroLabelWeight.Bold,
@@ -273,7 +330,7 @@ namespace ScrumIt.Forms
             var inProgressLabel = new MetroLabel
             {
                 Text = "In Progress",
-                Size = new Size(width / 3 , height / 12 - borderSize),
+                Size = new Size(width / 3, height / 12 - borderSize),
                 Location = new Point(width / 3 + borderSize, borderSize),
                 TextAlign = ContentAlignment.MiddleCenter,
                 FontWeight = MetroLabelWeight.Bold,
@@ -288,7 +345,7 @@ namespace ScrumIt.Forms
             var completedLabel = new MetroLabel
             {
                 Text = "Completed",
-                Size = new Size(width / 3 , height / 12 - borderSize),
+                Size = new Size(width / 3, height / 12 - borderSize),
                 Location = new Point(2 * width / 3 + borderSize, borderSize),
                 TextAlign = ContentAlignment.MiddleCenter,
                 FontWeight = MetroLabelWeight.Bold,
@@ -313,7 +370,7 @@ namespace ScrumIt.Forms
             g.DrawLine(greyPen, width / 3, borderSize, width / 3, height);
             g.DrawLine(greyPen, 2 * width / 3, borderSize, 2 * width / 3, height);
             g.Dispose();
-            
+
         }
 
         private Color getPriorityColor(string priority)
