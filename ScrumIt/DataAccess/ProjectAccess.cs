@@ -10,10 +10,9 @@ namespace ScrumIt.DataAccess
 {
     internal class ProjectAccess
     {
-        //bedzie List<ProjectModel> zamiast void
-        public static void GetAllProjects()
+        public static List<ProjectModel> GetAllProjects()
         {
-            //var projects = new List<ProjectModel>();
+            var projects = new List<ProjectModel>();
             using (var conn = new Connection())
             {
                 var cmd = new NpgsqlCommand("select * from projects;")
@@ -24,15 +23,18 @@ namespace ScrumIt.DataAccess
                 {
                     while (reader.Read())
                     {
-                        //projects.Add(new ProjectModel
-                        //{
-                        //    pole = (rzutowanie)reader[indeks],
-                        //});
+                        projects.Add(new ProjectModel
+                        {
+                            ProjectId = (int)reader[0],
+                            ProjectName = (string)reader[1],
+                            ProjectColor = (string)reader[2],
+                            //TeamId = (int)reader[3]
+                        });
                     }
                 }
             }
 
-            //return projects;
+            return projects;
         }
 
 

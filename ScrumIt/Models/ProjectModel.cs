@@ -13,7 +13,7 @@ namespace ScrumIt.Models
         public int ProjectId { get; set; } = 0;
         public string ProjectName { get; set; }
         public string ProjectColor { get; set; }
-        public int TeamId { get; set; }
+        //public int TeamId { get; set; }
  
  
         public static ProjectModel GetProjectById(int projectid)

@@ -10,13 +10,14 @@ namespace ScrumIt.Models
     class TaskModel
     {
         public int TaskId { get; set; } = 0;
+        public int SprintId { get; set; }
         public string TaskType{ get; set; }
         public string TaskName { get; set; }
         public string TaskDesc { get; set; }
         public int TaskPriority { get; set; }
         public int TaskEstimatedTime { get; set; }
         public int TaskStage { get; set; }
-        public int SpirintId { get; set; }
+
  
  
         public static TaskModel GetTaskById(int taskid)
