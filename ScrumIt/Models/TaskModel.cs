@@ -16,26 +16,32 @@ namespace ScrumIt.Models
         public int TaskPriority { get; set; }
         public int TaskEstimatedTime { get; set; }
         public int TaskStage { get; set; }
+        public int SpirintId { get; set; }
  
  
         public static TaskModel GetTaskById(int taskid)
         {
-            return TaskAccess.GetTaskById(taskid);
+            return new TaskModel();
         }
  
         public static TaskModel GetTaskByName(string taskname)
         {
-            return TaskAccess.GetTaskByName(taskname);
+            return new TaskModel();
         }
  
         public static List<TaskModel> GetTasksByPriority(int priority)
         {
-            return TaskAccess.GetTasksByPriority(priority);
+            return new List<TaskModel>();
         }
  
         public static List<TaskModel> GetTasksByStage(int stage)
         {
-            return TaskAccess.GetTasksByStage(stage);
+            return new List<TaskModel>();
+        }
+
+        public static List<TaskModel> GetTasksBySprintId(int sprintid)
+        {
+            return new List<TaskModel>();
         }
     }
 }

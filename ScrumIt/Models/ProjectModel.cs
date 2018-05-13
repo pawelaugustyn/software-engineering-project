@@ -18,17 +18,17 @@ namespace ScrumIt.Models
  
         public static ProjectModel GetProjectById(int projectid)
         {
-            return ProjectAccess.GetProjectById(projectid);
+            return new ProjectModel();
         }
  
         public static ProjectModel GetProjectByName(string projectname)
         {
-            return ProjectAccess.GetProjectByName(projectname);
+            return new ProjectModel();
         }
  
         public static ProjectModel GetProjectByTeamId(int teamid)
         {
-            return ProjectAccess.GetProjectByTeamId(teamid);
+            return new ProjectModel();
         }
     }
 }
