@@ -105,6 +105,7 @@
             this.passwordTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.passwordTextBox.Location = new System.Drawing.Point(256, 31);
             this.passwordTextBox.Name = "passwordTextBox";
+            this.passwordTextBox.PasswordChar = '*';
             this.passwordTextBox.Size = new System.Drawing.Size(248, 22);
             this.passwordTextBox.TabIndex = 5;
             this.passwordTextBox.Text = "admin";
