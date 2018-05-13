@@ -1,4 +1,5 @@
-﻿using System.Security.Cryptography;
+﻿using System.Collections.Generic;
+using System.Security.Cryptography;
 using System.Text;
 using Npgsql;
 using ScrumIt.DataAccess;
@@ -20,8 +21,33 @@ namespace ScrumIt.Models
             state.CurrentUser = UserAccess.LoginAs(username, password);
             return state.CurrentUser.UserId > 0;
         }
-        
 
+        public static bool Logout()
+        {
+            var state = AppStateProvider.Instance;
+            if (state.CurrentUser.UserId <= 0) return false;
+            state.CurrentUser = new UserModel();
+            return true;
+        }
+
+        public static UserModel GetUserById(int userid)
+        {
+            return UserAccess.GetUserById(userid);
+        }
+
+        public static List<UserModel> GetUsersByLastName(string lastname)
+        {
+            return UserAccess.GetUsersByLastName(lastname);
+        }
+        public static UserModel GetUserByLogin(string login)
+        {
+            return UserAccess.GetUserByLogin(login);
+        }
+
+        public static List<UserModel> GetUsersByProjectId(int projectid)
+        {
+            return UserAccess.GetUsersByProjectId(projectid);
+        }
     }
 
     public enum UserRoles
