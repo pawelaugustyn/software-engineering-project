@@ -17,7 +17,28 @@ namespace ScrumIt.Forms
         {
             InitializeComponent();
         }
+        
+        // zamykamy aplikacje jesli uzytkownik klika na przycisk "zamknij" (czerwony x :))
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            if (e.CloseReason == CloseReason.UserClosing)
+            {
+                MessageBox.Show("Zamknięcie aplikacji");
+                Application.Exit();
+            }
+        }
 
-       
+        private void loginButton_Click(object sender, EventArgs e)
+        {
+            //jeśli użytkownik znajduje sie w bazie to ukrywamy formularz Login i wchodzimy do mainView
+            if (Models.UserModel.LoginAs(loginTextBox.Text, passwordTextBox.Text))
+            {
+                this.Hide();
+            }
+            else
+            {
+                MessageBox.Show("Niepoprawne dane logowania");
+            }
+        }
     }
 }

@@ -89,6 +89,7 @@
             this.loginButton.Size = new System.Drawing.Size(248, 25);
             this.loginButton.TabIndex = 3;
             this.loginButton.Text = "Zaloguj";
+            this.loginButton.Click += new System.EventHandler(this.loginButton_Click);
             // 
             // loginTextBox
             // 
@@ -97,7 +98,7 @@
             this.loginTextBox.Name = "loginTextBox";
             this.loginTextBox.Size = new System.Drawing.Size(248, 22);
             this.loginTextBox.TabIndex = 4;
-            this.loginTextBox.Text = "...";
+            this.loginTextBox.Text = "admin";
             // 
             // passwordTextBox
             // 
@@ -106,7 +107,7 @@
             this.passwordTextBox.Name = "passwordTextBox";
             this.passwordTextBox.Size = new System.Drawing.Size(248, 22);
             this.passwordTextBox.TabIndex = 5;
-            this.passwordTextBox.Text = "...";
+            this.passwordTextBox.Text = "admin";
             // 
             // Login
             // 
@@ -116,7 +117,6 @@
             this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "Login";
             this.Text = "Login";
-            
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             this.ResumeLayout(false);
