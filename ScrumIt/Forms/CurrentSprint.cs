@@ -271,16 +271,16 @@ namespace ScrumIt.Forms
             var width = scrumBoardPanel.ClientRectangle.Width;
             if (_mouseUpLocation.X < width / 4)
             {
-                ((Panel)sender).Location = new Point(width / 30, ((Panel)sender).Location.Y);
+                ((Panel)sender).Location = new Point(width / 40, ((Panel)sender).Location.Y);
             }
 
             if (_mouseUpLocation.X > width / 4 && _mouseUpLocation.X < 7 * width / 12)
             {
-                ((Panel)sender).Location = new Point(width / 30 + width / 3, ((Panel)sender).Location.Y);
+                ((Panel)sender).Location = new Point(width / 40 + width / 3, ((Panel)sender).Location.Y);
             }
             if (_mouseUpLocation.X > 7 * width / 12)
             {
-                ((Panel)sender).Location = new Point(width / 30 + 2 * width / 3, ((Panel)sender).Location.Y);
+                ((Panel)sender).Location = new Point(width / 40 + 2 * width / 3, ((Panel)sender).Location.Y);
             }
             //change task stage
         }
@@ -312,7 +312,7 @@ namespace ScrumIt.Forms
         {
             MessageBox.Show(description);
         }
-        
+
         private void panel1_Paint_1(object sender, PaintEventArgs e)
         {
             var borderSize = getScrumBordPanelBorderSize();
@@ -439,8 +439,8 @@ namespace ScrumIt.Forms
                 };
                 toolStripMenuItem.Click += delegate
                 {
-                     historyToolStripMenuItem_Click(toolStripMenuItemName);
-                 };
+                    historyToolStripMenuItem_Click(toolStripMenuItemName);
+                };
                 toolStripItems[i] = toolStripMenuItem;
             }
 
@@ -493,7 +493,7 @@ namespace ScrumIt.Forms
             var width = GetScrumBoardPanelWidth();
             int stageTemp = taskList.taskStage;
             var taskPanelName = "taskPanel" + index;
-            var positionX = width / 30;
+            var positionX = width / 40;
             switch (stageTemp)
             {
                 case 2:
@@ -621,7 +621,7 @@ namespace ScrumIt.Forms
             var width = GetScrumBoardPanelWidth();
             int stageTemp = taskList.taskStage;
             var taskPanelName = "taskPanel" + index;
-            var positionX= width / 30;
+            var positionX = width / 40;
             switch (stageTemp)
             {
                 case 2:
@@ -759,7 +759,8 @@ namespace ScrumIt.Forms
             if (priority < 4)
             {
                 priorityColor = Color.CornflowerBlue;
-            }else if (priority < 8)
+            }
+            else if (priority < 8)
             {
                 priorityColor = Color.DarkOrange;
             }

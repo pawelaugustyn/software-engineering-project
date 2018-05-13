@@ -68,7 +68,7 @@ namespace ScrumIt.Forms
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(1509, 42);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(1313, 42);
             this.tableLayoutPanel1.TabIndex = 1;
             // 
             // addTaskButton
@@ -83,9 +83,9 @@ namespace ScrumIt.Forms
             this.addTaskButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.addTaskButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.addTaskButton.ForeColor = System.Drawing.Color.White;
-            this.addTaskButton.Location = new System.Drawing.Point(1207, 3);
+            this.addTaskButton.Location = new System.Drawing.Point(1051, 3);
             this.addTaskButton.Name = "addTaskButton";
-            this.addTaskButton.Size = new System.Drawing.Size(299, 36);
+            this.addTaskButton.Size = new System.Drawing.Size(259, 36);
             this.addTaskButton.TabIndex = 9;
             this.addTaskButton.Text = "Dodaj zadanie";
             this.addTaskButton.UseVisualStyleBackColor = true;
@@ -103,9 +103,9 @@ namespace ScrumIt.Forms
             this.backlogButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.backlogButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.backlogButton.ForeColor = System.Drawing.Color.White;
-            this.backlogButton.Location = new System.Drawing.Point(605, 3);
+            this.backlogButton.Location = new System.Drawing.Point(527, 3);
             this.backlogButton.Name = "backlogButton";
-            this.backlogButton.Size = new System.Drawing.Size(295, 36);
+            this.backlogButton.Size = new System.Drawing.Size(256, 36);
             this.backlogButton.TabIndex = 12;
             this.backlogButton.Text = "Backlog";
             this.backlogButton.UseVisualStyleBackColor = true;
@@ -125,7 +125,7 @@ namespace ScrumIt.Forms
             this.currentSprintButton.ForeColor = System.Drawing.Color.White;
             this.currentSprintButton.Location = new System.Drawing.Point(3, 3);
             this.currentSprintButton.Name = "currentSprintButton";
-            this.currentSprintButton.Size = new System.Drawing.Size(295, 36);
+            this.currentSprintButton.Size = new System.Drawing.Size(256, 36);
             this.currentSprintButton.TabIndex = 4;
             this.currentSprintButton.Text = "Obecny Sprint";
             this.currentSprintButton.UseVisualStyleBackColor = true;
@@ -143,9 +143,9 @@ namespace ScrumIt.Forms
             this.historyButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.historyButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.historyButton.ForeColor = System.Drawing.Color.White;
-            this.historyButton.Location = new System.Drawing.Point(304, 3);
+            this.historyButton.Location = new System.Drawing.Point(265, 3);
             this.historyButton.Name = "historyButton";
-            this.historyButton.Size = new System.Drawing.Size(295, 36);
+            this.historyButton.Size = new System.Drawing.Size(256, 36);
             this.historyButton.TabIndex = 10;
             this.historyButton.Text = "Historia Sprintów";
             this.historyButton.UseVisualStyleBackColor = true;
@@ -163,9 +163,9 @@ namespace ScrumIt.Forms
             this.userListButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.userListButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.userListButton.ForeColor = System.Drawing.Color.White;
-            this.userListButton.Location = new System.Drawing.Point(906, 3);
+            this.userListButton.Location = new System.Drawing.Point(789, 3);
             this.userListButton.Name = "userListButton";
-            this.userListButton.Size = new System.Drawing.Size(295, 36);
+            this.userListButton.Size = new System.Drawing.Size(256, 36);
             this.userListButton.TabIndex = 11;
             this.userListButton.Text = "Lista użytkowników";
             this.userListButton.UseVisualStyleBackColor = true;
@@ -188,9 +188,8 @@ namespace ScrumIt.Forms
             // 
             this.scrumBoardPanel.AutoScroll = true;
             this.scrumBoardPanel.Location = new System.Drawing.Point(27, 157);
-            this.scrumBoardPanel.MinimumSize = new System.Drawing.Size(1511, 0);
             this.scrumBoardPanel.Name = "scrumBoardPanel";
-            this.scrumBoardPanel.Size = new System.Drawing.Size(1511, 479);
+            this.scrumBoardPanel.Size = new System.Drawing.Size(1313, 479);
             this.scrumBoardPanel.TabIndex = 3;
             this.scrumBoardPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             // 
@@ -198,7 +197,7 @@ namespace ScrumIt.Forms
             // 
             this.headerPanel.Location = new System.Drawing.Point(26, 122);
             this.headerPanel.Name = "headerPanel";
-            this.headerPanel.Size = new System.Drawing.Size(1510, 35);
+            this.headerPanel.Size = new System.Drawing.Size(1314, 35);
             this.headerPanel.TabIndex = 7;
             this.headerPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint_1);
             // 
@@ -215,7 +214,7 @@ namespace ScrumIt.Forms
             // 
             this.bottomPanel.Location = new System.Drawing.Point(26, 632);
             this.bottomPanel.Name = "bottomPanel";
-            this.bottomPanel.Size = new System.Drawing.Size(1512, 21);
+            this.bottomPanel.Size = new System.Drawing.Size(1314, 21);
             this.bottomPanel.TabIndex = 9;
             this.bottomPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.bottomPanel_Paint);
             // 
@@ -244,7 +243,7 @@ namespace ScrumIt.Forms
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1594, 768);
+            this.ClientSize = new System.Drawing.Size(1366, 768);
             this.Controls.Add(this.bottomPanel);
             this.Controls.Add(this.metroLabel1);
             this.Controls.Add(this.headerPanel);
