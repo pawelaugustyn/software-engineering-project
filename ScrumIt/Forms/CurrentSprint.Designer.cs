@@ -189,7 +189,7 @@ namespace ScrumIt.Forms
             this.scrumBoardPanel.AutoScroll = true;
             this.scrumBoardPanel.Location = new System.Drawing.Point(27, 157);
             this.scrumBoardPanel.Name = "scrumBoardPanel";
-            this.scrumBoardPanel.Size = new System.Drawing.Size(1313, 479);
+            this.scrumBoardPanel.Size = new System.Drawing.Size(1313, 449);
             this.scrumBoardPanel.TabIndex = 3;
             this.scrumBoardPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             // 
@@ -204,7 +204,7 @@ namespace ScrumIt.Forms
             // metroLabel1
             // 
             this.metroLabel1.AutoSize = true;
-            this.metroLabel1.Location = new System.Drawing.Point(120, 688);
+            this.metroLabel1.Location = new System.Drawing.Point(94, 659);
             this.metroLabel1.Name = "metroLabel1";
             this.metroLabel1.Size = new System.Drawing.Size(142, 19);
             this.metroLabel1.TabIndex = 8;
@@ -212,7 +212,7 @@ namespace ScrumIt.Forms
             // 
             // bottomPanel
             // 
-            this.bottomPanel.Location = new System.Drawing.Point(26, 632);
+            this.bottomPanel.Location = new System.Drawing.Point(27, 606);
             this.bottomPanel.Name = "bottomPanel";
             this.bottomPanel.Size = new System.Drawing.Size(1314, 21);
             this.bottomPanel.TabIndex = 9;
@@ -243,7 +243,7 @@ namespace ScrumIt.Forms
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1366, 768);
+            this.ClientSize = new System.Drawing.Size(1366, 720);
             this.Controls.Add(this.bottomPanel);
             this.Controls.Add(this.metroLabel1);
             this.Controls.Add(this.headerPanel);
