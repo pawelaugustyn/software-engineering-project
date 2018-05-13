@@ -30,18 +30,22 @@ namespace ScrumIt.Forms
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.backlogButton = new System.Windows.Forms.Button();
-            this.userListButton = new System.Windows.Forms.Button();
-            this.historyButton = new System.Windows.Forms.Button();
             this.addTaskButton = new System.Windows.Forms.Button();
+            this.backlogButton = new System.Windows.Forms.Button();
             this.currentSprintButton = new System.Windows.Forms.Button();
+            this.historyButton = new System.Windows.Forms.Button();
+            this.userListButton = new System.Windows.Forms.Button();
             this.properiesComboBox = new System.Windows.Forms.ComboBox();
             this.scrumBoardPanel = new System.Windows.Forms.Panel();
-            this.colorDialog1 = new System.Windows.Forms.ColorDialog();
             this.headerPanel = new System.Windows.Forms.Panel();
             this.metroLabel1 = new MetroFramework.Controls.MetroLabel();
             this.bottomPanel = new System.Windows.Forms.Panel();
+            this.colorDialog1 = new System.Windows.Forms.ColorDialog();
+            this.historyMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.backlogMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.userListMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -55,74 +59,17 @@ namespace ScrumIt.Forms
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 23F));
-            this.tableLayoutPanel1.Controls.Add(this.backlogButton, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.userListButton, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.historyButton, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.addTaskButton, 4, 0);
+            this.tableLayoutPanel1.Controls.Add(this.backlogButton, 2, 0);
             this.tableLayoutPanel1.Controls.Add(this.currentSprintButton, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.historyButton, 1, 0);
+            this.tableLayoutPanel1.Controls.Add(this.userListButton, 3, 0);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(27, 74);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(1509, 42);
             this.tableLayoutPanel1.TabIndex = 1;
-            // 
-            // backlogButton
-            // 
-            this.backlogButton.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.backlogButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.backlogButton.FlatAppearance.BorderColor = System.Drawing.Color.White;
-            this.backlogButton.FlatAppearance.BorderSize = 0;
-            this.backlogButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.White;
-            this.backlogButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.backlogButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.backlogButton.ForeColor = System.Drawing.Color.White;
-            this.backlogButton.Location = new System.Drawing.Point(605, 3);
-            this.backlogButton.Name = "backlogButton";
-            this.backlogButton.Size = new System.Drawing.Size(295, 36);
-            this.backlogButton.TabIndex = 12;
-            this.backlogButton.Text = "Backlog";
-            this.backlogButton.UseVisualStyleBackColor = true;
-            // 
-            // userListButton
-            // 
-            this.userListButton.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.userListButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.userListButton.FlatAppearance.BorderColor = System.Drawing.Color.White;
-            this.userListButton.FlatAppearance.BorderSize = 0;
-            this.userListButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.White;
-            this.userListButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.userListButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.userListButton.ForeColor = System.Drawing.Color.White;
-            this.userListButton.Location = new System.Drawing.Point(906, 3);
-            this.userListButton.Name = "userListButton";
-            this.userListButton.Size = new System.Drawing.Size(295, 36);
-            this.userListButton.TabIndex = 11;
-            this.userListButton.Text = "Lista użytkowników";
-            this.userListButton.UseVisualStyleBackColor = true;
-            // 
-            // historyButton
-            // 
-            this.historyButton.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.historyButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.historyButton.FlatAppearance.BorderColor = System.Drawing.Color.White;
-            this.historyButton.FlatAppearance.BorderSize = 0;
-            this.historyButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.White;
-            this.historyButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.historyButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.historyButton.ForeColor = System.Drawing.Color.White;
-            this.historyButton.Location = new System.Drawing.Point(3, 3);
-            this.historyButton.Name = "historyButton";
-            this.historyButton.Size = new System.Drawing.Size(295, 36);
-            this.historyButton.TabIndex = 10;
-            this.historyButton.Text = "Historia Sprintów";
-            this.historyButton.UseVisualStyleBackColor = true;
             // 
             // addTaskButton
             // 
@@ -142,6 +89,27 @@ namespace ScrumIt.Forms
             this.addTaskButton.TabIndex = 9;
             this.addTaskButton.Text = "Dodaj zadanie";
             this.addTaskButton.UseVisualStyleBackColor = true;
+            this.addTaskButton.Click += new System.EventHandler(this.addTaskButton_Click);
+            // 
+            // backlogButton
+            // 
+            this.backlogButton.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.backlogButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.backlogButton.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.backlogButton.FlatAppearance.BorderSize = 0;
+            this.backlogButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.White;
+            this.backlogButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.backlogButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.backlogButton.ForeColor = System.Drawing.Color.White;
+            this.backlogButton.Location = new System.Drawing.Point(605, 3);
+            this.backlogButton.Name = "backlogButton";
+            this.backlogButton.Size = new System.Drawing.Size(295, 36);
+            this.backlogButton.TabIndex = 12;
+            this.backlogButton.Text = "Backlog";
+            this.backlogButton.UseVisualStyleBackColor = true;
+            this.backlogButton.Click += new System.EventHandler(this.backlogButton_Click);
             // 
             // currentSprintButton
             // 
@@ -155,12 +123,53 @@ namespace ScrumIt.Forms
             this.currentSprintButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.currentSprintButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.currentSprintButton.ForeColor = System.Drawing.Color.White;
-            this.currentSprintButton.Location = new System.Drawing.Point(304, 3);
+            this.currentSprintButton.Location = new System.Drawing.Point(3, 3);
             this.currentSprintButton.Name = "currentSprintButton";
             this.currentSprintButton.Size = new System.Drawing.Size(295, 36);
             this.currentSprintButton.TabIndex = 4;
             this.currentSprintButton.Text = "Obecny Sprint";
             this.currentSprintButton.UseVisualStyleBackColor = true;
+            this.currentSprintButton.Click += new System.EventHandler(this.currentSprintButton_Click);
+            // 
+            // historyButton
+            // 
+            this.historyButton.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.historyButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.historyButton.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.historyButton.FlatAppearance.BorderSize = 0;
+            this.historyButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.White;
+            this.historyButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.historyButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.historyButton.ForeColor = System.Drawing.Color.White;
+            this.historyButton.Location = new System.Drawing.Point(304, 3);
+            this.historyButton.Name = "historyButton";
+            this.historyButton.Size = new System.Drawing.Size(295, 36);
+            this.historyButton.TabIndex = 10;
+            this.historyButton.Text = "Historia Sprintów";
+            this.historyButton.UseVisualStyleBackColor = true;
+            this.historyButton.Click += new System.EventHandler(this.historyButton_Click);
+            // 
+            // userListButton
+            // 
+            this.userListButton.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.userListButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.userListButton.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.userListButton.FlatAppearance.BorderSize = 0;
+            this.userListButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.White;
+            this.userListButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.userListButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.userListButton.ForeColor = System.Drawing.Color.White;
+            this.userListButton.Location = new System.Drawing.Point(906, 3);
+            this.userListButton.Name = "userListButton";
+            this.userListButton.Size = new System.Drawing.Size(295, 36);
+            this.userListButton.TabIndex = 11;
+            this.userListButton.Text = "Lista użytkowników";
+            this.userListButton.UseVisualStyleBackColor = true;
+            this.userListButton.Click += new System.EventHandler(this.userListButton_Click);
             // 
             // properiesComboBox
             // 
@@ -210,6 +219,27 @@ namespace ScrumIt.Forms
             this.bottomPanel.TabIndex = 9;
             this.bottomPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.bottomPanel_Paint);
             // 
+            // historyMenuStrip
+            // 
+            this.historyMenuStrip.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.historyMenuStrip.MinimumSize = new System.Drawing.Size(295, 26);
+            this.historyMenuStrip.Name = "historyMenuStrip";
+            this.historyMenuStrip.Size = new System.Drawing.Size(295, 26);
+            // 
+            // backlogMenuStrip
+            // 
+            this.backlogMenuStrip.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.backlogMenuStrip.MinimumSize = new System.Drawing.Size(295, 26);
+            this.backlogMenuStrip.Name = "backlogMenuStrip";
+            this.backlogMenuStrip.Size = new System.Drawing.Size(295, 26);
+            // 
+            // userListMenuStrip
+            // 
+            this.userListMenuStrip.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.userListMenuStrip.MinimumSize = new System.Drawing.Size(295, 26);
+            this.userListMenuStrip.Name = "userListMenuStrip";
+            this.userListMenuStrip.Size = new System.Drawing.Size(295, 26);
+            // 
             // CurrentSprint
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 13F);
@@ -243,7 +273,6 @@ namespace ScrumIt.Forms
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.ComboBox properiesComboBox;
         private System.Windows.Forms.Panel scrumBoardPanel;
-        private System.Windows.Forms.ColorDialog colorDialog1;
         private System.Windows.Forms.Panel headerPanel;
         private MetroFramework.Controls.MetroLabel metroLabel1;
         private System.Windows.Forms.Button currentSprintButton;
@@ -252,5 +281,9 @@ namespace ScrumIt.Forms
         private System.Windows.Forms.Button backlogButton;
         private System.Windows.Forms.Button userListButton;
         private System.Windows.Forms.Button historyButton;
+        private System.Windows.Forms.ColorDialog colorDialog1;
+        private System.Windows.Forms.ContextMenuStrip historyMenuStrip;
+        private System.Windows.Forms.ContextMenuStrip backlogMenuStrip;
+        private System.Windows.Forms.ContextMenuStrip userListMenuStrip;
     }
 }
