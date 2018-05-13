@@ -25,7 +25,21 @@ namespace ScrumIt.Forms
                 taskDescription = "Task Description",
                 taskPriority = 5,
                 estimatedTime = 10,
-                users = new[] { "Mindur1", "Mindur2", "Mindur3", "Mindur4" }
+                users = new[]
+                {
+                    new
+                    {
+                        UserName ="BM",
+                        FirstName = "Bartosz",
+                        LastName = "Mindur"
+                    },
+                    new
+                    {
+                        UserName ="BM",
+                        FirstName = "Bartosz",
+                        LastName = "Mindur"
+                    }
+                }
             };
 
             taskNameTextBox.Text = task.taskName;
@@ -33,8 +47,10 @@ namespace ScrumIt.Forms
             priorityTextBox.Text = task.taskPriority.ToString();
             estimatedTimeTextBox.Text = task.estimatedTime.ToString();
 
-
-            //pobierz przypisanych uzytkownikow danego zadania
+            taskNameTextBox.BackColor = Color.White;
+            taskDescriptionTextBox.BackColor = Color.White;
+            priorityTextBox.BackColor = Color.White;
+            estimatedTimeTextBox.BackColor = Color.White;
 
             userListMenuStrip.Items.AddRange(createUsersListMenu(task.users));
         }
@@ -50,13 +66,17 @@ namespace ScrumIt.Forms
                 {
                     Name = toolStripMenuItemName,
                     Text = toolStripMenuItemText,
-                    Image = Properties.Resources.image,
-                    CheckOnClick = true
+                    Image = Properties.Resources.image
                 };
                 toolStripItems[i] = toolStripMenuItem;
             }
 
             return toolStripItems;
+        }
+
+        private void showUsersButton_Click(object sender, System.EventArgs e)
+        {
+            userListMenuStrip.Show(showUsersButton, new Point(0, showUsersButton.Height));
         }
     }
 }

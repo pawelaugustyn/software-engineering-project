@@ -300,7 +300,7 @@ namespace ScrumIt.Forms
         {
             MessageBox.Show(description);
         }
-
+        
         private void panel1_Paint_1(object sender, PaintEventArgs e)
         {
             var borderSize = getScrumBordPanelBorderSize();
@@ -509,7 +509,8 @@ namespace ScrumIt.Forms
                 Name = "taskNameTextBox",
                 Size = new Size(340, 43),
                 TabIndex = 5,
-                Text = taskList.taskName
+                Text = taskList.taskName,
+                Enabled = false
             };
 
             var priorityPanel = new Panel
@@ -629,7 +630,8 @@ namespace ScrumIt.Forms
                 Name = "taskNameTextBox",
                 Size = new Size(340, 43),
                 TabIndex = 5,
-                Text = taskList.taskName
+                Text = taskList.taskName,
+                Enabled = false
             };
 
             var priorityPanel = new Panel

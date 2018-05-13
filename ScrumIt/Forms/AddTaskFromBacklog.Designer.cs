@@ -38,7 +38,7 @@
             this.priorityTextBox = new System.Windows.Forms.TextBox();
             this.taskDescriptionTextBox = new System.Windows.Forms.TextBox();
             this.taskNameTextBox = new System.Windows.Forms.TextBox();
-            this.addUsersButton = new System.Windows.Forms.Button();
+            this.showUsersButton = new System.Windows.Forms.Button();
             this.taskNameLabel = new System.Windows.Forms.Label();
             this.addTaskButton = new System.Windows.Forms.Button();
             this.userListMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -59,7 +59,7 @@
             this.addTaskTableLayoutPanel.Controls.Add(this.priorityTextBox, 1, 2);
             this.addTaskTableLayoutPanel.Controls.Add(this.taskDescriptionTextBox, 1, 1);
             this.addTaskTableLayoutPanel.Controls.Add(this.taskNameTextBox, 1, 0);
-            this.addTaskTableLayoutPanel.Controls.Add(this.addUsersButton, 1, 4);
+            this.addTaskTableLayoutPanel.Controls.Add(this.showUsersButton, 1, 4);
             this.addTaskTableLayoutPanel.Controls.Add(this.taskNameLabel, 0, 0);
             this.addTaskTableLayoutPanel.Location = new System.Drawing.Point(31, 58);
             this.addTaskTableLayoutPanel.Name = "addTaskTableLayoutPanel";
@@ -168,21 +168,22 @@
             this.taskNameTextBox.Size = new System.Drawing.Size(273, 16);
             this.taskNameTextBox.TabIndex = 5;
             // 
-            // addUsersButton
+            // showUsersButton
             // 
-            this.addUsersButton.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.showUsersButton.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.addUsersButton.FlatAppearance.BorderColor = System.Drawing.Color.White;
-            this.addUsersButton.FlatAppearance.BorderSize = 0;
-            this.addUsersButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.addUsersButton.Font = new System.Drawing.Font("Segoe UI Light", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.addUsersButton.Location = new System.Drawing.Point(173, 270);
-            this.addUsersButton.Name = "addUsersButton";
-            this.addUsersButton.Size = new System.Drawing.Size(273, 24);
-            this.addUsersButton.TabIndex = 9;
-            this.addUsersButton.Text = "Lista Uzytkowikow";
-            this.addUsersButton.UseVisualStyleBackColor = true;
+            this.showUsersButton.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.showUsersButton.FlatAppearance.BorderSize = 0;
+            this.showUsersButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.showUsersButton.Font = new System.Drawing.Font("Segoe UI Light", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.showUsersButton.Location = new System.Drawing.Point(173, 270);
+            this.showUsersButton.Name = "showUsersButton";
+            this.showUsersButton.Size = new System.Drawing.Size(273, 24);
+            this.showUsersButton.TabIndex = 9;
+            this.showUsersButton.Text = "Lista Uzytkowikow";
+            this.showUsersButton.UseVisualStyleBackColor = true;
+            this.showUsersButton.Click += new System.EventHandler(this.showUsersButton_Click);
             // 
             // taskNameLabel
             // 
@@ -214,7 +215,7 @@
             // userListMenuStrip
             // 
             this.userListMenuStrip.Name = "userListMenuStrip";
-            this.userListMenuStrip.Size = new System.Drawing.Size(153, 26);
+            this.userListMenuStrip.Size = new System.Drawing.Size(61, 4);
             // 
             // AddTaskFromBacklog
             // 
@@ -243,7 +244,7 @@
         private System.Windows.Forms.TextBox priorityTextBox;
         private System.Windows.Forms.TextBox taskDescriptionTextBox;
         private System.Windows.Forms.TextBox taskNameTextBox;
-        private System.Windows.Forms.Button addUsersButton;
+        private System.Windows.Forms.Button showUsersButton;
         private System.Windows.Forms.Label taskNameLabel;
         private System.Windows.Forms.Button addTaskButton;
         private System.Windows.Forms.ContextMenuStrip userListMenuStrip;
