@@ -6,41 +6,110 @@ using MetroFramework.Forms;
 
 namespace ScrumIt.Forms
 {
-    public partial class AddTask : MetroForm
+    public partial class EditTask : MetroForm
     {
-        public AddTask()
+        private int _taskId;
+        public EditTask(int taskId)
         {
+            _taskId = taskId;
             InitializeComponent();
         }
 
-
         private readonly Color _panelColor = ColorTranslator.FromHtml("#4AC1C1");
 
-        private void TaskForm_Load(object sender, EventArgs e)
+        private void EditTask_Load(object sender, System.EventArgs e)
         {
-            addTaskButton.BackColor = _panelColor;
+            editTaskButton.BackColor = _panelColor;
 
-            //pobierz uzykownikow danego projektu z bazki
-            var users = new[]
+            //pobierz dany task z bazki
+            var task = new
+            {
+                taskName = "Nowy Task",
+                taskType = "High",
+                taskDescription = "Task Description",
+                taskPriority = 5,
+                estimatedTime = 10,
+                users = new[]
+                {
+                    new
+                    {
+                        UserName ="BM1",
+                        FirstName = "Bartosz",
+                        LastName = "Nowak"
+                    },
+                    new
+                    {
+                        UserName ="BM2",
+                        FirstName = "Bartosz",
+                        LastName = "Nowak"
+                    }
+                }
+            };
+
+            taskNameTextBox.Text = task.taskName;
+            taskDescriptionTextBox.Text = task.taskDescription;
+            priorityTextBox.Text = task.taskPriority.ToString();
+            estimatedTimeTextBox.Text = task.estimatedTime.ToString();
+
+            taskNameTextBox.BackColor = Color.White;
+            taskDescriptionTextBox.BackColor = Color.White;
+            priorityTextBox.BackColor = Color.White;
+            estimatedTimeTextBox.BackColor = Color.White;
+
+            userListMenuStrip.Items.AddRange(createUsersListMenu(task.users));
+        }
+
+        private ToolStripItem[] createUsersListMenu(dynamic userList)
+        {
+            //pobierz wszystkich uzytkownikow z bazki
+            var allUsers = new[]
             {
                 new
                 {
-                    UserName = "BM",
+                    UserName ="BM1",
                     FirstName = "Bartosz",
                     LastName = "Nowak"
                 },
                 new
                 {
-                    UserName = "BM",
+                    UserName ="BM2",
+                    FirstName = "Bartosz",
+                    LastName = "Nowak"
+                },
+                new
+                {
+                    UserName ="BM22",
                     FirstName = "Bartosz",
                     LastName = "Nowak"
                 }
             };
+            
+            var toolStripItems = new ToolStripItem[allUsers.Length];
+            for (var i = 0; i < allUsers.Length; i++)
+            {
+                var toolStripMenuItemName = allUsers[i].UserName;
+                var toolStripMenuItemText = allUsers[i].FirstName + " " + allUsers[i].LastName + " ";
+                var toolStripMenuItem = new ToolStripMenuItem
+                {
+                    Name = toolStripMenuItemName,
+                    Text = toolStripMenuItemText,
+                    Image = Properties.Resources.cat2,
+                    CheckOnClick = true
+                };
+                foreach (var user in userList)
+                {
+                    if (user.UserName == allUsers[i].UserName)
+                    {
+                        toolStripMenuItem.Checked = true;
+                    }
+                }
+                toolStripItems[i] = toolStripMenuItem;
+            }
 
-            userListMenuStrip.Items.AddRange(createUsersListMenu(users));
+            return toolStripItems;
         }
 
-        private void addTaskButton_Click(object sender, EventArgs e)
+        private void editTaskButton_Click(object sender, System.EventArgs e)
         {
             var validationFlag = true;
             var taskName = taskNameTextBox.Text;
@@ -95,6 +164,11 @@ namespace ScrumIt.Forms
             }
         }
 
+        private void showUsersButton_Click(object sender, System.EventArgs e)
+        {
+            userListMenuStrip.Show(showUsersButton, new Point(0, showUsersButton.Height));
+        }
+
         private void priorityTextBox_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) &&
@@ -111,31 +185,6 @@ namespace ScrumIt.Forms
             {
                 e.Handled = true;
             }
-        }
-
-        private void addUsersButton_Click(object sender, EventArgs e)
-        {
-            userListMenuStrip.Show(addUsersButton, new Point(0, addUsersButton.Height));
-        }
-
-        private ToolStripItem[] createUsersListMenu(dynamic userList)
-        {
-            var toolStripItems = new ToolStripItem[userList.Length];
-            for (var i = 0; i < userList.Length; i++)
-            {
-                var toolStripMenuItemName = userList[i].UserName;
-                var toolStripMenuItemText = userList[i].FirstName + " " + userList[i].LastName + " ";
-                var toolStripMenuItem = new ToolStripMenuItem
-                {
-                    Name = toolStripMenuItemName,
-                    Text = toolStripMenuItemText,
-                    Image = Properties.Resources.image,
-                    CheckOnClick = true
-                };
-                toolStripItems[i] = toolStripMenuItem;
-            }
-
-            return toolStripItems;
         }
 
         private void userListMenuStrip_Closing(object sender, ToolStripDropDownClosingEventArgs e)

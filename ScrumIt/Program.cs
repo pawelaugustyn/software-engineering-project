@@ -14,7 +14,7 @@ namespace ScrumIt
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new AddTaskFromBacklog());
+            Application.Run(new CurrentSprint());
         }
     }
 }

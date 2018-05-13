@@ -30,7 +30,7 @@ namespace ScrumIt.Forms
                     taskDescription = "Task Description",
                     taskPriority = 2,
                     estimatedTime = 10,
-                    users = new[] {"Mindur1","Mindur2","Mindur3","Mindur4"},
+                    users = new[] {"Nowak1","Nowak2","Nowak3","Nowak4"},
                     taskStage = 1
                 },
                 new
@@ -39,7 +39,7 @@ namespace ScrumIt.Forms
                     taskDescription = "Task Description",
                     taskPriority = 5,
                     estimatedTime = 10,
-                    users = new[] {"Mindur1","Mindur2","Mindur3","Mindur4"},
+                    users = new[] {"Nowak1","Nowak2","Nowak3","Nowak4"},
                     taskStage = 1
                 },
                 new
@@ -48,7 +48,7 @@ namespace ScrumIt.Forms
                     taskDescription = "Task Description",
                     taskPriority = 7,
                     estimatedTime = 10,
-                    users = new[] {"Mindur1","Mindur2","Mindur3","Mindur4"},
+                    users = new[] {"Nowak1","Nowak2","Nowak3","Nowak4"},
                     taskStage = 1
                 },
                 new
@@ -57,7 +57,7 @@ namespace ScrumIt.Forms
                     taskDescription = "Task Description",
                     taskPriority = 8,
                     estimatedTime = 10,
-                    users = new[] {"Mindur1","Mindur2","Mindur3","Mindur4"},
+                    users = new[] {"Nowak1","Nowak2","Nowak3","Nowak4"},
                     taskStage = 1
                 },
                 new
@@ -66,7 +66,7 @@ namespace ScrumIt.Forms
                     taskDescription = "Task Description",
                     taskPriority = 10,
                     estimatedTime = 10,
-                    users = new[] {"Mindur1","Mindur2","Mindur3","Mindur4"},
+                    users = new[] {"Nowak1","Nowak2","Nowak3","Nowak4"},
                     taskStage = 1
                 },
                 new
@@ -75,7 +75,7 @@ namespace ScrumIt.Forms
                     taskDescription = "Task Description",
                     taskPriority = 1,
                     estimatedTime = 10,
-                    users = new[] {"Mindur1","Mindur2","Mindur3","Mindur4"},
+                    users = new[] {"Nowak1","Nowak2","Nowak3","Nowak4"},
                     taskStage =1
                 },
                 new
@@ -84,7 +84,7 @@ namespace ScrumIt.Forms
                     taskDescription = "Task Description",
                     taskPriority = 0,
                     estimatedTime = 10,
-                    users = new[] {"Mindur1","Mindur2","Mindur3","Mindur4"},
+                    users = new[] {"Nowak1","Nowak2","Nowak3","Nowak4"},
                     taskStage = 1
                 },
                 new
@@ -93,7 +93,7 @@ namespace ScrumIt.Forms
                     taskDescription = "Task Description",
                     taskPriority = 5,
                     estimatedTime = 10,
-                    users = new[] {"Mindur1","Mindur2","Mindur3","Mindur4"},
+                    users = new[] {"Nowak1","Nowak2","Nowak3","Nowak4"},
                     taskStage = 1
                 },
                 new
@@ -102,7 +102,7 @@ namespace ScrumIt.Forms
                     taskDescription = "Task Description",
                     taskPriority = 4,
                     estimatedTime = 10,
-                    users = new[] {"Mindur1","Mindur2","Mindur3","Mindur4"},
+                    users = new[] {"Nowak1","Nowak2","Nowak3","Nowak4"},
                     taskStage = 1
                 },
                 new
@@ -111,7 +111,7 @@ namespace ScrumIt.Forms
                     taskDescription = "Task Description",
                     taskPriority = 4,
                     estimatedTime = 10,
-                    users = new[] {"Mindur1","Mindur2","Mindur3","Mindur4"},
+                    users = new[] {"Nowak1","Nowak2","Nowak3","Nowak4"},
                     taskStage = 1
                 },
                 new
@@ -120,7 +120,7 @@ namespace ScrumIt.Forms
                     taskDescription = "Task Description",
                     taskPriority = 4,
                     estimatedTime = 10,
-                    users = new[] {"Mindur1","Mindur2","Mindur3","Mindur4"},
+                    users = new[] {"Nowak1","Nowak2","Nowak3","Nowak4"},
                     taskStage = 1
                 }
             };
@@ -158,14 +158,14 @@ namespace ScrumIt.Forms
                 {
                     UserName = "BM",
                     FirstName = "Bartosz",
-                    LastName = "Mindur",
+                    LastName = "Nowak",
                     Role = "Admin"
                 },
                 new
                 {
                     UserName = "BM",
                     FirstName = "Bartosz",
-                    LastName = "Mindur",
+                    LastName = "Nowak",
                     Role = "Admin"
                 }
             };
@@ -218,7 +218,7 @@ namespace ScrumIt.Forms
                     taskDescription = "Task Description",
                     taskPriority = 0,
                     estimatedTime = 10,
-                    users = new[] {"Mindur1","Mindur2","Mindur3","Mindur4"},
+                    users = new[] {"Nowak1","Nowak2","Nowak3","Nowak4"},
                     taskStage = 1
                 },
                 new
@@ -227,7 +227,7 @@ namespace ScrumIt.Forms
                     taskDescription = "Task Description",
                     taskPriority = 8,
                     estimatedTime = 10,
-                    users = new[] {"Mindur1","Mindur2","Mindur3","Mindur4"},
+                    users = new[] {"Nowak1","Nowak2","Nowak3","Nowak4"},
                     taskStage =2
                 },
                 new
@@ -236,7 +236,7 @@ namespace ScrumIt.Forms
                     taskDescription = "Task Description",
                     taskPriority = 7,
                     estimatedTime = 10,
-                    users = new[] {"Mindur1","Mindur2","Mindur3","Mindur4"},
+                    users = new[] {"Nowak1","Nowak2","Nowak3","Nowak4"},
                     taskStage = 3
                 }
             };
@@ -283,6 +283,18 @@ namespace ScrumIt.Forms
                 ((Panel)sender).Location = new Point(width / 30 + 2 * width / 3, ((Panel)sender).Location.Y);
             }
             //change task stage
+        }
+
+        private void panel_DoubleClick(int taskId)
+        {
+            EditTask editTask = new EditTask(taskId);
+            editTask.Show();
+        }
+
+        private void backlogToolStripMenuItem_Click(int taskId)
+        {
+            AddTaskFromBacklog addTask = new AddTaskFromBacklog(taskId);
+            addTask.Show();
         }
 
         private void changeColorButton_Click(Panel taskPanel, MetroTextBox textBox)
@@ -351,7 +363,8 @@ namespace ScrumIt.Forms
 
         private void addTaskButton_Click(object sender, EventArgs e)
         {
-            //dodaj taska nowy form
+            AddTask addTask = new AddTask();
+            addTask.Show();
         }
 
         private void historyToolStripMenuItem_Click(string sprintName)
@@ -365,7 +378,7 @@ namespace ScrumIt.Forms
                     taskDescription = "Task Description",
                     taskPriority = 2,
                     estimatedTime = 10,
-                    users = new[] {"Mindur1","Mindur2","Mindur3","Mindur4"},
+                    users = new[] {"Nowak1","Nowak2","Nowak3","Nowak4"},
                     taskStage = 1,
                     Color = Color.Aquamarine
                 },
@@ -375,7 +388,7 @@ namespace ScrumIt.Forms
                     taskDescription = "Task Description",
                     taskPriority = 4,
                     estimatedTime = 10,
-                    users = new[] {"Mindur1","Mindur2","Mindur3","Mindur4"},
+                    users = new[] {"Nowak1","Nowak2","Nowak3","Nowak4"},
                     taskStage = 2,
                     Color = Color.Aqua
                 },
@@ -385,7 +398,7 @@ namespace ScrumIt.Forms
                     taskDescription = "Task Description",
                     taskPriority = 10,
                     estimatedTime = 10,
-                    users = new[] {"Mindur1","Mindur2","Mindur3","Mindur4"},
+                    users = new[] {"Nowak1","Nowak2","Nowak3","Nowak4"},
                     taskStage = 3,
                     Color = Color.Bisque
                 }
@@ -445,6 +458,10 @@ namespace ScrumIt.Forms
                     Name = toolStripMenuItemName,
                     Text = backlog[i].TaskName
                 };
+                toolStripMenuItem.Click += delegate
+                {
+                    backlogToolStripMenuItem_Click(0);
+                };
                 toolStripItems[i] = toolStripMenuItem;
             }
 
@@ -462,7 +479,7 @@ namespace ScrumIt.Forms
                 {
                     Name = toolStripMenuItemName,
                     Text = toolStripMenuItemText,
-                    Image = Properties.Resources.image
+                    Image = Properties.Resources.cat2
                 };
                 toolStripItems[i] = toolStripMenuItem;
             }
@@ -499,6 +516,10 @@ namespace ScrumIt.Forms
             taskPanel.MouseDown += panel_MouseDown;
             taskPanel.MouseMove += panel_MouseMove;
             taskPanel.MouseUp += panel_MouseUp;
+            taskPanel.DoubleClick += delegate
+            {
+                panel_DoubleClick(0);
+            };
 
             var taskNameTextBox = new MetroTextBox()
             {
@@ -557,7 +578,7 @@ namespace ScrumIt.Forms
                 var pictureBox = new PictureBox
                 {
                     //get picture by user id
-                    Image = Properties.Resources.image,
+                    Image = Properties.Resources.cat2,
                     Location = new Point(location, 49),
                     Name = pictureBoxName,
                     Size = new Size(23, 25),
@@ -678,7 +699,7 @@ namespace ScrumIt.Forms
                 var pictureBox = new PictureBox
                 {
                     //get picture by user id
-                    Image = Properties.Resources.image,
+                    Image = Properties.Resources.cat2,
                     Location = new Point(location, 49),
                     Name = pictureBoxName,
                     Size = new Size(23, 25),

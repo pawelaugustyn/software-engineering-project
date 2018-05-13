@@ -1,6 +1,6 @@
 ﻿namespace ScrumIt.Forms
 {
-    partial class AddTaskFromBacklog
+    partial class EditTask
     {
         /// <summary>
         /// Required designer variable.
@@ -40,7 +40,7 @@
             this.taskNameTextBox = new System.Windows.Forms.TextBox();
             this.showUsersButton = new System.Windows.Forms.Button();
             this.taskNameLabel = new System.Windows.Forms.Label();
-            this.addTaskButton = new System.Windows.Forms.Button();
+            this.editTaskButton = new System.Windows.Forms.Button();
             this.userListMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.addTaskTableLayoutPanel.SuspendLayout();
             this.SuspendLayout();
@@ -70,7 +70,7 @@
             this.addTaskTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
             this.addTaskTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
             this.addTaskTableLayoutPanel.Size = new System.Drawing.Size(450, 298);
-            this.addTaskTableLayoutPanel.TabIndex = 1;
+            this.addTaskTableLayoutPanel.TabIndex = 2;
             // 
             // taskUserListLabel
             // 
@@ -130,27 +130,26 @@
             // estimatedTimeTextBox
             // 
             this.estimatedTimeTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.estimatedTimeTextBox.Enabled = false;
             this.estimatedTimeTextBox.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.estimatedTimeTextBox.Location = new System.Drawing.Point(173, 240);
             this.estimatedTimeTextBox.Name = "estimatedTimeTextBox";
             this.estimatedTimeTextBox.Size = new System.Drawing.Size(273, 16);
             this.estimatedTimeTextBox.TabIndex = 8;
+            this.estimatedTimeTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.estimatedTimeTextBox_KeyPress);
             // 
             // priorityTextBox
             // 
             this.priorityTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.priorityTextBox.Enabled = false;
             this.priorityTextBox.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.priorityTextBox.Location = new System.Drawing.Point(173, 210);
             this.priorityTextBox.Name = "priorityTextBox";
             this.priorityTextBox.Size = new System.Drawing.Size(273, 16);
             this.priorityTextBox.TabIndex = 7;
+            this.priorityTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.priorityTextBox_KeyPress);
             // 
             // taskDescriptionTextBox
             // 
             this.taskDescriptionTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.taskDescriptionTextBox.Enabled = false;
             this.taskDescriptionTextBox.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.taskDescriptionTextBox.Location = new System.Drawing.Point(173, 34);
             this.taskDescriptionTextBox.Multiline = true;
@@ -161,7 +160,6 @@
             // taskNameTextBox
             // 
             this.taskNameTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.taskNameTextBox.Enabled = false;
             this.taskNameTextBox.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.taskNameTextBox.Location = new System.Drawing.Point(173, 4);
             this.taskNameTextBox.Name = "taskNameTextBox";
@@ -199,35 +197,37 @@
             this.taskNameLabel.Text = "Nazwa Zadania";
             this.taskNameLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // addTaskButton
+            // editTaskButton
             // 
-            this.addTaskButton.FlatAppearance.BorderSize = 0;
-            this.addTaskButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.addTaskButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.addTaskButton.ForeColor = System.Drawing.Color.White;
-            this.addTaskButton.Location = new System.Drawing.Point(31, 362);
-            this.addTaskButton.Name = "addTaskButton";
-            this.addTaskButton.Size = new System.Drawing.Size(450, 31);
-            this.addTaskButton.TabIndex = 2;
-            this.addTaskButton.Text = "Dodaj do sprintu";
-            this.addTaskButton.UseVisualStyleBackColor = true;
-            this.addTaskButton.Click += new System.EventHandler(this.addTaskButton_Click);
+            this.editTaskButton.FlatAppearance.BorderSize = 0;
+            this.editTaskButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.editTaskButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.editTaskButton.ForeColor = System.Drawing.Color.White;
+            this.editTaskButton.Location = new System.Drawing.Point(31, 362);
+            this.editTaskButton.Name = "editTaskButton";
+            this.editTaskButton.Size = new System.Drawing.Size(450, 31);
+            this.editTaskButton.TabIndex = 3;
+            this.editTaskButton.Text = "Uaktualnij";
+            this.editTaskButton.UseVisualStyleBackColor = true;
+            this.editTaskButton.Click += new System.EventHandler(this.editTaskButton_Click);
             // 
             // userListMenuStrip
             // 
             this.userListMenuStrip.Name = "userListMenuStrip";
-            this.userListMenuStrip.Size = new System.Drawing.Size(61, 4);
+            this.userListMenuStrip.ShowCheckMargin = true;
+            this.userListMenuStrip.Size = new System.Drawing.Size(83, 4);
+            this.userListMenuStrip.Closing += new System.Windows.Forms.ToolStripDropDownClosingEventHandler(this.userListMenuStrip_Closing);
             // 
-            // AddTaskFromBacklog
+            // EditTask
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(513, 415);
-            this.Controls.Add(this.addTaskButton);
+            this.Controls.Add(this.editTaskButton);
             this.Controls.Add(this.addTaskTableLayoutPanel);
-            this.Name = "AddTaskFromBacklog";
+            this.Name = "EditTask";
             this.Text = "ScrumIt!";
-            this.Load += new System.EventHandler(this.AddTaskFromBacklog_Load);
+            this.Load += new System.EventHandler(this.EditTask_Load);
             this.addTaskTableLayoutPanel.ResumeLayout(false);
             this.addTaskTableLayoutPanel.PerformLayout();
             this.ResumeLayout(false);
@@ -247,7 +247,7 @@
         private System.Windows.Forms.TextBox taskNameTextBox;
         private System.Windows.Forms.Button showUsersButton;
         private System.Windows.Forms.Label taskNameLabel;
-        private System.Windows.Forms.Button addTaskButton;
+        private System.Windows.Forms.Button editTaskButton;
         private System.Windows.Forms.ContextMenuStrip userListMenuStrip;
     }
 }

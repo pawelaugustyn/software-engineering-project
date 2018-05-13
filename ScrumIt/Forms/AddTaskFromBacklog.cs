@@ -6,8 +6,10 @@ namespace ScrumIt.Forms
 {
     public partial class AddTaskFromBacklog : MetroForm
     {
-        public AddTaskFromBacklog()
+        private int _taskId;
+        public AddTaskFromBacklog(int taskId)
         {
+            _taskId = taskId;
             InitializeComponent();
         }
 
@@ -31,13 +33,13 @@ namespace ScrumIt.Forms
                     {
                         UserName ="BM",
                         FirstName = "Bartosz",
-                        LastName = "Mindur"
+                        LastName = "Nowak"
                     },
                     new
                     {
                         UserName ="BM",
                         FirstName = "Bartosz",
-                        LastName = "Mindur"
+                        LastName = "Nowak"
                     }
                 }
             };
@@ -77,6 +79,12 @@ namespace ScrumIt.Forms
         private void showUsersButton_Click(object sender, System.EventArgs e)
         {
             userListMenuStrip.Show(showUsersButton, new Point(0, showUsersButton.Height));
+        }
+
+        private void addTaskButton_Click(object sender, System.EventArgs e)
+        {
+            //dodaj task do bazki
+            this.Close();
         }
     }
 }
