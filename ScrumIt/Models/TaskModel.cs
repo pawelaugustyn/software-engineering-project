@@ -19,12 +19,12 @@ namespace ScrumIt.Models
  
         public static TaskModel GetTaskById(int taskid)
         {
-            return TaskAcces.GetTaskById(taskid);
+            return TaskAccess.GetTaskById(taskid);
         }
  
         public static TaskModel GetTaskByName(string taskname)
         {
-            return TaskAcces.GetTaskByName(taskname);
+            return TaskAccess.GetTaskByName(taskname);
         }
  
         public static List<TaskModel> GetTasksByPriority(int priority)
