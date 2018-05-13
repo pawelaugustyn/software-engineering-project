@@ -27,112 +27,101 @@ namespace ScrumIt.Forms
                 new
                 {
                     taskName = "Nowy Task",
-                    taskType = "High",
                     taskDescription = "Task Description",
-                    taskPriority = "Low",
+                    taskPriority = 2,
                     estimatedTime = 10,
                     users = new[] {"Mindur1","Mindur2","Mindur3","Mindur4"},
-                    taskStage = 0
+                    taskStage = 1
                 },
                 new
                 {
                     taskName = "Nowy Task",
-                    taskType = "High",
                     taskDescription = "Task Description",
-                    taskPriority = "Medium",
+                    taskPriority = 5,
                     estimatedTime = 10,
                     users = new[] {"Mindur1","Mindur2","Mindur3","Mindur4"},
-                    taskStage = 0
+                    taskStage = 1
                 },
                 new
                 {
                     taskName = "Nowy Task",
-                    taskType = "High",
                     taskDescription = "Task Description",
-                    taskPriority = "High",
+                    taskPriority = 7,
                     estimatedTime = 10,
                     users = new[] {"Mindur1","Mindur2","Mindur3","Mindur4"},
-                    taskStage = 0
+                    taskStage = 1
                 },
                 new
                 {
                     taskName = "Nowy Task",
-                    taskType = "High",
                     taskDescription = "Task Description",
-                    taskPriority = "High",
+                    taskPriority = 8,
                     estimatedTime = 10,
                     users = new[] {"Mindur1","Mindur2","Mindur3","Mindur4"},
-                    taskStage = 0
+                    taskStage = 1
                 },
                 new
                 {
                     taskName = "Nowy Task",
-                    taskType = "High",
                     taskDescription = "Task Description",
-                    taskPriority = "High",
+                    taskPriority = 10,
                     estimatedTime = 10,
                     users = new[] {"Mindur1","Mindur2","Mindur3","Mindur4"},
-                    taskStage = 0
+                    taskStage = 1
                 },
                 new
                 {
                     taskName = "Nowy Task",
-                    taskType = "High",
                     taskDescription = "Task Description",
-                    taskPriority = "High",
+                    taskPriority = 1,
                     estimatedTime = 10,
                     users = new[] {"Mindur1","Mindur2","Mindur3","Mindur4"},
-                    taskStage = 0
+                    taskStage =1
                 },
                 new
                 {
                     taskName = "Nowy Task",
-                    taskType = "High",
                     taskDescription = "Task Description",
-                    taskPriority = "High",
+                    taskPriority = 0,
                     estimatedTime = 10,
                     users = new[] {"Mindur1","Mindur2","Mindur3","Mindur4"},
-                    taskStage = 0
+                    taskStage = 1
                 },
                 new
                 {
                     taskName = "Nowy Task",
-                    taskType = "High",
                     taskDescription = "Task Description",
-                    taskPriority = "High",
+                    taskPriority = 5,
                     estimatedTime = 10,
                     users = new[] {"Mindur1","Mindur2","Mindur3","Mindur4"},
-                    taskStage = 0
+                    taskStage = 1
                 },
                 new
                 {
                     taskName = "Nowy Task",
-                    taskType = "High",
                     taskDescription = "Task Description",
-                    taskPriority = "High",
+                    taskPriority = 4,
                     estimatedTime = 10,
                     users = new[] {"Mindur1","Mindur2","Mindur3","Mindur4"},
-                    taskStage = 0
+                    taskStage = 1
                 },
                 new
                 {
                     taskName = "Nowy Task",
-                    taskType = "High",
                     taskDescription = "Task Description",
-                    taskPriority = "High",
+                    taskPriority = 4,
                     estimatedTime = 10,
                     users = new[] {"Mindur1","Mindur2","Mindur3","Mindur4"},
-                    taskStage = 0
+                    taskStage = 1
                 },
                 new
                 {
                     taskName = "Nowy Task",
-                    taskType = "High",
                     taskDescription = "Task Description",
-                    taskPriority = "High",
+                    taskPriority = 4,
                     estimatedTime = 10,
                     users = new[] {"Mindur1","Mindur2","Mindur3","Mindur4"},
-                    taskStage = 0
+                    taskStage = 1
                 }
             };
 
@@ -226,32 +215,29 @@ namespace ScrumIt.Forms
                 new
                 {
                     taskName = "Nowy Task",
-                    taskType = "High",
                     taskDescription = "Task Description",
-                    taskPriority = "Low",
+                    taskPriority = 0,
                     estimatedTime = 10,
                     users = new[] {"Mindur1","Mindur2","Mindur3","Mindur4"},
-                    taskStage = 0
+                    taskStage = 1
                 },
                 new
                 {
                     taskName = "Nowy Task",
-                    taskType = "High",
                     taskDescription = "Task Description",
-                    taskPriority = "Medium",
+                    taskPriority = 8,
                     estimatedTime = 10,
                     users = new[] {"Mindur1","Mindur2","Mindur3","Mindur4"},
-                    taskStage =1
+                    taskStage =2
                 },
                 new
                 {
                     taskName = "Nowy Task",
-                    taskType = "High",
                     taskDescription = "Task Description",
-                    taskPriority = "High",
+                    taskPriority = 7,
                     estimatedTime = 10,
                     users = new[] {"Mindur1","Mindur2","Mindur3","Mindur4"},
-                    taskStage = 2
+                    taskStage = 3
                 }
             };
             scrumBoardPanel.Controls.Clear();
@@ -376,20 +362,18 @@ namespace ScrumIt.Forms
                 new
                 {
                     taskName = "Stary Task",
-                    taskType = "Feature",
                     taskDescription = "Task Description",
-                    taskPriority = "Low",
+                    taskPriority = 2,
                     estimatedTime = 10,
                     users = new[] {"Mindur1","Mindur2","Mindur3","Mindur4"},
-                    taskStage = 0,
+                    taskStage = 1,
                     Color = Color.Aquamarine
                 },
                 new
                 {
                     taskName = "Stary Task",
-                    taskType = "High",
                     taskDescription = "Task Description",
-                    taskPriority = "Medium",
+                    taskPriority = 4,
                     estimatedTime = 10,
                     users = new[] {"Mindur1","Mindur2","Mindur3","Mindur4"},
                     taskStage = 2,
@@ -398,12 +382,11 @@ namespace ScrumIt.Forms
                 new
                 {
                     taskName = "Stary Task",
-                    taskType = "Low",
                     taskDescription = "Task Description",
-                    taskPriority = "High",
+                    taskPriority = 10,
                     estimatedTime = 10,
                     users = new[] {"Mindur1","Mindur2","Mindur3","Mindur4"},
-                    taskStage = 1,
+                    taskStage = 3,
                     Color = Color.Bisque
                 }
             };
@@ -491,15 +474,15 @@ namespace ScrumIt.Forms
         {
             var height = GetScrumBoardPanelHeight();
             var width = GetScrumBoardPanelWidth();
-
+            int stageTemp = taskList.taskStage;
             var taskPanelName = "taskPanel" + index;
             var positionX = width / 30;
-            switch (taskList.taskStage)
+            switch (stageTemp)
             {
-                case 1:
+                case 2:
                     positionX += width / 3;
                     break;
-                case 2:
+                case 3:
                     positionX += 2 * width / 3;
                     break;
             }
@@ -614,15 +597,15 @@ namespace ScrumIt.Forms
         {
             var height = GetScrumBoardPanelHeight();
             var width = GetScrumBoardPanelWidth();
-
+            int stageTemp = taskList.taskStage;
             var taskPanelName = "taskPanel" + index;
             var positionX= width / 30;
-            switch (taskList.taskStage)
+            switch (stageTemp)
             {
-                case 1:
+                case 2:
                     positionX += width / 3;
                     break;
-                case 2:
+                case 3:
                     positionX += 2 * width / 3;
                     break;
             }
@@ -708,7 +691,7 @@ namespace ScrumIt.Forms
             taskPanel.BackColor = taskList.Color;
             taskNameTextBox.BackColor = taskList.Color;
 
-            if (taskList.taskStage < 2)
+            if (taskList.taskStage < 3)
             {
                 var notFinishedTask = new Label
                 {
@@ -747,20 +730,19 @@ namespace ScrumIt.Forms
             g.Dispose();
         }
 
-        private Color getPriorityColor(string priority)
+        private Color getPriorityColor(int priority)
         {
             Color priorityColor;
-            switch (priority)
+            if (priority < 4)
             {
-                case ("High"):
-                    priorityColor = Color.DarkRed;
-                    break;
-                case ("Medium"):
-                    priorityColor = Color.DarkOrange;
-                    break;
-                default:
-                    priorityColor = Color.CornflowerBlue;
-                    break;
+                priorityColor = Color.CornflowerBlue;
+            }else if (priority < 8)
+            {
+                priorityColor = Color.DarkOrange;
+            }
+            else
+            {
+                priorityColor = Color.DarkRed;
             }
             return priorityColor;
         }
