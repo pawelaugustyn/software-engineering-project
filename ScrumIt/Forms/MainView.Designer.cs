@@ -28,13 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainView));
             this.propertiesComboBox = new System.Windows.Forms.ComboBox();
-            this.projectsList = new MetroFramework.Controls.MetroTextBox();
-            this.chooseProjectTextBox = new MetroFramework.Controls.MetroTextBox();
-            this.whichProjectTextBox = new MetroFramework.Controls.MetroTextBox();
-            this.projectButton = new MetroFramework.Controls.MetroButton();
-            this.infoTextBox = new MetroFramework.Controls.MetroTextBox();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // propertiesComboBox
@@ -45,76 +41,50 @@
             this.propertiesComboBox.Size = new System.Drawing.Size(228, 24);
             this.propertiesComboBox.TabIndex = 0;
             // 
-            // projectsList
+            // tableLayoutPanel1
             // 
-            this.projectsList.Location = new System.Drawing.Point(50, 200);
-            this.projectsList.Multiline = true;
-            this.projectsList.Name = "projectsList";
-            this.projectsList.ReadOnly = true;
-            this.projectsList.Size = new System.Drawing.Size(400, 230);
-            this.projectsList.TabIndex = 1;
-            this.projectsList.Text = resources.GetString("projectsList.Text");
+            this.tableLayoutPanel1.ColumnCount = 2;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(50, 213);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 2;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(343, 185);
+            this.tableLayoutPanel1.TabIndex = 6;
             // 
-            // chooseProjectTextBox
+            // label1
             // 
-            this.chooseProjectTextBox.Location = new System.Drawing.Point(50, 453);
-            this.chooseProjectTextBox.Name = "chooseProjectTextBox";
-            this.chooseProjectTextBox.ReadOnly = true;
-            this.chooseProjectTextBox.Size = new System.Drawing.Size(170, 30);
-            this.chooseProjectTextBox.TabIndex = 2;
-            this.chooseProjectTextBox.Text = "Podaj numer projektu:";
-            // 
-            // whichProjectTextBox
-            // 
-            this.whichProjectTextBox.Location = new System.Drawing.Point(226, 453);
-            this.whichProjectTextBox.Name = "whichProjectTextBox";
-            this.whichProjectTextBox.Size = new System.Drawing.Size(50, 30);
-            this.whichProjectTextBox.TabIndex = 3;
-            this.whichProjectTextBox.Text = "nr";
-            // 
-            // projectButton
-            // 
-            this.projectButton.Location = new System.Drawing.Point(325, 453);
-            this.projectButton.Name = "projectButton";
-            this.projectButton.Size = new System.Drawing.Size(69, 30);
-            this.projectButton.TabIndex = 4;
-            this.projectButton.Text = "OK";
-            // 
-            // infoTextBox
-            // 
-            this.infoTextBox.Location = new System.Drawing.Point(50, 135);
-            this.infoTextBox.Name = "infoTextBox";
-            this.infoTextBox.ReadOnly = true;
-            this.infoTextBox.Size = new System.Drawing.Size(200, 30);
-            this.infoTextBox.TabIndex = 5;
-            this.infoTextBox.Text = "Wybierz projekt:";
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.label1.Location = new System.Drawing.Point(47, 132);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(185, 29);
+            this.label1.TabIndex = 7;
+            this.label1.Text = "Wybierz projekt:";
             // 
             // MainView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1006, 721);
-            this.Controls.Add(this.infoTextBox);
-            this.Controls.Add(this.projectButton);
-            this.Controls.Add(this.whichProjectTextBox);
-            this.Controls.Add(this.chooseProjectTextBox);
-            this.Controls.Add(this.projectsList);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.propertiesComboBox);
             this.Name = "MainView";
             this.Padding = new System.Windows.Forms.Padding(20, 60, 20, 10);
             this.Text = "Scrum It!";
             this.Load += new System.EventHandler(this.MainView_Load);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
 
         private System.Windows.Forms.ComboBox propertiesComboBox;
-        private MetroFramework.Controls.MetroTextBox projectsList;
-        private MetroFramework.Controls.MetroTextBox chooseProjectTextBox;
-        private MetroFramework.Controls.MetroTextBox whichProjectTextBox;
-        private MetroFramework.Controls.MetroButton projectButton;
-        private MetroFramework.Controls.MetroTextBox infoTextBox;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.Label label1;
     }
 }
