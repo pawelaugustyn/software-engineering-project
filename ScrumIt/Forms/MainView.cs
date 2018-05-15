@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Windows.Forms;
-using MaterialSkin;
-using MaterialSkin.Controls;
-using ScrumIt.Models;
+using MetroFramework.Forms;
 
 namespace ScrumIt.Forms
 {
-    public partial class MainView : Form
+    public partial class MainView : MetroForm
     {
         public MainView()
         {
