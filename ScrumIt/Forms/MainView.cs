@@ -3,6 +3,8 @@ using System.Windows.Forms;
 using ScrumIt.Models;
 using MetroFramework.Forms;
 using MetroFramework.Controls;
+using ScrumIt.DataAccess;
+
 
 namespace ScrumIt.Forms
 {
@@ -31,8 +33,6 @@ namespace ScrumIt.Forms
             propertiesComboBox.Items.Add("Dane użytkownika");
             propertiesComboBox.Items.Add("Wyloguj");
             propertiesComboBox.SelectedIndex = 0;
-            
-            
 
         }
 
@@ -45,9 +45,13 @@ namespace ScrumIt.Forms
             panel.Size = new System.Drawing.Size(500, 500);
             //panel.BackColor = System.Drawing.Color.Beige;
 
-            //później- pobrać nazwy z bazy
-            string[] tab = { "nazwaProjektu", "nazwaProjektu2", "nazwaProjektu3", "nazwaProjektu4" };
-            var howManyRows = tab.Length;
+            //pobranie projektow danego uzytkownika i wpisanie ich nazw do tablicy projectsNames
+            var projectsList = ProjectAccess.GetProjectsByUserId(AppStateProvider.Instance.CurrentUser.UserId);
+            string[] projectsNames = new string[projectsList.Count];
+            for (int i = 0; i < projectsList.Count; i++)
+                projectsNames[i] = projectsList[i].ProjectName;
+
+            var howManyRows = projectsNames.Length;
 
             // ilosc kolumn i wierszy na poczatku - reszta dodana dynamicznie
             panel.ColumnCount = 1;
@@ -67,12 +71,12 @@ namespace ScrumIt.Forms
             {
                 panel.RowCount = panel.RowCount + 1;
                 panel.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
-                //panel.Controls.Add(new Label() { Text = tab[i],/* TextAlign = ContentAlignment.MiddleCenter*/ }, 0, panel.RowCount - 1);
+                //panel.Controls.Add(new Label() { Text = projectsNames[i],/* TextAlign = ContentAlignment.MiddleCenter*/ }, 0, panel.RowCount - 1);
 
                 MetroButton b = new MetroButton();
                 b.Click += delegate { MessageBox.Show("Buttonclick"); };
-                b.Text = tab[i];
-                b.Name = tab[i] + "Button";
+                b.Text = projectsNames[i];
+                b.Name = projectsNames[i] + "Button";
                 b.BackColor = System.Drawing.Color.GhostWhite;
                 b.Size = new System.Drawing.Size(200,40);
                 panel.Controls.Add(b, 0, panel.RowCount - 1);
@@ -94,9 +98,9 @@ namespace ScrumIt.Forms
         private void propertiesComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (propertiesComboBox.SelectedIndex == 1)
-                MessageBox.Show("otworz formularz z danymi uzytkownika");
+                MessageBox.Show("formularz z danymi uzytkownika");
             if (propertiesComboBox.SelectedIndex == 2)
-                MessageBox.Show("wylog");
+                MessageBox.Show("formularz do wylogowania");
         }
     }
 }
