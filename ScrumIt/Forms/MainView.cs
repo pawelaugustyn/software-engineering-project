@@ -12,7 +12,7 @@ namespace ScrumIt.Forms
 
         private void MainView_Load(object sender, EventArgs e)
         {
-
+            
         }
     }
 }
