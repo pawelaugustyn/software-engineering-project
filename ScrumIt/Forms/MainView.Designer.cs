@@ -35,8 +35,9 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(754, 586);
-            this.Margin = new System.Windows.Forms.Padding(2);
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "MainView";
+            this.Padding = new System.Windows.Forms.Padding(15, 49, 15, 16);
             this.Text = "Scrum It!";
             this.Load += new System.EventHandler(this.MainView_Load);
             this.ResumeLayout(false);
