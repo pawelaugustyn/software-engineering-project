@@ -34,11 +34,19 @@ namespace ScrumIt.Forms
             if (Models.UserModel.LoginAs(loginTextBox.Text, passwordTextBox.Text))
             {
                 this.Hide();
+                var view = new MainView();
+                //view.ShowDialog();
+                view.Show();
             }
             else
             {
                 MessageBox.Show("Niepoprawne dane logowania");
             }
+        }
+
+        private void GuestmetroLink_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("zalogowano jako gość");
         }
     }
 }

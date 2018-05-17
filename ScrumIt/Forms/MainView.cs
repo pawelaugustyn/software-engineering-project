@@ -16,17 +16,17 @@ namespace ScrumIt.Forms
         private void MainView_Load(object sender, EventArgs e)
         {
             // jesli pierwszy raz otwieramy aplikacje wchodzi if - przechodzimy do formularza logowania
-            if (AppStateProvider.Instance.CurrentUser == null)
-            {
-                var login = new Login();
-                this.Hide();
-                login.ShowDialog();
-            }
-            //else
+            //if (AppStateProvider.Instance.CurrentUser == null)
             //{
-                MessageBox.Show("uzytkownik zalogowany");
-                Draw_Projects_Table();
+            //    var login = new Login();
+            //    this.Hide();
+            //    login.ShowDialog();
             //}
+
+
+            MessageBox.Show("uzytkownik zalogowany jako " + AppStateProvider.Instance.CurrentUser.Role);
+            Draw_Projects_Table();
+            
         }
 
         private void Draw_Projects_Table()
@@ -39,40 +39,50 @@ namespace ScrumIt.Forms
             //panel.BackColor = System.Drawing.Color.Beige;
 
             //później- pobrać nazwy z bazy
-            string[] tab = { "nazwa", "nazwa2", "nazwa3", "nazwa4" };
+            string[] tab = { "nazwaProjektu", "nazwaProjektu2", "nazwaProjektu3", "nazwaProjektu4" };
             var howManyRows = tab.Length;
 
-            // ilosc kolumn i pierwszy wiersz - reszta dodana dynamicznie
-            panel.ColumnCount = 2;
-            panel.RowCount = 1;
+            // ilosc kolumn i wierszy na poczatku - reszta dodana dynamicznie
+            panel.ColumnCount = 1;
+            panel.RowCount = 0;
 
             //kolumny
             panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            //panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
 
             // wiersze - dynamicznie
             //wiersz naglowkowy
-            panel.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
-            panel.Controls.Add(new Label() { Text = "Nazwa projektu", /*TextAlign = ContentAlignment.MiddleCenter*/ }, 0, 0);
-            panel.Controls.Add(new Label() { Text = "Button", /*TextAlign = ContentAlignment.MiddleCenter*/ }, 1, 0);
+            //panel.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
+            //panel.Controls.Add(new Label() { Text = "Nazwa projektu", /*TextAlign = ContentAlignment.MiddleCenter*/ }, 0, 0);
+            //panel.Controls.Add(new Label() { Text = "Button", /*TextAlign = ContentAlignment.MiddleCenter*/ }, 1, 0);
             //pozostale wiersze
             for (var i = 0; i < howManyRows; i++)
             {
                 panel.RowCount = panel.RowCount + 1;
                 panel.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
-                panel.Controls.Add(new Label() { Text = tab[i],/* TextAlign = ContentAlignment.MiddleCenter*/ }, 0, panel.RowCount - 1);
+                //panel.Controls.Add(new Label() { Text = tab[i],/* TextAlign = ContentAlignment.MiddleCenter*/ }, 0, panel.RowCount - 1);
 
                 Button b = new Button();
                 b.Click += delegate { MessageBox.Show("Buttonclick"); };
-                b.Text = "button" + (i + 1);
-                b.Name = "button" + (i + 1);
+                b.Text = tab[i];
+                b.Name = tab[i] + "Button";
                 b.BackColor = System.Drawing.Color.GhostWhite;
-                panel.Controls.Add(b, 1, panel.RowCount - 1);
+                b.Size = new System.Drawing.Size(200,40);
+                panel.Controls.Add(b, 0, panel.RowCount - 1);
 
             }
 
             Controls.Add(panel);
         }
-        
+        // zamykamy aplikacje jesli uzytkownik klika na przycisk "zamknij" (czerwony x :))
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            if (e.CloseReason == CloseReason.UserClosing)
+            {
+                MessageBox.Show("Zamknięcie aplikacji");
+                Application.Exit();
+            }
+        }
+
     }
 }
