@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using ScrumIt.Models;
 using MetroFramework.Forms;
+using MetroFramework.Controls;
 
 namespace ScrumIt.Forms
 {
@@ -26,7 +27,13 @@ namespace ScrumIt.Forms
 
             MessageBox.Show("uzytkownik zalogowany jako " + AppStateProvider.Instance.CurrentUser.Role);
             Draw_Projects_Table();
+            propertiesComboBox.Items.Add("Wybierz opcję...");
+            propertiesComboBox.Items.Add("Dane użytkownika");
+            propertiesComboBox.Items.Add("Wyloguj");
+            propertiesComboBox.SelectedIndex = 0;
             
+            
+
         }
 
         private void Draw_Projects_Table()
@@ -62,7 +69,7 @@ namespace ScrumIt.Forms
                 panel.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
                 //panel.Controls.Add(new Label() { Text = tab[i],/* TextAlign = ContentAlignment.MiddleCenter*/ }, 0, panel.RowCount - 1);
 
-                Button b = new Button();
+                MetroButton b = new MetroButton();
                 b.Click += delegate { MessageBox.Show("Buttonclick"); };
                 b.Text = tab[i];
                 b.Name = tab[i] + "Button";
@@ -84,5 +91,12 @@ namespace ScrumIt.Forms
             }
         }
 
+        private void propertiesComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (propertiesComboBox.SelectedIndex == 1)
+                MessageBox.Show("otworz formularz z danymi uzytkownika");
+            if (propertiesComboBox.SelectedIndex == 2)
+                MessageBox.Show("wylog");
+        }
     }
 }

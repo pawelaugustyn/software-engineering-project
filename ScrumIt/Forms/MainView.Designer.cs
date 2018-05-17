@@ -28,18 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.propertiesComboBox = new System.Windows.Forms.ComboBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.label1 = new System.Windows.Forms.Label();
+            this.propertiesComboBox = new MetroFramework.Controls.MetroComboBox();
             this.SuspendLayout();
-            // 
-            // propertiesComboBox
-            // 
-            this.propertiesComboBox.FormattingEnabled = true;
-            this.propertiesComboBox.Location = new System.Drawing.Point(727, 64);
-            this.propertiesComboBox.Name = "propertiesComboBox";
-            this.propertiesComboBox.Size = new System.Drawing.Size(228, 24);
-            this.propertiesComboBox.TabIndex = 0;
             // 
             // tableLayoutPanel1
             // 
@@ -64,14 +56,24 @@
             this.label1.TabIndex = 7;
             this.label1.Text = "Wybierz projekt:";
             // 
+            // propertiesComboBox
+            // 
+            this.propertiesComboBox.FormattingEnabled = true;
+            this.propertiesComboBox.ItemHeight = 24;
+            this.propertiesComboBox.Location = new System.Drawing.Point(716, 63);
+            this.propertiesComboBox.Name = "propertiesComboBox";
+            this.propertiesComboBox.Size = new System.Drawing.Size(224, 30);
+            this.propertiesComboBox.TabIndex = 8;
+            this.propertiesComboBox.SelectedIndexChanged += new System.EventHandler(this.propertiesComboBox_SelectedIndexChanged);
+            // 
             // MainView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1006, 721);
+            this.Controls.Add(this.propertiesComboBox);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.tableLayoutPanel1);
-            this.Controls.Add(this.propertiesComboBox);
             this.Name = "MainView";
             this.Padding = new System.Windows.Forms.Padding(20, 60, 20, 10);
             this.Text = "Scrum It!";
@@ -82,9 +84,8 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.ComboBox propertiesComboBox;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.Label label1;
+        private MetroFramework.Controls.MetroComboBox propertiesComboBox;
     }
 }
