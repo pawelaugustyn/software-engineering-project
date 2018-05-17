@@ -66,6 +66,8 @@
   <ItemGroup>
     <Compile Include="AppStateProvider.cs" />
     <Compile Include="DataAccess\Connection.cs" />
+    <Compile Include="DataAccess\ProjectAccess.cs" />
+    <Compile Include="DataAccess\TaskAccess.cs" />
     <Compile Include="DataAccess\UserAccess.cs" />
     <Compile Include="Forms\Login.cs">
       <SubType>Form</SubType>
@@ -79,6 +81,8 @@
     <Compile Include="Forms\MainView.Designer.cs">
       <DependentUpon>MainView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Models\ProjectModel.cs" />
+    <Compile Include="Models\TaskModel.cs" />
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

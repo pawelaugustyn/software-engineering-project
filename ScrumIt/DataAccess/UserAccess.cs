@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
 using System.Windows.Forms;
@@ -29,7 +30,7 @@ namespace ScrumIt.DataAccess
                 {
                     while (reader.Read())
                     {
-                        currentUser = new UserModel()
+                        currentUser = new UserModel
                         {
                             UserId = (int)reader[0],
                             Username = (string)reader[1],
@@ -42,6 +43,124 @@ namespace ScrumIt.DataAccess
                 }
             }
             return currentUser;
+        }
+
+        public static UserModel GetUserById(int userid)
+        {
+            var user = new UserModel();
+            using (var conn = new Connection())
+            {
+                var cmd = new NpgsqlCommand("select * from users where uid=@uid limit 1;")
+                {
+                    Connection = conn.Conn
+                };
+                cmd.Parameters.AddWithValue("uid", userid);
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        user = new UserModel
+                        {
+                            UserId = (int)reader[0],
+                            Username = (string)reader[1],
+                            Firstname = (string)reader[3],
+                            Lastname = (string)reader[4],
+                            Role = (UserRoles)reader[5]
+                        };
+                        break;
+                    }
+                }
+            }
+
+            return user;
+        }
+
+        public static List<UserModel> GetUsersByLastName(string lastname)
+        {
+            var users = new List<UserModel>();
+            using (var conn = new Connection())
+            {
+                var cmd = new NpgsqlCommand("select * from users where lower(lastname) like @lastname;")
+                {
+                    Connection = conn.Conn
+                };
+                cmd.Parameters.AddWithValue("lastname", lastname + '%');
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        users.Add(new UserModel
+                        {
+                            UserId = (int)reader[0],
+                            Username = (string)reader[1],
+                            Firstname = (string)reader[3],
+                            Lastname = (string)reader[4],
+                            Role = (UserRoles)reader[5]
+                        });
+                    }
+                }
+            }
+
+            return users;
+        }
+
+        public static UserModel GetUserByLogin(string login)
+        {
+            var user = new UserModel();
+            using (var conn = new Connection())
+            {
+                var cmd = new NpgsqlCommand("select * from users where lower(login) like @login limit 1;")
+                {
+                    Connection = conn.Conn
+                };
+                cmd.Parameters.AddWithValue("login", login + '%');
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        user = new UserModel
+                        {
+                            UserId = (int)reader[0],
+                            Username = (string)reader[1],
+                            Firstname = (string)reader[3],
+                            Lastname = (string)reader[4],
+                            Role = (UserRoles)reader[5]
+                        };
+                        break;
+                    }
+                }
+            }
+
+            return user;
+        }
+
+        public static List<UserModel> GetUsersByProjectId(int projectid)
+        {
+            var users = new List<UserModel>();
+            using (var conn = new Connection())
+            {
+                var cmd = new NpgsqlCommand("select b.* from projects_has_users a join users b using(uid) where a.project_id = @projectid order by b.uid;")
+                {
+                    Connection = conn.Conn
+                };
+                cmd.Parameters.AddWithValue("projectid", projectid);
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        users.Add(new UserModel
+                        {
+                            UserId = (int)reader[0],
+                            Username = (string)reader[1],
+                            Firstname = (string)reader[3],
+                            Lastname = (string)reader[4],
+                            Role = (UserRoles)reader[5]
+                        });
+                    }
+                }
+            }
+
+            return users;
         }
 
         private static string EncryptMd5(string input)
