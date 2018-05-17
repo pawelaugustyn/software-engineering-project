@@ -28,10 +28,10 @@ namespace ScrumIt.Models
             //return ProjectAccess.GetProjectByName(projectname);
         }
  
-        public static ProjectModel GetProjectByTeamId(int teamid)
-        {
-            return new ProjectModel();
-            //return ProjectAccess.GetProjectByTeamId(teamid);
-        }
+        //public static ProjectModel GetProjectByTeamId(int teamid)
+        //{
+        //    return new ProjectModel();
+        //    //return ProjectAccess.GetProjectByTeamId(teamid);
+        //}
     }
 }
