@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.label1 = new System.Windows.Forms.Label();
+            this.infoLabel = new System.Windows.Forms.Label();
             this.propertiesComboBox = new MetroFramework.Controls.MetroComboBox();
             this.SuspendLayout();
             // 
@@ -46,21 +46,21 @@
             this.tableLayoutPanel1.Size = new System.Drawing.Size(343, 185);
             this.tableLayoutPanel1.TabIndex = 6;
             // 
-            // label1
+            // infoLabel
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.label1.Location = new System.Drawing.Point(47, 132);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(185, 29);
-            this.label1.TabIndex = 7;
-            this.label1.Text = "Wybierz projekt:";
+            this.infoLabel.AutoSize = true;
+            this.infoLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.infoLabel.Location = new System.Drawing.Point(47, 132);
+            this.infoLabel.Name = "infoLabel";
+            this.infoLabel.Size = new System.Drawing.Size(185, 29);
+            this.infoLabel.TabIndex = 7;
+            this.infoLabel.Text = "Wybierz projekt:";
             // 
             // propertiesComboBox
             // 
             this.propertiesComboBox.FormattingEnabled = true;
             this.propertiesComboBox.ItemHeight = 24;
-            this.propertiesComboBox.Location = new System.Drawing.Point(716, 63);
+            this.propertiesComboBox.Location = new System.Drawing.Point(1099, 53);
             this.propertiesComboBox.Name = "propertiesComboBox";
             this.propertiesComboBox.Size = new System.Drawing.Size(224, 30);
             this.propertiesComboBox.TabIndex = 8;
@@ -70,9 +70,9 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1006, 721);
+            this.ClientSize = new System.Drawing.Size(1366, 768);
             this.Controls.Add(this.propertiesComboBox);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.infoLabel);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "MainView";
             this.Padding = new System.Windows.Forms.Padding(20, 60, 20, 10);
@@ -85,7 +85,7 @@
 
         #endregion
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label infoLabel;
         private MetroFramework.Controls.MetroComboBox propertiesComboBox;
     }
 }

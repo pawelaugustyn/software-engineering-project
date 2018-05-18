@@ -83,6 +83,24 @@ namespace ScrumIt.Forms
 
             }
 
+            // stworz nowy projekt
+            panel.RowCount = panel.RowCount + 1;
+            panel.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
+
+            MetroButton newProject = new MetroButton();
+            newProject.Click += delegate {
+                var add = new AddProject();
+                add.ShowDialog();
+
+
+            };
+
+            newProject.Text = "Stwórz nowy projekt";
+            newProject.Name = "newProjectButton";
+            newProject.BackColor = System.Drawing.Color.Red;
+            newProject.Size = new System.Drawing.Size(200, 40);
+            panel.Controls.Add(newProject, 0, panel.RowCount - 1);
+
             Controls.Add(panel);
         }
         // zamykamy aplikacje jesli uzytkownik klika na przycisk "zamknij" (czerwony x :))
@@ -91,16 +109,26 @@ namespace ScrumIt.Forms
             if (e.CloseReason == CloseReason.UserClosing)
             {
                 MessageBox.Show("Zamknięcie aplikacji");
+                UserModel.Logout();
                 Application.Exit();
             }
         }
 
         private void propertiesComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
+            //opcja dane uzytkownika
             if (propertiesComboBox.SelectedIndex == 1)
                 MessageBox.Show("formularz z danymi uzytkownika");
+            //opcja wyloguj
             if (propertiesComboBox.SelectedIndex == 2)
-                MessageBox.Show("formularz do wylogowania");
+            {
+                MessageBox.Show("logout");
+                UserModel.Logout();
+                this.Hide();
+                var l = new Login();
+                l.Show();
+                
+            }
         }
     }
 }
