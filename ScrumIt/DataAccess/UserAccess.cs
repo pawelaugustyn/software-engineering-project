@@ -24,7 +24,7 @@ namespace ScrumIt.DataAccess
                 {
                     Connection = conn.Conn
                 };
-                cmd.Parameters.AddWithValue("username", username);
+                cmd.Parameters.AddWithValue("username", username.ToLower());
                 cmd.Parameters.AddWithValue("pass", EncryptMd5(password));
                 using (var reader = cmd.ExecuteReader())
                 {
@@ -36,7 +36,8 @@ namespace ScrumIt.DataAccess
                             Username = (string)reader[1],
                             Firstname = (string)reader[3],
                             Lastname = (string)reader[4],
-                            Role = (UserRoles)reader[5]
+                            Role = (UserRoles)reader[5],
+                            Email = (string)reader[6]
                         };
                         break;
                     }
@@ -65,7 +66,8 @@ namespace ScrumIt.DataAccess
                             Username = (string)reader[1],
                             Firstname = (string)reader[3],
                             Lastname = (string)reader[4],
-                            Role = (UserRoles)reader[5]
+                            Role = (UserRoles)reader[5],
+                            Email = (string)reader[6]
                         };
                         break;
                     }
@@ -84,7 +86,7 @@ namespace ScrumIt.DataAccess
                 {
                     Connection = conn.Conn
                 };
-                cmd.Parameters.AddWithValue("lastname", lastname + '%');
+                cmd.Parameters.AddWithValue("lastname", lastname.ToLower() + '%');
                 using (var reader = cmd.ExecuteReader())
                 {
                     while (reader.Read())
@@ -95,7 +97,8 @@ namespace ScrumIt.DataAccess
                             Username = (string)reader[1],
                             Firstname = (string)reader[3],
                             Lastname = (string)reader[4],
-                            Role = (UserRoles)reader[5]
+                            Role = (UserRoles)reader[5],
+                            Email = (string)reader[6]
                         });
                     }
                 }
@@ -113,7 +116,7 @@ namespace ScrumIt.DataAccess
                 {
                     Connection = conn.Conn
                 };
-                cmd.Parameters.AddWithValue("login", login + '%');
+                cmd.Parameters.AddWithValue("login", login.ToLower() + '%');
                 using (var reader = cmd.ExecuteReader())
                 {
                     while (reader.Read())
@@ -124,7 +127,8 @@ namespace ScrumIt.DataAccess
                             Username = (string)reader[1],
                             Firstname = (string)reader[3],
                             Lastname = (string)reader[4],
-                            Role = (UserRoles)reader[5]
+                            Role = (UserRoles)reader[5],
+                            Email = (string)reader[6]
                         };
                         break;
                     }
@@ -154,7 +158,8 @@ namespace ScrumIt.DataAccess
                             Username = (string)reader[1],
                             Firstname = (string)reader[3],
                             Lastname = (string)reader[4],
-                            Role = (UserRoles)reader[5]
+                            Role = (UserRoles)reader[5],
+                            Email = (string)reader[6]
                         });
                     }
                 }
