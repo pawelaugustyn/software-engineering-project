@@ -22,8 +22,7 @@ namespace ScrumIt.Models
  
         public static TaskModel GetTaskById(int taskid)
         {
-            return new TaskModel();
-            //return TaskAccess.GetTaskById(taskid);
+            return TaskAccess.GetTaskById(taskid);
         }
  
         public static TaskModel GetTaskByName(string taskname)

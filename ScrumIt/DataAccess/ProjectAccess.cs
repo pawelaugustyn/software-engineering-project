@@ -28,7 +28,6 @@ namespace ScrumIt.DataAccess
                             ProjectId = (int)reader[0],
                             ProjectName = (string)reader[1],
                             ProjectColor = (string)reader[2]
-                            //TeamId = (int)reader[3] //teams are now deleted / not in projects in DB
                         });
                     }
                 }
@@ -58,7 +57,6 @@ namespace ScrumIt.DataAccess
                             ProjectId = (int)reader[0],
                             ProjectName = (string)reader[1],
                             ProjectColor = (string)reader[2]
-                            //TeamId = (int)reader[3] //teams are now deleted / not in projects in DB
                         });
 
                     }
@@ -68,7 +66,33 @@ namespace ScrumIt.DataAccess
             return projects;
         }
 
+        public static ProjectModel GetProjectById(int projectid)
+        {
+            var project = new ProjectModel();
+            using (var conn = new Connection())
+            {
+                var cmd = new NpgsqlCommand("select * from projects where project_id = @projectid;")
+                {
+                    Connection = conn.Conn
+                };
+                cmd.Parameters.AddWithValue("projectid", projectid);
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        project = new ProjectModel
+                        {
+                            ProjectId = (int)reader[0],
+                            ProjectName = (string)reader[1],
+                            ProjectColor = (string)reader[2]
+                        };
+                        break;
+                    }
+                }
+            }
 
+            return project;
+        }
 
     }
 }
