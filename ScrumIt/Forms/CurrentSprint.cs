@@ -190,11 +190,14 @@ namespace ScrumIt.Forms
             bottomPanel.BackColor = _panelColor;
         }
 
+        private void userMenuButton_Click(object sender, EventArgs e)
+        {
+            userPanelMenuStrip.Show(userMenuButton, new Point(0, userMenuButton.Height));
+        }
+
         private void historyButton_Click(object sender, EventArgs e)
         {
-
             historyMenuStrip.Show(historyButton, new Point(0, historyButton.Height));
-
         }
 
         private void backlogButton_Click(object sender, EventArgs e)
@@ -289,6 +292,11 @@ namespace ScrumIt.Forms
         {
             EditTask editTask = new EditTask(taskId);
             editTask.Show();
+        }
+
+        private void projectListStripMenuItem_Click()
+        {
+
         }
 
         private void backlogToolStripMenuItem_Click(int taskId)
@@ -424,6 +432,31 @@ namespace ScrumIt.Forms
         private int getScrumBordPanelBorderSize()
         {
             return 2;
+        }
+
+        private ToolStripItem[] creatUserPanelMenu()
+        {
+            var projektListStripMenuItem = new ToolStripMenuItem
+            {
+                Name = "ProjektListStripMenuItem",
+                Text = "Lista projektów"
+            };
+            projektListStripMenuItem.Click += delegate { historyToolStripMenuItem_Click(toolStripMenuItemName); };
+            //    new ToolStripMenuItem
+            //    {
+            //        Name = "AccountSettingsStripMenuItem",
+            //        Text = "Ustawienia konta"
+            //    },
+            //    new ToolStripMenuItem
+            //    {
+            //        Name = "LogoutStripMenuItem",
+            //        Text = "Wyloguj się"
+            //    }
+            //};
+
+
+
+
         }
 
         private ToolStripItem[] CreateHistoryMenu(dynamic history)

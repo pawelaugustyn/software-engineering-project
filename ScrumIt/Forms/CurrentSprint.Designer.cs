@@ -46,6 +46,8 @@ namespace ScrumIt.Forms
             this.historyMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.backlogMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.userListMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.userMenuButton = new System.Windows.Forms.Button();
+            this.userPanelMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -239,11 +241,31 @@ namespace ScrumIt.Forms
             this.userListMenuStrip.Name = "userListMenuStrip";
             this.userListMenuStrip.Size = new System.Drawing.Size(295, 26);
             // 
+            // userMenuButton
+            // 
+            this.userMenuButton.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.userMenuButton.FlatAppearance.BorderSize = 0;
+            this.userMenuButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.userMenuButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.userMenuButton.Location = new System.Drawing.Point(1304, 9);
+            this.userMenuButton.Name = "userMenuButton";
+            this.userMenuButton.Size = new System.Drawing.Size(33, 31);
+            this.userMenuButton.TabIndex = 10;
+            this.userMenuButton.Text = "v";
+            this.userMenuButton.UseVisualStyleBackColor = true;
+            this.userMenuButton.Click += new System.EventHandler(this.userMenuButton_Click);
+            // 
+            // userPanelMenuStrip
+            // 
+            this.userPanelMenuStrip.Name = "userPanelMenuStrip";
+            this.userPanelMenuStrip.Size = new System.Drawing.Size(61, 4);
+            // 
             // CurrentSprint
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1366, 768);
+            this.Controls.Add(this.userMenuButton);
             this.Controls.Add(this.bottomPanel);
             this.Controls.Add(this.metroLabel1);
             this.Controls.Add(this.headerPanel);
@@ -284,5 +306,7 @@ namespace ScrumIt.Forms
         private System.Windows.Forms.ContextMenuStrip historyMenuStrip;
         private System.Windows.Forms.ContextMenuStrip backlogMenuStrip;
         private System.Windows.Forms.ContextMenuStrip userListMenuStrip;
+        private System.Windows.Forms.Button userMenuButton;
+        private System.Windows.Forms.ContextMenuStrip userPanelMenuStrip;
     }
 }
