@@ -67,6 +67,7 @@
     <Compile Include="AppStateProvider.cs" />
     <Compile Include="DataAccess\Connection.cs" />
     <Compile Include="DataAccess\ProjectAccess.cs" />
+    <Compile Include="DataAccess\SprintAccess.cs" />
     <Compile Include="DataAccess\TaskAccess.cs" />
     <Compile Include="DataAccess\UserAccess.cs" />
     <Compile Include="Forms\AddProject.cs">
@@ -80,6 +81,23 @@
     </Compile>
     <Compile Include="Forms\Login.Designer.cs">
       <DependentUpon>Login.cs</DependentUpon>
+    <Compile Include="Forms\AddTaskFromBacklog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\AddTaskFromBacklog.Designer.cs">
+      <DependentUpon>AddTaskFromBacklog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\CurrentSprint.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\CurrentSprint.Designer.cs">
+      <DependentUpon>CurrentSprint.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\EditTask.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\EditTask.Designer.cs">
+      <DependentUpon>EditTask.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\MainView.cs">
       <SubType>Form</SubType>
@@ -87,7 +105,14 @@
     <Compile Include="Forms\MainView.Designer.cs">
       <DependentUpon>MainView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\AddTask.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\AddTask.Designer.cs">
+      <DependentUpon>AddTask.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\ProjectModel.cs" />
+    <Compile Include="Models\SprintModel.cs" />
     <Compile Include="Models\TaskModel.cs" />
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Program.cs" />
@@ -97,9 +122,20 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Login.resx">
       <DependentUpon>Login.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\AddTaskFromBacklog.resx">
+      <DependentUpon>AddTaskFromBacklog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\CurrentSprint.resx">
+      <DependentUpon>CurrentSprint.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\EditTask.resx">
+      <DependentUpon>EditTask.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\MainView.resx">
       <DependentUpon>MainView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\AddTask.resx">
+      <DependentUpon>AddTask.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -109,6 +145,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -122,11 +159,19 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="Models\App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="MetroFramework.txt" />
+    <None Include="Resources\cat.jpg" />
+    <None Include="Resources\cat.png" />
+    <None Include="Resources\cat2.png" />
+    <None Include="Resources\image.png" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="MetroFramework.txt" />
   </ItemGroup>
+
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

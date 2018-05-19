@@ -13,6 +13,7 @@ namespace ScrumIt.Models
         public string Firstname { get; set;  }
         public string Lastname { get; set; }
         public UserRoles Role { get; set; } = UserRoles.Guest;
+        public string Email { get; set; }
         
 
         public static bool LoginAs(string username, string password)

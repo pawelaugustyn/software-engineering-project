@@ -76,6 +76,9 @@
             this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "MainView";
             this.Padding = new System.Windows.Forms.Padding(20, 60, 20, 10);
+            //this.ClientSize = new System.Drawing.Size(754, 586);
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            //this.Padding = new System.Windows.Forms.Padding(15, 49, 15, 16);
             this.Text = "Scrum It!";
             this.Load += new System.EventHandler(this.MainView_Load);
             this.ResumeLayout(false);
