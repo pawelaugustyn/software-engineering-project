@@ -81,6 +81,7 @@
     </Compile>
     <Compile Include="Forms\Login.Designer.cs">
       <DependentUpon>Login.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\AddTaskFromBacklog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -122,6 +123,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Login.resx">
       <DependentUpon>Login.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\AddTaskFromBacklog.resx">
       <DependentUpon>AddTaskFromBacklog.cs</DependentUpon>
     </EmbeddedResource>
