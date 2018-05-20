@@ -81,5 +81,63 @@ namespace ScrumIt.DataAccess
 
             return task;
         }
+        //zaktualizuj w bazie dane zadanie nadajac mu nowy stage (przeciagniecia miedzy kolumnami w sprincie)
+        public static bool UpdateTaskStage(int taskid, int newstage)
+        {
+            //dzieki using nie musimy martwic sie o rzucanie wyjatkow i nie zamkniecie polaczenia - using to ogarnie za nas
+            using (var conn = new Connection())
+            {
+
+                var cmd = new NpgsqlCommand("update tasks SET task_stage=@newstage where task_id = @taskid;")
+                {
+                    Connection = conn.Conn
+                };
+                cmd.Parameters.AddWithValue("newstage", newstage);
+                cmd.Parameters.AddWithValue("taskid", taskid);
+                //if one record was affected then it went as expected. If not, there was something wrong with the query so we throw exceptions
+                var howManyAffected = cmd.ExecuteNonQuery();
+                if (howManyAffected == 1)
+                    return true;
+                else if (howManyAffected == 0)
+                    throw new Exception("Task not found");
+                else throw new Exception("Multiple references to the same ID!");
+                
+            }
+        }
+
+        public static List<TaskModel> GetProjectTasksBySprintId(int sprintid)
+        {
+            var tasks = new List<TaskModel>();
+            using (var conn = new Connection())
+            {
+                var cmd = new NpgsqlCommand("select tsk.* from tasks tsk where tsk.sprint_id = @sprintid order by tsk.sprint_id;")
+                {
+                    Connection = conn.Conn
+                };
+                cmd.Parameters.AddWithValue("sprintid", sprintid);
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+
+                        tasks.Add(new TaskModel
+                        {
+                            TaskId = (int)reader[0],
+                            SprintId = (int)reader[1],
+                            TaskType = (string)reader[2],
+                            TaskName = (string)reader[3],
+                            TaskDesc = (string)reader[4],
+                            TaskPriority = (int)reader[5],
+                            TaskEstimatedTime = (int)reader[6],
+                            TaskStage = (int)reader[7],
+
+                        });
+
+                    }
+                }
+            }
+
+            return tasks;
+        }
     }
 }
