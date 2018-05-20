@@ -16,7 +16,8 @@ namespace ScrumIt.DataAccess
             var tasks = new List<TaskModel>();
             using (var conn = new Connection())
             {
-                var cmd = new NpgsqlCommand("select tsk.* from tasks tsk join sprints spr using(sprint_id) where spr.project_id = @projectid order by spr.sprint_id;")
+                var cmd = new NpgsqlCommand(
+                    "select tsk.* from tasks tsk join sprints spr using(sprint_id) where spr.project_id = @projectid order by spr.sprint_id;")
                 {
                     Connection = conn.Conn
                 };
@@ -28,14 +29,14 @@ namespace ScrumIt.DataAccess
 
                         tasks.Add(new TaskModel
                         {
-                            TaskId = (int)reader[0],
-                            SprintId = (int)reader[1],
-                            TaskType = (string)reader[2],
-                            TaskName = (string)reader[3],
-                            TaskDesc = (string)reader[4],
-                            TaskPriority = (int)reader[5],
-                            TaskEstimatedTime = (int)reader[6],
-                            TaskStage = (int)reader[7],
+                            TaskId = (int) reader[0],
+                            SprintId = (int) reader[1],
+                            TaskType = (string) reader[2],
+                            TaskName = (string) reader[3],
+                            TaskDesc = (string) reader[4],
+                            TaskPriority = (int) reader[5],
+                            TaskEstimatedTime = (int) reader[6],
+                            TaskStage = (int) reader[7],
 
                         });
 
@@ -46,40 +47,42 @@ namespace ScrumIt.DataAccess
             return tasks;
         }
 
-        public static TaskModel GetTaskById(int taskid)
+
+        public static List<TaskModel> GetTasksFromCurrentSprint(int project_id)
         {
-            var task = new TaskModel();
-            using (var conn = new Connection())
+            var tasks = new List<TaskModel>();
+            var current_sprint_id = SprintAccess.GetCurrentSprint(project_id).SprintId;
+
+            using (var db_connection = new Connection())
             {
-                var cmd = new NpgsqlCommand(
-                    "select * from tasks where task_id = @taskid;")
+                var db_query_to_execute = new NpgsqlCommand("select * from tasks where sprint_id = @sprint_id;")
                 {
-                    Connection = conn.Conn
+                    Connection = db_connection.Conn
                 };
-                cmd.Parameters.AddWithValue("taskid", taskid);
-                using (var reader = cmd.ExecuteReader())
+
+                db_query_to_execute.Parameters.AddWithValue("sprint_id", current_sprint_id);
+
+                using (var reader = db_query_to_execute.ExecuteReader())
                 {
                     while (reader.Read())
                     {
-
-                        task = new TaskModel
+                        tasks.Add(new TaskModel
                         {
-                            TaskId = (int)reader[0],
-                            SprintId = (int)reader[1],
-                            TaskType = (string)reader[2],
-                            TaskName = (string)reader[3],
-                            TaskDesc = (string)reader[4],
-                            TaskPriority = (int)reader[5],
-                            TaskEstimatedTime = (int)reader[6],
-                            TaskStage = (int)reader[7],
-
-                        };
-                        break;
+                            TaskId = (int) reader[0],
+                            SprintId = (int) reader[1],
+                            TaskType = (string) reader[2],
+                            TaskName = (string) reader[3],
+                            TaskDesc = (string) reader[4],
+                            TaskPriority = (int) reader[5],
+                            TaskEstimatedTime = (int) reader[6],
+                            TaskStage = (int) reader[7],
+                        });
                     }
                 }
             }
 
-            return task;
+            return tasks;
         }
     }
 }
+

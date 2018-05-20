@@ -67,7 +67,6 @@
     <Compile Include="AppStateProvider.cs" />
     <Compile Include="DataAccess\Connection.cs" />
     <Compile Include="DataAccess\ProjectAccess.cs" />
-    <Compile Include="DataAccess\SprintAccess.cs" />
     <Compile Include="DataAccess\TaskAccess.cs" />
     <Compile Include="DataAccess\UserAccess.cs" />
     <Compile Include="Forms\AddTaskFromBacklog.cs">
@@ -101,7 +100,6 @@
       <DependentUpon>AddTask.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\ProjectModel.cs" />
-    <Compile Include="Models\SprintModel.cs" />
     <Compile Include="Models\TaskModel.cs" />
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Program.cs" />

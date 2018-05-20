@@ -58,5 +58,32 @@ namespace ScrumIt.DataAccess
 
             return sprint;
         }
+
+
+        public static SprintModel GetCurrentSprint(int project_id)
+        {
+            SprintModel current_sprint = new SprintModel();
+
+            using (var db_connection = new Connection())
+            {
+                var db_query_to_execute = new NpgsqlCommand("select * from sprint where project_id = @project_id and sprint_end > now() order by sprint_start desc limit 1;")
+                {
+                    Connection = db_connection.Conn
+                };
+
+                db_query_to_execute.Parameters.AddWithValue("project_id", project_id);
+
+                using (var query_result = db_query_to_execute.ExecuteReader())
+                {
+                    while (query_result.Read())
+                    {
+                        current_sprint = new SprintModel((int)query_result[0], (int) query_result[1], (string)query_result[2], (string)query_result[3]);
+                        break;
+                    }
+                }
+            }
+
+            return current_sprint;
+        }
     }
 }
