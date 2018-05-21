@@ -33,8 +33,8 @@
             this.metroLabel3 = new MetroFramework.Controls.MetroLabel();
             this.newProjectNameMetroTextBox = new MetroFramework.Controls.MetroTextBox();
             this.newProjectMetroButton = new MetroFramework.Controls.MetroButton();
-            this.newProjectColorDialog = new System.Windows.Forms.ColorDialog();
             this.SelectProjectColorButton = new System.Windows.Forms.Button();
+            this.newProjectColorDialog = new System.Windows.Forms.ColorDialog();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 

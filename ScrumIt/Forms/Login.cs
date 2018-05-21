@@ -23,7 +23,7 @@ namespace ScrumIt.Forms
         {
             if (e.CloseReason == CloseReason.UserClosing)
             {
-                MessageBox.Show("Zamknięcie aplikacji");
+                //MessageBox.Show("Zamknięcie aplikacji");
                 Application.Exit();
             }
         }

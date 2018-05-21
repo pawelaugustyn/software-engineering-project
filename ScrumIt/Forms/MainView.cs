@@ -1,11 +1,10 @@
 ﻿using System;
-
 using System.Windows.Forms;
 using ScrumIt.Models;
 using MetroFramework.Forms;
 using MetroFramework.Controls;
 using ScrumIt.DataAccess;
-
+using System.Collections.Generic;
 
 namespace ScrumIt.Forms
 {
@@ -19,17 +18,9 @@ namespace ScrumIt.Forms
 
         private void MainView_Load(object sender, EventArgs e)
         {
-            // jesli pierwszy raz otwieramy aplikacje wchodzi if - przechodzimy do formularza logowania
-            //if (AppStateProvider.Instance.CurrentUser == null)
-            //{
-            //    var login = new Login();
-            //    this.Hide();
-            //    login.ShowDialog();
-            //}
-
-
             MessageBox.Show("uzytkownik zalogowany jako " + AppStateProvider.Instance.CurrentUser.Role);
             Draw_Projects_Table();
+            //rozwijalna lista
             propertiesComboBox.Items.Add("Wybierz opcję...");
             propertiesComboBox.Items.Add("Dane użytkownika");
             propertiesComboBox.Items.Add("Wyloguj");
@@ -44,15 +35,6 @@ namespace ScrumIt.Forms
             panel.Location = new System.Drawing.Point(50, 150);
             panel.Name = "ProjectsTable";
             panel.Size = new System.Drawing.Size(500, 500);
-            //panel.BackColor = System.Drawing.Color.Beige;
-
-            //pobranie projektow danego uzytkownika i wpisanie ich nazw do tablicy projectsNames
-            var projectsList = ProjectAccess.GetProjectsByUserId(AppStateProvider.Instance.CurrentUser.UserId);
-            string[] projectsNames = new string[projectsList.Count];
-            for (int i = 0; i < projectsList.Count; i++)
-                projectsNames[i] = projectsList[i].ProjectName;
-
-            var howManyRows = projectsNames.Length;
 
             // ilosc kolumn i wierszy na poczatku - reszta dodana dynamicznie
             panel.ColumnCount = 1;
@@ -60,40 +42,11 @@ namespace ScrumIt.Forms
 
             //kolumny
             panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            //panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
 
             // wiersze - dynamicznie
-            //wiersz naglowkowy
-            //panel.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
-            //panel.Controls.Add(new Label() { Text = "Nazwa projektu", /*TextAlign = ContentAlignment.MiddleCenter*/ }, 0, 0);
-            //panel.Controls.Add(new Label() { Text = "Button", /*TextAlign = ContentAlignment.MiddleCenter*/ }, 1, 0);
-            //pozostale wiersze
-            for (var i = 0; i < howManyRows; i++)
-            {
-                panel.RowCount = panel.RowCount + 1;
-                panel.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
-                //panel.Controls.Add(new Label() { Text = projectsNames[i],/* TextAlign = ContentAlignment.MiddleCenter*/ }, 0, panel.RowCount - 1);
-
-                MetroButton b = new MetroButton();
-                b.Click += delegate {
-                    var sprint = new CurrentSprint();
-                    
-                    sprint.Show();
-                    this.Hide();
-                    //MessageBox.Show("Buttonclick");
-                };
-                b.Text = projectsNames[i];
-                b.Name = projectsNames[i] + "Button";
-                b.BackColor = System.Drawing.Color.GhostWhite;
-                b.Size = new System.Drawing.Size(200,40);
-                panel.Controls.Add(b, 0, panel.RowCount - 1);
-
-            }
-
-            // stworz nowy projekt
+            #region newProjectButton
             panel.RowCount = panel.RowCount + 1;
             panel.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
-
             MetroButton newProject = new MetroButton();
             newProject.Click += delegate {
                 var add = new AddProject();
@@ -101,12 +54,41 @@ namespace ScrumIt.Forms
 
 
             };
-
             newProject.Text = "Stwórz nowy projekt";
             newProject.Name = "newProjectButton";
             newProject.BackColor = System.Drawing.Color.Red;
             newProject.Size = new System.Drawing.Size(200, 40);
             panel.Controls.Add(newProject, 0, panel.RowCount - 1);
+            #endregion
+            #region projectsButtons
+            //pozostale wiersze
+            //pobranie projektow danego uzytkownika i wpisanie ich numerow ID oraz nazw do słownika projects
+            var projectsList = ProjectAccess.GetProjectsByUserId(AppStateProvider.Instance.CurrentUser.UserId);
+            var projects = new Dictionary<int, string>();
+            for (int i = 0; i < projectsList.Count; i++)
+                projects.Add(projectsList[i].ProjectId, projectsList[i].ProjectName);
+
+            foreach (KeyValuePair<int, string> dict in projects)
+            {
+                panel.RowCount = panel.RowCount + 1;
+                panel.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
+                //panel.Controls.Add(new Label() { Text = projectsNames[i],/* TextAlign = ContentAlignment.MiddleCenter*/ }, 0, panel.RowCount - 1);
+
+                MetroButton b = new MetroButton();
+                b.Click += delegate {
+                    var sprint = new CurrentSprint(dict.Key);
+                    sprint.Show();
+                    this.Hide();
+                    //MessageBox.Show("Buttonclick");
+                };
+                b.Text = dict.Value;
+                b.Name = dict.Value + "Button";
+                b.BackColor = System.Drawing.Color.GhostWhite;
+                b.Size = new System.Drawing.Size(200,40);
+                panel.Controls.Add(b, 0, panel.RowCount - 1);
+
+            }
+            #endregion
 
             Controls.Add(panel);
         }
@@ -115,7 +97,7 @@ namespace ScrumIt.Forms
         {
             if (e.CloseReason == CloseReason.UserClosing)
             {
-                MessageBox.Show("Zamknięcie aplikacji");
+                //MessageBox.Show("Zamknięcie aplikacji");
                 UserModel.Logout();
                 Application.Exit();
             }
@@ -125,11 +107,12 @@ namespace ScrumIt.Forms
         {
             //opcja dane uzytkownika
             if (propertiesComboBox.SelectedIndex == 1)
+                //otworz formularz z danymi uzytkownika - metoda
                 MessageBox.Show("formularz z danymi uzytkownika");
             //opcja wyloguj
             if (propertiesComboBox.SelectedIndex == 2)
             {
-                MessageBox.Show("logout");
+                MessageBox.Show("wylogowano");
                 UserModel.Logout();
                 this.Hide();
                 var l = new Login();

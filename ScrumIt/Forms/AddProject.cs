@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using MetroFramework.Forms;
-
+using ScrumIt.Models;
 
 namespace ScrumIt.Forms
 {
@@ -22,10 +22,12 @@ namespace ScrumIt.Forms
 
         private void newProjectMetroButton_Click(object sender, EventArgs e)
         {
+            var name = newProjectNameMetroTextBox.Text;
+            var color = SelectProjectColorButton.BackColor;
             //wyślij dane do bazy
-            //potrzebna metoda 
+            //potrzebna metoda!
         }
-
+        
         private void SelectProjectColorButton_Click(object sender, EventArgs e)
         {
             var c = new Color();

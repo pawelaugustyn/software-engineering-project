@@ -5,12 +5,18 @@ using System.Windows.Forms;
 using MetroFramework;
 using MetroFramework.Controls;
 using MetroFramework.Forms;
+using ScrumIt.Models;
 
 namespace ScrumIt.Forms
 {
     public partial class CurrentSprint : MetroForm
     {
         public CurrentSprint()
+        {
+            InitializeComponent();
+        }
+
+        public CurrentSprint(int projectId)
         {
             InitializeComponent();
         }
@@ -433,6 +439,10 @@ namespace ScrumIt.Forms
         private void projectListToolStripMenuItem_Click()
         {
             //wyswietl liste projektow
+            MainView mainView = new MainView();
+            this.Hide();
+            mainView.Show();
+           
         }
 
         private void userSettingsToolStripMenuItem_Click()
@@ -443,7 +453,11 @@ namespace ScrumIt.Forms
 
         private void logOutToolStripMenuItem_Click()
         {
-            //log out 
+            MessageBox.Show("wylogowano");
+            UserModel.Logout();
+            this.Hide();
+            var login = new Login();
+            login.Show();
         }
 
         private ToolStripItem[] creatUserPanelMenu()
