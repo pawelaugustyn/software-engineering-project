@@ -18,7 +18,7 @@ namespace ScrumIt.Forms
 
         private void MainView_Load(object sender, EventArgs e)
         {
-            MessageBox.Show("uzytkownik zalogowany jako " + AppStateProvider.Instance.CurrentUser.Role);
+            //MessageBox.Show("uzytkownik zalogowany jako " + AppStateProvider.Instance.CurrentUser.Role);
             Draw_Projects_Table();
             //rozwijalna lista
             propertiesComboBox.Items.Add("Wybierz opcję...");
