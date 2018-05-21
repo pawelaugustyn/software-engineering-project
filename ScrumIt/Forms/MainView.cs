@@ -75,7 +75,13 @@ namespace ScrumIt.Forms
                 //panel.Controls.Add(new Label() { Text = projectsNames[i],/* TextAlign = ContentAlignment.MiddleCenter*/ }, 0, panel.RowCount - 1);
 
                 MetroButton b = new MetroButton();
-                b.Click += delegate { MessageBox.Show("Buttonclick"); };
+                b.Click += delegate {
+                    var sprint = new CurrentSprint();
+                    
+                    sprint.Show();
+                    this.Hide();
+                    //MessageBox.Show("Buttonclick");
+                };
                 b.Text = projectsNames[i];
                 b.Name = projectsNames[i] + "Button";
                 b.BackColor = System.Drawing.Color.GhostWhite;

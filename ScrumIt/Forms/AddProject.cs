@@ -19,21 +19,21 @@ namespace ScrumIt.Forms
             InitializeComponent();
         }
 
-        private void setProjectColorMetroButton_Click(object sender, EventArgs e)
+
+        private void newProjectMetroButton_Click(object sender, EventArgs e)
+        {
+            //wyślij dane do bazy
+            //potrzebna metoda 
+        }
+
+        private void SelectProjectColorButton_Click(object sender, EventArgs e)
         {
             var c = new Color();
             if (newProjectColorDialog.ShowDialog() == DialogResult.OK)
             {
                 c = newProjectColorDialog.Color;
             }
-            //linia niżej nie działa
-            setProjectColorMetroButton.BackColor = Color.Red;
-        }
-
-        private void newProjectMetroButton_Click(object sender, EventArgs e)
-        {
-            //wyślij dane do bazy
-            //potrzebna metoda 
+            SelectProjectColorButton.BackColor = c;
         }
     }
 }

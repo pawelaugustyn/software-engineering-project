@@ -31,10 +31,10 @@
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.metroLabel1 = new MetroFramework.Controls.MetroLabel();
             this.metroLabel3 = new MetroFramework.Controls.MetroLabel();
-            this.setProjectColorMetroButton = new MetroFramework.Controls.MetroButton();
             this.newProjectNameMetroTextBox = new MetroFramework.Controls.MetroTextBox();
-            this.newProjectColorDialog = new System.Windows.Forms.ColorDialog();
             this.newProjectMetroButton = new MetroFramework.Controls.MetroButton();
+            this.newProjectColorDialog = new System.Windows.Forms.ColorDialog();
+            this.SelectProjectColorButton = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -46,8 +46,8 @@
             this.tableLayoutPanel1.Controls.Add(this.metroLabel1, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.metroLabel3, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.newProjectNameMetroTextBox, 1, 0);
-            this.tableLayoutPanel1.Controls.Add(this.setProjectColorMetroButton, 1, 1);
             this.tableLayoutPanel1.Controls.Add(this.newProjectMetroButton, 1, 2);
+            this.tableLayoutPanel1.Controls.Add(this.SelectProjectColorButton, 1, 1);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(42, 82);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 3;
@@ -81,16 +81,6 @@
             this.metroLabel3.Text = "Kolor:";
             this.metroLabel3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // setProjectColorMetroButton
-            // 
-            this.setProjectColorMetroButton.Location = new System.Drawing.Point(228, 70);
-            this.setProjectColorMetroButton.Margin = new System.Windows.Forms.Padding(10);
-            this.setProjectColorMetroButton.Name = "setProjectColorMetroButton";
-            this.setProjectColorMetroButton.Size = new System.Drawing.Size(30, 30);
-            this.setProjectColorMetroButton.TabIndex = 3;
-            this.setProjectColorMetroButton.TextAlign = System.Drawing.ContentAlignment.BottomRight;
-            this.setProjectColorMetroButton.Click += new System.EventHandler(this.setProjectColorMetroButton_Click);
-            // 
             // newProjectNameMetroTextBox
             // 
             this.newProjectNameMetroTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -111,6 +101,17 @@
             this.newProjectMetroButton.Text = "Zatwierdź";
             this.newProjectMetroButton.Click += new System.EventHandler(this.newProjectMetroButton_Click);
             // 
+            // SelectProjectColorButton
+            // 
+            this.SelectProjectColorButton.BackColor = System.Drawing.Color.Red;
+            this.SelectProjectColorButton.Location = new System.Drawing.Point(228, 70);
+            this.SelectProjectColorButton.Margin = new System.Windows.Forms.Padding(10);
+            this.SelectProjectColorButton.Name = "SelectProjectColorButton";
+            this.SelectProjectColorButton.Size = new System.Drawing.Size(40, 40);
+            this.SelectProjectColorButton.TabIndex = 6;
+            this.SelectProjectColorButton.UseVisualStyleBackColor = false;
+            this.SelectProjectColorButton.Click += new System.EventHandler(this.SelectProjectColorButton_Click);
+            // 
             // AddProject
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -130,9 +131,9 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private MetroFramework.Controls.MetroLabel metroLabel1;
         private MetroFramework.Controls.MetroLabel metroLabel3;
-        private MetroFramework.Controls.MetroButton setProjectColorMetroButton;
         private System.Windows.Forms.ColorDialog newProjectColorDialog;
         private MetroFramework.Controls.MetroTextBox newProjectNameMetroTextBox;
         private MetroFramework.Controls.MetroButton newProjectMetroButton;
+        private System.Windows.Forms.Button SelectProjectColorButton;
     }
 }
