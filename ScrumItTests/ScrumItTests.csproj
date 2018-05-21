@@ -55,7 +55,12 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ModelsTests\UserModelTests.cs" />
+    <Compile Include="Assertion.cs" />
+    <Compile Include="IntegrationTests\DataAccessTests\UserAccessIntegrationTests.cs" />
+    <Compile Include="IntegrationTests\IntegrationTestAttribute.cs" />
+    <Compile Include="Messages.cs" />
+    <Compile Include="Objects.cs" />
+    <Compile Include="UnitTests\ModelsTests\UserModelTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -66,6 +71,10 @@
       <Project>{eeb58880-fe4e-4d44-9e7c-49466c9416f5}</Project>
       <Name>ScrumIt</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="IntegrationTests\ModelsTests\" />
+    <Folder Include="UnitTests\DataAccessTests\" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
