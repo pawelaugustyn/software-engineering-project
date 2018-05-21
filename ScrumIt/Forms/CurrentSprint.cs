@@ -432,7 +432,18 @@ namespace ScrumIt.Forms
 
         private void projectListToolStripMenuItem_Click()
         {
+            //wyswietl liste projektow
+        }
 
+        private void userSettingsToolStripMenuItem_Click()
+        {
+            UserPanel userPanel = new UserPanel();
+            userPanel.Show();
+        }
+
+        private void logOutToolStripMenuItem_Click()
+        {
+            //log out 
         }
 
         private ToolStripItem[] creatUserPanelMenu()
@@ -443,8 +454,23 @@ namespace ScrumIt.Forms
                 Text = "Lista projektów"
             };
             projektListStripMenuItem.Click += delegate { projectListToolStripMenuItem_Click(); };
-       
-
+            var userSettingsStripMenuItem = new ToolStripMenuItem
+            {
+                Name = "userSettingsStripMenuItem",
+                Text = "Ustawienia Konta"
+            };
+            userSettingsStripMenuItem.Click += delegate { userSettingsToolStripMenuItem_Click(); };
+            var logOutStripMenuItem = new ToolStripMenuItem
+            {
+                Name = "logOutStripMenuItem",
+                Text = "Wyloguj"
+            };
+            logOutStripMenuItem.Click += delegate { logOutToolStripMenuItem_Click(); };
+            var toolStripItems = new ToolStripItem[3];
+            toolStripItems[0] = projektListStripMenuItem;
+            toolStripItems[1] = userSettingsStripMenuItem;
+            toolStripItems[2] = logOutStripMenuItem;
+            return toolStripItems;
         }
 
         private ToolStripItem[] CreateHistoryMenu(dynamic history)
