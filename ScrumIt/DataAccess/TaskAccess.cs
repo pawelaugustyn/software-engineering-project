@@ -35,7 +35,7 @@ namespace ScrumIt.DataAccess
                             TaskDesc = (string)reader[4],
                             TaskPriority = (int)reader[5],
                             TaskEstimatedTime = (int)reader[6],
-                            TaskStage = (int)reader[7],
+                            TaskStage = (TaskModel.TaskStages)reader[7],
 
                         });
 
@@ -71,7 +71,7 @@ namespace ScrumIt.DataAccess
                             TaskDesc = (string)reader[4],
                             TaskPriority = (int)reader[5],
                             TaskEstimatedTime = (int)reader[6],
-                            TaskStage = (int)reader[7],
+                            TaskStage = (TaskModel.TaskStages)reader[7],
 
                         };
                         break;
@@ -82,7 +82,7 @@ namespace ScrumIt.DataAccess
             return task;
         }
         //zaktualizuj w bazie dane zadanie nadajac mu nowy stage (przeciagniecia miedzy kolumnami w sprincie)
-        public static bool UpdateTaskStage(int taskid, int newstage)
+        public static bool UpdateTaskStage(int taskid, TaskModel.TaskStages newstage)
         {
             //dzieki using nie musimy martwic sie o rzucanie wyjatkow i nie zamkniecie polaczenia - using to ogarnie za nas
             using (var conn = new Connection())
@@ -92,16 +92,14 @@ namespace ScrumIt.DataAccess
                 {
                     Connection = conn.Conn
                 };
-                cmd.Parameters.AddWithValue("newstage", newstage);
+                var newstageInt = (int) newstage;
+                cmd.Parameters.AddWithValue("newstage", newstageInt);
                 cmd.Parameters.AddWithValue("taskid", taskid);
-                //if one record was affected then it went as expected. If not, there was something wrong with the query so we throw exceptions
+                //if one record was affected then it went as expected. If not, we didnt manage to find the task
                 var howManyAffected = cmd.ExecuteNonQuery();
                 if (howManyAffected == 1)
                     return true;
-                else if (howManyAffected == 0)
-                    throw new Exception("Task not found");
-                else throw new Exception("Multiple references to the same ID!");
-                
+                throw new Exception("Task not found");                
             }
         }
 
@@ -129,7 +127,7 @@ namespace ScrumIt.DataAccess
                             TaskDesc = (string)reader[4],
                             TaskPriority = (int)reader[5],
                             TaskEstimatedTime = (int)reader[6],
-                            TaskStage = (int)reader[7],
+                            TaskStage = (TaskModel.TaskStages)reader[7],
 
                         });
 

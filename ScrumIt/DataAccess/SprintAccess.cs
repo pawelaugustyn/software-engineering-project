@@ -38,7 +38,7 @@ namespace ScrumIt.DataAccess
             SprintModel sprint = new SprintModel();
             using (var conn = new Connection())
             {
-                var cmd = new NpgsqlCommand("select * from sprints where project_id = @projectid and sprint_start < @datestart and sprint_end > @dateend;")
+                var cmd = new NpgsqlCommand("select * from sprints where project_id = @projectid and sprint_start < @datestart::timestamp and sprint_end > @dateend::timestamp;")
                 {
                     Connection = conn.Conn
                 };
@@ -50,7 +50,13 @@ namespace ScrumIt.DataAccess
                 {
                     while (reader.Read())
                     {
-                        sprint = new SprintModel((int)reader[0], (int)reader[1], (string)reader[2], (string)reader[3]);
+                        sprint = new SprintModel
+                        {
+                            SprintId = (int)reader[0],
+                            ParentProjectId = (int)reader[1],
+                            StartDateTime = (DateTime)reader[2],
+                            EndDateTime = (DateTime)reader[3]
+                        };
                         break;
                     }
                 }
@@ -58,6 +64,7 @@ namespace ScrumIt.DataAccess
 
             return sprint;
         }
+
         //pobierz najchetniej obecny sprint, jesli nie istnieje to najblizszy zaplanowany sprint, jesli nie ma zaplanowanych sprintow do przodu to ostatni ukonczony
         public static SprintModel GetMostRecentSprintByProjectId(int projectid, DateTime time)
         {
@@ -89,7 +96,13 @@ namespace ScrumIt.DataAccess
                         while (reader.Read())
                         {
                             checkIfAnyResults = true;
-                            sprint = new SprintModel(reader.GetInt32(0), reader.GetInt32(1), reader.GetString(2), reader.GetString(3));
+                            sprint = new SprintModel
+                            {
+                                SprintId = (int)reader[0],
+                                ParentProjectId = (int)reader[1],
+                                StartDateTime = (DateTime)reader[2],
+                                EndDateTime = (DateTime)reader[3]
+                            };
                             break; //ten oto break powinien byc chyba wyrzucony, i sprawdzanie czy faktycznie byla to jedna wartosc powinna byc robiona przez test
                         }
                         //ostatni ukonczony sprint
@@ -108,7 +121,13 @@ namespace ScrumIt.DataAccess
                             {
                                 while (reader2.Read())
                                 {
-                                    sprint = new SprintModel(reader2.GetInt32(0), reader2.GetInt32(1), reader2.GetString(2), reader2.GetString(3));
+                                    sprint = new SprintModel
+                                    {
+                                        SprintId = (int)reader[0],
+                                        ParentProjectId = (int)reader[1],
+                                        StartDateTime = (DateTime)reader[2],
+                                        EndDateTime = (DateTime)reader[3]
+                                    };
                                     break;
                                 }
                             }
