@@ -91,7 +91,7 @@ namespace ScrumIt.Forms
             if (validationFlag)
             {
                 //add task to db
-                this.Close();
+                Close();
             }
         }
 

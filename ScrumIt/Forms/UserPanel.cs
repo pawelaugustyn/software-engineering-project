@@ -51,12 +51,12 @@ namespace ScrumIt.Forms
             var newPassConf = confirmNewPasswordTextBox.Text;
             if (newPass == newPassConf)
             {
-                MessageBox.Show("Pomyślnie zmieniono hasło");
+                MessageBox.Show(@"Pomyślnie zmieniono hasło");
                 // update hasla na bazie
             }
             else
             {
-                MessageBox.Show("Wprowadzone nowe hasła nie są identyczne");
+                MessageBox.Show(@"Wprowadzone nowe hasła nie są identyczne");
             }
         }
     }

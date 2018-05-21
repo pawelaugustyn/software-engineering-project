@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows.Forms;
+﻿using System.Collections.Generic;
 using Npgsql;
-using NpgsqlTypes;
 using ScrumIt.Models;
-using ScrumIt.Forms;
 
 namespace ScrumIt.DataAccess
 {
