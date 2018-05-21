@@ -178,6 +178,7 @@ namespace ScrumIt.Forms
             historyMenuStrip.Items.AddRange(CreateHistoryMenu(historicalSprints));
             backlogMenuStrip.Items.AddRange(createBacklogMenu(backlogTasks));
             userListMenuStrip.Items.AddRange(createUserListMenu(users));
+            userPanelMenuStrip.Items.AddRange(creatUserPanelMenu());
         }
 
         private void panel1_Paint(object sender, PaintEventArgs e)
@@ -292,11 +293,6 @@ namespace ScrumIt.Forms
         {
             EditTask editTask = new EditTask(taskId);
             editTask.Show();
-        }
-
-        private void projectListStripMenuItem_Click()
-        {
-
         }
 
         private void backlogToolStripMenuItem_Click(int taskId)
@@ -434,6 +430,11 @@ namespace ScrumIt.Forms
             return 2;
         }
 
+        private void projectListToolStripMenuItem_Click()
+        {
+
+        }
+
         private ToolStripItem[] creatUserPanelMenu()
         {
             var projektListStripMenuItem = new ToolStripMenuItem
@@ -441,21 +442,8 @@ namespace ScrumIt.Forms
                 Name = "ProjektListStripMenuItem",
                 Text = "Lista projektów"
             };
-            projektListStripMenuItem.Click += delegate { historyToolStripMenuItem_Click(toolStripMenuItemName); };
-            //    new ToolStripMenuItem
-            //    {
-            //        Name = "AccountSettingsStripMenuItem",
-            //        Text = "Ustawienia konta"
-            //    },
-            //    new ToolStripMenuItem
-            //    {
-            //        Name = "LogoutStripMenuItem",
-            //        Text = "Wyloguj się"
-            //    }
-            //};
-
-
-
+            projektListStripMenuItem.Click += delegate { projectListToolStripMenuItem_Click(); };
+       
 
         }
 
