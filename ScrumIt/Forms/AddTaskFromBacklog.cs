@@ -68,7 +68,7 @@ namespace ScrumIt.Forms
                 {
                     Name = toolStripMenuItemName,
                     Text = toolStripMenuItemText,
-                    Image = Properties.Resources.image
+                    Image = Properties.Resources.cat2
                 };
                 toolStripItems[i] = toolStripMenuItem;
             }

@@ -1,7 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Security.Cryptography;
-using System.Text;
-using Npgsql;
 using ScrumIt.DataAccess;
 
 namespace ScrumIt.Models
