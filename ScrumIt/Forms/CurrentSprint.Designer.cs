@@ -283,6 +283,7 @@ namespace ScrumIt.Forms
             this.Style = MetroFramework.MetroColorStyle.Teal;
             this.Text = "ScrumIt!";
             this.Theme = MetroFramework.MetroThemeStyle.Light;
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.CurrentSprint_FormClosing);
             this.Load += new System.EventHandler(this.CurrentSprint_Load);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.ResumeLayout(false);

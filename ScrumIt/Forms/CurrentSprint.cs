@@ -11,6 +11,8 @@ namespace ScrumIt.Forms
 {
     public partial class CurrentSprint : MetroForm
     {
+        private readonly int _projectId;
+
         public CurrentSprint()
         {
             InitializeComponent();
@@ -18,6 +20,7 @@ namespace ScrumIt.Forms
 
         public CurrentSprint(int projectId)
         {
+            _projectId = projectId;
             InitializeComponent();
         }
 
@@ -27,109 +30,48 @@ namespace ScrumIt.Forms
 
         private void CurrentSprint_Load(object sender, EventArgs e)
         {
-            //lista taskow - pobierz z bazki
-            var taskList = new[]
+            /*
+             var sprintModel = SprintModel.GetCurrentSprintForProject(_projectId);
+             var taskList = TaskModel.GetTasksBySprintId(sprintModel.SprintId);
+
+            */
+
+            var taskList = new List<TaskModel>()
             {
-                new
+                new TaskModel
                 {
-                    taskName = "Nowy Task",
-                    taskDescription = "Task Description",
-                    taskPriority = 2,
-                    estimatedTime = 10,
-                    users = new[] {"Nowak1","Nowak2","Nowak3","Nowak4"},
-                    taskStage = 1
+                    TaskName = "Nowy Task",
+                    TaskDesc = "Task Description",
+                    TaskPriority = 2,
+                    TaskEstimatedTime = 10,
+                    TaskStage = 1
                 },
-                new
+                new TaskModel
                 {
-                    taskName = "Nowy Task",
-                    taskDescription = "Task Description",
-                    taskPriority = 5,
-                    estimatedTime = 10,
-                    users = new[] {"Nowak1","Nowak2","Nowak3","Nowak4"},
-                    taskStage = 1
+                    TaskName = "Nowy Task",
+                    TaskDesc = "Task Description",
+                    TaskPriority = 2,
+                    TaskEstimatedTime = 10,
+                    TaskStage = 1
                 },
-                new
+                new TaskModel
                 {
-                    taskName = "Nowy Task",
-                    taskDescription = "Task Description",
-                    taskPriority = 7,
-                    estimatedTime = 10,
-                    users = new[] {"Nowak1","Nowak2","Nowak3","Nowak4"},
-                    taskStage = 1
+                    TaskName = "Nowy Task",
+                    TaskDesc = "Task Description",
+                    TaskPriority = 2,
+                    TaskEstimatedTime = 10,
+                    TaskStage = 1
                 },
-                new
-                {
-                    taskName = "Nowy Task",
-                    taskDescription = "Task Description",
-                    taskPriority = 8,
-                    estimatedTime = 10,
-                    users = new[] {"Nowak1","Nowak2","Nowak3","Nowak4"},
-                    taskStage = 1
-                },
-                new
-                {
-                    taskName = "Nowy Task",
-                    taskDescription = "Task Description",
-                    taskPriority = 10,
-                    estimatedTime = 10,
-                    users = new[] {"Nowak1","Nowak2","Nowak3","Nowak4"},
-                    taskStage = 1
-                },
-                new
-                {
-                    taskName = "Nowy Task",
-                    taskDescription = "Task Description",
-                    taskPriority = 1,
-                    estimatedTime = 10,
-                    users = new[] {"Nowak1","Nowak2","Nowak3","Nowak4"},
-                    taskStage =1
-                },
-                new
-                {
-                    taskName = "Nowy Task",
-                    taskDescription = "Task Description",
-                    taskPriority = 0,
-                    estimatedTime = 10,
-                    users = new[] {"Nowak1","Nowak2","Nowak3","Nowak4"},
-                    taskStage = 1
-                },
-                new
-                {
-                    taskName = "Nowy Task",
-                    taskDescription = "Task Description",
-                    taskPriority = 5,
-                    estimatedTime = 10,
-                    users = new[] {"Nowak1","Nowak2","Nowak3","Nowak4"},
-                    taskStage = 1
-                },
-                new
-                {
-                    taskName = "Nowy Task",
-                    taskDescription = "Task Description",
-                    taskPriority = 4,
-                    estimatedTime = 10,
-                    users = new[] {"Nowak1","Nowak2","Nowak3","Nowak4"},
-                    taskStage = 1
-                },
-                new
-                {
-                    taskName = "Nowy Task",
-                    taskDescription = "Task Description",
-                    taskPriority = 4,
-                    estimatedTime = 10,
-                    users = new[] {"Nowak1","Nowak2","Nowak3","Nowak4"},
-                    taskStage = 1
-                },
-                new
-                {
-                    taskName = "Nowy Task",
-                    taskDescription = "Task Description",
-                    taskPriority = 4,
-                    estimatedTime = 10,
-                    users = new[] {"Nowak1","Nowak2","Nowak3","Nowak4"},
-                    taskStage = 1
+                    new TaskModel
+                    {
+                    TaskName = "Nowy Task",
+                    TaskDesc = "Task Description",
+                    TaskPriority = 2,
+                    TaskEstimatedTime = 10,
+                    TaskStage = 1
                 }
             };
+
 
             //pobierz historyczne sprinty
             var historicalSprints = new[]
@@ -157,28 +99,11 @@ namespace ScrumIt.Forms
                 }
             };
 
-            //Pobierz liste użytkowników danego projektu 
-            var users = new[]
+            var users = UserModel.GetUsersByProjectId(_projectId);
+            var index = 0;
+            foreach (var task in taskList)
             {
-                new
-                {
-                    UserName = "BM",
-                    FirstName = "Bartosz",
-                    LastName = "Nowak",
-                    Role = "Admin"
-                },
-                new
-                {
-                    UserName = "BM",
-                    FirstName = "Bartosz",
-                    LastName = "Nowak",
-                    Role = "Admin"
-                }
-            };
-
-            for (var i = 0; i < taskList.Length; i++)
-            {
-                CreateTaskPanel(taskList[i], i);
+                CreateTaskPanel(task, index++);
             }
 
             historyMenuStrip.Items.AddRange(CreateHistoryMenu(historicalSprints));
@@ -219,46 +144,56 @@ namespace ScrumIt.Forms
 
         private void currentSprintButton_Click(object sender, EventArgs e)
         {
-            //pobierz taski z bazy dla najnowszego sprintu
-            var taskList = new[]
-{
-                new
+            /*
+              var sprintModel = SprintModel.GetCurrentSprintForProject(_projectId);
+              var taskList = TaskModel.GetTasksBySprintId(sprintModel.SprintId);
+
+             */
+            var taskList = new List<TaskModel>()
+            {
+                new TaskModel
                 {
-                    taskName = "Nowy Task",
-                    taskDescription = "Task Description",
-                    taskPriority = 0,
-                    estimatedTime = 10,
-                    users = new[] {"Nowak1","Nowak2","Nowak3","Nowak4"},
-                    taskStage = 1
+                    TaskName = "Nowy Task",
+                    TaskDesc = "Task Description",
+                    TaskPriority = 2,
+                    TaskEstimatedTime = 10,
+                    TaskStage = 1
                 },
-                new
+                new TaskModel
                 {
-                    taskName = "Nowy Task",
-                    taskDescription = "Task Description",
-                    taskPriority = 8,
-                    estimatedTime = 10,
-                    users = new[] {"Nowak1","Nowak2","Nowak3","Nowak4"},
-                    taskStage =2
+                    TaskName = "Nowy Task",
+                    TaskDesc = "Task Description",
+                    TaskPriority = 2,
+                    TaskEstimatedTime = 10,
+                    TaskStage = 1
                 },
-                new
+                new TaskModel
                 {
-                    taskName = "Nowy Task",
-                    taskDescription = "Task Description",
-                    taskPriority = 7,
-                    estimatedTime = 10,
-                    users = new[] {"Nowak1","Nowak2","Nowak3","Nowak4"},
-                    taskStage = 3
+                    TaskName = "Nowy Task",
+                    TaskDesc = "Task Description",
+                    TaskPriority = 2,
+                    TaskEstimatedTime = 10,
+                    TaskStage = 1
+                },
+                new TaskModel
+                {
+                    TaskName = "Nowy Task",
+                    TaskDesc = "Task Description",
+                    TaskPriority = 2,
+                    TaskEstimatedTime = 10,
+                    TaskStage = 1
                 }
             };
             scrumBoardPanel.Controls.Clear();
 
-            for (var i = 0; i < taskList.Length; i++)
+            var index = 0;
+            foreach (var task in taskList)
             {
-                CreateTaskPanel(taskList[i], i);
+                CreateTaskPanel(task, index++);
             }
         }
 
-        private void panel_MouseDown(object sender, MouseEventArgs e)
+        private void panel_MouseDown(MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
             {
@@ -276,12 +211,13 @@ namespace ScrumIt.Forms
             }
         }
 
-        private void panel_MouseUp(object sender, MouseEventArgs e)
+        private void panel_MouseUp(object sender, MouseEventArgs e, TaskModel task)
         {
             var width = scrumBoardPanel.ClientRectangle.Width;
             if (_mouseUpLocation.X < width / 4)
             {
                 ((Panel)sender).Location = new Point(width / 40, ((Panel)sender).Location.Y);
+                //update task stage
             }
 
             if (_mouseUpLocation.X > width / 4 && _mouseUpLocation.X < 7 * width / 12)
@@ -442,7 +378,7 @@ namespace ScrumIt.Forms
             MainView mainView = new MainView();
             this.Hide();
             mainView.Show();
-           
+
         }
 
         private void userSettingsToolStripMenuItem_Click()
@@ -529,30 +465,31 @@ namespace ScrumIt.Forms
             return toolStripItems;
         }
 
-        private ToolStripItem[] createUserListMenu(dynamic userList)
+        private ToolStripItem[] createUserListMenu(List<UserModel> userList)
         {
-            var toolStripItems = new ToolStripItem[userList.Length];
-            for (var i = 0; i < userList.Length; i++)
+            var toolStripItems = new ToolStripItem[userList.Count];
+            var index = 0;
+            foreach (var user in userList)
             {
-                var toolStripMenuItemName = userList[i].UserName + "ToolStripMenu";
-                var toolStripMenuItemText = userList[i].FirstName + " " + userList[i].LastName + " " + userList[i].Role;
+                var toolStripMenuItemName = user.Username + "ToolStripMenu";
+                var toolStripMenuItemText = user.Firstname + " " + user.Lastname + " " + user.Role;
                 var toolStripMenuItem = new ToolStripMenuItem
                 {
                     Name = toolStripMenuItemName,
                     Text = toolStripMenuItemText,
                     Image = Properties.Resources.cat2
                 };
-                toolStripItems[i] = toolStripMenuItem;
+                toolStripItems[index++] = toolStripMenuItem;
             }
 
             return toolStripItems;
         }
 
-        private void CreateTaskPanel(dynamic taskList, int index)
+        private void CreateTaskPanel(TaskModel task, int index)
         {
             var height = GetScrumBoardPanelHeight();
             var width = GetScrumBoardPanelWidth();
-            int stageTemp = taskList.taskStage;
+            int stageTemp = task.TaskStage;
             var taskPanelName = "taskPanel" + index;
             var positionX = width / 40;
             switch (stageTemp)
@@ -574,9 +511,9 @@ namespace ScrumIt.Forms
                 TabIndex = 0,
                 Dock = DockStyle.None
             };
-            taskPanel.MouseDown += panel_MouseDown;
+            taskPanel.MouseDown += (sender, e) => panel_MouseDown(e);
             taskPanel.MouseMove += panel_MouseMove;
-            taskPanel.MouseUp += panel_MouseUp;
+            taskPanel.MouseUp += (sender, e) => panel_MouseUp(sender, e, task); ;
             taskPanel.DoubleClick += delegate
             {
                 panel_DoubleClick(0);
@@ -591,13 +528,13 @@ namespace ScrumIt.Forms
                 Name = "taskNameTextBox",
                 Size = new Size(340, 43),
                 TabIndex = 5,
-                Text = taskList.taskName,
+                Text = task.TaskName,
                 Enabled = false
             };
 
             var priorityPanel = new Panel
             {
-                BackColor = getPriorityColor(taskList.taskPriority),
+                BackColor = getPriorityColor(task.TaskPriority),
                 Location = new Point(-1, -1),
                 Name = "priorityPanel",
                 Size = new Size(10, 79),
@@ -614,7 +551,7 @@ namespace ScrumIt.Forms
             };
             taskDescriptionButton.Click += delegate
             {
-                taskDescriptionButton_Click(taskList.taskDescription);
+                taskDescriptionButton_Click(task.TaskDesc);
             };
 
             var taskTimeLabel = new MetroLabel
@@ -626,11 +563,11 @@ namespace ScrumIt.Forms
                 Name = "taskTimeLabel",
                 Size = new Size(13, 15),
                 TabIndex = 3,
-                Text = (taskList.estimatedTime).ToString(),
+                Text = (task.TaskEstimatedTime).ToString(),
                 TextAlign = ContentAlignment.MiddleRight
             };
 
-            var userPhotos = taskList.users;
+            var userPhotos = new[] { "Nowak1", "Nowak2", "Nowak3", "Nowak4" };
             var pictureBoxes = new List<PictureBox>();
             var location = 15;
             foreach (var user in userPhotos)
@@ -817,11 +754,11 @@ namespace ScrumIt.Forms
         private Color getPriorityColor(int priority)
         {
             Color priorityColor;
-            if (priority < 4)
+            if (priority < 40)
             {
                 priorityColor = Color.CornflowerBlue;
             }
-            else if (priority < 8)
+            else if (priority < 80)
             {
                 priorityColor = Color.DarkOrange;
             }
@@ -837,6 +774,15 @@ namespace ScrumIt.Forms
             return "#" + color.R.ToString("X2") +
                    color.G.ToString("X2") +
                    color.B.ToString("X2");
+        }
+
+        private void CurrentSprint_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (e.CloseReason == CloseReason.UserClosing)
+            {
+                UserModel.Logout();
+                Application.Exit();
+            }
         }
     }
 }
