@@ -12,10 +12,15 @@ namespace ScrumIt.Models
         public string TaskDesc { get; set; }
         public int TaskPriority { get; set; }
         public int TaskEstimatedTime { get; set; }
-        public int TaskStage { get; set; }
+        public TaskStages TaskStage { get; set; }
 
- 
- 
+        public enum TaskStages
+        {
+            ToDo = 1,
+            Doing = 2,
+            Completed = 3
+        }
+
         public static TaskModel GetTaskById(int taskid)
         {
             return TaskAccess.GetTaskById(taskid);
