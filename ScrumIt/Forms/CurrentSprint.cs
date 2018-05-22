@@ -118,12 +118,9 @@ namespace ScrumIt.Forms
 
         private void currentSprintButton_Click(object sender, EventArgs e)
         {
-            /*
-              var sprintModel = SprintModel.GetCurrentSprintForProject(_projectId);
-              var taskList = TaskModel.GetTasksBySprintId(sprintModel.SprintId);
-
-             */
-            var taskList = new List<TaskModel>();
+            
+            var sprintModel = SprintModel.GetCurrentSprintForProject(_projectId);
+            var taskList = TaskModel.GetTasksBySprintId(sprintModel.SprintId);
             for (int i = 1; i <= 3; i++)
             {
                 taskList.Add(TaskModel.GetTaskById(i));
@@ -412,10 +409,10 @@ namespace ScrumIt.Forms
             var positionX = width / 40;
             switch (stageTemp)
             {
-                case 2:
+                case TaskModel.TaskStages.Doing:
                     positionX += width / 3;
                     break;
-                case 3:
+                case TaskModel.TaskStages.Completed:
                     positionX += 2 * width / 3;
                     break;
             }
@@ -535,15 +532,15 @@ namespace ScrumIt.Forms
         {
             var height = GetScrumBoardPanelHeight();
             var width = GetScrumBoardPanelWidth();
-            int stageTemp = taskList.taskStage;
+            var stageTemp = (TaskModel.TaskStages)taskList.taskStage;
             var taskPanelName = "taskPanel" + index;
             var positionX = width / 40;
             switch (stageTemp)
             {
-                case 2:
+                case TaskModel.TaskStages.Doing:
                     positionX += width / 3;
                     break;
-                case 3:
+                case TaskModel.TaskStages.Completed:
                     positionX += 2 * width / 3;
                     break;
             }
@@ -630,7 +627,7 @@ namespace ScrumIt.Forms
             taskPanel.BackColor = taskList.Color;
             taskNameTextBox.BackColor = taskList.Color;
 
-            if (taskList.taskStage < 3)
+            if ((TaskModel.TaskStages)taskList.taskStage < TaskModel.TaskStages.Completed)
             {
                 var notFinishedTask = new Label
                 {
