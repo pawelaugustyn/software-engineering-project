@@ -3,15 +3,19 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using MetroFramework.Forms;
+using ScrumIt.Models;
 
 namespace ScrumIt.Forms
 {
     public partial class EditTask : MetroForm
     {
         private int _taskId;
-        public EditTask(int taskId)
+        private int _projectId;
+
+        public EditTask(int taskId, int projectId)
         {
             _taskId = taskId;
+            _projectId = projectId;
             InitializeComponent();
         }
 
@@ -62,33 +66,13 @@ namespace ScrumIt.Forms
         private ToolStripItem[] createUsersListMenu(dynamic userList)
         {
             //pobierz wszystkich uzytkownikow z bazki
-            var allUsers = new[]
-            {
-                new
-                {
-                    UserName ="BM1",
-                    FirstName = "Bartosz",
-                    LastName = "Nowak"
-                },
-                new
-                {
-                    UserName ="BM2",
-                    FirstName = "Bartosz",
-                    LastName = "Nowak"
-                },
-                new
-                {
-                    UserName ="BM22",
-                    FirstName = "Bartosz",
-                    LastName = "Nowak"
-                }
-            };
+            var allUsers = UserModel.GetUsersByProjectId(_projectId);
             
-            var toolStripItems = new ToolStripItem[allUsers.Length];
-            for (var i = 0; i < allUsers.Length; i++)
+            var toolStripItems = new ToolStripItem[allUsers.Count];
+            for (var i = 0; i < allUsers.Count; i++)
             {
-                var toolStripMenuItemName = allUsers[i].UserName;
-                var toolStripMenuItemText = allUsers[i].FirstName + " " + allUsers[i].LastName + " ";
+                var toolStripMenuItemName = allUsers[i].Username;
+                var toolStripMenuItemText = allUsers[i].Firstname + " " + allUsers[i].Lastname + " ";
                 var toolStripMenuItem = new ToolStripMenuItem
                 {
                     Name = toolStripMenuItemName,
@@ -98,7 +82,7 @@ namespace ScrumIt.Forms
                 };
                 foreach (var user in userList)
                 {
-                    if (user.UserName == allUsers[i].UserName)
+                    if (user.UserName == allUsers[i].Username)
                     {
                         toolStripMenuItem.Checked = true;
                     }
@@ -160,6 +144,7 @@ namespace ScrumIt.Forms
             if (validationFlag)
             {
                 //add task to db
+                
                 this.Close();
             }
         }

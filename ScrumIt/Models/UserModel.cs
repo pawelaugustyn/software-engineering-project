@@ -46,6 +46,8 @@ namespace ScrumIt.Models
         {
             return UserAccess.GetUsersByProjectId(projectid);
         }
+
+        //pobierz userow przypisanych do tasku
     }
 
     public enum UserRoles

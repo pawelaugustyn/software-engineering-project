@@ -48,5 +48,7 @@ namespace ScrumIt.Models
         {
             return SprintAccess.GetSprintByProjectIdAndDate(projectid, DateTime.Now);
         }
+
+        //pobierz historyczne sprinty
     }
 }

@@ -107,8 +107,10 @@ namespace ScrumIt.Forms
         {
             //opcja dane uzytkownika
             if (propertiesComboBox.SelectedIndex == 1)
-                //otworz formularz z danymi uzytkownika - metoda
-                MessageBox.Show("formularz z danymi uzytkownika");
+            {
+                UserPanel userPanel = new UserPanel();
+                userPanel.Show();
+            }
             //opcja wyloguj
             if (propertiesComboBox.SelectedIndex == 2)
             {

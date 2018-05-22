@@ -3,13 +3,16 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using MetroFramework.Forms;
+using ScrumIt.Models;
 
 namespace ScrumIt.Forms
 {
     public partial class AddTask : MetroForm
     {
-        public AddTask()
+        private int _projectId;
+        public AddTask(int projectId)
         {
+            _projectId = projectId;
             InitializeComponent();
         }
 
@@ -20,24 +23,9 @@ namespace ScrumIt.Forms
         {
             addTaskButton.BackColor = _panelColor;
 
-            //pobierz uzykownikow danego projektu z bazki
-            var users = new[]
-            {
-                new
-                {
-                    UserName = "BM",
-                    FirstName = "Bartosz",
-                    LastName = "Nowak"
-                },
-                new
-                {
-                    UserName = "BM",
-                    FirstName = "Bartosz",
-                    LastName = "Nowak"
-                }
-            };
+            var allUsers = UserModel.GetUsersByProjectId(_projectId);
 
-            userListMenuStrip.Items.AddRange(createUsersListMenu(users));
+            userListMenuStrip.Items.AddRange(createUsersListMenu(allUsers));
         }
 
         private void addTaskButton_Click(object sender, EventArgs e)
@@ -118,13 +106,13 @@ namespace ScrumIt.Forms
             userListMenuStrip.Show(addUsersButton, new Point(0, addUsersButton.Height));
         }
 
-        private ToolStripItem[] createUsersListMenu(dynamic userList)
+        private ToolStripItem[] createUsersListMenu(List<UserModel> userList)
         {
-            var toolStripItems = new ToolStripItem[userList.Length];
-            for (var i = 0; i < userList.Length; i++)
+            var toolStripItems = new ToolStripItem[userList.Count];
+            for (var i = 0; i < userList.Count; i++)
             {
-                var toolStripMenuItemName = userList[i].UserName;
-                var toolStripMenuItemText = userList[i].FirstName + " " + userList[i].LastName + " ";
+                var toolStripMenuItemName = userList[i].Username;
+                var toolStripMenuItemText = userList[i].Firstname + " " + userList[i].Lastname + " ";
                 var toolStripMenuItem = new ToolStripMenuItem
                 {
                     Name = toolStripMenuItemName,
