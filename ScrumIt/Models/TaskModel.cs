@@ -49,5 +49,10 @@ namespace ScrumIt.Models
             return new List<TaskModel>();
             //return TaskAccess.GetTasksBySprintId(sprintid);
         }
+
+        public static bool CreateNewTask(TaskModel taskToAdd, List<UserModel> usersAssignedToTask)
+        {
+            return TaskAccess.CreateNewTask(ref taskToAdd, usersAssignedToTask);
+        }
     }
 }

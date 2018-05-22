@@ -133,5 +133,66 @@ namespace ScrumIt.DataAccess
 
             return tasks;
         }
+
+        public static bool CreateNewTask(ref TaskModel addedTask, List<UserModel> usersAssignedToTask)
+        {
+            ValidateNewTask(ref addedTask);
+            using (var conn = new Connection())
+            {
+                var cmd = new NpgsqlCommand("INSERT INTO tasks (task_id, sprint_id, task_name, task_desc, task_priority, task_estimated_time, task_stage)" +
+                                            "VALUES (DEFAULT, @sprint_id, @task_name, @task_desc, @task_priority, @task_estimated_time, @task_stage);")
+                {
+                    Connection = conn.Conn
+                };
+                cmd.Parameters.AddWithValue("sprint_id", addedTask.SprintId);
+                cmd.Parameters.AddWithValue("task_name", addedTask.TaskName);
+                cmd.Parameters.AddWithValue("task_desc", addedTask.TaskDesc);
+                cmd.Parameters.AddWithValue("task_priority", addedTask.TaskPriority);
+                cmd.Parameters.AddWithValue("task_estimated_time", addedTask.TaskEstimatedTime);
+                cmd.Parameters.AddWithValue("task_stage", (int)addedTask.TaskStage);
+                cmd.ExecuteNonQuery();
+
+                cmd = new NpgsqlCommand("SELECT task_id FROM tasks ORDER BY task_id DESC LIMIT 1;")
+                {
+                    Connection = conn.Conn
+                };
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        addedTask.TaskId = (int)reader[0];
+                        break;
+                    }
+                }
+                // metoda dopisujaca liste uzytkownikow do zadania
+            }
+
+            return true;
+        }
+
+        private static void ValidateNewTask(ref TaskModel addedTask)
+        {
+            ValidateTaskName(ref addedTask);
+            ValidateTaskPriority(ref addedTask);
+            ValidateTaskEstimatedTime(ref addedTask);
+        }
+
+        private static void ValidateTaskName(ref TaskModel addedTask)
+        {
+            if (addedTask.TaskName.Length == 0)
+                throw new ArgumentException("Task name cannot be empty!");
+        }
+
+        private static void ValidateTaskPriority(ref TaskModel addedTask)
+        {
+            if (addedTask.TaskPriority < 0 || addedTask.TaskPriority > 100)
+                throw new ArgumentException("Task priority must be between 0 and 100.");
+        }
+
+        private static void ValidateTaskEstimatedTime(ref TaskModel addedTask)
+        {
+            if (addedTask.TaskEstimatedTime < 0)
+                throw new ArgumentException("Estimated time cannot be lower than zero!");
+        }
     }
 }

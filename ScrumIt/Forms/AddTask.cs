@@ -10,9 +10,12 @@ namespace ScrumIt.Forms
     public partial class AddTask : MetroForm
     {
         private int _projectId;
-        public AddTask(int projectId)
+        private int _sprintId;
+
+        public AddTask(int projectId, int sprintId)
         {
             _projectId = projectId;
+            _sprintId = sprintId;
             InitializeComponent();
         }
 
@@ -46,9 +49,9 @@ namespace ScrumIt.Forms
                 validationFlag = false;
             }
             else
-            if (Int16.Parse(taskPriority) > 11 || Int16.Parse(taskPriority) < 0)
+            if (Int16.Parse(taskPriority) > 101 || Int16.Parse(taskPriority) < 0)
             {
-                MessageBox.Show(@"Możliwa wartość stopnia skomplikowania to liczba całkownita między 0 a 10");
+                MessageBox.Show(@"Możliwa wartość stopnia skomplikowania to liczba całkownita między 0 a 100");
                 validationFlag = false;
             }
 
@@ -59,7 +62,7 @@ namespace ScrumIt.Forms
                 validationFlag = false;
             }
             else
-            if (Int16.Parse(taskEstimatedTime) > 11 || Int16.Parse(taskEstimatedTime) < 0)
+            if (Int16.Parse(taskEstimatedTime) > 101 || Int16.Parse(taskEstimatedTime) < 0)
             {
                 MessageBox.Show(@"Możliwa wartość przewidywanego czasu zadania to liczba całkownita między 0 a 100");
                 validationFlag = false;
@@ -78,6 +81,17 @@ namespace ScrumIt.Forms
             }
             if (validationFlag)
             {
+                var task = new TaskModel
+                {
+                    TaskName = taskName,
+                    TaskDesc = taskDescription,
+                    TaskType = "T",
+                    TaskPriority = Int16.Parse(taskPriority),
+                    TaskEstimatedTime = Int16.Parse(taskEstimatedTime),
+                    TaskStage = TaskModel.TaskStages.ToDo,
+                    SprintId = _sprintId
+                };
+                TaskModel.CreateNewTask(task, new List<UserModel>());
                 //add task to db
                 Close();
             }

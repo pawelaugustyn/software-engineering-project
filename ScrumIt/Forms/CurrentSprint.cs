@@ -32,16 +32,18 @@ namespace ScrumIt.Forms
 
         private void CurrentSprint_Load(object sender, EventArgs e)
         {
-            //var sprintModel = SprintModel.GetCurrentSprintForProject(_projectId);
-            //_sprintId = sprintModel.SprintId;
+            var sprintModel = SprintModel.GetCurrentSprintForProject(_projectId);
+            _sprintId = sprintModel.SprintId;
             /*
             var taskList = TaskModel.GetTasksBySprintId(sprintModel.SprintId);
 
             */
             var taskList = new List<TaskModel>();
-            for (int i = 1; i <= 3; i++)
+            var i = 1;
+            while(TaskModel.GetTaskById(i).SprintId!=0)
             {
                 taskList.Add(TaskModel.GetTaskById(i));
+                i++;
             }
             var index = 0;
             foreach (var task in taskList)
@@ -271,7 +273,7 @@ namespace ScrumIt.Forms
 
         private void addTaskButton_Click(object sender, EventArgs e)
         {
-            AddTask addTask = new AddTask(_projectId);
+            AddTask addTask = new AddTask(_projectId, _sprintId);
             addTask.FormClosed += delegate { addTask_FormClosed(); };
             addTask.Show();
         }
