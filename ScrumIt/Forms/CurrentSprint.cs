@@ -34,17 +34,9 @@ namespace ScrumIt.Forms
         {
             var sprintModel = SprintModel.GetCurrentSprintForProject(_projectId);
             _sprintId = sprintModel.SprintId;
-            /*
-            var taskList = TaskModel.GetTasksBySprintId(sprintModel.SprintId);
-
-            */
-            var taskList = new List<TaskModel>();
-            var i = 1;
-            while(TaskModel.GetTaskById(i).SprintId!=0)
-            {
-                taskList.Add(TaskModel.GetTaskById(i));
-                i++;
-            }
+            
+            var taskList = TaskModel.GetTasksBySprintId(_sprintId);
+            
             var index = 0;
             foreach (var task in taskList)
             {
@@ -120,13 +112,7 @@ namespace ScrumIt.Forms
 
         private void currentSprintButton_Click(object sender, EventArgs e)
         {
-            
-            var sprintModel = SprintModel.GetCurrentSprintForProject(_projectId);
-            var taskList = TaskModel.GetTasksBySprintId(sprintModel.SprintId);
-            for (int i = 1; i <= 3; i++)
-            {
-                taskList.Add(TaskModel.GetTaskById(i));
-            }
+            var taskList = TaskModel.GetTasksBySprintId(_sprintId);
             scrumBoardPanel.Controls.Clear();
 
             var index = 0;

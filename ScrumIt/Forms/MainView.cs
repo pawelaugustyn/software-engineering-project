@@ -13,7 +13,6 @@ namespace ScrumIt.Forms
         public MainView()
         {
             InitializeComponent();
-          
         }
 
         private void MainView_Load(object sender, EventArgs e)
@@ -50,6 +49,7 @@ namespace ScrumIt.Forms
             MetroButton newProject = new MetroButton();
             newProject.Click += delegate {
                 var add = new AddProject();
+                
                 add.ShowDialog();
 
 
