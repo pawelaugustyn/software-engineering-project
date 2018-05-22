@@ -164,6 +164,7 @@ namespace ScrumIt.DataAccess
                         break;
                     }
                 }
+                // TODO
                 // metoda dopisujaca liste uzytkownikow do zadania
             }
 
