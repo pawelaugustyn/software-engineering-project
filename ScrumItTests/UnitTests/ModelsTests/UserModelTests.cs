@@ -14,6 +14,37 @@ namespace ScrumItTests.UnitTests.ModelsTests
         public void SetUp()
         {
             _state = AppStateProvider.Instance;
+            _state.CurrentUser = new UserModel();
+        }
+
+        [Test]
+        public void LoginAsWithEmptyPasswordShouldFail()
+        {
+            var loggedInSuccessful = UserModel.LoginAs("admin", "");
+
+            Assert.That(loggedInSuccessful, Is.EqualTo(false), "Logging in was successful without password.");
+            Assert.That(_state.CurrentUser.UserId, Is.EqualTo(0), "User Id changed after failed log in");
+            Assert.That(_state.CurrentUser.Role, Is.EqualTo(UserRoles.Guest), "User role changed from guest after failed log in");
+        }
+
+        [Test]
+        public void LoginAsWithEmptyLoginShouldFail()
+        {
+            var loggedInSuccessful = UserModel.LoginAs("", "admin");
+
+            Assert.That(loggedInSuccessful, Is.EqualTo(false), "Logging in was successful with empty login.");
+            Assert.That(_state.CurrentUser.UserId, Is.EqualTo(0), "User Id changed after failed log in");
+            Assert.That(_state.CurrentUser.Role, Is.EqualTo(UserRoles.Guest), "User role changed from guest after failed log in");
+        }
+
+        [Test]
+        public void LoginAsWithEmptyCredentialsShouldFail()
+        {
+            var loggedInSuccessful = UserModel.LoginAs("", "");
+
+            Assert.That(loggedInSuccessful, Is.EqualTo(false), "Logging in was successful with empty credentials.");
+            Assert.That(_state.CurrentUser.UserId, Is.EqualTo(0), "User Id changed after failed log in");
+            Assert.That(_state.CurrentUser.Role, Is.EqualTo(UserRoles.Guest), "User role changed from guest after failed log in");
         }
 
         [Test]
