@@ -684,13 +684,6 @@ namespace ScrumIt.Forms
             return priorityColor;
         }
 
-        private static string ToHexValue(Color color)
-        {
-            return "#" + color.R.ToString("X2") +
-                   color.G.ToString("X2") +
-                   color.B.ToString("X2");
-        }
-
         private void CurrentSprint_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (e.CloseReason == CloseReason.UserClosing)

@@ -137,10 +137,10 @@ namespace ScrumIt.DataAccess
         private static void ValidateProjectColour(string colour)
         {
             var res = 0;
-            if (!int.TryParse(colour,
+            if (!(int.TryParse(colour,
                 System.Globalization.NumberStyles.HexNumber,
                 System.Globalization.CultureInfo.InvariantCulture,
-                out res))
+                out res)||Regex.IsMatch(colour, @"^#[0-9A-Fa-f]{6}$") ))
                 throw new ArgumentException("Provided string is not an RGB colour.");
             if (colour.Length != 7)
                 throw new ArgumentException("Provided string is not an RGB colour");
