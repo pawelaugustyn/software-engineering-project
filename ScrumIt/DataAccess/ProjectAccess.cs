@@ -105,6 +105,28 @@ namespace ScrumIt.DataAccess
                 cmd.Parameters.AddWithValue("pname", projectName);
                 cmd.Parameters.AddWithValue("pcolor", projectColour);
                 cmd.ExecuteNonQuery();
+
+                cmd = new NpgsqlCommand("SELECT project_id FROM projects ORDER BY project_id DESC LIMIT 1;")
+                {
+                    Connection = conn.Conn
+                };
+                var projid = 0;
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        projid = (int)reader[0];
+                        break;
+                    }
+                }
+
+                cmd = new NpgsqlCommand("INSERT INTO projects_has_users VALUES(@uid, @projid);")
+                {
+                    Connection = conn.Conn
+                };
+                cmd.Parameters.AddWithValue("uid", AppStateProvider.Instance.CurrentUser.UserId);
+                cmd.Parameters.AddWithValue("projid", projid);
+                cmd.ExecuteNonQuery();
             }
 
             return true;
@@ -136,14 +158,8 @@ namespace ScrumIt.DataAccess
 
         private static void ValidateProjectColour(string colour)
         {
-            var res = 0;
-            if (!(int.TryParse(colour,
-                System.Globalization.NumberStyles.HexNumber,
-                System.Globalization.CultureInfo.InvariantCulture,
-                out res)||Regex.IsMatch(colour, @"^#[0-9A-Fa-f]{6}$") ))
+            if (!new Regex(@"^#[a-fA-F0-9]{6}").IsMatch(colour))
                 throw new ArgumentException("Provided string is not an RGB colour.");
-            if (colour.Length != 7)
-                throw new ArgumentException("Provided string is not an RGB colour");
         }
 
     }

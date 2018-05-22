@@ -151,7 +151,7 @@ namespace ScrumIt.DataAccess
                 cmd.Parameters.AddWithValue("task_estimated_time", addedTask.TaskEstimatedTime);
                 cmd.Parameters.AddWithValue("task_stage", (int)addedTask.TaskStage);
                 cmd.ExecuteNonQuery();
-
+                
                 cmd = new NpgsqlCommand("SELECT task_id FROM tasks ORDER BY task_id DESC LIMIT 1;")
                 {
                     Connection = conn.Conn
@@ -160,10 +160,11 @@ namespace ScrumIt.DataAccess
                 {
                     while (reader.Read())
                     {
-                        addedTask.TaskId = (int)reader[0];
+                        addedTask.TaskId = (int) reader[0];
                         break;
                     }
                 }
+                // TODO
                 // metoda dopisujaca liste uzytkownikow do zadania
             }
 
@@ -185,7 +186,7 @@ namespace ScrumIt.DataAccess
 
         private static void ValidateTaskPriority(ref TaskModel addedTask)
         {
-            if (addedTask.TaskPriority < 0 || addedTask.TaskPriority > 100)
+            if (addedTask.TaskPriority < 0 || addedTask.TaskPriority > 100) 
                 throw new ArgumentException("Task priority must be between 0 and 100.");
         }
 
