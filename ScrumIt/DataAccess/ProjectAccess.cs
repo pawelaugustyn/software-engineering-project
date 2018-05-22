@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Windows.Forms;
 using Npgsql;
-using NpgsqlTypes;
 using ScrumIt.Models;
 
 namespace ScrumIt.DataAccess
