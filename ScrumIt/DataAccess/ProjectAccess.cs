@@ -92,11 +92,11 @@ namespace ScrumIt.DataAccess
             return project;
         }
 
-        public static bool CreateNewProject(string projectName, string projectColour)
+        public static bool CreateNewProject(ProjectModel addedProject)
         {
             if (AppStateProvider.Instance.CurrentUser.Role != UserRoles.ScrumMaster)
                 throw new UnauthorizedAccessException("Not permitted for that operation.");
-            ValidateNewProject(new ProjectModel() {ProjectName = projectName, ProjectColor = projectColour});
+            ValidateNewProject(addedProject);
 
             using (new Connection())
             {
@@ -104,20 +104,19 @@ namespace ScrumIt.DataAccess
                 {
                     Connection = Connection.Conn
                 };
-                cmd.Parameters.AddWithValue("pname", projectName);
-                cmd.Parameters.AddWithValue("pcolor", projectColour);
+                cmd.Parameters.AddWithValue("pname", addedProject.ProjectName);
+                cmd.Parameters.AddWithValue("pcolor", addedProject.ProjectColor);
                 cmd.ExecuteNonQuery();
 
                 cmd = new NpgsqlCommand("SELECT project_id FROM projects ORDER BY project_id DESC LIMIT 1;")
                 {
                     Connection = Connection.Conn
                 };
-                var projid = 0;
                 using (var reader = cmd.ExecuteReader())
                 {
                     while (reader.Read())
                     {
-                        projid = (int)reader[0];
+                        addedProject.ProjectId = (int) reader[0];
                         break;
                     }
                 }
@@ -127,7 +126,7 @@ namespace ScrumIt.DataAccess
                     Connection = Connection.Conn
                 };
                 cmd.Parameters.AddWithValue("uid", AppStateProvider.Instance.CurrentUser.UserId);
-                cmd.Parameters.AddWithValue("projid", projid);
+                cmd.Parameters.AddWithValue("projid", addedProject.ProjectId);
                 cmd.ExecuteNonQuery();
             }
 

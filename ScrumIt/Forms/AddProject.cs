@@ -27,7 +27,7 @@ namespace ScrumIt.Forms
             
             if (name != "")
             {
-                ProjectModel.CreateNewProject(name, ToHexValue(color));
+                ProjectModel.CreateNewProject(new ProjectModel {ProjectName = name, ProjectColor = ToHexValue(color)});
                 MessageBox.Show("Pomyślnie dodano nowy projekt");
                 this.Close();
             }
