@@ -17,7 +17,7 @@ namespace ScrumIt.DataAccess
             // zamkniemy poprawnie polaczenie
             using (var conn = new Connection())
             {
-                var cmd = new NpgsqlCommand("select * from users where username=@username and pass=@pass limit 1;")
+                var cmd = new NpgsqlCommand("select * from users where lower(username)=@username and pass=@pass limit 1;")
                 {
                     Connection = conn.Conn
                 };
@@ -79,7 +79,7 @@ namespace ScrumIt.DataAccess
             var users = new List<UserModel>();
             using (var conn = new Connection())
             {
-                var cmd = new NpgsqlCommand("select * from users where lower(lastname) like @lastname;")
+                var cmd = new NpgsqlCommand("select * from users where lower(last_name) like @lastname;")
                 {
                     Connection = conn.Conn
                 };
@@ -109,7 +109,7 @@ namespace ScrumIt.DataAccess
             var user = new UserModel();
             using (var conn = new Connection())
             {
-                var cmd = new NpgsqlCommand("select * from users where lower(login) like @login limit 1;")
+                var cmd = new NpgsqlCommand("select * from users where lower(username) like @login limit 1;")
                 {
                     Connection = conn.Conn
                 };
