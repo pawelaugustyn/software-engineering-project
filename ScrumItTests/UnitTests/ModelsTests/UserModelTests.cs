@@ -10,6 +10,12 @@ namespace ScrumItTests.UnitTests.ModelsTests
     {
         private AppStateProvider _state;
 
+        private void AssertFailedLogging() 
+        {
+            Assert.That(_state.CurrentUser.UserId, Is.EqualTo(0), "User Id changed after failed log in");
+            Assert.That(_state.CurrentUser.Role, Is.EqualTo(UserRoles.Guest), "User role changed from guest after failed log in");
+        }
+
         [OneTimeSetUp]
         public void SetUp()
         {
@@ -18,33 +24,27 @@ namespace ScrumItTests.UnitTests.ModelsTests
         }
 
         [Test]
-        public void LoginAsWithEmptyPasswordShouldFail()
+        [TestCase("", "")]
+        [TestCase("admin", "")]
+        [TestCase("", "admin")]
+        public void LoginAsWithEmptyCredentialsShouldFail(string username, string password)
         {
-            var loggedInSuccessful = UserModel.LoginAs("admin", "");
-
-            Assert.That(loggedInSuccessful, Is.EqualTo(false), "Logging in was successful without password.");
-            Assert.That(_state.CurrentUser.UserId, Is.EqualTo(0), "User Id changed after failed log in");
-            Assert.That(_state.CurrentUser.Role, Is.EqualTo(UserRoles.Guest), "User role changed from guest after failed log in");
-        }
-
-        [Test]
-        public void LoginAsWithEmptyLoginShouldFail()
-        {
-            var loggedInSuccessful = UserModel.LoginAs("", "admin");
-
-            Assert.That(loggedInSuccessful, Is.EqualTo(false), "Logging in was successful with empty login.");
-            Assert.That(_state.CurrentUser.UserId, Is.EqualTo(0), "User Id changed after failed log in");
-            Assert.That(_state.CurrentUser.Role, Is.EqualTo(UserRoles.Guest), "User role changed from guest after failed log in");
-        }
-
-        [Test]
-        public void LoginAsWithEmptyCredentialsShouldFail()
-        {
-            var loggedInSuccessful = UserModel.LoginAs("", "");
+            var loggedInSuccessful = UserModel.LoginAs(username, password);
 
             Assert.That(loggedInSuccessful, Is.EqualTo(false), "Logging in was successful with empty credentials.");
-            Assert.That(_state.CurrentUser.UserId, Is.EqualTo(0), "User Id changed after failed log in");
-            Assert.That(_state.CurrentUser.Role, Is.EqualTo(UserRoles.Guest), "User role changed from guest after failed log in");
+            AssertFailedLogging();
+        }
+
+        [Test]
+        [TestCase("incorrect_login", "incorrect_password")]
+        [TestCase("admin", "incorrect_password")]
+        [TestCase("incorrect_login", "admin")]
+        public void LoginAsWithIncorrectCredentialsShouldFail(string username, string password)
+        {
+            var loggedInSuccessful = UserModel.LoginAs(username, password);
+
+            Assert.That(loggedInSuccessful, Is.EqualTo(false), "Logging in was successful with incorrect credentials.");
+            AssertFailedLogging();
         }
 
         [Test]
