@@ -47,9 +47,14 @@ namespace ScrumIt.Models
             return UserAccess.GetUsersByProjectId(projectid);
         }
 
-        public static bool Add(ref UserModel addedUser, string password)
+        public static bool Add(UserModel addedUser, string password)
         {
-            return UserAccess.Add(ref addedUser, password);
+            return UserAccess.Add(addedUser, password);
+        }
+
+        public static bool Delete(UserModel deletedUser)
+        {
+            return UserAccess.Delete(deletedUser);
         }
 
         //pobierz userow przypisanych do tasku

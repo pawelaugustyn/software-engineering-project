@@ -11,11 +11,11 @@ namespace ScrumIt.DataAccess
         public static List<ProjectModel> GetAllProjects()
         {
             var projects = new List<ProjectModel>();
-            using (var conn = new Connection())
+            using (new Connection())
             {
                 var cmd = new NpgsqlCommand("select * from projects;")
                 {
-                    Connection = conn.Conn
+                    Connection = Connection.Conn
                 };
                 using (var reader = cmd.ExecuteReader())
                 {
@@ -38,11 +38,11 @@ namespace ScrumIt.DataAccess
         public static List<ProjectModel> GetProjectsByUserId(int userid)
         {
             var projects = new List<ProjectModel>();
-            using (var conn = new Connection())
+            using (new Connection())
             {
                 var cmd = new NpgsqlCommand("select proj.* from projects proj join projects_has_users proj_users using(project_id) where proj_users.uid = @userid order by proj.project_id;")
                 {
-                    Connection = conn.Conn
+                    Connection = Connection.Conn
                 };
                 cmd.Parameters.AddWithValue("userid", userid);
                 using (var reader = cmd.ExecuteReader())
@@ -67,11 +67,11 @@ namespace ScrumIt.DataAccess
         public static ProjectModel GetProjectById(int projectid)
         {
             var project = new ProjectModel();
-            using (var conn = new Connection())
+            using (new Connection())
             {
                 var cmd = new NpgsqlCommand("select * from projects where project_id = @projectid;")
                 {
-                    Connection = conn.Conn
+                    Connection = Connection.Conn
                 };
                 cmd.Parameters.AddWithValue("projectid", projectid);
                 using (var reader = cmd.ExecuteReader())
@@ -94,13 +94,15 @@ namespace ScrumIt.DataAccess
 
         public static bool CreateNewProject(string projectName, string projectColour)
         {
+            if (AppStateProvider.Instance.CurrentUser.Role != UserRoles.ScrumMaster)
+                throw new UnauthorizedAccessException("Not permitted for that operation.");
             ValidateNewProject(new ProjectModel() {ProjectName = projectName, ProjectColor = projectColour});
 
-            using (var conn = new Connection())
+            using (new Connection())
             {
                 var cmd = new NpgsqlCommand("INSERT INTO projects VALUES (DEFAULT, @pname, @pcolor);")
                 {
-                    Connection = conn.Conn
+                    Connection = Connection.Conn
                 };
                 cmd.Parameters.AddWithValue("pname", projectName);
                 cmd.Parameters.AddWithValue("pcolor", projectColour);
@@ -108,7 +110,7 @@ namespace ScrumIt.DataAccess
 
                 cmd = new NpgsqlCommand("SELECT project_id FROM projects ORDER BY project_id DESC LIMIT 1;")
                 {
-                    Connection = conn.Conn
+                    Connection = Connection.Conn
                 };
                 var projid = 0;
                 using (var reader = cmd.ExecuteReader())
@@ -122,7 +124,7 @@ namespace ScrumIt.DataAccess
 
                 cmd = new NpgsqlCommand("INSERT INTO projects_has_users VALUES(@uid, @projid);")
                 {
-                    Connection = conn.Conn
+                    Connection = Connection.Conn
                 };
                 cmd.Parameters.AddWithValue("uid", AppStateProvider.Instance.CurrentUser.UserId);
                 cmd.Parameters.AddWithValue("projid", projid);

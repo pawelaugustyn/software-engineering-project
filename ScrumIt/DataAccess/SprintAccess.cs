@@ -13,11 +13,11 @@ namespace ScrumIt.DataAccess
         public static SprintModel GetSprintById(int sprintid)
         {
             SprintModel sprint = new SprintModel();
-            using (var conn = new Connection())
+            using (new Connection())
             {
                 var cmd = new NpgsqlCommand("select * from sprints where sprint_id = @sprintid;")
                 {
-                    Connection = conn.Conn
+                    Connection = Connection.Conn
                 };
                 cmd.Parameters.AddWithValue("sprintid", sprintid);
                 using (var reader = cmd.ExecuteReader())
@@ -36,11 +36,11 @@ namespace ScrumIt.DataAccess
         public static SprintModel GetSprintByProjectIdAndDate(int projectid, DateTime time)
         {
             SprintModel sprint = new SprintModel();
-            using (var conn = new Connection())
+            using (new Connection())
             {
                 var cmd = new NpgsqlCommand("select * from sprints where project_id = @projectid and sprint_start < @datestart::timestamp and sprint_end > @dateend::timestamp;")
                 {
-                    Connection = conn.Conn
+                    Connection = Connection.Conn
                 };
                 cmd.Parameters.AddWithValue("projectid", projectid);
                 string datetime = time.ToString("yyyy-MM-dd hh:mm:ss");
@@ -75,7 +75,7 @@ namespace ScrumIt.DataAccess
             else
             {
                 sprint = new SprintModel();
-                using (var conn = new Connection())
+                using (new Connection())
                 {
                     //najblizszy zaplanowany (na przyszlosc) sprint
                     //jesli nie ma current sprintu, pobierz z bazy wszystkie sprinty dla danego projektu, uszereguj rosnaco pod wzgledem daty startu i wez pierwszy rekord, czyli pierwszy zaplanowany sprint
@@ -83,7 +83,7 @@ namespace ScrumIt.DataAccess
                     var cmd = new NpgsqlCommand(
                         "select * from sprints where project_id = @projectid and sprint_start > @currentdate order by sprint_start top 1;")
                     {
-                        Connection = conn.Conn
+                        Connection = Connection.Conn
                     };
 
                     cmd.Parameters.AddWithValue("projectid", projectid);
@@ -112,7 +112,7 @@ namespace ScrumIt.DataAccess
                             cmd = new NpgsqlCommand(
                                 "select * from sprints where project_id = @projectid and sprint_end < @currentdate order by sprint_end desc top 1;")
                             {
-                                Connection = conn.Conn
+                                Connection = Connection.Conn
                             };
 
                             cmd.Parameters.AddWithValue("projectid", projectid);
