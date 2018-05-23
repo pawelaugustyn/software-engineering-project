@@ -165,6 +165,47 @@ namespace ScrumIt.DataAccess
             return users;
         }
 
+        public static bool Add(ref UserModel addedUser, string password)
+        {
+            ValidateUser(ref addedUser);
+
+            using (var conn = new Connection())
+            {
+                var cmd = new NpgsqlCommand("INSERT INTO users VALUES (DEFAULT, @username, @pass, @first_name, @last_name, @role, @email);")
+                {
+                    Connection = conn.Conn
+                };
+                cmd.Parameters.AddWithValue("username", addedUser.Username);
+                cmd.Parameters.AddWithValue("pass", EncryptMd5(password));
+                cmd.Parameters.AddWithValue("first_name", addedUser.Firstname);
+                cmd.Parameters.AddWithValue("last_name", addedUser.Lastname);
+                cmd.Parameters.AddWithValue("role", (int) addedUser.Role);
+                cmd.Parameters.AddWithValue("email", addedUser.Email);
+                cmd.ExecuteNonQuery();
+
+                cmd = new NpgsqlCommand("SELECT uid FROM users ORDER BY uid DESC LIMIT 1;")
+                {
+                    Connection = conn.Conn
+                };
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        addedUser.UserId = (int)reader[0];
+                        break;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        private static void ValidateUser(ref UserModel addedUser)
+        {
+            // TODO
+            // validate added user
+        }
+
         private static string EncryptMd5(string input)
         {
             var md5 = MD5.Create();
