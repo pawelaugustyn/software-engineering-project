@@ -3,13 +3,19 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using MetroFramework.Forms;
+using ScrumIt.Models;
 
 namespace ScrumIt.Forms
 {
     public partial class AddTask : MetroForm
     {
-        public AddTask()
+        private int _projectId;
+        private int _sprintId;
+
+        public AddTask(int projectId, int sprintId)
         {
+            _projectId = projectId;
+            _sprintId = sprintId;
             InitializeComponent();
         }
 
@@ -20,24 +26,9 @@ namespace ScrumIt.Forms
         {
             addTaskButton.BackColor = _panelColor;
 
-            //pobierz uzykownikow danego projektu z bazki
-            var users = new[]
-            {
-                new
-                {
-                    UserName = "BM",
-                    FirstName = "Bartosz",
-                    LastName = "Nowak"
-                },
-                new
-                {
-                    UserName = "BM",
-                    FirstName = "Bartosz",
-                    LastName = "Nowak"
-                }
-            };
+            var allUsers = UserModel.GetUsersByProjectId(_projectId);
 
-            userListMenuStrip.Items.AddRange(createUsersListMenu(users));
+            userListMenuStrip.Items.AddRange(createUsersListMenu(allUsers));
         }
 
         private void addTaskButton_Click(object sender, EventArgs e)
@@ -58,9 +49,9 @@ namespace ScrumIt.Forms
                 validationFlag = false;
             }
             else
-            if (Int16.Parse(taskPriority) > 11 || Int16.Parse(taskPriority) < 0)
+            if (Int16.Parse(taskPriority) > 101 || Int16.Parse(taskPriority) < 0)
             {
-                MessageBox.Show(@"Możliwa wartość stopnia skomplikowania to liczba całkownita między 0 a 10");
+                MessageBox.Show(@"Możliwa wartość stopnia skomplikowania to liczba całkownita między 0 a 100");
                 validationFlag = false;
             }
 
@@ -71,7 +62,7 @@ namespace ScrumIt.Forms
                 validationFlag = false;
             }
             else
-            if (Int16.Parse(taskEstimatedTime) > 11 || Int16.Parse(taskEstimatedTime) < 0)
+            if (Int16.Parse(taskEstimatedTime) > 101 || Int16.Parse(taskEstimatedTime) < 0)
             {
                 MessageBox.Show(@"Możliwa wartość przewidywanego czasu zadania to liczba całkownita między 0 a 100");
                 validationFlag = false;
@@ -90,6 +81,17 @@ namespace ScrumIt.Forms
             }
             if (validationFlag)
             {
+                var task = new TaskModel
+                {
+                    TaskName = taskName,
+                    TaskDesc = taskDescription,
+                    TaskType = "T",
+                    TaskPriority = Int16.Parse(taskPriority),
+                    TaskEstimatedTime = Int16.Parse(taskEstimatedTime),
+                    TaskStage = TaskModel.TaskStages.ToDo,
+                    SprintId = _sprintId
+                };
+                TaskModel.CreateNewTask(task, new List<UserModel>());
                 //add task to db
                 Close();
             }
@@ -118,13 +120,13 @@ namespace ScrumIt.Forms
             userListMenuStrip.Show(addUsersButton, new Point(0, addUsersButton.Height));
         }
 
-        private ToolStripItem[] createUsersListMenu(dynamic userList)
+        private ToolStripItem[] createUsersListMenu(List<UserModel> userList)
         {
-            var toolStripItems = new ToolStripItem[userList.Length];
-            for (var i = 0; i < userList.Length; i++)
+            var toolStripItems = new ToolStripItem[userList.Count];
+            for (var i = 0; i < userList.Count; i++)
             {
-                var toolStripMenuItemName = userList[i].UserName;
-                var toolStripMenuItemText = userList[i].FirstName + " " + userList[i].LastName + " ";
+                var toolStripMenuItemName = userList[i].Username;
+                var toolStripMenuItemText = userList[i].Firstname + " " + userList[i].Lastname + " ";
                 var toolStripMenuItem = new ToolStripMenuItem
                 {
                     Name = toolStripMenuItemName,

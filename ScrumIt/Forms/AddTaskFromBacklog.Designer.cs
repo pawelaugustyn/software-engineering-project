@@ -30,7 +30,6 @@
         {
             this.components = new System.ComponentModel.Container();
             this.addTaskTableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
-            this.taskUserListLabel = new System.Windows.Forms.Label();
             this.estimatedTimeLabel = new System.Windows.Forms.Label();
             this.taskPriorityLabel = new System.Windows.Forms.Label();
             this.taskDescriptionLabel = new System.Windows.Forms.Label();
@@ -38,7 +37,6 @@
             this.priorityTextBox = new System.Windows.Forms.TextBox();
             this.taskDescriptionTextBox = new System.Windows.Forms.TextBox();
             this.taskNameTextBox = new System.Windows.Forms.TextBox();
-            this.showUsersButton = new System.Windows.Forms.Button();
             this.taskNameLabel = new System.Windows.Forms.Label();
             this.addTaskButton = new System.Windows.Forms.Button();
             this.userListMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -51,7 +49,6 @@
             this.addTaskTableLayoutPanel.ColumnCount = 2;
             this.addTaskTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 37.6392F));
             this.addTaskTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 62.3608F));
-            this.addTaskTableLayoutPanel.Controls.Add(this.taskUserListLabel, 0, 4);
             this.addTaskTableLayoutPanel.Controls.Add(this.estimatedTimeLabel, 0, 3);
             this.addTaskTableLayoutPanel.Controls.Add(this.taskPriorityLabel, 0, 2);
             this.addTaskTableLayoutPanel.Controls.Add(this.taskDescriptionLabel, 0, 1);
@@ -59,32 +56,17 @@
             this.addTaskTableLayoutPanel.Controls.Add(this.priorityTextBox, 1, 2);
             this.addTaskTableLayoutPanel.Controls.Add(this.taskDescriptionTextBox, 1, 1);
             this.addTaskTableLayoutPanel.Controls.Add(this.taskNameTextBox, 1, 0);
-            this.addTaskTableLayoutPanel.Controls.Add(this.showUsersButton, 1, 4);
             this.addTaskTableLayoutPanel.Controls.Add(this.taskNameLabel, 0, 0);
             this.addTaskTableLayoutPanel.Location = new System.Drawing.Point(31, 58);
             this.addTaskTableLayoutPanel.Name = "addTaskTableLayoutPanel";
-            this.addTaskTableLayoutPanel.RowCount = 5;
+            this.addTaskTableLayoutPanel.RowCount = 4;
             this.addTaskTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
-            this.addTaskTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 60F));
+            this.addTaskTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 70F));
             this.addTaskTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
             this.addTaskTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
-            this.addTaskTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
+            this.addTaskTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.addTaskTableLayoutPanel.Size = new System.Drawing.Size(450, 298);
             this.addTaskTableLayoutPanel.TabIndex = 1;
-            // 
-            // taskUserListLabel
-            // 
-            this.taskUserListLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.taskUserListLabel.AutoSize = true;
-            this.taskUserListLabel.Font = new System.Drawing.Font("Segoe UI Light", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.taskUserListLabel.Location = new System.Drawing.Point(4, 267);
-            this.taskUserListLabel.Name = "taskUserListLabel";
-            this.taskUserListLabel.Size = new System.Drawing.Size(162, 30);
-            this.taskUserListLabel.TabIndex = 14;
-            this.taskUserListLabel.Text = "Przypisz do zadania";
-            this.taskUserListLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // estimatedTimeLabel
             // 
@@ -93,9 +75,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.estimatedTimeLabel.AutoSize = true;
             this.estimatedTimeLabel.Font = new System.Drawing.Font("Segoe UI Light", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.estimatedTimeLabel.Location = new System.Drawing.Point(4, 237);
+            this.estimatedTimeLabel.Location = new System.Drawing.Point(4, 267);
             this.estimatedTimeLabel.Name = "estimatedTimeLabel";
-            this.estimatedTimeLabel.Size = new System.Drawing.Size(162, 29);
+            this.estimatedTimeLabel.Size = new System.Drawing.Size(162, 30);
             this.estimatedTimeLabel.TabIndex = 13;
             this.estimatedTimeLabel.Text = "Przewidziany czas";
             this.estimatedTimeLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -107,7 +89,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.taskPriorityLabel.AutoSize = true;
             this.taskPriorityLabel.Font = new System.Drawing.Font("Segoe UI Light", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.taskPriorityLabel.Location = new System.Drawing.Point(4, 207);
+            this.taskPriorityLabel.Location = new System.Drawing.Point(4, 237);
             this.taskPriorityLabel.Name = "taskPriorityLabel";
             this.taskPriorityLabel.Size = new System.Drawing.Size(162, 29);
             this.taskPriorityLabel.TabIndex = 12;
@@ -123,7 +105,7 @@
             this.taskDescriptionLabel.Font = new System.Drawing.Font("Segoe UI Light", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.taskDescriptionLabel.Location = new System.Drawing.Point(4, 31);
             this.taskDescriptionLabel.Name = "taskDescriptionLabel";
-            this.taskDescriptionLabel.Size = new System.Drawing.Size(162, 175);
+            this.taskDescriptionLabel.Size = new System.Drawing.Size(162, 205);
             this.taskDescriptionLabel.TabIndex = 11;
             this.taskDescriptionLabel.Text = "Opis Zadania";
             // 
@@ -132,7 +114,7 @@
             this.estimatedTimeTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.estimatedTimeTextBox.Enabled = false;
             this.estimatedTimeTextBox.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.estimatedTimeTextBox.Location = new System.Drawing.Point(173, 240);
+            this.estimatedTimeTextBox.Location = new System.Drawing.Point(173, 270);
             this.estimatedTimeTextBox.Name = "estimatedTimeTextBox";
             this.estimatedTimeTextBox.Size = new System.Drawing.Size(273, 16);
             this.estimatedTimeTextBox.TabIndex = 8;
@@ -142,7 +124,7 @@
             this.priorityTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.priorityTextBox.Enabled = false;
             this.priorityTextBox.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.priorityTextBox.Location = new System.Drawing.Point(173, 210);
+            this.priorityTextBox.Location = new System.Drawing.Point(173, 240);
             this.priorityTextBox.Name = "priorityTextBox";
             this.priorityTextBox.Size = new System.Drawing.Size(273, 16);
             this.priorityTextBox.TabIndex = 7;
@@ -167,23 +149,6 @@
             this.taskNameTextBox.Name = "taskNameTextBox";
             this.taskNameTextBox.Size = new System.Drawing.Size(273, 16);
             this.taskNameTextBox.TabIndex = 5;
-            // 
-            // showUsersButton
-            // 
-            this.showUsersButton.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.showUsersButton.FlatAppearance.BorderColor = System.Drawing.Color.White;
-            this.showUsersButton.FlatAppearance.BorderSize = 0;
-            this.showUsersButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.showUsersButton.Font = new System.Drawing.Font("Segoe UI Light", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.showUsersButton.Location = new System.Drawing.Point(173, 270);
-            this.showUsersButton.Name = "showUsersButton";
-            this.showUsersButton.Size = new System.Drawing.Size(273, 24);
-            this.showUsersButton.TabIndex = 9;
-            this.showUsersButton.Text = "Lista Uzytkowikow";
-            this.showUsersButton.UseVisualStyleBackColor = true;
-            this.showUsersButton.Click += new System.EventHandler(this.showUsersButton_Click);
             // 
             // taskNameLabel
             // 
@@ -237,7 +202,6 @@
         #endregion
 
         private System.Windows.Forms.TableLayoutPanel addTaskTableLayoutPanel;
-        private System.Windows.Forms.Label taskUserListLabel;
         private System.Windows.Forms.Label estimatedTimeLabel;
         private System.Windows.Forms.Label taskPriorityLabel;
         private System.Windows.Forms.Label taskDescriptionLabel;
@@ -245,7 +209,6 @@
         private System.Windows.Forms.TextBox priorityTextBox;
         private System.Windows.Forms.TextBox taskDescriptionTextBox;
         private System.Windows.Forms.TextBox taskNameTextBox;
-        private System.Windows.Forms.Button showUsersButton;
         private System.Windows.Forms.Label taskNameLabel;
         private System.Windows.Forms.Button addTaskButton;
         private System.Windows.Forms.ContextMenuStrip userListMenuStrip;
