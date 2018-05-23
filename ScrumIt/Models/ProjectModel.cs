@@ -22,9 +22,9 @@ namespace ScrumIt.Models
             //return ProjectAccess.GetProjectByName(projectname);
         }
 
-        public static bool CreateNewProject(string projectName, string projectColour)
+        public static bool CreateNewProject(ProjectModel addedProject)
         {
-            return ProjectAccess.CreateNewProject(projectName, projectColour);
+            return ProjectAccess.CreateNewProject(addedProject);
         }
     }
 }
