@@ -141,14 +141,15 @@ namespace ScrumIt.DataAccess
             ValidateNewTask(ref addedTask);
             using (new Connection())
             {
-                var cmd = new NpgsqlCommand("INSERT INTO tasks (task_id, sprint_id, task_name, task_desc, task_priority, task_estimated_time, task_stage)" +
-                                            "VALUES (DEFAULT, @sprint_id, @task_name, @task_desc, @task_priority, @task_estimated_time, @task_stage);")
+                var cmd = new NpgsqlCommand("INSERT INTO tasks (task_id, sprint_id, task_name, task_desc, task_type, task_priority, task_estimated_time, task_stage)" +
+                                            "VALUES (DEFAULT, @sprint_id, @task_name, @task_desc,@task_type, @task_priority, @task_estimated_time, @task_stage);")
                 {
                     Connection = Connection.Conn
                 };
                 cmd.Parameters.AddWithValue("sprint_id", addedTask.SprintId);
                 cmd.Parameters.AddWithValue("task_name", addedTask.TaskName);
                 cmd.Parameters.AddWithValue("task_desc", addedTask.TaskDesc);
+                cmd.Parameters.AddWithValue("task_type", addedTask.TaskType);
                 cmd.Parameters.AddWithValue("task_priority", addedTask.TaskPriority);
                 cmd.Parameters.AddWithValue("task_estimated_time", addedTask.TaskEstimatedTime);
                 cmd.Parameters.AddWithValue("task_stage", (int)addedTask.TaskStage);

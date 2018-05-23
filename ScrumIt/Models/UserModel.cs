@@ -56,6 +56,8 @@ namespace ScrumIt.Models
         {
             return UserAccess.Delete(deletedUser);
         }
+
+        //pobierz userow przypisanych do tasku
     }
 
     public enum UserRoles

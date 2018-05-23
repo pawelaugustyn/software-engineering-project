@@ -215,7 +215,7 @@
             // 
             this.userListMenuStrip.Name = "userListMenuStrip";
             this.userListMenuStrip.ShowCheckMargin = true;
-            this.userListMenuStrip.Size = new System.Drawing.Size(175, 26);
+            this.userListMenuStrip.Size = new System.Drawing.Size(83, 4);
             this.userListMenuStrip.Closing += new System.Windows.Forms.ToolStripDropDownClosingEventHandler(this.userListMenuStrip_Closing);
             // 
             // AddTask
@@ -226,6 +226,7 @@
             this.Controls.Add(this.addTaskButton);
             this.Controls.Add(this.addTaskTableLayoutPanel);
             this.Name = "AddTask";
+            this.Resizable = false;
             this.Text = "ScrumIt!";
             this.Load += new System.EventHandler(this.TaskForm_Load);
             this.addTaskTableLayoutPanel.ResumeLayout(false);

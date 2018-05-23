@@ -19,14 +19,8 @@ namespace ScrumIt.Forms
             changePasswordButton.BackColor = _panelColor;
             submitPasswordChangeButton.BackColor = _panelColor;
 
-            UserModel user = new UserModel
-            {
-                Email = "dd",
-                Firstname = "Kamil",
-                Lastname = "Nowak",
-                Role = UserRoles.Developer,
-                Username = "Kamil123"
-            };
+            var state = AppStateProvider.Instance;
+            var user = state.CurrentUser;
 
             userEmailTextBox.Text = user.Email;
             userNameTextBox.Text = user.Firstname;

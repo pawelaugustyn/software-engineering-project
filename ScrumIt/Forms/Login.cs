@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using MetroFramework;
 using MetroFramework.Forms;
 
 namespace ScrumIt.Forms
@@ -43,7 +44,7 @@ namespace ScrumIt.Forms
                 MessageBox.Show("Niepoprawne dane logowania");
             }
         }
-
+        
         private void GuestmetroLink_Click(object sender, EventArgs e)
         {
             MessageBox.Show("zalogowano jako gość");
