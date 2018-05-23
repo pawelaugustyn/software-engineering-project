@@ -46,6 +46,11 @@ namespace ScrumIt.Models
         {
             return UserAccess.GetUsersByProjectId(projectid);
         }
+
+        public static bool Add(ref UserModel addedUser, string password)
+        {
+            return UserAccess.Add(ref addedUser, password);
+        }
     }
 
     public enum UserRoles
