@@ -208,35 +208,54 @@ namespace ScrumIt.DataAccess
             return true;
         }
 
-        private static void ValidateNewTask(TaskModel addedTask)
+        public static bool SetNewColour(TaskModel task, string colour)
         {
-            ValidateTaskName(addedTask);
-            ValidateTaskPriority(addedTask);
-            ValidateTaskEstimatedTime(addedTask);
-            ValidateTaskColor(addedTask);
+            ValidateTaskColor(colour);
+            using (new Connection())
+            {
+                var cmd = new NpgsqlCommand("UPDATE tasks SET task_color = @task_color WHERE task_id = @taskid;")
+                {
+                    Connection = Connection.Conn
+                };
+                cmd.Parameters.AddWithValue("task_color", colour);
+                cmd.Parameters.AddWithValue("task_id", task.TaskId);
+                var res = cmd.ExecuteNonQuery();
+                if (res != 1) return false;
+                task.TaskColor = colour;
+
+                return true;
+            }
         }
 
-        private static void ValidateTaskName(TaskModel addedTask)
+        private static void ValidateNewTask(TaskModel addedTask)
         {
-            if (addedTask.TaskName.Length == 0)
+            ValidateTaskName(addedTask.TaskName);
+            ValidateTaskPriority(addedTask.TaskPriority);
+            ValidateTaskEstimatedTime(addedTask.TaskEstimatedTime);
+            ValidateTaskColor(addedTask.TaskColor);
+        }
+
+        private static void ValidateTaskName(string taskName)
+        {
+            if (taskName.Length == 0)
                 throw new ArgumentException("Task name cannot be empty!");
         }
 
-        private static void ValidateTaskPriority(TaskModel addedTask)
+        private static void ValidateTaskPriority(int taskPriority)
         {
-            if (addedTask.TaskPriority < 0 || addedTask.TaskPriority > 100) 
+            if (taskPriority < 0 || taskPriority > 100) 
                 throw new ArgumentException("Task priority must be between 0 and 100.");
         }
 
-        private static void ValidateTaskEstimatedTime(TaskModel addedTask)
+        private static void ValidateTaskEstimatedTime(int estimatedTime)
         {
-            if (addedTask.TaskEstimatedTime < 0)
+            if (estimatedTime < 0)
                 throw new ArgumentException("Estimated time cannot be lower than zero!");
         }
 
-        private static void ValidateTaskColor(TaskModel addedTask)
+        private static void ValidateTaskColor(string colour)
         {
-            if (!new Regex(@"^#[a-fA-F0-9]{6}").IsMatch(addedTask.TaskColor))
+            if (!new Regex(@"^#[a-fA-F0-9]{6}").IsMatch(colour))
                 throw new ArgumentException("Provided string is not an RGB colour.");
         }
     }

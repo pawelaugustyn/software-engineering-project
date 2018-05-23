@@ -55,5 +55,10 @@ namespace ScrumIt.Models
         {
             return TaskAccess.CreateNewTask(taskToAdd, usersAssignedToTask);
         }
+
+        public static bool SetNewColour(TaskModel task, string colour)
+        {
+            return TaskAccess.SetNewColour(task, colour);
+        }
     }
 }
