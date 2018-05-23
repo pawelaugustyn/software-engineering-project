@@ -10,11 +10,11 @@ namespace ScrumIt.DataAccess
         public static List<TaskModel> GetProjectTasksByProjectId(int projectid)
         {
             var tasks = new List<TaskModel>();
-            using (var conn = new Connection())
+            using (new Connection())
             {
                 var cmd = new NpgsqlCommand("select tsk.* from tasks tsk join sprints spr using(sprint_id) where spr.project_id = @projectid order by spr.sprint_id;")
                 {
-                    Connection = conn.Conn
+                    Connection = Connection.Conn
                 };
                 cmd.Parameters.AddWithValue("projectid", projectid);
                 using (var reader = cmd.ExecuteReader())
@@ -45,12 +45,12 @@ namespace ScrumIt.DataAccess
         public static TaskModel GetTaskById(int taskid)
         {
             var task = new TaskModel();
-            using (var conn = new Connection())
+            using (new Connection())
             {
                 var cmd = new NpgsqlCommand(
                     "select * from tasks where task_id = @taskid;")
                 {
-                    Connection = conn.Conn
+                    Connection = Connection.Conn
                 };
                 cmd.Parameters.AddWithValue("taskid", taskid);
                 using (var reader = cmd.ExecuteReader())
@@ -81,12 +81,12 @@ namespace ScrumIt.DataAccess
         public static bool UpdateTaskStage(int taskid, TaskModel.TaskStages newstage)
         {
             //dzieki using nie musimy martwic sie o rzucanie wyjatkow i nie zamkniecie polaczenia - using to ogarnie za nas
-            using (var conn = new Connection())
+            using (new Connection())
             {
 
                 var cmd = new NpgsqlCommand("update tasks SET task_stage=@newstage where task_id = @taskid;")
                 {
-                    Connection = conn.Conn
+                    Connection = Connection.Conn
                 };
                 var newstageInt = (int) newstage;
                 cmd.Parameters.AddWithValue("newstage", newstageInt);
@@ -102,11 +102,11 @@ namespace ScrumIt.DataAccess
         public static List<TaskModel> GetProjectTasksBySprintId(int sprintid)
         {
             var tasks = new List<TaskModel>();
-            using (var conn = new Connection())
+            using (new Connection())
             {
                 var cmd = new NpgsqlCommand("select tsk.* from tasks tsk where tsk.sprint_id = @sprintid order by tsk.sprint_id;")
                 {
-                    Connection = conn.Conn
+                    Connection = Connection.Conn
                 };
                 cmd.Parameters.AddWithValue("sprintid", sprintid);
                 using (var reader = cmd.ExecuteReader())
@@ -136,13 +136,15 @@ namespace ScrumIt.DataAccess
 
         public static bool CreateNewTask(ref TaskModel addedTask, List<UserModel> usersAssignedToTask)
         {
+            // TODO
+            // Check permissions for creating new task in that project
             ValidateNewTask(ref addedTask);
-            using (var conn = new Connection())
+            using (new Connection())
             {
                 var cmd = new NpgsqlCommand("INSERT INTO tasks (task_id, sprint_id, task_name, task_desc, task_priority, task_estimated_time, task_stage)" +
                                             "VALUES (DEFAULT, @sprint_id, @task_name, @task_desc, @task_priority, @task_estimated_time, @task_stage);")
                 {
-                    Connection = conn.Conn
+                    Connection = Connection.Conn
                 };
                 cmd.Parameters.AddWithValue("sprint_id", addedTask.SprintId);
                 cmd.Parameters.AddWithValue("task_name", addedTask.TaskName);
@@ -154,7 +156,7 @@ namespace ScrumIt.DataAccess
                 
                 cmd = new NpgsqlCommand("SELECT task_id FROM tasks ORDER BY task_id DESC LIMIT 1;")
                 {
-                    Connection = conn.Conn
+                    Connection = Connection.Conn
                 };
                 using (var reader = cmd.ExecuteReader())
                 {
