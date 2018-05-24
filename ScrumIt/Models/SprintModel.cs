@@ -39,14 +39,19 @@ namespace ScrumIt.Models
             DateTime.TryParse(endDate, out _endDateTime);
         }
 
-        public static SprintModel GetSprintById(int sprintid)
+        public static SprintModel GetSprintById(int sprint_id)
         {
-            return SprintAccess.GetSprintById(sprintid);
+            return SprintAccess.GetSprintById(sprint_id);
         }
 
-        public static SprintModel GetCurrentSprintForProject(int projectid)
+        public static SprintModel GetCurrentSprintForProject(int project_id)
         {
-            return SprintAccess.GetSprintByProjectIdAndDate(projectid, DateTime.Now);
+            return SprintAccess.GetSprintByProjectIdAndDate(project_id, DateTime.Now);
+        }
+
+        public static List<SprintModel> GetAllSprintsInAProject(int project_id)
+        {
+            return SprintAccess.GetAllSprintsInAProject(project_id);
         }
     }
 }

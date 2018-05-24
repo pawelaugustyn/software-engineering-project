@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
 using Npgsql;
@@ -48,6 +49,27 @@ namespace ScrumIt.Models
         public static List<UserModel> GetUsersByProjectId(int projectid)
         {
             return UserAccess.GetUsersByProjectId(projectid);
+        }
+
+        public string SetToTask(int task_id)
+        {
+            // SetUserToTask returns string information, if adding user to task was successful or not
+            return UserAccess.SetUserToTask(this.UserId, task_id);
+        }
+
+        public string RemoveFromTask(int task_id)
+        {
+            return UserAccess.RemoveUserFromTask(this.UserId, task_id);
+        }
+
+        public string SetToProject(int project_id)
+        {
+            return UserAccess.SetUserToProject(this.UserId, project_id);
+        }
+
+        public string RemoveFromProject(int project_id)
+        {
+            return UserAccess.RemoveUserFromProject(this.UserId, project_id);
         }
     }
 

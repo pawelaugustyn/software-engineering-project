@@ -168,6 +168,119 @@ namespace ScrumIt.DataAccess
             return users;
         }
 
+        public static string SetUserToTask(int user_id, int task_id)
+        {
+            bool task_with_provided_id_exists = false;
+            using (var db_connection = new Connection())
+            {
+                //To check, if a task with provided ID exists in the DB. Maybe unnecessary?
+                var db_query_to_execute = new NpgsqlCommand("select * from tasks where task_id = @task_id")
+                {
+                    Connection = db_connection.Conn
+                };
+
+                db_query_to_execute.Parameters.AddWithValue("task_id", task_id);
+
+                using (var query_result = db_query_to_execute.ExecuteReader())
+                {
+                    if (query_result.Read())
+                    {
+                        task_with_provided_id_exists = true;
+                    }
+                }
+
+                if (task_with_provided_id_exists)
+                {
+                    //TODO: What should be the value of time_spent field in the database?? 0 by default?
+                    db_query_to_execute.CommandText = "insert into tasks_assigned_users values(@task_id, @user_id, 0)";
+                    db_query_to_execute.Parameters.AddWithValue("task_id", task_id);
+                    db_query_to_execute.Parameters.AddWithValue("user_id", user_id);
+
+                    using (var query_result = db_query_to_execute.ExecuteReader())
+                    {
+                        return "User successfully set to task.";
+                    }
+                }
+                return "ERROR: Provided task does not exist in the database.";
+            }
+        }
+
+        public static string RemoveUserFromTask(int user_id, int task_id)
+        {
+            using (var db_connection = new Connection())
+            {
+                var db_query_to_execute =
+                    new NpgsqlCommand("delete from tasks_assigned_users where task_id=@task_id and uid=@user_id")
+                    {
+                        Connection = db_connection.Conn
+                    };
+
+                db_query_to_execute.Parameters.AddWithValue("task_id", task_id);
+                db_query_to_execute.Parameters.AddWithValue("user_id", user_id);
+
+                using (var query_result = db_query_to_execute.ExecuteReader())
+                {
+                    return "User deleted from task.";
+                }
+            }
+        }
+
+        public static string SetUserToProject(int user_id, int project_id)
+        {
+            bool project_with_provided_id_exists = false;
+            using (var db_connection = new Connection())
+            {
+                //To check, if a project with provided ID exists in the DB. Maybe unnecessary?
+                var db_query_to_execute = new NpgsqlCommand("select * from projects where project_id = @project_id")
+                {
+                    Connection = db_connection.Conn
+                };
+
+                db_query_to_execute.Parameters.AddWithValue("project_id", project_id);
+
+                using (var query_result = db_query_to_execute.ExecuteReader())
+                {
+                    if (query_result.Read())
+                    {
+                        project_with_provided_id_exists = true;
+                    }
+                }
+
+                if (project_with_provided_id_exists)
+                {
+                    db_query_to_execute.CommandText = "insert into projects_has_users values(@user_id, @project_id)";
+                    db_query_to_execute.Parameters.AddWithValue("project_id", project_id);
+                    db_query_to_execute.Parameters.AddWithValue("user_id", user_id);
+
+                    using (var query_result = db_query_to_execute.ExecuteReader())
+                    {
+                        return "User successfully set to project.";
+                    }
+                }
+                return "ERROR: Provided project does not exist in the database.";
+            }
+        }
+
+        public static string RemoveUserFromProject(int user_id, int project_id)
+        {
+            using (var db_connection = new Connection())
+            {
+                var db_query_to_execute =
+                    new NpgsqlCommand("delete from projects_has_users where project_id=@project_id and uid=@user_id")
+                    {
+                        Connection = db_connection.Conn
+                    };
+
+                db_query_to_execute.Parameters.AddWithValue("project_id", project_id);
+                db_query_to_execute.Parameters.AddWithValue("user_id", user_id);
+
+                using (var query_result = db_query_to_execute.ExecuteReader())
+                {
+                    return "User deleted from project.";
+                }
+            }
+        }
+
         private static string EncryptMd5(string input)
         {
             var md5 = MD5.Create();
