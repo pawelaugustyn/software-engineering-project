@@ -8,6 +8,7 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
     public class UserAccessIntegrationTests
     {
         private UserModel _user;
+        private UserModel _guest;
         private ProjectModel _project;
 
         [OneTimeSetUp]
@@ -30,8 +31,32 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
                 ProjectName = "TestProject"
             };
 
+            _guest = new UserModel();
+
             //UserAccess.Add(_user);
             //ProjectAccess.Add(_project);
+        }
+
+        [Test]
+        [TestCase("", "")]
+        [TestCase("testScrumMaster", "")]
+        [TestCase("", "testScrumMaster")]
+        public void LoginAsWithEmptyCredentialsShouldFail(string username, string password)
+        {
+            var user = UserAccess.LoginAs(username, password);
+
+            Assertion.Equals(user, _guest);
+        }
+
+        [Test]
+        [TestCase("incorrectLogin", "incorrectPassword")]
+        [TestCase("testScrumMaster", "incorrectPassword")]
+        [TestCase("incorrectLogin", "testScrumMaster")]
+        public void LoginAsWithIncorrectCredentialsShouldFail(string username, string password)
+        {
+            var user = UserAccess.LoginAs(username, password);
+
+            Assertion.Equals(user, _guest);
         }
 
         [Test]

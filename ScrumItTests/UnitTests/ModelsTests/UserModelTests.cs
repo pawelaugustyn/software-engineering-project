@@ -13,14 +13,13 @@ namespace ScrumItTests.UnitTests.ModelsTests
         private void AssertFailedLogging() 
         {
             Assert.That(_state.CurrentUser.UserId, Is.EqualTo(0), "User Id changed after failed log in");
-            Assert.That(_state.CurrentUser.Role, Is.EqualTo(UserRoles.Guest), "User role changed from guest after failed log in");
+            Assert.That(_state.CurrentUser.Role, Is.EqualTo(UserRoles.Guest), "User role changed after failed log in");
         }
 
         [OneTimeSetUp]
         public void SetUp()
         {
             _state = AppStateProvider.Instance;
-            _state.CurrentUser = new UserModel();
         }
 
         [Test]
@@ -29,6 +28,8 @@ namespace ScrumItTests.UnitTests.ModelsTests
         [TestCase("", "admin")]
         public void LoginAsWithEmptyCredentialsShouldFail(string username, string password)
         {
+            _state.CurrentUser = new UserModel();
+
             var loggedInSuccessful = UserModel.LoginAs(username, password);
 
             Assert.That(loggedInSuccessful, Is.EqualTo(false), "Logging in was successful with empty credentials.");
@@ -36,15 +37,29 @@ namespace ScrumItTests.UnitTests.ModelsTests
         }
 
         [Test]
-        [TestCase("incorrect_login", "incorrect_password")]
-        [TestCase("admin", "incorrect_password")]
-        [TestCase("incorrect_login", "admin")]
+        [TestCase("incorrectLogin", "incorrectPassword")]
+        [TestCase("admin", "incorrectPassword")]
+        [TestCase("incorrectLogin", "admin")]
         public void LoginAsWithIncorrectCredentialsShouldFail(string username, string password)
         {
+            _state.CurrentUser = new UserModel();
+
             var loggedInSuccessful = UserModel.LoginAs(username, password);
 
             Assert.That(loggedInSuccessful, Is.EqualTo(false), "Logging in was successful with incorrect credentials.");
             AssertFailedLogging();
+        }
+
+        [Test]
+        public void LogOutWhenYouAreNotLoggedInShouldFail()
+        {
+            _state.CurrentUser = new UserModel();
+
+            var loggedOutSuccessful = UserModel.Logout();
+
+            Assert.That(loggedOutSuccessful, Is.EqualTo(false), "Logging out without logging in first was successful.");
+            Assert.That(_state.CurrentUser.UserId, Is.EqualTo(0), "User Id changed after failed logging out");
+            Assert.That(_state.CurrentUser.Role, Is.EqualTo(UserRoles.Guest), "User role changed after failed log out");
         }
 
         [Test]
