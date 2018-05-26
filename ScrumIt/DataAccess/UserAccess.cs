@@ -107,7 +107,7 @@ namespace ScrumIt.DataAccess
             return users;
         }
 
-        public static UserModel GetUserByLogin(string login)
+        public static UserModel GetUserByUsername(string login)
         {
             var user = new UserModel();
             using (new Connection())
@@ -184,7 +184,7 @@ namespace ScrumIt.DataAccess
                 cmd.Parameters.AddWithValue("pass", EncryptMd5(password));
                 cmd.Parameters.AddWithValue("first_name", addedUser.Firstname);
                 cmd.Parameters.AddWithValue("last_name", addedUser.Lastname);
-                cmd.Parameters.AddWithValue("role", (int) addedUser.Role);
+                cmd.Parameters.AddWithValue("role", (int)addedUser.Role);
                 cmd.Parameters.AddWithValue("email", addedUser.Email);
                 cmd.ExecuteNonQuery();
 
@@ -244,9 +244,9 @@ namespace ScrumIt.DataAccess
         {
             if (username.Length == 0)
                 throw new ArgumentException("Username cannot be empty!");
-            if (!new Regex(@"^[a-zA-Z0-9]*$").IsMatch(username))
+            if (!new Regex(@"^[a-zA-Z0-9()-]*$").IsMatch(username))
                 throw new ArgumentException("Username must contain only alphanumeric characters!");
-            if (!new Regex(@"^[a-zA-Z][a-zA-Z0-9]*$").IsMatch(username))
+            if (!new Regex(@"^[a-zA-Z][a-zA-Z0-9()-]*$").IsMatch(username))
                 throw new ArgumentException("Username cannot begin with number!");
         }
 
@@ -254,7 +254,7 @@ namespace ScrumIt.DataAccess
         {
             using (new Connection())
             {
-                var cmd = new NpgsqlCommand("SELECT FROM users WHERE lower(username) LIKE %username;")
+                var cmd = new NpgsqlCommand("SELECT lower(username) FROM users WHERE lower(username) LIKE 'username';")
                 {
                     Connection = Connection.Conn
                 };

@@ -39,7 +39,7 @@ namespace ScrumIt.Models
         }
         public static UserModel GetUserByLogin(string login)
         {
-            return UserAccess.GetUserByLogin(login);
+            return UserAccess.GetUserByUsername(login);
         }
 
         public static List<UserModel> GetUsersByProjectId(int projectid)
@@ -64,7 +64,6 @@ namespace ScrumIt.Models
     {
         Guest,
         Developer,
-        ScrumMaster,
-        Admin
+        ScrumMaster
     }
 }

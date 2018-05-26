@@ -1,7 +1,8 @@
-# Unit test 
+# 1. Unit test 
 ### Rules
 1. Test only logic - all database and UI stuff should be mocked
-2. Test should take place in ScrumItTest solution at the same as in ScrumIt solution
+    >*Unit testing is designed to focus on small units of isolated code.*
+2. Test should take place in ScrumItTest solution in UnitTestes directory at the same as in ScrumIt solution
 3. Everythig that are common to all test should be in SetUp metod
      ```.cs
      private int _variable;
@@ -39,26 +40,59 @@
 Rhino Mocks will generate fake objects to replace the dependencies that you have, and then allow you to tell them, at runtime, how to behave. This functionality is very powerful, and it means that you can tell your fake objects, for each test, how to behave. It allows to test every element separately and test only part of code that we want to test.
 Documentation: http://www.ayende.com/wiki/Rhino+Mocks+Documentation.ashx
 Exaples: https://www.hibernatingrhinos.com/oss/rhino-mocks
+9. To test equality simply call the IsDeepEqual extension method.
+
+    ```.cs
+    bool result = object1.IsDeepEqual(object2); 
+    ```
+    When used inside a test you might want to call ShouldDeepEqual instead. This method throws an exception with a detailed description of the differences between the 2 objects.
+
+    ```.cs
+    object1.ShouldDeepEqual(object2);
+    ```
+    You can pass a custom comparison as the second argument to the ShouldDeepEqual method to override the default behaviour. You can also customize the behaviour inline using the WithDeepEqual extension method.
+
+    ```.cs
+    object1.WithDeepEqual(object2)
+           .SkipDefault<MyEntity>()
+           .IgnoreSourceProperty(x => x.Id)
+           .Assert()
+    ```
+	   
+# 2. Integration test 
+1. Test functionality 
+    >*Integration testing is a type of testing which is typically designed to test interactions between an application and a database backend.*
+2. If you' d like to test logic only, mock db and UI and write unit test instead of integration one.
+3. Steps to follow:
+    - Use "IntegrationTest" attribute
+    - Prepare environment - setup
+    - Run a test
+    - Check test result
+    - Go back to the first point
+4. The structure is the same as in Unit Tests, but we do not mock db.
+    
+# 3. UI test
+1. Test window, all controls and their behaviour.
+
 ### Test Area to Cover
 1. Log in
-    - incorrect login
-    - incorrest password
+    - incorrect login +
+    - incorrest password 
     - incorrect login and password
     - empty login
     - empty password
     - empty login and password
     - go as guest
-    - SQL injection
+    - SQL injection 
 2. Log out 
-    - when you are logged in
+    - when you are logged in +
     - try when you are not logged in
     - then log in as a different user and check if there aro NO remainders of previous user
 3. Right to access - roles
     - check if you have particular role you can only do  :
         - Guest - read only mode
         - Developer - Guest + can edit tasks 
-        - ScrumMaster - Developer + everything despite scrum master settings
-        - Admin  - everything
+        - ScrumMaster - Everything
 4. Navigation in application and components work properly
     - tabs
     - pop up winows
@@ -119,4 +153,4 @@ Tasks:
         - e-mail remainder
 
 
-    
+        
