@@ -13,6 +13,7 @@ namespace ScrumIt.Models
         public int TaskPriority { get; set; }
         public int TaskEstimatedTime { get; set; }
         public TaskStages TaskStage { get; set; }
+        public string TaskColor { get; set; }
 
         public enum TaskStages
         {
@@ -52,7 +53,12 @@ namespace ScrumIt.Models
 
         public static bool CreateNewTask(TaskModel taskToAdd, List<UserModel> usersAssignedToTask)
         {
-            return TaskAccess.CreateNewTask(ref taskToAdd, usersAssignedToTask);
+            return TaskAccess.CreateNewTask(taskToAdd, usersAssignedToTask);
+        }
+
+        public static bool SetNewColour(TaskModel task, string colour)
+        {
+            return TaskAccess.SetNewColour(task, colour);
         }
     }
 }

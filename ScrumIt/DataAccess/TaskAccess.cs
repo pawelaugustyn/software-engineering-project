@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
 using Npgsql;
 using ScrumIt.Models;
 
@@ -32,7 +34,7 @@ namespace ScrumIt.DataAccess
                             TaskPriority = (int)reader[5],
                             TaskEstimatedTime = (int)reader[6],
                             TaskStage = (TaskModel.TaskStages)reader[7],
-
+                            TaskColor = (string)reader[8]
                         });
 
                     }
@@ -68,7 +70,7 @@ namespace ScrumIt.DataAccess
                             TaskPriority = (int)reader[5],
                             TaskEstimatedTime = (int)reader[6],
                             TaskStage = (TaskModel.TaskStages)reader[7],
-
+                            TaskColor = (string)reader[8]
                         };
                         break;
                     }
@@ -124,6 +126,7 @@ namespace ScrumIt.DataAccess
                             TaskPriority = (int)reader[5],
                             TaskEstimatedTime = (int)reader[6],
                             TaskStage = (TaskModel.TaskStages)reader[7],
+                            TaskColor = (string)reader[8]
 
                         });
 
@@ -134,15 +137,15 @@ namespace ScrumIt.DataAccess
             return tasks;
         }
 
-        public static bool CreateNewTask(ref TaskModel addedTask, List<UserModel> usersAssignedToTask)
+        public static bool CreateNewTask(TaskModel addedTask, List<UserModel> usersAssignedToTask = null)
         {
             // TODO
             // Check permissions for creating new task in that project
-            ValidateNewTask(ref addedTask);
+            ValidateNewTask(addedTask);
             using (new Connection())
             {
-                var cmd = new NpgsqlCommand("INSERT INTO tasks (task_id, sprint_id, task_name, task_desc, task_type, task_priority, task_estimated_time, task_stage)" +
-                                            "VALUES (DEFAULT, @sprint_id, @task_name, @task_desc,@task_type, @task_priority, @task_estimated_time, @task_stage);")
+                var cmd = new NpgsqlCommand("INSERT INTO tasks (task_id, sprint_id, task_name, task_desc, task_type, task_priority, task_estimated_time, task_stage, task_color)" +
+                                            "VALUES (DEFAULT, @sprint_id, @task_name, @task_desc,@task_type, @task_priority, @task_estimated_time, @task_stage, @task_color);")
                 {
                     Connection = Connection.Conn
                 };
@@ -153,6 +156,7 @@ namespace ScrumIt.DataAccess
                 cmd.Parameters.AddWithValue("task_priority", addedTask.TaskPriority);
                 cmd.Parameters.AddWithValue("task_estimated_time", addedTask.TaskEstimatedTime);
                 cmd.Parameters.AddWithValue("task_stage", (int)addedTask.TaskStage);
+                cmd.Parameters.AddWithValue("task_color", addedTask.TaskColor);
                 cmd.ExecuteNonQuery();
                 
                 cmd = new NpgsqlCommand("SELECT task_id FROM tasks ORDER BY task_id DESC LIMIT 1;")
@@ -167,36 +171,92 @@ namespace ScrumIt.DataAccess
                         break;
                     }
                 }
-                // TODO
-                // metoda dopisujaca liste uzytkownikow do zadania
+
+                if (usersAssignedToTask != null)
+                    AssignUsersToTask(addedTask, usersAssignedToTask);
             }
 
             return true;
         }
 
-        private static void ValidateNewTask(ref TaskModel addedTask)
+        public static bool AssignUsersToTask(TaskModel taskToAssignTo, List<UserModel> usersToAssign)
         {
-            ValidateTaskName(ref addedTask);
-            ValidateTaskPriority(ref addedTask);
-            ValidateTaskEstimatedTime(ref addedTask);
+            using (new Connection())
+            {
+                // TODO
+                // Delete only these who you want to get rid of
+                var cmd = new NpgsqlCommand("DELETE FROM tasks_assigned_users WHERE task_id = @taskid;")
+                {
+                    Connection = Connection.Conn
+                };
+                cmd.Parameters.AddWithValue("task_id", taskToAssignTo.TaskId);
+                cmd.ExecuteNonQuery();
+
+                var usersToAdd = usersToAssign.Select(o=>o.UserId).ToList().Distinct();
+                cmd = new NpgsqlCommand("INSERT INTO tasks_assigned_users VALUES (@task_id, @uid, 0);")
+                {
+                    Connection = Connection.Conn
+                };
+                foreach (var userId in usersToAdd)
+                {
+                    cmd.Parameters.AddWithValue("task_id", taskToAssignTo.TaskId);
+                    cmd.Parameters.AddWithValue("uid", userId);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+
+            return true;
         }
 
-        private static void ValidateTaskName(ref TaskModel addedTask)
+        public static bool SetNewColour(TaskModel task, string colour)
         {
-            if (addedTask.TaskName.Length == 0)
+            ValidateTaskColor(colour);
+            using (new Connection())
+            {
+                var cmd = new NpgsqlCommand("UPDATE tasks SET task_color = @task_color WHERE task_id = @taskid;")
+                {
+                    Connection = Connection.Conn
+                };
+                cmd.Parameters.AddWithValue("task_color", colour);
+                cmd.Parameters.AddWithValue("task_id", task.TaskId);
+                var res = cmd.ExecuteNonQuery();
+                if (res != 1) return false;
+                task.TaskColor = colour;
+
+                return true;
+            }
+        }
+
+        private static void ValidateNewTask(TaskModel addedTask)
+        {
+            ValidateTaskName(addedTask.TaskName);
+            ValidateTaskPriority(addedTask.TaskPriority);
+            ValidateTaskEstimatedTime(addedTask.TaskEstimatedTime);
+            ValidateTaskColor(addedTask.TaskColor);
+        }
+
+        private static void ValidateTaskName(string taskName)
+        {
+            if (taskName.Length == 0)
                 throw new ArgumentException("Task name cannot be empty!");
         }
 
-        private static void ValidateTaskPriority(ref TaskModel addedTask)
+        private static void ValidateTaskPriority(int taskPriority)
         {
-            if (addedTask.TaskPriority < 0 || addedTask.TaskPriority > 100) 
+            if (taskPriority < 0 || taskPriority > 100) 
                 throw new ArgumentException("Task priority must be between 0 and 100.");
         }
 
-        private static void ValidateTaskEstimatedTime(ref TaskModel addedTask)
+        private static void ValidateTaskEstimatedTime(int estimatedTime)
         {
-            if (addedTask.TaskEstimatedTime < 0)
+            if (estimatedTime < 0)
                 throw new ArgumentException("Estimated time cannot be lower than zero!");
+        }
+
+        private static void ValidateTaskColor(string colour)
+        {
+            if (!new Regex(@"^#[a-fA-F0-9]{6}").IsMatch(colour))
+                throw new ArgumentException("Provided string is not an RGB colour.");
         }
     }
 }
