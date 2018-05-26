@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System.Collections.Generic;
+using System.Drawing;
 using System.Windows.Forms;
 using MetroFramework.Forms;
 using ScrumIt.Models;
@@ -21,17 +22,8 @@ namespace ScrumIt.Forms
 
         private void AddTaskFromBacklog_Load(object sender, System.EventArgs e)
         {
+            TaskModel task = TaskModel.GetTaskById(_taskId);
             addTaskButton.BackColor = _panelColor;
-
-            //pobierz dany task z bazki
-            var task = new TaskModel
-            {
-                TaskName = "Nowy Task",
-                TaskType = "High",
-                TaskDesc = "Task Description",
-                TaskPriority = 5,
-                TaskEstimatedTime = 10
-            };
 
             taskNameTextBox.Text = task.TaskName;
             taskDescriptionTextBox.Text = task.TaskDesc;

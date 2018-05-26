@@ -213,7 +213,7 @@ namespace ScrumIt.DataAccess
             ValidateTaskColor(colour);
             using (new Connection())
             {
-                var cmd = new NpgsqlCommand("UPDATE tasks SET task_color = @task_color WHERE task_id = @taskid;")
+                var cmd = new NpgsqlCommand("UPDATE tasks SET task_color = @task_color WHERE task_id = @task_id;")
                 {
                     Connection = Connection.Conn
                 };

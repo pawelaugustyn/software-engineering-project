@@ -35,7 +35,7 @@ namespace ScrumIt.Forms
             var sprintModel = SprintModel.GetCurrentSprintForProject(_projectId);
             _sprintId = sprintModel.SprintId;
             
-            var taskList = TaskModel.GetTasksBySprintId(_sprintId);
+            var taskList = TaskModel.GetTasksBySprintId(_sprintId+1);
             
             var index = 0;
             foreach (var task in taskList)
@@ -67,13 +67,7 @@ namespace ScrumIt.Forms
                 };
 
                 //Pobierz backlog
-                var backlogTasks = new List<TaskModel>
-                {
-                    new TaskModel()
-                    {
-                        TaskName = "Task z backlogu1",
-                    }
-                };
+                var backlogTasks = TaskModel.GetTasksBySprintId(0);
 
                 var users = UserModel.GetUsersByProjectId(_projectId);
 
@@ -112,7 +106,7 @@ namespace ScrumIt.Forms
 
         private void currentSprintButton_Click(object sender, EventArgs e)
         {
-            var taskList = TaskModel.GetTasksBySprintId(_sprintId);
+            var taskList = TaskModel.GetTasksBySprintId(_sprintId+1);
             scrumBoardPanel.Controls.Clear();
 
             var index = 0;
@@ -188,12 +182,13 @@ namespace ScrumIt.Forms
 
         private void backlogToolStripMenuItem_Click(int taskId)
         {
+
             AddTaskFromBacklog addTask = new AddTaskFromBacklog(taskId, _sprintId);
             addTask.FormClosed += delegate { addTaskFromBacklog_FormClosed(); };
             addTask.Show();
         }
 
-        private void changeColorButton_Click(Panel taskPanel, MetroTextBox textBox)
+        private void changeColorButton_Click(Panel taskPanel, MetroTextBox textBox, TaskModel task)
         {
             var color = new Color();
             if (colorDialog1.ShowDialog() == DialogResult.OK)
@@ -201,7 +196,7 @@ namespace ScrumIt.Forms
                 color = colorDialog1.Color;
             }
             taskPanel.BackColor = color;
-            textBox.BackColor = color;
+            TaskModel.SetNewColour(task, ToHexValue(color));
         }
 
         private void taskDescriptionButton_Click(string description)
@@ -353,6 +348,7 @@ namespace ScrumIt.Forms
             for (var i = 0; i < backlog.Count; i++)
             {
                 var toolStripMenuItemName = backlog[i].TaskName + "ToolStripMenu";
+                var taskId = backlog[i].TaskId;
                 var toolStripMenuItem = new ToolStripMenuItem
                 {
                     Name = toolStripMenuItemName,
@@ -360,7 +356,7 @@ namespace ScrumIt.Forms
                 };
                 toolStripMenuItem.Click += delegate
                 {
-                    backlogToolStripMenuItem_Click(0);
+                    backlogToolStripMenuItem_Click(taskId);
                 };
                 toolStripItems[i] = toolStripMenuItem;
             }
@@ -406,7 +402,7 @@ namespace ScrumIt.Forms
             }
             var taskPanel = new Panel
             {
-                BackColor = Color.White,
+                BackColor = ColorTranslator.FromHtml(task.TaskColor),
                 BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle,
                 Location = new Point(positionX, height / 24 + index * 90),
                 Name = taskPanelName,
@@ -501,7 +497,7 @@ namespace ScrumIt.Forms
             };
             changeColorButton.Click += delegate
             {
-                changeColorButton_Click(taskPanel, taskNameTextBox);
+                changeColorButton_Click(taskPanel, taskNameTextBox, task);
             };
 
             taskPanel.Controls.Add(priorityPanel);
@@ -534,7 +530,6 @@ namespace ScrumIt.Forms
             }
             var taskPanel = new Panel
             {
-                BackColor = Color.White,
                 BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle,
                 Location = new Point(positionX, height / 24 + index * 90),
                 Name = taskPanelName,
@@ -705,6 +700,13 @@ namespace ScrumIt.Forms
                 l.Show();
 
             }
+        }
+
+        private static string ToHexValue(Color color)
+        {
+            return "#" + color.R.ToString("X2") +
+                   color.G.ToString("X2") +
+                   color.B.ToString("X2");
         }
     }
 }
