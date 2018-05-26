@@ -225,7 +225,10 @@
             this.ClientSize = new System.Drawing.Size(513, 415);
             this.Controls.Add(this.editTaskButton);
             this.Controls.Add(this.addTaskTableLayoutPanel);
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "EditTask";
+            this.Resizable = false;
             this.Text = "ScrumIt!";
             this.Load += new System.EventHandler(this.EditTask_Load);
             this.addTaskTableLayoutPanel.ResumeLayout(false);

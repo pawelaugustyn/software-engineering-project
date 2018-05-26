@@ -349,7 +349,10 @@
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.userPhotoPictureBox);
             this.Controls.Add(this.changePasswordButton);
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "UserPanel";
+            this.Resizable = false;
             this.Style = MetroFramework.MetroColorStyle.Teal;
             this.Text = "ScrumIt!";
             this.Load += new System.EventHandler(this.UserPanel_Load);
