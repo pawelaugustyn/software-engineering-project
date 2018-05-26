@@ -40,25 +40,7 @@
 Rhino Mocks will generate fake objects to replace the dependencies that you have, and then allow you to tell them, at runtime, how to behave. This functionality is very powerful, and it means that you can tell your fake objects, for each test, how to behave. It allows to test every element separately and test only part of code that we want to test.
 Documentation: http://www.ayende.com/wiki/Rhino+Mocks+Documentation.ashx
 Exaples: https://www.hibernatingrhinos.com/oss/rhino-mocks
-9. To test equality simply call the IsDeepEqual extension method.
 
-    ```.cs
-    bool result = object1.IsDeepEqual(object2); 
-    ```
-    When used inside a test you might want to call ShouldDeepEqual instead. This method throws an exception with a detailed description of the differences between the 2 objects.
-
-    ```.cs
-    object1.ShouldDeepEqual(object2);
-    ```
-    You can pass a custom comparison as the second argument to the ShouldDeepEqual method to override the default behaviour. You can also customize the behaviour inline using the WithDeepEqual extension method.
-
-    ```.cs
-    object1.WithDeepEqual(object2)
-           .SkipDefault<MyEntity>()
-           .IgnoreSourceProperty(x => x.Id)
-           .Assert()
-    ```
-	   
 # 2. Integration test 
 1. Test functionality 
     >*Integration testing is a type of testing which is typically designed to test interactions between an application and a database backend.*
@@ -76,16 +58,15 @@ Exaples: https://www.hibernatingrhinos.com/oss/rhino-mocks
 
 ### Test Area to Cover
 1. Log in
-    - incorrect login +
+    - incorrect login 
     - incorrest password 
     - incorrect login and password
     - empty login
     - empty password
     - empty login and password
     - go as guest
-    - SQL injection 
 2. Log out 
-    - when you are logged in +
+    - when you are logged in
     - try when you are not logged in
     - then log in as a different user and check if there aro NO remainders of previous user
 3. Right to access - roles
@@ -152,5 +133,35 @@ Tasks:
         - remove (what appears in history, were all task deleted)
         - e-mail remainder
 
+### Implemented Tests
+**Uni Tests**
+1. 
+**Integration Tests:**
+2. UserAccessIntegrationTests 
+- AddUserWithUniqueUsername 
+- GetUserByIdShouldReturnCorrectUser
+- GetUserByLoginShouldReturnCorrectUser 
+- GetUsersByLastNameShouldReturnCorrectUser 
+- GetUsersByProjectIdShouldReturnCorrectUsers 
+- LoginAsWithCorrectCredentialsShouldPass 
+- DeleteUserWithUniqueUsername
+To do:
+     1. Log in
+    - incorrect login 
+    - incorrest password 
+    - incorrect login and password
+    - empty login
+    - empty password
+    - empty login and password
+    - go as guest
+    2.
+    - add user that already exist
+    - delete user that not exist
+    - add/delete user with incorrect credential
+3. TaskAccessIntegrationTests 
+4. SprintAccessIntegrationTests 
+5. ProjectAccessIntegrationTests 
+6. ConnectionIntegrationTests
 
-        
+    
+    
