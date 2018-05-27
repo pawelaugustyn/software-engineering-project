@@ -107,16 +107,16 @@ namespace ScrumIt.DataAccess
             return users;
         }
 
-        public static UserModel GetUserByUsername(string login)
+        public static UserModel GetUserByUsername(string username)
         {
             var user = new UserModel();
             using (new Connection())
             {
-                var cmd = new NpgsqlCommand("select * from users where lower(username) like @login limit 1;")
+                var cmd = new NpgsqlCommand("select * from users where lower(username) like @username limit 1;")
                 {
                     Connection = Connection.Conn
                 };
-                cmd.Parameters.AddWithValue("login", login.ToLower() + '%');
+                cmd.Parameters.AddWithValue("username", username.ToLower() + '%');
                 using (var reader = cmd.ExecuteReader())
                 {
                     while (reader.Read())
