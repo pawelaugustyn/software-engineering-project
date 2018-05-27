@@ -168,6 +168,35 @@ namespace ScrumIt.DataAccess
             return users;
         }
 
+        public static List<UserModel> GetAllUsers()
+        {
+            var users = new List<UserModel>();
+            using (new Connection())
+            {
+                var cmd = new NpgsqlCommand("select * from users order by uid;")
+                {
+                    Connection = Connection.Conn
+                };
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        users.Add(new UserModel
+                        {
+                            UserId = (int)reader[0],
+                            Username = (string)reader[1],
+                            Firstname = (string)reader[3],
+                            Lastname = (string)reader[4],
+                            Role = (UserRoles)reader[5],
+                            Email = (string)reader[6]
+                        });
+                    }
+                }
+            }
+
+            return users;
+        }
+
         public static bool Add(UserModel addedUser, string password)
         {
             if (AppStateProvider.Instance.CurrentUser.Role != UserRoles.ScrumMaster)
