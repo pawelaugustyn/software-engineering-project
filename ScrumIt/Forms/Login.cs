@@ -15,6 +15,8 @@ namespace ScrumIt.Forms
 {
     public partial class Login : MetroForm
     {
+        private readonly Color _panelColor = ColorTranslator.FromHtml("#4AC1C1");
+        private readonly Color _guestColorButton = ColorTranslator.FromHtml("#eeeeee");
         public Login()
         {
             InitializeComponent();
@@ -46,7 +48,15 @@ namespace ScrumIt.Forms
             }
         }
         
-        private void GuestmetroLink_Click(object sender, EventArgs e)
+
+        private void Login_Load(object sender, EventArgs e)
+        {
+            loginButton.BackColor = _panelColor;
+            guestButton.BackColor = _guestColorButton;
+            registerButton.BackColor = _panelColor;
+        }
+
+        private void guestButton_Click(object sender, EventArgs e)
         {
             var state = AppStateProvider.Instance;
             state.CurrentUser = new UserModel();
@@ -54,6 +64,14 @@ namespace ScrumIt.Forms
             var view = new MainView();
             //view.ShowDialog();
             view.Show();
+
+        }
+
+        private void registerButton_Click(object sender, EventArgs e)
+        {
+            Register reg = new Register();
+            Hide();
+            reg.Show();
         }
     }
 }

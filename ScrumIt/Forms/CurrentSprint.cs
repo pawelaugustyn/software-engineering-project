@@ -50,14 +50,22 @@ namespace ScrumIt.Forms
             {
                 propertiesComboBox.Items.Add("Wybierz opcję...");
                 propertiesComboBox.Items.Add("Lista Projektów");
-                if (_userRole != "Guest")
+                if (_userRole == "ScrumMaster")
+                {
+                    propertiesComboBox.Items.Add("Dane użytkownika");
+                    propertiesComboBox.Items.Add("Stwórz konto");
+                    propertiesComboBox.Items.Add("Dodaj do projektu");
+                    propertiesComboBox.Items.Add("Usuń z projektu");
+                    propertiesComboBox.Items.Add("Wyloguj");
+                }
+                else if (_userRole == "Developer")
                 {
                     propertiesComboBox.Items.Add("Dane użytkownika");
                     propertiesComboBox.Items.Add("Wyloguj");
                 }
                 else
                 {
-                    propertiesComboBox.Items.Add("Zaloguj sie");
+                    propertiesComboBox.Items.Add("Zaloguj się");
                 }
                 propertiesComboBox.SelectedIndex = 0;
 
@@ -701,7 +709,46 @@ namespace ScrumIt.Forms
 
         private void propertiesComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (_userRole != "Guest")
+            if (_userRole == "ScrumMaster")
+            {
+                if (propertiesComboBox.SelectedIndex == 1)
+                {
+                    MainView mainView = new MainView();
+                    Hide();
+                    mainView.Show();
+                }
+                //opcja dane uzytkownika
+                if (propertiesComboBox.SelectedIndex == 2)
+                {
+                    UserPanel userPanel = new UserPanel();
+                    userPanel.Show();
+                }
+                
+                //opcja wyloguj
+                if (propertiesComboBox.SelectedIndex == 3)
+                {
+                    var reg = new Register();
+                    reg.Show();
+                }
+                if (propertiesComboBox.SelectedIndex == 4)
+                {
+                    MessageBox.Show("Add");
+                }
+                if (propertiesComboBox.SelectedIndex == 5)
+                {
+                    MessageBox.Show("Delete");
+                }
+
+                if (propertiesComboBox.SelectedIndex == 6)
+                {
+                    MessageBox.Show("wylogowano");
+                    UserModel.Logout();
+                    this.Hide();
+                    var l = new Login();
+                    l.Show();
+                }
+            }
+            else if (_userRole == "Developer")
             {
                 if (propertiesComboBox.SelectedIndex == 1)
                 {
@@ -718,9 +765,9 @@ namespace ScrumIt.Forms
                 //opcja wyloguj
                 if (propertiesComboBox.SelectedIndex == 3)
                 {
-                    MessageBox.Show(@"wylogowano");
+                    MessageBox.Show("wylogowano");
                     UserModel.Logout();
-                    Hide();
+                    this.Hide();
                     var l = new Login();
                     l.Show();
                 }
@@ -735,12 +782,11 @@ namespace ScrumIt.Forms
                 }
                 if (propertiesComboBox.SelectedIndex == 2)
                 {
-                    Hide();
+                    this.Hide();
                     var l = new Login();
                     l.Show();
                 }
             }
-            
         }
 
         private static string ToHexValue(Color color)

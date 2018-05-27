@@ -28,136 +28,131 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.loginLabel = new MetroFramework.Controls.MetroLabel();
-            this.passwordLabel = new MetroFramework.Controls.MetroLabel();
-            this.loginButton = new MetroFramework.Controls.MetroButton();
-            this.loginTextBox = new MetroFramework.Controls.MetroTextBox();
-            this.passwordTextBox = new MetroFramework.Controls.MetroTextBox();
-            this.GuestmetroLink = new MetroFramework.Controls.MetroLink();
-            this.tableLayoutPanel1.SuspendLayout();
+            this.registerButton = new System.Windows.Forms.Button();
+            this.loginButton = new System.Windows.Forms.Button();
+            this.guestButton = new System.Windows.Forms.Button();
+            this.loginTextBox = new System.Windows.Forms.TextBox();
+            this.passwordTextBox = new System.Windows.Forms.TextBox();
+            this.loginLabel = new System.Windows.Forms.Label();
+            this.passwordLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
-            // tableLayoutPanel1
+            // registerButton
             // 
-            this.tableLayoutPanel1.ColumnCount = 2;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Controls.Add(this.loginLabel, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.passwordLabel, 0, 1);
-            this.tableLayoutPanel1.Controls.Add(this.loginButton, 1, 3);
-            this.tableLayoutPanel1.Controls.Add(this.loginTextBox, 1, 0);
-            this.tableLayoutPanel1.Controls.Add(this.passwordTextBox, 1, 1);
-            this.tableLayoutPanel1.Controls.Add(this.GuestmetroLink, 1, 4);
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(10, 79);
-            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(2);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 5;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 15F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(387, 117);
-            this.tableLayoutPanel1.TabIndex = 0;
+            this.registerButton.BackColor = System.Drawing.Color.Silver;
+            this.registerButton.Enabled = false;
+            this.registerButton.FlatAppearance.BorderSize = 0;
+            this.registerButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.registerButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.registerButton.ForeColor = System.Drawing.Color.White;
+            this.registerButton.Location = new System.Drawing.Point(10, 231);
+            this.registerButton.Name = "registerButton";
+            this.registerButton.Size = new System.Drawing.Size(387, 31);
+            this.registerButton.TabIndex = 2;
+            this.registerButton.Text = "Stworz konto";
+            this.registerButton.UseVisualStyleBackColor = false;
+            this.registerButton.Click += new System.EventHandler(this.registerButton_Click);
+            // 
+            // loginButton
+            // 
+            this.loginButton.BackColor = System.Drawing.Color.Silver;
+            this.loginButton.FlatAppearance.BorderSize = 0;
+            this.loginButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.loginButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.loginButton.ForeColor = System.Drawing.Color.White;
+            this.loginButton.Location = new System.Drawing.Point(10, 157);
+            this.loginButton.Name = "loginButton";
+            this.loginButton.Size = new System.Drawing.Size(387, 31);
+            this.loginButton.TabIndex = 3;
+            this.loginButton.Text = "Zaloguj";
+            this.loginButton.UseVisualStyleBackColor = false;
+            this.loginButton.Click += new System.EventHandler(this.loginButton_Click);
+            // 
+            // guestButton
+            // 
+            this.guestButton.BackColor = System.Drawing.Color.White;
+            this.guestButton.FlatAppearance.BorderSize = 0;
+            this.guestButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.guestButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.guestButton.ForeColor = System.Drawing.Color.DarkGray;
+            this.guestButton.Location = new System.Drawing.Point(10, 194);
+            this.guestButton.Name = "guestButton";
+            this.guestButton.Size = new System.Drawing.Size(387, 31);
+            this.guestButton.TabIndex = 4;
+            this.guestButton.Text = "Zaloguj się jako gość";
+            this.guestButton.UseVisualStyleBackColor = false;
+            this.guestButton.Click += new System.EventHandler(this.guestButton_Click);
+            // 
+            // loginTextBox
+            // 
+            this.loginTextBox.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.loginTextBox.Location = new System.Drawing.Point(100, 74);
+            this.loginTextBox.Name = "loginTextBox";
+            this.loginTextBox.Size = new System.Drawing.Size(297, 33);
+            this.loginTextBox.TabIndex = 5;
+            // 
+            // passwordTextBox
+            // 
+            this.passwordTextBox.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.passwordTextBox.Location = new System.Drawing.Point(100, 109);
+            this.passwordTextBox.Name = "passwordTextBox";
+            this.passwordTextBox.PasswordChar = '*';
+            this.passwordTextBox.Size = new System.Drawing.Size(297, 33);
+            this.passwordTextBox.TabIndex = 6;
             // 
             // loginLabel
             // 
             this.loginLabel.AutoSize = true;
-            this.loginLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.loginLabel.FontSize = MetroFramework.MetroLabelSize.Tall;
-            this.loginLabel.Location = new System.Drawing.Point(2, 0);
-            this.loginLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.loginLabel.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.loginLabel.Location = new System.Drawing.Point(18, 78);
             this.loginLabel.Name = "loginLabel";
-            this.loginLabel.Size = new System.Drawing.Size(189, 29);
-            this.loginLabel.TabIndex = 0;
-            this.loginLabel.Text = "Login:";
-            this.loginLabel.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            this.loginLabel.Size = new System.Drawing.Size(59, 25);
+            this.loginLabel.TabIndex = 7;
+            this.loginLabel.Text = "Login";
             // 
             // passwordLabel
             // 
             this.passwordLabel.AutoSize = true;
-            this.passwordLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.passwordLabel.FontSize = MetroFramework.MetroLabelSize.Tall;
-            this.passwordLabel.Location = new System.Drawing.Point(2, 29);
-            this.passwordLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.passwordLabel.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.passwordLabel.Location = new System.Drawing.Point(18, 113);
             this.passwordLabel.Name = "passwordLabel";
-            this.passwordLabel.Size = new System.Drawing.Size(189, 29);
-            this.passwordLabel.TabIndex = 2;
-            this.passwordLabel.Text = "Hasło:";
-            this.passwordLabel.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            // 
-            // loginButton
-            // 
-            this.loginButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.loginButton.Location = new System.Drawing.Point(195, 71);
-            this.loginButton.Margin = new System.Windows.Forms.Padding(2);
-            this.loginButton.Name = "loginButton";
-            this.loginButton.Size = new System.Drawing.Size(190, 25);
-            this.loginButton.TabIndex = 3;
-            this.loginButton.Text = "Zaloguj";
-            this.loginButton.Click += new System.EventHandler(this.loginButton_Click);
-            // 
-            // loginTextBox
-            // 
-            this.loginTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.loginTextBox.Location = new System.Drawing.Point(195, 2);
-            this.loginTextBox.Margin = new System.Windows.Forms.Padding(2);
-            this.loginTextBox.Name = "loginTextBox";
-            this.loginTextBox.Size = new System.Drawing.Size(190, 25);
-            this.loginTextBox.TabIndex = 4;
-            this.loginTextBox.Text = "admin";
-            // 
-            // passwordTextBox
-            // 
-            this.passwordTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.passwordTextBox.Location = new System.Drawing.Point(195, 31);
-            this.passwordTextBox.Margin = new System.Windows.Forms.Padding(2);
-            this.passwordTextBox.Name = "passwordTextBox";
-            this.passwordTextBox.PasswordChar = '*';
-            this.passwordTextBox.Size = new System.Drawing.Size(190, 25);
-            this.passwordTextBox.TabIndex = 5;
-            this.passwordTextBox.Text = "admin";
-            // 
-            // GuestmetroLink
-            // 
-            this.GuestmetroLink.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.GuestmetroLink.Location = new System.Drawing.Point(195, 100);
-            this.GuestmetroLink.Margin = new System.Windows.Forms.Padding(2);
-            this.GuestmetroLink.Name = "GuestmetroLink";
-            this.GuestmetroLink.Size = new System.Drawing.Size(190, 15);
-            this.GuestmetroLink.TabIndex = 6;
-            this.GuestmetroLink.Text = "Zaloguj się jako gość";
-            this.GuestmetroLink.Click += new System.EventHandler(this.GuestmetroLink_Click);
+            this.passwordLabel.Size = new System.Drawing.Size(59, 25);
+            this.passwordLabel.TabIndex = 8;
+            this.passwordLabel.Text = "Hasło";
             // 
             // Login
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(525, 406);
-            this.Controls.Add(this.tableLayoutPanel1);
+            this.ClientSize = new System.Drawing.Size(413, 289);
+            this.Controls.Add(this.passwordLabel);
+            this.Controls.Add(this.loginLabel);
+            this.Controls.Add(this.passwordTextBox);
+            this.Controls.Add(this.loginTextBox);
+            this.Controls.Add(this.guestButton);
+            this.Controls.Add(this.loginButton);
+            this.Controls.Add(this.registerButton);
             this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "Login";
             this.Padding = new System.Windows.Forms.Padding(15, 60, 15, 16);
             this.Resizable = false;
-            this.Text = "Login";
+            this.Text = "ScrumIt!";
             this.TopMost = true;
-            this.tableLayoutPanel1.ResumeLayout(false);
-            this.tableLayoutPanel1.PerformLayout();
+            this.Load += new System.EventHandler(this.Login_Load);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private MetroFramework.Controls.MetroLabel loginLabel;
-        private MetroFramework.Controls.MetroLabel passwordLabel;
-        private MetroFramework.Controls.MetroButton loginButton;
-        private MetroFramework.Controls.MetroTextBox loginTextBox;
-        private MetroFramework.Controls.MetroTextBox passwordTextBox;
-        private MetroFramework.Controls.MetroLink GuestmetroLink;
+        private System.Windows.Forms.Button registerButton;
+        private System.Windows.Forms.Button loginButton;
+        private System.Windows.Forms.Button guestButton;
+        private System.Windows.Forms.TextBox loginTextBox;
+        private System.Windows.Forms.TextBox passwordTextBox;
+        private System.Windows.Forms.Label loginLabel;
+        private System.Windows.Forms.Label passwordLabel;
     }
 }

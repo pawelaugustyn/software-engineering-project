@@ -83,7 +83,7 @@
             this.Name = "MainView";
             this.Padding = new System.Windows.Forms.Padding(15, 60, 15, 8);
             this.Resizable = false;
-            this.Text = "Scrum It!";
+            this.Text = "ScrumIt!";
             this.Load += new System.EventHandler(this.MainView_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

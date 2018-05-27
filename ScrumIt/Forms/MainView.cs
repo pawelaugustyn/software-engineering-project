@@ -27,7 +27,13 @@ namespace ScrumIt.Forms
             Draw_Projects_Table();
             //rozwijalna lista
             propertiesComboBox.Items.Add("Wybierz opcję...");
-            if (_userRole != "Guest")
+            if (_userRole == "ScrumMaster")
+            {
+                propertiesComboBox.Items.Add("Dane użytkownika");
+                propertiesComboBox.Items.Add("Stwórz konto");
+                propertiesComboBox.Items.Add("Wyloguj");
+            }
+            else if (_userRole == "Developer")
             {
                 propertiesComboBox.Items.Add("Dane użytkownika");
                 propertiesComboBox.Items.Add("Wyloguj");
@@ -68,7 +74,8 @@ namespace ScrumIt.Forms
             }
             else
             {
-                newProject.Click += delegate {
+                newProject.Click += delegate
+                {
                     var add = new AddProject();
                     add.ShowDialog();
 
@@ -99,7 +106,8 @@ namespace ScrumIt.Forms
                 //panel.Controls.Add(new Label() { Text = projectsNames[i],/* TextAlign = ContentAlignment.MiddleCenter*/ }, 0, panel.RowCount - 1);
 
                 MetroButton b = new MetroButton();
-                b.Click += delegate {
+                b.Click += delegate
+                {
                     var sprint = new CurrentSprint(dict.Key);
                     sprint.Show();
                     this.Hide();
@@ -108,7 +116,7 @@ namespace ScrumIt.Forms
                 b.Text = dict.Value;
                 b.Name = dict.Value + "Button";
                 b.BackColor = System.Drawing.Color.GhostWhite;
-                b.Size = new System.Drawing.Size(200,40);
+                b.Size = new System.Drawing.Size(200, 40);
                 panel.Controls.Add(b, 0, panel.RowCount - 1);
 
             }
@@ -129,7 +137,30 @@ namespace ScrumIt.Forms
 
         private void propertiesComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (_userRole != "Guest")
+            if (_userRole == "ScrumMaster")
+            {
+                if (propertiesComboBox.SelectedIndex == 1)
+                {
+                    var userPanel = new UserPanel();
+                    userPanel.Show();
+                }
+                //opcja wyloguj
+                if (propertiesComboBox.SelectedIndex == 2)
+                {
+                    var reg = new Register();
+                    reg.Show();
+                }
+                
+                if (propertiesComboBox.SelectedIndex == 3)
+                {
+                    MessageBox.Show("wylogowano");
+                    UserModel.Logout();
+                    this.Hide();
+                    var l = new Login();
+                    l.Show();
+                }
+            }
+            else if (_userRole == "Developer")
             {
                 //opcja dane uzytkownika
                 if (propertiesComboBox.SelectedIndex == 1)
@@ -157,6 +188,6 @@ namespace ScrumIt.Forms
                 }
             }
         }
-        
+
     }
 }
