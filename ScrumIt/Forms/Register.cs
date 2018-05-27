@@ -29,7 +29,7 @@ namespace ScrumIt.Forms
                     Firstname = userNameTextBox.Text,
                     Lastname = userLastNameTextBox.Text,
                     Email = userEmailTextBox.Text,
-                    Role = UserRoles.Admin,
+                    Role = UserRoles.Developer, //tu bedzie combobox
                     //Image
 
                 };
