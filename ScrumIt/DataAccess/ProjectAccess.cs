@@ -56,7 +56,6 @@ namespace ScrumIt.DataAccess
                             ProjectName = (string)reader[1],
                             ProjectColor = (string)reader[2]
                         });
-
                     }
                 }
             }
@@ -116,7 +115,7 @@ namespace ScrumIt.DataAccess
                 {
                     while (reader.Read())
                     {
-                        addedProject.ProjectId = (int) reader[0];
+                        addedProject.ProjectId = (int)reader[0];
                         break;
                     }
                 }
@@ -153,7 +152,7 @@ namespace ScrumIt.DataAccess
 
         private static void ValidateProjectNameContainsOnlyAllowableCharacters(string name)
         {
-            if (!new Regex(@"^[a-zA-Z0-9-. ]+$").IsMatch(name))
+            if (!new Regex(@"^[a-zA-Z0-9()-. ]+$").IsMatch(name))
                 throw new ArgumentException("Project name contains not allowed characters.");
         }
 
@@ -162,7 +161,6 @@ namespace ScrumIt.DataAccess
             if (!new Regex(@"^#[a-fA-F0-9]{6}").IsMatch(colour))
                 throw new ArgumentException("Provided string is not an RGB colour.");
         }
-
     }
 }
 

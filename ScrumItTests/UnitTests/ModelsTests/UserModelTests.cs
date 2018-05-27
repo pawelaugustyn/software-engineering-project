@@ -3,7 +3,7 @@ using ScrumIt;
 using ScrumIt.Models;
 using Assert = NUnit.Framework.Assert;
 
-namespace ScrumItTests.ModelsTests
+namespace ScrumItTests.UnitTests.ModelsTests
 {
     [TestFixture]
     public class UserModelTests
