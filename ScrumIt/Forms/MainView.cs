@@ -10,10 +10,16 @@ namespace ScrumIt.Forms
 {
     public partial class MainView : MetroForm
     {
+        private string _userRole;
+        ToolTip toolTip1 = new ToolTip();
+        MetroButton newProject = new MetroButton();
+
         public MainView()
         {
+            _userRole = AppStateProvider.Instance.CurrentUser.Role.ToString();
             InitializeComponent();
         }
+
 
         private void MainView_Load(object sender, EventArgs e)
         {
@@ -21,10 +27,16 @@ namespace ScrumIt.Forms
             Draw_Projects_Table();
             //rozwijalna lista
             propertiesComboBox.Items.Add("Wybierz opcję...");
-            propertiesComboBox.Items.Add("Dane użytkownika");
-            propertiesComboBox.Items.Add("Wyloguj");
+            if (_userRole != "Guest")
+            {
+                propertiesComboBox.Items.Add("Dane użytkownika");
+                propertiesComboBox.Items.Add("Wyloguj");
+            }
+            else
+            {
+                propertiesComboBox.Items.Add("Zaloguj się");
+            }
             propertiesComboBox.SelectedIndex = 0;
-
         }
 
         private void Draw_Projects_Table()
@@ -46,24 +58,36 @@ namespace ScrumIt.Forms
             #region newProjectButton
             panel.RowCount = panel.RowCount + 1;
             panel.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
-            MetroButton newProject = new MetroButton();
-            newProject.Click += delegate {
-                var add = new AddProject();
-                
-                add.ShowDialog();
-
-
-            };
             newProject.Text = "Stwórz nowy projekt";
             newProject.Name = "newProjectButton";
             newProject.BackColor = System.Drawing.Color.Red;
             newProject.Size = new System.Drawing.Size(200, 40);
+            if (_userRole != "ScrumMaster")
+            {
+                toolTip1.SetToolTip(newProject, "Tylko Scrum Master może tworzyć projekty");
+            }
+            else
+            {
+                newProject.Click += delegate {
+                    var add = new AddProject();
+                    add.ShowDialog();
+
+                };
+            }
             panel.Controls.Add(newProject, 0, panel.RowCount - 1);
             #endregion
             #region projectsButtons
             //pozostale wiersze
             //pobranie projektow danego uzytkownika i wpisanie ich numerow ID oraz nazw do słownika projects
-            var projectsList = ProjectAccess.GetProjectsByUserId(AppStateProvider.Instance.CurrentUser.UserId);
+            List<ProjectModel> projectsList;
+            if (_userRole == "Guest")
+            {
+                projectsList = ProjectAccess.GetAllProjects();
+            }
+            else
+            {
+                projectsList = ProjectAccess.GetProjectsByUserId(AppStateProvider.Instance.CurrentUser.UserId);
+            }
             var projects = new Dictionary<int, string>();
             for (int i = 0; i < projectsList.Count; i++)
                 projects.Add(projectsList[i].ProjectId, projectsList[i].ProjectName);
@@ -105,22 +129,34 @@ namespace ScrumIt.Forms
 
         private void propertiesComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //opcja dane uzytkownika
-            if (propertiesComboBox.SelectedIndex == 1)
+            if (_userRole != "Guest")
             {
-                UserPanel userPanel = new UserPanel();
-                userPanel.Show();
+                //opcja dane uzytkownika
+                if (propertiesComboBox.SelectedIndex == 1)
+                {
+                    UserPanel userPanel = new UserPanel();
+                    userPanel.Show();
+                }
+                //opcja wyloguj
+                if (propertiesComboBox.SelectedIndex == 2)
+                {
+                    MessageBox.Show("wylogowano");
+                    UserModel.Logout();
+                    this.Hide();
+                    var l = new Login();
+                    l.Show();
+                }
             }
-            //opcja wyloguj
-            if (propertiesComboBox.SelectedIndex == 2)
+            else
             {
-                MessageBox.Show("wylogowano");
-                UserModel.Logout();
-                this.Hide();
-                var l = new Login();
-                l.Show();
-                
+                if (propertiesComboBox.SelectedIndex == 1)
+                {
+                    this.Hide();
+                    var l = new Login();
+                    l.Show();
+                }
             }
         }
+        
     }
 }

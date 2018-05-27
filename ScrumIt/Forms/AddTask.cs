@@ -89,10 +89,10 @@ namespace ScrumIt.Forms
                     TaskPriority = Int16.Parse(taskPriority),
                     TaskEstimatedTime = Int16.Parse(taskEstimatedTime),
                     TaskStage = TaskModel.TaskStages.ToDo,
-                    SprintId = _sprintId
+                    SprintId = _sprintId,
+                    TaskColor = "#ffffff"
                 };
                 TaskModel.CreateNewTask(task, new List<UserModel>());
-                //add task to db
                 Close();
             }
         }

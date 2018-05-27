@@ -10,9 +10,11 @@ namespace ScrumIt.Forms
     {
         private int _taskId;
         private int _sprintId;
+        private string _userRole;
 
         public AddTaskFromBacklog(int taskId, int sprintId)
         {
+            _userRole = AppStateProvider.Instance.CurrentUser.Role.ToString();
             _taskId = taskId;
             _sprintId = sprintId;
             InitializeComponent();
@@ -38,8 +40,16 @@ namespace ScrumIt.Forms
 
         private void addTaskButton_Click(object sender, System.EventArgs e)
         {
-            //dodaj task do bazki
-            this.Close();
+            if (_userRole != "Guest")
+            {
+                // update task
+                this.Close();
+            }
+            else
+            {
+                var toolTip = new ToolTip();
+                toolTip.SetToolTip(addTaskButton, "Zaloguj się aby dodać zadanie");
+            }
         }
     }
 }

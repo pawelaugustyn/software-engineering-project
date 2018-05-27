@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using MetroFramework;
 using MetroFramework.Forms;
+using ScrumIt.Models;
 
 namespace ScrumIt.Forms
 {
@@ -47,7 +48,12 @@ namespace ScrumIt.Forms
         
         private void GuestmetroLink_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("zalogowano jako gość");
+            var state = AppStateProvider.Instance;
+            state.CurrentUser = new UserModel();
+            this.Hide();
+            var view = new MainView();
+            //view.ShowDialog();
+            view.Show();
         }
     }
 }

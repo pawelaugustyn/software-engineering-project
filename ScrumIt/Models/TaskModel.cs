@@ -63,5 +63,9 @@ namespace ScrumIt.Models
 
         // TO DO 
         //Update task
+
+        //TO DO 
+        // (Optionally) Update task stage
+       
     }
 }

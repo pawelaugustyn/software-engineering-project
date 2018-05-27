@@ -50,7 +50,7 @@
             this.tableLayoutPanel1.Controls.Add(this.passwordTextBox, 1, 1);
             this.tableLayoutPanel1.Controls.Add(this.GuestmetroLink, 1, 4);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(10, 79);
-            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(2);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 5;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
@@ -91,7 +91,7 @@
             // 
             this.loginButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.loginButton.Location = new System.Drawing.Point(195, 71);
-            this.loginButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.loginButton.Margin = new System.Windows.Forms.Padding(2);
             this.loginButton.Name = "loginButton";
             this.loginButton.Size = new System.Drawing.Size(190, 25);
             this.loginButton.TabIndex = 3;
@@ -102,7 +102,7 @@
             // 
             this.loginTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.loginTextBox.Location = new System.Drawing.Point(195, 2);
-            this.loginTextBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.loginTextBox.Margin = new System.Windows.Forms.Padding(2);
             this.loginTextBox.Name = "loginTextBox";
             this.loginTextBox.Size = new System.Drawing.Size(190, 25);
             this.loginTextBox.TabIndex = 4;
@@ -112,7 +112,7 @@
             // 
             this.passwordTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.passwordTextBox.Location = new System.Drawing.Point(195, 31);
-            this.passwordTextBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.passwordTextBox.Margin = new System.Windows.Forms.Padding(2);
             this.passwordTextBox.Name = "passwordTextBox";
             this.passwordTextBox.PasswordChar = '*';
             this.passwordTextBox.Size = new System.Drawing.Size(190, 25);
@@ -123,7 +123,7 @@
             // 
             this.GuestmetroLink.Dock = System.Windows.Forms.DockStyle.Fill;
             this.GuestmetroLink.Location = new System.Drawing.Point(195, 100);
-            this.GuestmetroLink.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.GuestmetroLink.Margin = new System.Windows.Forms.Padding(2);
             this.GuestmetroLink.Name = "GuestmetroLink";
             this.GuestmetroLink.Size = new System.Drawing.Size(190, 15);
             this.GuestmetroLink.TabIndex = 6;
@@ -136,13 +136,14 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(525, 406);
             this.Controls.Add(this.tableLayoutPanel1);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "Login";
-            this.Padding = new System.Windows.Forms.Padding(15, 49, 15, 16);
+            this.Padding = new System.Windows.Forms.Padding(15, 60, 15, 16);
             this.Resizable = false;
             this.Text = "Login";
+            this.TopMost = true;
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             this.ResumeLayout(false);

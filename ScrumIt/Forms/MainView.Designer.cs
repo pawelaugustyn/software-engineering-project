@@ -39,7 +39,7 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.Location = new System.Drawing.Point(38, 173);
-            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(2);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
@@ -63,7 +63,7 @@
             this.propertiesComboBox.FormattingEnabled = true;
             this.propertiesComboBox.ItemHeight = 23;
             this.propertiesComboBox.Location = new System.Drawing.Point(824, 43);
-            this.propertiesComboBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.propertiesComboBox.Margin = new System.Windows.Forms.Padding(2);
             this.propertiesComboBox.Name = "propertiesComboBox";
             this.propertiesComboBox.Size = new System.Drawing.Size(169, 29);
             this.propertiesComboBox.TabIndex = 8;
@@ -81,7 +81,7 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "MainView";
-            this.Padding = new System.Windows.Forms.Padding(15, 49, 15, 8);
+            this.Padding = new System.Windows.Forms.Padding(15, 60, 15, 8);
             this.Resizable = false;
             this.Text = "Scrum It!";
             this.Load += new System.EventHandler(this.MainView_Load);
