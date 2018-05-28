@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System.Collections.Generic;
+using System.Drawing;
 using System.Windows.Forms;
 using MetroFramework.Forms;
 using ScrumIt.Models;
@@ -9,9 +10,11 @@ namespace ScrumIt.Forms
     {
         private int _taskId;
         private int _sprintId;
+        private string _userRole;
 
         public AddTaskFromBacklog(int taskId, int sprintId)
         {
+            _userRole = AppStateProvider.Instance.CurrentUser.Role.ToString();
             _taskId = taskId;
             _sprintId = sprintId;
             InitializeComponent();
@@ -21,17 +24,8 @@ namespace ScrumIt.Forms
 
         private void AddTaskFromBacklog_Load(object sender, System.EventArgs e)
         {
+            TaskModel task = TaskModel.GetTaskById(_taskId);
             addTaskButton.BackColor = _panelColor;
-
-            //pobierz dany task z bazki
-            var task = new TaskModel
-            {
-                TaskName = "Nowy Task",
-                TaskType = "High",
-                TaskDesc = "Task Description",
-                TaskPriority = 5,
-                TaskEstimatedTime = 10
-            };
 
             taskNameTextBox.Text = task.TaskName;
             taskDescriptionTextBox.Text = task.TaskDesc;
@@ -46,8 +40,16 @@ namespace ScrumIt.Forms
 
         private void addTaskButton_Click(object sender, System.EventArgs e)
         {
-            //dodaj task do bazki
-            this.Close();
+            if (_userRole != "Guest")
+            {
+                // update task
+                this.Close();
+            }
+            else
+            {
+                var toolTip = new ToolTip();
+                toolTip.SetToolTip(addTaskButton, "Zaloguj się aby dodać zadanie");
+            }
         }
     }
 }

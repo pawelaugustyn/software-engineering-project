@@ -49,7 +49,7 @@
             this.tableLayoutPanel1.Controls.Add(this.newProjectMetroButton, 1, 2);
             this.tableLayoutPanel1.Controls.Add(this.SelectProjectColorButton, 1, 1);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(32, 67);
-            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(2);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 3;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 40F));
@@ -89,7 +89,7 @@
             this.newProjectNameMetroTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.newProjectNameMetroTextBox.FontSize = MetroFramework.MetroTextBoxSize.Tall;
             this.newProjectNameMetroTextBox.Location = new System.Drawing.Point(166, 2);
-            this.newProjectNameMetroTextBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.newProjectNameMetroTextBox.Margin = new System.Windows.Forms.Padding(2);
             this.newProjectNameMetroTextBox.Name = "newProjectNameMetroTextBox";
             this.newProjectNameMetroTextBox.Size = new System.Drawing.Size(251, 45);
             this.newProjectNameMetroTextBox.TabIndex = 4;
@@ -98,7 +98,7 @@
             // 
             this.newProjectMetroButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.newProjectMetroButton.Location = new System.Drawing.Point(166, 100);
-            this.newProjectMetroButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.newProjectMetroButton.Margin = new System.Windows.Forms.Padding(2);
             this.newProjectMetroButton.Name = "newProjectMetroButton";
             this.newProjectMetroButton.Size = new System.Drawing.Size(251, 21);
             this.newProjectMetroButton.TabIndex = 5;
@@ -109,7 +109,7 @@
             // 
             this.SelectProjectColorButton.BackColor = System.Drawing.Color.Red;
             this.SelectProjectColorButton.Location = new System.Drawing.Point(172, 57);
-            this.SelectProjectColorButton.Margin = new System.Windows.Forms.Padding(8, 8, 8, 8);
+            this.SelectProjectColorButton.Margin = new System.Windows.Forms.Padding(8);
             this.SelectProjectColorButton.Name = "SelectProjectColorButton";
             this.SelectProjectColorButton.Size = new System.Drawing.Size(30, 32);
             this.SelectProjectColorButton.TabIndex = 6;
@@ -122,9 +122,12 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(512, 368);
             this.Controls.Add(this.tableLayoutPanel1);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "AddProject";
-            this.Padding = new System.Windows.Forms.Padding(15, 49, 15, 16);
+            this.Padding = new System.Windows.Forms.Padding(15, 60, 15, 16);
+            this.Resizable = false;
             this.Text = "Scrum it!";
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();

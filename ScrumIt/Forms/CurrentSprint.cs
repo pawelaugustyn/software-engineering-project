@@ -14,15 +14,20 @@ namespace ScrumIt.Forms
         private readonly int _projectId;
         private int _sprintId;
         private bool createMenuflag = true;
+        private string _userRole;
 
         public CurrentSprint()
         {
+            _userRole = AppStateProvider.Instance.CurrentUser.Role.ToString();
             InitializeComponent();
         }
 
         public CurrentSprint(int projectId)
         {
             _projectId = projectId;
+            _userRole = AppStateProvider.Instance.CurrentUser.Role.ToString();
+            var sprintModel = SprintModel.GetCurrentSprintForProject(_projectId);
+            _sprintId = sprintModel.SprintId+1;
             InitializeComponent();
         }
 
@@ -32,9 +37,6 @@ namespace ScrumIt.Forms
 
         private void CurrentSprint_Load(object sender, EventArgs e)
         {
-            var sprintModel = SprintModel.GetCurrentSprintForProject(_projectId);
-            _sprintId = sprintModel.SprintId;
-            
             var taskList = TaskModel.GetTasksBySprintId(_sprintId);
             
             var index = 0;
@@ -47,8 +49,22 @@ namespace ScrumIt.Forms
             {
                 propertiesComboBox.Items.Add("Wybierz opcję...");
                 propertiesComboBox.Items.Add("Lista Projektów");
-                propertiesComboBox.Items.Add("Dane użytkownika");
-                propertiesComboBox.Items.Add("Wyloguj");
+                if (_userRole == "ScrumMaster")
+                {
+                    propertiesComboBox.Items.Add("Dane użytkownika");
+                    propertiesComboBox.Items.Add("Stwórz konto");
+                    propertiesComboBox.Items.Add("Zarządzaj projektem");
+                    propertiesComboBox.Items.Add("Wyloguj");
+                }
+                else if (_userRole == "Developer")
+                {
+                    propertiesComboBox.Items.Add("Dane użytkownika");
+                    propertiesComboBox.Items.Add("Wyloguj");
+                }
+                else
+                {
+                    propertiesComboBox.Items.Add("Zaloguj się");
+                }
                 propertiesComboBox.SelectedIndex = 0;
 
                 var projectColorString = ProjectModel.GetProjectById(_projectId).ProjectColor;
@@ -67,13 +83,7 @@ namespace ScrumIt.Forms
                 };
 
                 //Pobierz backlog
-                var backlogTasks = new List<TaskModel>
-                {
-                    new TaskModel()
-                    {
-                        TaskName = "Task z backlogu1",
-                    }
-                };
+                var backlogTasks = TaskModel.GetTasksBySprintId(0);
 
                 var users = UserModel.GetUsersByProjectId(_projectId);
 
@@ -188,12 +198,13 @@ namespace ScrumIt.Forms
 
         private void backlogToolStripMenuItem_Click(int taskId)
         {
+
             AddTaskFromBacklog addTask = new AddTaskFromBacklog(taskId, _sprintId);
             addTask.FormClosed += delegate { addTaskFromBacklog_FormClosed(); };
             addTask.Show();
         }
 
-        private void changeColorButton_Click(Panel taskPanel, MetroTextBox textBox)
+        private void changeColorButton_Click(Panel taskPanel, MetroTextBox textBox, TaskModel task)
         {
             var color = new Color();
             if (colorDialog1.ShowDialog() == DialogResult.OK)
@@ -201,7 +212,7 @@ namespace ScrumIt.Forms
                 color = colorDialog1.Color;
             }
             taskPanel.BackColor = color;
-            textBox.BackColor = color;
+            TaskModel.SetNewColour(task, ToHexValue(color));
         }
 
         private void taskDescriptionButton_Click(string description)
@@ -259,9 +270,17 @@ namespace ScrumIt.Forms
 
         private void addTaskButton_Click(object sender, EventArgs e)
         {
-            AddTask addTask = new AddTask(_projectId, _sprintId);
-            addTask.FormClosed += delegate { addTask_FormClosed(); };
-            addTask.Show();
+            if (_userRole != "Guest")
+            {
+                AddTask addTask = new AddTask(_projectId, _sprintId);
+                addTask.FormClosed += delegate { addTask_FormClosed(); };
+                addTask.Show();
+            }
+            else
+            {
+                var addTaskToolTip = new ToolTip();
+                addTaskToolTip.SetToolTip(addTaskButton, "Zaloguj się aby dodać zadanie");
+            }
         }
 
         private void historyToolStripMenuItem_Click(int sprintId)
@@ -353,6 +372,7 @@ namespace ScrumIt.Forms
             for (var i = 0; i < backlog.Count; i++)
             {
                 var toolStripMenuItemName = backlog[i].TaskName + "ToolStripMenu";
+                var taskId = backlog[i].TaskId;
                 var toolStripMenuItem = new ToolStripMenuItem
                 {
                     Name = toolStripMenuItemName,
@@ -360,7 +380,7 @@ namespace ScrumIt.Forms
                 };
                 toolStripMenuItem.Click += delegate
                 {
-                    backlogToolStripMenuItem_Click(0);
+                    backlogToolStripMenuItem_Click(taskId);
                 };
                 toolStripItems[i] = toolStripMenuItem;
             }
@@ -394,7 +414,9 @@ namespace ScrumIt.Forms
             var width = GetScrumBoardPanelWidth();
             var stageTemp = task.TaskStage;
             var taskPanelName = "taskPanel" + index;
+            var taskId = task.TaskId;
             var positionX = width / 40;
+            
             switch (stageTemp)
             {
                 case TaskModel.TaskStages.Doing:
@@ -406,7 +428,7 @@ namespace ScrumIt.Forms
             }
             var taskPanel = new Panel
             {
-                BackColor = Color.White,
+                BackColor = ColorTranslator.FromHtml(task.TaskColor),
                 BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle,
                 Location = new Point(positionX, height / 24 + index * 90),
                 Name = taskPanelName,
@@ -414,14 +436,16 @@ namespace ScrumIt.Forms
                 TabIndex = 0,
                 Dock = DockStyle.None
             };
-            taskPanel.MouseDown += (sender, e) => panel_MouseDown(e);
-            taskPanel.MouseMove += panel_MouseMove;
-            taskPanel.MouseUp += (sender, e) => panel_MouseUp(sender, e, task); ;
-            taskPanel.DoubleClick += delegate
+            if (_userRole != "Guest")
             {
-                panel_DoubleClick(0);
-            };
-
+                taskPanel.MouseDown += (sender, e) => panel_MouseDown(e);
+                taskPanel.MouseMove += panel_MouseMove;
+                taskPanel.MouseUp += (sender, e) => panel_MouseUp(sender, e, task); ;
+                taskPanel.DoubleClick += delegate
+                {
+                    panel_DoubleClick(taskId);
+                };
+            }
             var taskNameTextBox = new MetroTextBox()
             {
                 BackColor = Color.White,
@@ -499,10 +523,13 @@ namespace ScrumIt.Forms
                 TabIndex = 0,
                 BackColor = Color.Red
             };
-            changeColorButton.Click += delegate
+            if (_userRole != "Guest")
             {
-                changeColorButton_Click(taskPanel, taskNameTextBox);
-            };
+                changeColorButton.Click += delegate
+                {
+                    changeColorButton_Click(taskPanel, taskNameTextBox, task);
+                };
+            }
 
             taskPanel.Controls.Add(priorityPanel);
             foreach (var pictureBox in pictureBoxes)
@@ -534,7 +561,6 @@ namespace ScrumIt.Forms
             }
             var taskPanel = new Panel
             {
-                BackColor = Color.White,
                 BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle,
                 Location = new Point(positionX, height / 24 + index * 90),
                 Name = taskPanelName,
@@ -683,28 +709,87 @@ namespace ScrumIt.Forms
 
         private void propertiesComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (propertiesComboBox.SelectedIndex == 1)
+            if (_userRole == "ScrumMaster")
             {
-                MainView mainView = new MainView();
-                Hide();
-                mainView.Show();
+                if (propertiesComboBox.SelectedIndex == 1)
+                {
+                    MainView mainView = new MainView();
+                    Hide();
+                    mainView.Show();
+                }
+                //opcja dane uzytkownika
+                if (propertiesComboBox.SelectedIndex == 2)
+                {
+                    UserPanel userPanel = new UserPanel();
+                    userPanel.Show();
+                }
+                
+                //opcja wyloguj
+                if (propertiesComboBox.SelectedIndex == 3)
+                {
+                    var reg = new Register();
+                    reg.Show();
+                }
+                if (propertiesComboBox.SelectedIndex == 4)
+                {
+                    var proj = new ManageProject(_projectId);
+                    proj.Show();
+                }
+                if (propertiesComboBox.SelectedIndex == 5)
+                {
+                    MessageBox.Show("wylogowano");
+                    UserModel.Logout();
+                    this.Hide();
+                    var l = new Login();
+                    l.Show();
+                }
             }
-            //opcja dane uzytkownika
-            if (propertiesComboBox.SelectedIndex == 2)
+            else if (_userRole == "Developer")
             {
-                UserPanel userPanel = new UserPanel();
-                userPanel.Show();
+                if (propertiesComboBox.SelectedIndex == 1)
+                {
+                    MainView mainView = new MainView();
+                    Hide();
+                    mainView.Show();
+                }
+                //opcja dane uzytkownika
+                if (propertiesComboBox.SelectedIndex == 2)
+                {
+                    UserPanel userPanel = new UserPanel();
+                    userPanel.Show();
+                }
+                //opcja wyloguj
+                if (propertiesComboBox.SelectedIndex == 3)
+                {
+                    MessageBox.Show("wylogowano");
+                    UserModel.Logout();
+                    this.Hide();
+                    var l = new Login();
+                    l.Show();
+                }
             }
-            //opcja wyloguj
-            if (propertiesComboBox.SelectedIndex == 3)
+            else
             {
-                MessageBox.Show(@"wylogowano");
-                UserModel.Logout();
-                Hide();
-                var l = new Login();
-                l.Show();
+                if (propertiesComboBox.SelectedIndex == 1)
+                {
+                    MainView mainView = new MainView();
+                    Hide();
+                    mainView.Show();
+                }
+                if (propertiesComboBox.SelectedIndex == 2)
+                {
+                    this.Hide();
+                    var l = new Login();
+                    l.Show();
+                }
+            }
+        }
 
-            }
+        private static string ToHexValue(Color color)
+        {
+            return "#" + color.R.ToString("X2") +
+                   color.G.ToString("X2") +
+                   color.B.ToString("X2");
         }
     }
 }

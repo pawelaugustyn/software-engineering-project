@@ -190,7 +190,10 @@
             this.ClientSize = new System.Drawing.Size(513, 415);
             this.Controls.Add(this.addTaskButton);
             this.Controls.Add(this.addTaskTableLayoutPanel);
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "AddTaskFromBacklog";
+            this.Resizable = false;
             this.Text = "ScrumIt!";
             this.Load += new System.EventHandler(this.AddTaskFromBacklog_Load);
             this.addTaskTableLayoutPanel.ResumeLayout(false);
