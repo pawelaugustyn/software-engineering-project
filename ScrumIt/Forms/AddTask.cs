@@ -25,10 +25,6 @@ namespace ScrumIt.Forms
         private void TaskForm_Load(object sender, EventArgs e)
         {
             addTaskButton.BackColor = _panelColor;
-
-            var allUsers = UserModel.GetUsersByProjectId(_projectId);
-
-            userListMenuStrip.Items.AddRange(createUsersListMenu(allUsers));
         }
 
         private void addTaskButton_Click(object sender, EventArgs e)
@@ -68,17 +64,12 @@ namespace ScrumIt.Forms
                 validationFlag = false;
             }
 
-            var usersList = userListMenuStrip.Items;
-            var userNames = new List<string>();
-            foreach (ToolStripMenuItem user in usersList)
+            var sprintId = 0;
+            if (currentSptintRadio.Checked)
             {
-                if (user.Checked)
-                {
-                    var userName = user.Name;
-                    userNames.Add(userName);
-                    //przypisz uzytkownika do zadania do bazki
-                }
+                sprintId = _sprintId;
             }
+
             if (validationFlag)
             {
                 var task = new TaskModel
@@ -89,7 +80,7 @@ namespace ScrumIt.Forms
                     TaskPriority = Int16.Parse(taskPriority),
                     TaskEstimatedTime = Int16.Parse(taskEstimatedTime),
                     TaskStage = TaskModel.TaskStages.ToDo,
-                    SprintId = _sprintId,
+                    SprintId = sprintId,
                     TaskColor = "#ffffff"
                 };
                 TaskModel.CreateNewTask(task, new List<UserModel>());
@@ -113,31 +104,6 @@ namespace ScrumIt.Forms
             {
                 e.Handled = true;
             }
-        }
-
-        private void addUsersButton_Click(object sender, EventArgs e)
-        {
-            userListMenuStrip.Show(addUsersButton, new Point(0, addUsersButton.Height));
-        }
-
-        private ToolStripItem[] createUsersListMenu(List<UserModel> userList)
-        {
-            var toolStripItems = new ToolStripItem[userList.Count];
-            for (var i = 0; i < userList.Count; i++)
-            {
-                var toolStripMenuItemName = userList[i].Username;
-                var toolStripMenuItemText = userList[i].Firstname + " " + userList[i].Lastname + " ";
-                var toolStripMenuItem = new ToolStripMenuItem
-                {
-                    Name = toolStripMenuItemName,
-                    Text = toolStripMenuItemText,
-                    Image = Properties.Resources.cat2,
-                    CheckOnClick = true
-                };
-                toolStripItems[i] = toolStripMenuItem;
-            }
-
-            return toolStripItems;
         }
 
         private void userListMenuStrip_Closing(object sender, ToolStripDropDownClosingEventArgs e)

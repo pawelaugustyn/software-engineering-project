@@ -26,6 +26,8 @@ namespace ScrumIt.Forms
         {
             _projectId = projectId;
             _userRole = AppStateProvider.Instance.CurrentUser.Role.ToString();
+            var sprintModel = SprintModel.GetCurrentSprintForProject(_projectId);
+            _sprintId = sprintModel.SprintId+1;
             InitializeComponent();
         }
 
@@ -35,10 +37,7 @@ namespace ScrumIt.Forms
 
         private void CurrentSprint_Load(object sender, EventArgs e)
         {
-            var sprintModel = SprintModel.GetCurrentSprintForProject(_projectId);
-            _sprintId = sprintModel.SprintId;
-            
-            var taskList = TaskModel.GetTasksBySprintId(_sprintId+1);
+            var taskList = TaskModel.GetTasksBySprintId(_sprintId);
             
             var index = 0;
             foreach (var task in taskList)
@@ -124,7 +123,7 @@ namespace ScrumIt.Forms
 
         private void currentSprintButton_Click(object sender, EventArgs e)
         {
-            var taskList = TaskModel.GetTasksBySprintId(_sprintId+1);
+            var taskList = TaskModel.GetTasksBySprintId(_sprintId);
             scrumBoardPanel.Controls.Clear();
 
             var index = 0;

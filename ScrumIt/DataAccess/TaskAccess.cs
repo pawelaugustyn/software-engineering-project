@@ -90,14 +90,14 @@ namespace ScrumIt.DataAccess
                 {
                     Connection = Connection.Conn
                 };
-                var newstageInt = (int) newstage;
+                var newstageInt = (int)newstage;
                 cmd.Parameters.AddWithValue("newstage", newstageInt);
                 cmd.Parameters.AddWithValue("taskid", taskid);
                 //if one record was affected then it went as expected. If not, we didnt manage to find the task
                 var howManyAffected = cmd.ExecuteNonQuery();
                 if (howManyAffected == 1)
                     return true;
-                throw new Exception("Task not found");                
+                throw new Exception("Task not found");
             }
         }
 
@@ -158,7 +158,7 @@ namespace ScrumIt.DataAccess
                 cmd.Parameters.AddWithValue("task_stage", (int)addedTask.TaskStage);
                 cmd.Parameters.AddWithValue("task_color", addedTask.TaskColor);
                 cmd.ExecuteNonQuery();
-                
+
                 cmd = new NpgsqlCommand("SELECT task_id FROM tasks ORDER BY task_id DESC LIMIT 1;")
                 {
                     Connection = Connection.Conn
@@ -167,12 +167,12 @@ namespace ScrumIt.DataAccess
                 {
                     while (reader.Read())
                     {
-                        addedTask.TaskId = (int) reader[0];
+                        addedTask.TaskId = (int)reader[0];
                         break;
                     }
                 }
 
-                if (usersAssignedToTask != null)
+                if (usersAssignedToTask.Count != 0)
                     AssignUsersToTask(addedTask, usersAssignedToTask);
             }
 
@@ -192,7 +192,7 @@ namespace ScrumIt.DataAccess
                 cmd.Parameters.AddWithValue("task_id", taskToAssignTo.TaskId);
                 cmd.ExecuteNonQuery();
 
-                var usersToAdd = usersToAssign.Select(o=>o.UserId).ToList().Distinct();
+                var usersToAdd = usersToAssign.Select(o => o.UserId).ToList().Distinct();
                 cmd = new NpgsqlCommand("INSERT INTO tasks_assigned_users VALUES (@task_id, @uid, 0);")
                 {
                     Connection = Connection.Conn
@@ -243,7 +243,7 @@ namespace ScrumIt.DataAccess
 
         private static void ValidateTaskPriority(int taskPriority)
         {
-            if (taskPriority < 0 || taskPriority > 100) 
+            if (taskPriority < 0 || taskPriority > 100)
                 throw new ArgumentException("Task priority must be between 0 and 100.");
         }
 
