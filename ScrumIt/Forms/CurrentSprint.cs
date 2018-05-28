@@ -53,8 +53,7 @@ namespace ScrumIt.Forms
                 {
                     propertiesComboBox.Items.Add("Dane użytkownika");
                     propertiesComboBox.Items.Add("Stwórz konto");
-                    propertiesComboBox.Items.Add("Dodaj do projektu");
-                    propertiesComboBox.Items.Add("Usuń z projektu");
+                    propertiesComboBox.Items.Add("Zarządzaj projektem");
                     propertiesComboBox.Items.Add("Wyloguj");
                 }
                 else if (_userRole == "Developer")
@@ -731,14 +730,10 @@ namespace ScrumIt.Forms
                 }
                 if (propertiesComboBox.SelectedIndex == 4)
                 {
-                    MessageBox.Show("Add");
+                    var proj = new ManageProject(_projectId);
+                    proj.Show();
                 }
                 if (propertiesComboBox.SelectedIndex == 5)
-                {
-                    MessageBox.Show("Delete");
-                }
-
-                if (propertiesComboBox.SelectedIndex == 6)
                 {
                     MessageBox.Show("wylogowano");
                     UserModel.Logout();
