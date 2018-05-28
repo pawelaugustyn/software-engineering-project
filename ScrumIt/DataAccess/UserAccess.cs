@@ -228,8 +228,10 @@ namespace ScrumIt.DataAccess
 
         public static bool UpdateUserData(UserModel updatedUser)
         {
-            if (AppStateProvider.Instance.CurrentUser.Role != UserRoles.ScrumMaster)
+            if (AppStateProvider.Instance.CurrentUser.Role == UserRoles.Guest)
                 throw new UnauthorizedAccessException("Not permitted for that operation.");
+            if (AppStateProvider.Instance.CurrentUser.Role == UserRoles.Developer && AppStateProvider.Instance.CurrentUser.UserId != updatedUser.UserId)
+                throw new UnauthorizedAccessException("Not permitted for that operation - you can't change other person's data.");
             ValidateUsername(updatedUser);
             using (new Connection())
             {
