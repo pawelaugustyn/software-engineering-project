@@ -47,11 +47,12 @@ namespace ScrumIt.Forms
 
         private void Draw_Projects_Table()
         {
-            tableLayoutPanel1.Visible = false;
             TableLayoutPanel panel = new TableLayoutPanel();
             panel.Location = new System.Drawing.Point(50, 150);
             panel.Name = "ProjectsTable";
-            panel.Size = new System.Drawing.Size(500, 500);
+            panel.Size = new System.Drawing.Size(400, 400);
+            panel.AutoScroll = true;
+            panel.MaximumSize = new System.Drawing.Size(400,400);
 
             // ilosc kolumn i wierszy na poczatku - reszta dodana dynamicznie
             panel.ColumnCount = 1;
@@ -64,9 +65,22 @@ namespace ScrumIt.Forms
             #region newProjectButton
             panel.RowCount = panel.RowCount + 1;
             panel.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
+            MetroButton newProject = new MetroButton();
+            newProject.Click += delegate {
+                var add = new AddProject();
+                add.FormClosing += delegate
+                {
+                    Controls.Remove(panel);
+                    propertiesComboBox.Items.Clear();
+                    MainView_Load(null, EventArgs.Empty);
+                };
+                add.ShowDialog();
+
+
+            };
             newProject.Text = "Stwórz nowy projekt";
             newProject.Name = "newProjectButton";
-            newProject.BackColor = System.Drawing.Color.Red;
+            newProject.Theme = MetroFramework.MetroThemeStyle.Dark;
             newProject.Size = new System.Drawing.Size(200, 40);
             if (_userRole != "ScrumMaster")
             {

@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.infoLabel = new System.Windows.Forms.Label();
             this.propertiesComboBox = new MetroFramework.Controls.MetroComboBox();
             this.SuspendLayout();
@@ -91,7 +90,6 @@
         }
 
         #endregion
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.Label infoLabel;
         private MetroFramework.Controls.MetroComboBox propertiesComboBox;
     }
