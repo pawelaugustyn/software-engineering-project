@@ -414,7 +414,9 @@ namespace ScrumIt.Forms
             var width = GetScrumBoardPanelWidth();
             var stageTemp = task.TaskStage;
             var taskPanelName = "taskPanel" + index;
+            var taskId = task.TaskId;
             var positionX = width / 40;
+            
             switch (stageTemp)
             {
                 case TaskModel.TaskStages.Doing:
@@ -441,7 +443,7 @@ namespace ScrumIt.Forms
                 taskPanel.MouseUp += (sender, e) => panel_MouseUp(sender, e, task); ;
                 taskPanel.DoubleClick += delegate
                 {
-                    panel_DoubleClick(0);
+                    panel_DoubleClick(taskId);
                 };
             }
             var taskNameTextBox = new MetroTextBox()
