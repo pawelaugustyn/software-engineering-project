@@ -137,5 +137,35 @@ namespace ScrumIt.DataAccess
                 return sprint;
             }
         }
+        // pobiera wszystkie sprinty, ktorych data zakonczenia jest wczesniejsza niz obecna data
+        public static List<SprintModel> GetOldSprintsByProjectId(int projectid)
+        {
+            var sprints = new List<SprintModel>();
+            var time = DateTime.Now;
+            using (new Connection())
+            {
+                var cmd = new NpgsqlCommand("select * from sprints where project_id = @projectid and sprint_end < @currentdate::timestamp;")
+                {
+                    Connection = Connection.Conn
+                };
+                cmd.Parameters.AddWithValue("projectid", projectid);
+                string datetime = time.ToString("yyyy-MM-dd hh:mm:ss");
+                cmd.Parameters.AddWithValue("currentdate", datetime);
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        sprints.Add(new SprintModel
+                        {
+                            SprintId = (int)reader[0],
+                            ParentProjectId = (int)reader[1],
+                            StartDateTime = (DateTime)reader[2],
+                            EndDateTime = (DateTime)reader[3]
+                        });
+                    }
+                }
+            }
+            return sprints;
+        }
     }
 }
