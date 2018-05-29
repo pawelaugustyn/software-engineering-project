@@ -10,6 +10,7 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
     public class UserAccessIntegrationTests
     {
         private UserModel _user;
+        private UserModel _guest;
         private ProjectModel _project;
         private const string Password = "testScrumMaster";
 
@@ -31,6 +32,8 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
                 ProjectColor = "#ff0000"
             };
 
+            _guest = new UserModel();
+          
             AppStateProvider.Instance.CurrentUser = _user;
 
             UserAccess.Add(_user, Password);
@@ -44,6 +47,28 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
         public void Teardown()
         {
             UserModel.Logout();
+        }
+      
+        [Test]
+        [TestCase("", "")]
+        [TestCase("testScrumMaster", "")]
+        [TestCase("", "testScrumMaster")]
+        public void LoginAsWithEmptyCredentialsShouldFail(string username, string password)
+        {
+            var user = UserAccess.LoginAs(username, password);
+
+            Assertion.Equals(user, _guest);
+        }
+
+        [Test]
+        [TestCase("incorrectLogin", "incorrectPassword")]
+        [TestCase("testScrumMaster", "incorrectPassword")]
+        [TestCase("incorrectLogin", "testScrumMaster")]
+        public void LoginAsWithIncorrectCredentialsShouldFail(string username, string password)
+        {
+            var user = UserAccess.LoginAs(username, password);
+
+            Assertion.Equals(user, _guest);
         }
 
         [Test]
