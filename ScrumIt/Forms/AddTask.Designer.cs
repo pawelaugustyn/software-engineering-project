@@ -95,7 +95,7 @@
             this.taskPriorityLabel.Name = "taskPriorityLabel";
             this.taskPriorityLabel.Size = new System.Drawing.Size(162, 25);
             this.taskPriorityLabel.TabIndex = 12;
-            this.taskPriorityLabel.Text = "Stopieñ skomplikowania";
+            this.taskPriorityLabel.Text = "Stopień skomplikowania";
             this.taskPriorityLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // taskDescriptionLabel

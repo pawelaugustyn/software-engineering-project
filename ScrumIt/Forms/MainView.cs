@@ -5,15 +5,15 @@ using MetroFramework.Forms;
 using MetroFramework.Controls;
 using ScrumIt.DataAccess;
 using System.Collections.Generic;
+using System.Drawing;
 
 namespace ScrumIt.Forms
 {
     public partial class MainView : MetroForm
     {
         private string _userRole;
-        ToolTip toolTip1 = new ToolTip();
-        MetroButton newProject = new MetroButton();
 
+        private readonly Color _panelColor = ColorTranslator.FromHtml("#4AC1C1");
         public MainView()
         {
             _userRole = AppStateProvider.Instance.CurrentUser.Role.ToString();
@@ -48,11 +48,11 @@ namespace ScrumIt.Forms
         private void Draw_Projects_Table()
         {
             TableLayoutPanel panel = new TableLayoutPanel();
-            panel.Location = new System.Drawing.Point(50, 150);
+            panel.Location = new Point(50, 150);
             panel.Name = "ProjectsTable";
-            panel.Size = new System.Drawing.Size(400, 400);
+            panel.Size = new System.Drawing.Size(450, 400);
             panel.AutoScroll = true;
-            panel.MaximumSize = new System.Drawing.Size(400,400);
+            panel.MaximumSize = new Size(450, 400);
 
             // ilosc kolumn i wierszy na poczatku - reszta dodana dynamicznie
             panel.ColumnCount = 1;
@@ -65,35 +65,37 @@ namespace ScrumIt.Forms
             #region newProjectButton
             panel.RowCount = panel.RowCount + 1;
             panel.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
-            MetroButton newProject = new MetroButton();
-            newProject.Click += delegate {
-                var add = new AddProject();
-                add.FormClosing += delegate
-                {
-                    Controls.Remove(panel);
-                    propertiesComboBox.Items.Clear();
-                    MainView_Load(null, EventArgs.Empty);
-                };
-                add.ShowDialog();
-
-
-            };
+            Button newProject = new Button();
+            newProject.FlatStyle = FlatStyle.Flat;
+            newProject.Font =new Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             newProject.Text = "Stwórz nowy projekt";
             newProject.Name = "newProjectButton";
-            newProject.Theme = MetroFramework.MetroThemeStyle.Dark;
-            newProject.Size = new System.Drawing.Size(200, 40);
-            if (_userRole != "ScrumMaster")
+            newProject.Size = new System.Drawing.Size(400, 40);
+            newProject.FlatAppearance.BorderColor = Color.White;
+            newProject.FlatAppearance.BorderSize = 0;
+            if (_userRole == "ScrumMaster")
             {
-                toolTip1.SetToolTip(newProject, "Tylko Scrum Master może tworzyć projekty");
-            }
-            else
-            {
+                newProject.BackColor = Color.LimeGreen;
+                newProject.ForeColor = Color.White;
                 newProject.Click += delegate
                 {
                     var add = new AddProject();
+                    add.FormClosing += delegate
+                    {
+                        Controls.Remove(panel);
+                        propertiesComboBox.Items.Clear();
+                        MainView_Load(null, EventArgs.Empty);
+                    };
                     add.ShowDialog();
 
                 };
+            }
+            else
+            {
+                newProject.BackColor = ColorTranslator.FromHtml("#eeeeee");
+                newProject.ForeColor = Color.DarkGray;
+                var toolTip = new ToolTip();
+                toolTip.SetToolTip(newProject, "Tylko Scrum Master może dodawać projekty");
             }
             panel.Controls.Add(newProject, 0, panel.RowCount - 1);
             #endregion
@@ -119,7 +121,13 @@ namespace ScrumIt.Forms
                 panel.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
                 //panel.Controls.Add(new Label() { Text = projectsNames[i],/* TextAlign = ContentAlignment.MiddleCenter*/ }, 0, panel.RowCount - 1);
 
-                MetroButton b = new MetroButton();
+                var b = new Button();
+                b.FlatStyle = FlatStyle.Flat;
+                b.Font = new Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+                b.BackColor = _panelColor;
+                b.ForeColor = Color.White;
+                b.FlatAppearance.BorderColor = Color.White;
+                b.FlatAppearance.BorderSize = 0;
                 b.Click += delegate
                 {
                     var sprint = new CurrentSprint(dict.Key);
@@ -129,8 +137,7 @@ namespace ScrumIt.Forms
                 };
                 b.Text = dict.Value;
                 b.Name = dict.Value + "Button";
-                b.BackColor = System.Drawing.Color.GhostWhite;
-                b.Size = new System.Drawing.Size(200, 40);
+                b.Size = new System.Drawing.Size(400, 40);
                 panel.Controls.Add(b, 0, panel.RowCount - 1);
 
             }
@@ -164,7 +171,7 @@ namespace ScrumIt.Forms
                     var reg = new Register();
                     reg.Show();
                 }
-                
+
                 if (propertiesComboBox.SelectedIndex == 3)
                 {
                     MessageBox.Show("wylogowano");

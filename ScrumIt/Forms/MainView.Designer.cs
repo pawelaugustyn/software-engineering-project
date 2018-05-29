@@ -47,10 +47,10 @@
             // 
             this.propertiesComboBox.FormattingEnabled = true;
             this.propertiesComboBox.ItemHeight = 23;
-            this.propertiesComboBox.Location = new System.Drawing.Point(824, 43);
+            this.propertiesComboBox.Location = new System.Drawing.Point(310, 4);
             this.propertiesComboBox.Margin = new System.Windows.Forms.Padding(2);
             this.propertiesComboBox.Name = "propertiesComboBox";
-            this.propertiesComboBox.Size = new System.Drawing.Size(169, 29);
+            this.propertiesComboBox.Size = new System.Drawing.Size(150, 29);
             this.propertiesComboBox.TabIndex = 8;
             this.propertiesComboBox.SelectedIndexChanged += new System.EventHandler(this.propertiesComboBox_SelectedIndexChanged);
             // 
@@ -58,7 +58,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1024, 624);
+            this.ClientSize = new System.Drawing.Size(500, 624);
             this.Controls.Add(this.propertiesComboBox);
             this.Controls.Add(this.infoLabel);
             this.Margin = new System.Windows.Forms.Padding(2);

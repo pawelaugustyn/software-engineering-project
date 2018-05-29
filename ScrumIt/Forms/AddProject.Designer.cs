@@ -28,100 +28,80 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.metroLabel1 = new MetroFramework.Controls.MetroLabel();
-            this.metroLabel3 = new MetroFramework.Controls.MetroLabel();
-            this.newProjectNameMetroTextBox = new MetroFramework.Controls.MetroTextBox();
-            this.newProjectMetroButton = new MetroFramework.Controls.MetroButton();
-            this.SelectProjectColorButton = new System.Windows.Forms.Button();
             this.newProjectColorDialog = new System.Windows.Forms.ColorDialog();
-            this.tableLayoutPanel1.SuspendLayout();
+            this.addProjectButton = new System.Windows.Forms.Button();
+            this.projectNameLabel = new System.Windows.Forms.Label();
+            this.colorLabel = new System.Windows.Forms.Label();
+            this.projecctNameTextBox = new System.Windows.Forms.TextBox();
+            this.changeColorButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
-            // tableLayoutPanel1
+            // addProjectButton
             // 
-            this.tableLayoutPanel1.ColumnCount = 2;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 39.1771F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 60.8229F));
-            this.tableLayoutPanel1.Controls.Add(this.metroLabel1, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.metroLabel3, 0, 1);
-            this.tableLayoutPanel1.Controls.Add(this.newProjectNameMetroTextBox, 1, 0);
-            this.tableLayoutPanel1.Controls.Add(this.newProjectMetroButton, 1, 2);
-            this.tableLayoutPanel1.Controls.Add(this.SelectProjectColorButton, 1, 1);
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(32, 67);
-            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(2);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 3;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 40F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 40F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(419, 123);
-            this.tableLayoutPanel1.TabIndex = 0;
+            this.addProjectButton.BackColor = System.Drawing.Color.Silver;
+            this.addProjectButton.FlatAppearance.BorderSize = 0;
+            this.addProjectButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.addProjectButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.addProjectButton.ForeColor = System.Drawing.Color.White;
+            this.addProjectButton.Location = new System.Drawing.Point(32, 153);
+            this.addProjectButton.Name = "addProjectButton";
+            this.addProjectButton.Size = new System.Drawing.Size(383, 31);
+            this.addProjectButton.TabIndex = 2;
+            this.addProjectButton.Text = "Dodaj";
+            this.addProjectButton.UseVisualStyleBackColor = false;
+            this.addProjectButton.Click += new System.EventHandler(this.addProjectButton_Click);
             // 
-            // metroLabel1
+            // projectNameLabel
             // 
-            this.metroLabel1.AutoSize = true;
-            this.metroLabel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.metroLabel1.FontSize = MetroFramework.MetroLabelSize.Tall;
-            this.metroLabel1.Location = new System.Drawing.Point(2, 0);
-            this.metroLabel1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.metroLabel1.Name = "metroLabel1";
-            this.metroLabel1.Size = new System.Drawing.Size(160, 49);
-            this.metroLabel1.TabIndex = 0;
-            this.metroLabel1.Text = "Nazwa:";
-            this.metroLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.projectNameLabel.AutoSize = true;
+            this.projectNameLabel.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.projectNameLabel.Location = new System.Drawing.Point(27, 70);
+            this.projectNameLabel.Name = "projectNameLabel";
+            this.projectNameLabel.Size = new System.Drawing.Size(144, 25);
+            this.projectNameLabel.TabIndex = 8;
+            this.projectNameLabel.Text = "Nazwa Projektu";
             // 
-            // metroLabel3
+            // colorLabel
             // 
-            this.metroLabel3.AutoSize = true;
-            this.metroLabel3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.metroLabel3.FontSize = MetroFramework.MetroLabelSize.Tall;
-            this.metroLabel3.Location = new System.Drawing.Point(2, 49);
-            this.metroLabel3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.metroLabel3.Name = "metroLabel3";
-            this.metroLabel3.Size = new System.Drawing.Size(160, 49);
-            this.metroLabel3.TabIndex = 2;
-            this.metroLabel3.Text = "Kolor:";
-            this.metroLabel3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.colorLabel.AutoSize = true;
+            this.colorLabel.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.colorLabel.Location = new System.Drawing.Point(27, 106);
+            this.colorLabel.Name = "colorLabel";
+            this.colorLabel.Size = new System.Drawing.Size(132, 25);
+            this.colorLabel.TabIndex = 9;
+            this.colorLabel.Text = "Kolor projektu";
             // 
-            // newProjectNameMetroTextBox
+            // projecctNameTextBox
             // 
-            this.newProjectNameMetroTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.newProjectNameMetroTextBox.FontSize = MetroFramework.MetroTextBoxSize.Tall;
-            this.newProjectNameMetroTextBox.Location = new System.Drawing.Point(166, 2);
-            this.newProjectNameMetroTextBox.Margin = new System.Windows.Forms.Padding(2);
-            this.newProjectNameMetroTextBox.Name = "newProjectNameMetroTextBox";
-            this.newProjectNameMetroTextBox.Size = new System.Drawing.Size(251, 45);
-            this.newProjectNameMetroTextBox.TabIndex = 4;
+            this.projecctNameTextBox.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.projecctNameTextBox.Location = new System.Drawing.Point(185, 70);
+            this.projecctNameTextBox.Name = "projecctNameTextBox";
+            this.projecctNameTextBox.Size = new System.Drawing.Size(230, 33);
+            this.projecctNameTextBox.TabIndex = 10;
             // 
-            // newProjectMetroButton
+            // changeColorButton
             // 
-            this.newProjectMetroButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.newProjectMetroButton.Location = new System.Drawing.Point(166, 100);
-            this.newProjectMetroButton.Margin = new System.Windows.Forms.Padding(2);
-            this.newProjectMetroButton.Name = "newProjectMetroButton";
-            this.newProjectMetroButton.Size = new System.Drawing.Size(251, 21);
-            this.newProjectMetroButton.TabIndex = 5;
-            this.newProjectMetroButton.Text = "Zatwierdź";
-            this.newProjectMetroButton.Click += new System.EventHandler(this.newProjectMetroButton_Click);
-            // 
-            // SelectProjectColorButton
-            // 
-            this.SelectProjectColorButton.BackColor = System.Drawing.Color.Red;
-            this.SelectProjectColorButton.Location = new System.Drawing.Point(172, 57);
-            this.SelectProjectColorButton.Margin = new System.Windows.Forms.Padding(8);
-            this.SelectProjectColorButton.Name = "SelectProjectColorButton";
-            this.SelectProjectColorButton.Size = new System.Drawing.Size(30, 32);
-            this.SelectProjectColorButton.TabIndex = 6;
-            this.SelectProjectColorButton.UseVisualStyleBackColor = false;
-            this.SelectProjectColorButton.Click += new System.EventHandler(this.SelectProjectColorButton_Click);
+            this.changeColorButton.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.changeColorButton.BackColor = System.Drawing.Color.Red;
+            this.changeColorButton.Location = new System.Drawing.Point(185, 109);
+            this.changeColorButton.Name = "changeColorButton";
+            this.changeColorButton.Size = new System.Drawing.Size(230, 29);
+            this.changeColorButton.TabIndex = 18;
+            this.changeColorButton.UseVisualStyleBackColor = false;
+            this.changeColorButton.Click += new System.EventHandler(this.SelectProjectColorButton_Click);
             // 
             // AddProject
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(512, 368);
-            this.Controls.Add(this.tableLayoutPanel1);
+            this.ClientSize = new System.Drawing.Size(449, 220);
+            this.Controls.Add(this.changeColorButton);
+            this.Controls.Add(this.projecctNameTextBox);
+            this.Controls.Add(this.colorLabel);
+            this.Controls.Add(this.projectNameLabel);
+            this.Controls.Add(this.addProjectButton);
             this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
@@ -129,20 +109,18 @@
             this.Padding = new System.Windows.Forms.Padding(15, 60, 15, 16);
             this.Resizable = false;
             this.Text = "Scrum it!";
-            this.tableLayoutPanel1.ResumeLayout(false);
-            this.tableLayoutPanel1.PerformLayout();
+            this.Load += new System.EventHandler(this.AddProject_Load);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private MetroFramework.Controls.MetroLabel metroLabel1;
-        private MetroFramework.Controls.MetroLabel metroLabel3;
         private System.Windows.Forms.ColorDialog newProjectColorDialog;
-        private MetroFramework.Controls.MetroTextBox newProjectNameMetroTextBox;
-        private MetroFramework.Controls.MetroButton newProjectMetroButton;
-        private System.Windows.Forms.Button SelectProjectColorButton;
+        private System.Windows.Forms.Button addProjectButton;
+        private System.Windows.Forms.Label projectNameLabel;
+        private System.Windows.Forms.Label colorLabel;
+        private System.Windows.Forms.TextBox projecctNameTextBox;
+        private System.Windows.Forms.Button changeColorButton;
     }
 }

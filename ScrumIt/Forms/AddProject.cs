@@ -19,15 +19,16 @@ namespace ScrumIt.Forms
             InitializeComponent();
         }
 
-
-        private void newProjectMetroButton_Click(object sender, EventArgs e)
+        private readonly Color _panelColor = ColorTranslator.FromHtml("#4AC1C1");
+        
+        private void addProjectButton_Click(object sender, EventArgs e)
         {
-            var name = newProjectNameMetroTextBox.Text;
-            var color = SelectProjectColorButton.BackColor;
-            
+            var name = projecctNameTextBox.Text;
+            var color = changeColorButton.BackColor;
+
             if (name != "")
             {
-                ProjectModel.CreateNewProject(new ProjectModel {ProjectName = name, ProjectColor = ToHexValue(color)});
+                ProjectModel.CreateNewProject(new ProjectModel { ProjectName = name, ProjectColor = ToHexValue(color) });
                 MessageBox.Show("Pomyślnie dodano nowy projekt");
                 this.Close();
             }
@@ -36,7 +37,7 @@ namespace ScrumIt.Forms
                 MessageBox.Show("Podaj nazwe projektu");
             }
         }
-        
+
         private void SelectProjectColorButton_Click(object sender, EventArgs e)
         {
             var c = new Color();
@@ -44,7 +45,7 @@ namespace ScrumIt.Forms
             {
                 c = newProjectColorDialog.Color;
             }
-            SelectProjectColorButton.BackColor = c;
+            changeColorButton.BackColor = c;
         }
 
         private static string ToHexValue(Color color)
@@ -52,6 +53,11 @@ namespace ScrumIt.Forms
             return "#" + color.R.ToString("X2") +
                    color.G.ToString("X2") +
                    color.B.ToString("X2");
+        }
+
+        private void AddProject_Load(object sender, EventArgs e)
+        {
+            addProjectButton.BackColor = _panelColor;
         }
     }
 }

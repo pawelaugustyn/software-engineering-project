@@ -792,5 +792,47 @@ namespace ScrumIt.Forms
                    color.G.ToString("X2") +
                    color.B.ToString("X2");
         }
+
+        private void progressBar_Paint(object sender, PaintEventArgs e)
+        {
+            var taskList = TaskModel.GetTasksBySprintId(_sprintId);
+            var sum = 0;
+            var done = 0;
+            var todo = 0;
+            var doing = 0;
+            foreach (var task in taskList)
+            {
+                sum += task.TaskPriority;
+                if (task.TaskStage == TaskModel.TaskStages.ToDo)
+                {
+                    todo += task.TaskPriority;
+                }
+
+                if (task.TaskStage == TaskModel.TaskStages.Doing)
+                {
+                    doing += task.TaskPriority;
+                }
+
+                if (task.TaskStage == TaskModel.TaskStages.Completed)
+                {
+                    done += task.TaskPriority;
+                }
+            }
+            var width = progressBar.ClientRectangle.Width;
+            var height = progressBar.ClientRectangle.Height;
+
+            SolidBrush greenBrush = new SolidBrush(Color.GreenYellow);
+            SolidBrush yellowBrush = new SolidBrush(Color.Yellow);
+            SolidBrush redBrush = new SolidBrush(Color.Red);
+            Graphics g = e.Graphics;
+            g.FillRectangle(redBrush, new Rectangle(0, 0, width*todo/sum, height));
+            g.FillRectangle(yellowBrush, new Rectangle(width * todo / sum, 0, width * doing / sum + width * todo / sum, height));
+            g.FillRectangle(greenBrush, new Rectangle(width * doing / sum + width * todo / sum, 0, width , height));
+            greenBrush.Dispose();
+            yellowBrush.Dispose();
+            redBrush.Dispose();
+            g.Dispose();
+
+        }
     }
 }
