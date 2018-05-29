@@ -66,7 +66,7 @@ Exaples: https://www.hibernatingrhinos.com/oss/rhino-mocks
     - empty login and password
     - go as guest
 2. Log out 
-    - when you are logged in +
+    - when you are logged in 
     - try when you are not logged in
     - then log in as a different user and check if there aro NO remainders of previous user
 3. Right to access - roles
