@@ -1,4 +1,5 @@
-﻿using DeepEqual.Syntax;
+﻿using System;
+using DeepEqual.Syntax;
 using NUnit.Framework;
 using ScrumIt;
 using ScrumIt.DataAccess;
@@ -33,7 +34,7 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
             };
 
             _guest = new UserModel();
-          
+
             AppStateProvider.Instance.CurrentUser = _user;
 
             UserAccess.Add(_user, Password);
@@ -48,7 +49,7 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
         {
             UserModel.Logout();
         }
-      
+
         [Test]
         [TestCase("", "")]
         [TestCase("testScrumMaster", "")]
@@ -126,10 +127,48 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
             var userWithTheSameUsername = UserAccess.GetUserByUsername(userToAdd.Username);
             Assert.That(userWithTheSameUsername.IsDeepEqual(new UserModel()), Is.True, "User should not exist.");
 
-            UserAccess.Add(userToAdd, "addUser");
+            var isAddedSuccessful = UserAccess.Add(userToAdd, "addUser");
             var userAfterAdd = UserAccess.GetUserByUsername(userToAdd.Username);
 
-            Assertion.Equals(userToAdd, userAfterAdd, "User with unique username not added correctly to DB. ");
+            Assertion.Equals(userToAdd, userAfterAdd, "User with unique username not added correctly to DB.");
+            Assert.That(isAddedSuccessful, Is.True, $"Adding user should be successful {Messages.Display(userToAdd)}.");
+        }
+
+        [Test]
+        public void AddUserThatAlreadyExistShouldThrow()
+        {
+            var userToAdd = new UserModel
+            {
+                Username = "addUser".WithUniqueName(),
+                Firstname = "add",
+                Lastname = "User",
+                Role = UserRoles.Developer,
+                Email = "addUser@test.com"
+            };
+            var userWithTheSameUsername = UserAccess.GetUserByUsername(userToAdd.Username);
+            Assert.That(userWithTheSameUsername.IsDeepEqual(new UserModel()), Is.True, "User should not exist.");
+
+            UserAccess.Add(userToAdd, "addUser");
+
+            var isAddedSuccessful = false;
+            Assert.Throws<ArgumentException>(delegate { isAddedSuccessful = UserAccess.Add(userToAdd, "addUser"); },
+                "Exception should be thrown, because it should not be possible to add user with the same username that has already been added.");
+
+            var userAfterAdd = UserAccess.GetUserByUsername(userToAdd.Username);
+            Assertion.Equals(userToAdd, userAfterAdd, "User with already existing username should not be added correctly to DB.");
+            Assert.That(isAddedSuccessful, Is.False, $"Adding user should not be successful {Messages.Display(userToAdd)}.");
+        }
+
+        [Test]
+        public void AddEmptyUserShouldThrow()
+        {
+            var userToAdd = new UserModel();
+            var isAddedSuccessful = false;
+
+            Assert.Throws<ArgumentException>(delegate { isAddedSuccessful = UserAccess.Add(userToAdd, "guest"); },
+                "Exception should be thrown, because it should not be possible to add user with empty username.");
+
+            Assert.That(isAddedSuccessful, Is.False, $"Adding user should not be successful {Messages.Display(userToAdd)}.");
         }
 
         [Test]
@@ -151,10 +190,27 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
 
             Assertion.Equals(userToAdd, userAfterAdd, "User with unique username not added correctly to DB. ");
 
-            UserAccess.Delete(userAfterAdd);
+            var deletedSyccessful = UserAccess.Delete(userAfterAdd);
+            Assert.That(deletedSyccessful, Is.True, $"Deleting should be successful {Messages.Display(userAfterAdd)}.");
 
             var userAfterDelete = UserAccess.GetUserByUsername(userToAdd.Username);
             Assert.That(userAfterDelete.IsDeepEqual(new UserModel()), Is.True, $"User {Messages.Display(userAfterDelete)} should be deleted.");
+        }
+
+        [Test]
+        public void DeleteEmptyOrInvalidUserShouldDoNothing()
+        {
+            var userToDelete = new UserModel();
+            var deletedSyccessful = UserAccess.Delete(userToDelete);
+            Assert.That(deletedSyccessful, Is.False, $"Deleting user should not be successful {Messages.Display(userToDelete)}.");
+
+            userToDelete = new UserModel
+            {
+                Username = "delete",
+            };
+
+            deletedSyccessful = UserAccess.Delete(userToDelete);
+            Assert.That(deletedSyccessful, Is.False, $"Deleting user should not be successful {Messages.Display(userToDelete)}.");
         }
     }
 }
