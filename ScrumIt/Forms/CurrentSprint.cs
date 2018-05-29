@@ -386,7 +386,6 @@ namespace ScrumIt.Forms
                 };
                 toolStripItems[i] = toolStripMenuItem;
             }
-
             return toolStripItems;
         }
 
