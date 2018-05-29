@@ -166,6 +166,7 @@
             // 
             // addTaskButton
             // 
+            this.addTaskButton.BackColor = System.Drawing.Color.Silver;
             this.addTaskButton.FlatAppearance.BorderSize = 0;
             this.addTaskButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.addTaskButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
@@ -175,7 +176,7 @@
             this.addTaskButton.Size = new System.Drawing.Size(450, 31);
             this.addTaskButton.TabIndex = 2;
             this.addTaskButton.Text = "Dodaj do sprintu";
-            this.addTaskButton.UseVisualStyleBackColor = true;
+            this.addTaskButton.UseVisualStyleBackColor = false;
             this.addTaskButton.Click += new System.EventHandler(this.addTaskButton_Click);
             // 
             // userListMenuStrip

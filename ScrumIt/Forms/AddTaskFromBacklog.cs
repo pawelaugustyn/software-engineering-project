@@ -24,8 +24,19 @@ namespace ScrumIt.Forms
 
         private void AddTaskFromBacklog_Load(object sender, System.EventArgs e)
         {
+            if (_userRole == "Guest")
+            {
+                addTaskButton.BackColor = ColorTranslator.FromHtml("#eeeeee");
+                addTaskButton.ForeColor = Color.DarkGray;
+                var toolTip = new ToolTip();
+                toolTip.SetToolTip(addTaskButton, "Zaloguj się aby dodać zadanie");
+            }
+            else
+            {
+                addTaskButton.BackColor = _panelColor;
+            }
+
             TaskModel task = TaskModel.GetTaskById(_taskId);
-            addTaskButton.BackColor = _panelColor;
 
             taskNameTextBox.Text = task.TaskName;
             taskDescriptionTextBox.Text = task.TaskDesc;
@@ -44,11 +55,6 @@ namespace ScrumIt.Forms
             {
                 // update task
                 this.Close();
-            }
-            else
-            {
-                var toolTip = new ToolTip();
-                toolTip.SetToolTip(addTaskButton, "Zaloguj się aby dodać zadanie");
             }
         }
     }

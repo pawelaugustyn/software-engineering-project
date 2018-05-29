@@ -27,7 +27,7 @@ namespace ScrumIt.Forms
             _projectId = projectId;
             _userRole = AppStateProvider.Instance.CurrentUser.Role.ToString();
             var sprintModel = SprintModel.GetCurrentSprintForProject(_projectId);
-            _sprintId = sprintModel.SprintId+1;
+            _sprintId = sprintModel.SprintId + 1;
             InitializeComponent();
         }
 
@@ -38,7 +38,7 @@ namespace ScrumIt.Forms
         private void CurrentSprint_Load(object sender, EventArgs e)
         {
             var taskList = TaskModel.GetTasksBySprintId(_sprintId);
-            
+
             var index = 0;
             foreach (var task in taskList)
             {
@@ -97,6 +97,13 @@ namespace ScrumIt.Forms
 
         private void panel1_Paint(object sender, PaintEventArgs e)
         {
+            if (_userRole == "Guest")
+            {
+                addTaskButton.BackColor = ColorTranslator.FromHtml("#eeeeee");
+                addTaskButton.ForeColor = Color.DarkGray;
+                var addTaskToolTip = new ToolTip();
+                addTaskToolTip.SetToolTip(addTaskButton, "Zaloguj się aby dodać zadanie");
+            }
             PrepareLayout(e);
         }
 
@@ -276,11 +283,6 @@ namespace ScrumIt.Forms
                 addTask.FormClosed += delegate { addTask_FormClosed(); };
                 addTask.Show();
             }
-            else
-            {
-                var addTaskToolTip = new ToolTip();
-                addTaskToolTip.SetToolTip(addTaskButton, "Zaloguj się aby dodać zadanie");
-            }
         }
 
         private void historyToolStripMenuItem_Click(int sprintId)
@@ -416,7 +418,7 @@ namespace ScrumIt.Forms
             var taskPanelName = "taskPanel" + index;
             var taskId = task.TaskId;
             var positionX = width / 40;
-            
+
             switch (stageTemp)
             {
                 case TaskModel.TaskStages.Doing:
@@ -723,7 +725,7 @@ namespace ScrumIt.Forms
                     UserPanel userPanel = new UserPanel();
                     userPanel.Show();
                 }
-                
+
                 //opcja wyloguj
                 if (propertiesComboBox.SelectedIndex == 3)
                 {

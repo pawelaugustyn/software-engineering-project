@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.registerButton = new System.Windows.Forms.Button();
             this.loginButton = new System.Windows.Forms.Button();
             this.guestButton = new System.Windows.Forms.Button();
             this.loginTextBox = new System.Windows.Forms.TextBox();
@@ -36,22 +35,6 @@
             this.loginLabel = new System.Windows.Forms.Label();
             this.passwordLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
-            // 
-            // registerButton
-            // 
-            this.registerButton.BackColor = System.Drawing.Color.Silver;
-            this.registerButton.Enabled = false;
-            this.registerButton.FlatAppearance.BorderSize = 0;
-            this.registerButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.registerButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.registerButton.ForeColor = System.Drawing.Color.White;
-            this.registerButton.Location = new System.Drawing.Point(10, 231);
-            this.registerButton.Name = "registerButton";
-            this.registerButton.Size = new System.Drawing.Size(387, 31);
-            this.registerButton.TabIndex = 2;
-            this.registerButton.Text = "Stworz konto";
-            this.registerButton.UseVisualStyleBackColor = false;
-            this.registerButton.Click += new System.EventHandler(this.registerButton_Click);
             // 
             // loginButton
             // 
@@ -124,14 +107,13 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(413, 289);
+            this.ClientSize = new System.Drawing.Size(413, 252);
             this.Controls.Add(this.passwordLabel);
             this.Controls.Add(this.loginLabel);
             this.Controls.Add(this.passwordTextBox);
             this.Controls.Add(this.loginTextBox);
             this.Controls.Add(this.guestButton);
             this.Controls.Add(this.loginButton);
-            this.Controls.Add(this.registerButton);
             this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
@@ -147,7 +129,6 @@
         }
 
         #endregion
-        private System.Windows.Forms.Button registerButton;
         private System.Windows.Forms.Button loginButton;
         private System.Windows.Forms.Button guestButton;
         private System.Windows.Forms.TextBox loginTextBox;

@@ -53,7 +53,6 @@ namespace ScrumIt.Forms
         {
             loginButton.BackColor = _panelColor;
             guestButton.BackColor = _guestColorButton;
-            registerButton.BackColor = _panelColor;
         }
 
         private void guestButton_Click(object sender, EventArgs e)

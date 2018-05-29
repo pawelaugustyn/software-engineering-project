@@ -172,8 +172,14 @@ namespace ScrumIt.Forms
         {
             if (_userRole == "ScrumMaster")
             {
-                // TO DO
-                //Usuń task z bazki
+                DialogResult dialogResult = MessageBox.Show("Jesteś pewny, że chcesz usunąć ten projekt? ", "Usuń projekt", MessageBoxButtons.YesNo);
+                if (dialogResult == DialogResult.Yes)
+                {
+                    // TO DO
+                    // delete project from db
+
+                    Close();
+                }
             }
             else
             {
