@@ -137,5 +137,51 @@ namespace ScrumIt.DataAccess
                 return sprint;
             }
         }
+
+        public static int GetEstimatesOfTasksCompletedInSprint(int sprintid)
+        {
+            int estimates_of_completed_tasks = 0;
+            using (new Connection())
+            {
+                var cmd = new NpgsqlCommand("select sum(task_estimated_time) from tasks where sprint_id=@sprint_id and task_stage=3;")
+                {
+                    Connection = Connection.Conn
+                };
+                cmd.Parameters.AddWithValue("sprint_id", sprintid);
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        estimates_of_completed_tasks = (int) reader[0];
+                        break;
+                    }
+                }
+            }
+
+            return estimates_of_completed_tasks;
+        }
+
+        public static int GetEstimatesOfAlTasksInSprint(int sprintid)
+        {
+            int estimates_of_all_tasks = 0;
+            using (new Connection())
+            {
+                var cmd = new NpgsqlCommand("select sum(task_estimated_time) from tasks where sprint_id=@sprint_id;")
+                {
+                    Connection = Connection.Conn
+                };
+                cmd.Parameters.AddWithValue("sprint_id", sprintid);
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        estimates_of_all_tasks = (int)reader[0];
+                        break;
+                    }
+                }
+            }
+
+            return estimates_of_all_tasks;
+        }
     }
 }

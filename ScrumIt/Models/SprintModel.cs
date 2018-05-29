@@ -49,6 +49,16 @@ namespace ScrumIt.Models
             return SprintAccess.GetSprintByProjectIdAndDate(projectid, DateTime.Now);
         }
 
+        public static int GetEstimatesOfTasksCompletedInSprint(int sprintid)
+        {
+            return SprintAccess.GetEstimatesOfTasksCompletedInSprint(sprintid);
+        }
+
+        public static int GetEstimatesOfAllTasksInSprint(int sprintid)
+        {
+            return SprintAccess.GetEstimatesOfAlTasksInSprint(sprintid);
+        }
+
         // TO DO
         //pobierz historyczne sprinty
     }
