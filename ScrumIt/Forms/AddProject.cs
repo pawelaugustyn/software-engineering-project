@@ -24,8 +24,17 @@ namespace ScrumIt.Forms
         {
             var name = newProjectNameMetroTextBox.Text;
             var color = SelectProjectColorButton.BackColor;
-            //wyślij dane do bazy
-            //potrzebna metoda!
+            
+            if (name != "")
+            {
+                ProjectModel.CreateNewProject(new ProjectModel {ProjectName = name, ProjectColor = ToHexValue(color)});
+                MessageBox.Show("Pomyślnie dodano nowy projekt");
+                this.Close();
+            }
+            else
+            {
+                MessageBox.Show("Podaj nazwe projektu");
+            }
         }
         
         private void SelectProjectColorButton_Click(object sender, EventArgs e)
@@ -36,6 +45,13 @@ namespace ScrumIt.Forms
                 c = newProjectColorDialog.Color;
             }
             SelectProjectColorButton.BackColor = c;
+        }
+
+        private static string ToHexValue(Color color)
+        {
+            return "#" + color.R.ToString("X2") +
+                   color.G.ToString("X2") +
+                   color.B.ToString("X2");
         }
     }
 }

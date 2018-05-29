@@ -37,22 +37,33 @@ namespace ScrumIt.Models
         {
             return UserAccess.GetUsersByLastName(lastname);
         }
-        public static UserModel GetUserByLogin(string login)
+        public static UserModel GetUserByUsername(string username)
         {
-            return UserAccess.GetUserByLogin(login);
+            return UserAccess.GetUserByUsername(username);
         }
 
         public static List<UserModel> GetUsersByProjectId(int projectid)
         {
             return UserAccess.GetUsersByProjectId(projectid);
         }
+
+        public static bool Add(UserModel addedUser, string password)
+        {
+            return UserAccess.Add(addedUser, password);
+        }
+
+        public static bool Delete(UserModel deletedUser)
+        {
+            return UserAccess.Delete(deletedUser);
+        }
+
+        //pobierz userow przypisanych do tasku
     }
 
     public enum UserRoles
     {
         Guest,
         Developer,
-        ScrumMaster,
-        Admin
+        ScrumMaster
     }
 }

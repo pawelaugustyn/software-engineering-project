@@ -58,14 +58,13 @@ Exaples: https://www.hibernatingrhinos.com/oss/rhino-mocks
 
 ### Test Area to Cover
 1. Log in
-    - incorrect login +
+    - incorrect login 
     - incorrest password 
     - incorrect login and password
     - empty login
     - empty password
     - empty login and password
     - go as guest
-    - SQL injection 
 2. Log out 
     - when you are logged in +
     - try when you are not logged in
@@ -134,5 +133,35 @@ Tasks:
         - remove (what appears in history, were all task deleted)
         - e-mail remainder
 
+### Implemented Tests
+**Uni Tests**
+1. 
+**Integration Tests:**
+2. UserAccessIntegrationTests 
+- AddUserWithUniqueUsername 
+- GetUserByIdShouldReturnCorrectUser
+- GetUserByLoginShouldReturnCorrectUser 
+- GetUsersByLastNameShouldReturnCorrectUser 
+- GetUsersByProjectIdShouldReturnCorrectUsers 
+- LoginAsWithCorrectCredentialsShouldPass 
+- DeleteUserWithUniqueUsername
+To do:
+     1. Log in
+    - incorrect login 
+    - incorrest password 
+    - incorrect login and password
+    - empty login
+    - empty password
+    - empty login and password
+    - go as guest
+    2.
+    - add user that already exist
+    - delete user that not exist
+    - add/delete user with incorrect credential
+3. TaskAccessIntegrationTests 
+4. SprintAccessIntegrationTests 
+5. ProjectAccessIntegrationTests 
+6. ConnectionIntegrationTests
 
+    
     

@@ -3,15 +3,21 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using MetroFramework.Forms;
+using ScrumIt.Models;
 
 namespace ScrumIt.Forms
 {
     public partial class EditTask : MetroForm
     {
         private int _taskId;
-        public EditTask(int taskId)
+        private int _projectId;
+        private string _userRole;
+
+        public EditTask(int taskId, int projectId)
         {
+            _userRole = AppStateProvider.Instance.CurrentUser.Role.ToString();
             _taskId = taskId;
+            _projectId = projectId;
             InitializeComponent();
         }
 
@@ -21,74 +27,38 @@ namespace ScrumIt.Forms
         {
             editTaskButton.BackColor = _panelColor;
 
-            //pobierz dany task z bazki
-            var task = new
-            {
-                taskName = "Nowy Task",
-                taskType = "High",
-                taskDescription = "Task Description",
-                taskPriority = 5,
-                estimatedTime = 10,
-                users = new[]
-                {
-                    new
-                    {
-                        UserName ="BM1",
-                        FirstName = "Bartosz",
-                        LastName = "Nowak"
-                    },
-                    new
-                    {
-                        UserName ="BM2",
-                        FirstName = "Bartosz",
-                        LastName = "Nowak"
-                    }
-                }
-            };
+            var task = TaskModel.GetTaskById(_taskId);
 
-            taskNameTextBox.Text = task.taskName;
-            taskDescriptionTextBox.Text = task.taskDescription;
-            priorityTextBox.Text = task.taskPriority.ToString();
-            estimatedTimeTextBox.Text = task.estimatedTime.ToString();
+            taskNameTextBox.Text = task.TaskName;
+            taskDescriptionTextBox.Text = task.TaskDesc;
+            priorityTextBox.Text = task.TaskPriority.ToString();
+            estimatedTimeTextBox.Text = task.TaskEstimatedTime.ToString();
 
             taskNameTextBox.BackColor = Color.White;
             taskDescriptionTextBox.BackColor = Color.White;
             priorityTextBox.BackColor = Color.White;
             estimatedTimeTextBox.BackColor = Color.White;
 
-            userListMenuStrip.Items.AddRange(createUsersListMenu(task.users));
+            // TO DO
+            // Pobierz userow przypisanych do zadania
+            var users = new List<UserModel>
+            {
+                UserModel.GetUserById(1)
+            };
+
+            userListMenuStrip.Items.AddRange(createUsersListMenu(users));
         }
 
-        private ToolStripItem[] createUsersListMenu(dynamic userList)
+        private ToolStripItem[] createUsersListMenu(List<UserModel> userList)
         {
             //pobierz wszystkich uzytkownikow z bazki
-            var allUsers = new[]
-            {
-                new
-                {
-                    UserName ="BM1",
-                    FirstName = "Bartosz",
-                    LastName = "Nowak"
-                },
-                new
-                {
-                    UserName ="BM2",
-                    FirstName = "Bartosz",
-                    LastName = "Nowak"
-                },
-                new
-                {
-                    UserName ="BM22",
-                    FirstName = "Bartosz",
-                    LastName = "Nowak"
-                }
-            };
+            var allUsers = UserModel.GetUsersByProjectId(_projectId);
             
-            var toolStripItems = new ToolStripItem[allUsers.Length];
-            for (var i = 0; i < allUsers.Length; i++)
+            var toolStripItems = new ToolStripItem[allUsers.Count];
+            for (var i = 0; i < allUsers.Count; i++)
             {
-                var toolStripMenuItemName = allUsers[i].UserName;
-                var toolStripMenuItemText = allUsers[i].FirstName + " " + allUsers[i].LastName + " ";
+                var toolStripMenuItemName = allUsers[i].Username;
+                var toolStripMenuItemText = allUsers[i].Firstname + " " + allUsers[i].Lastname + " ";
                 var toolStripMenuItem = new ToolStripMenuItem
                 {
                     Name = toolStripMenuItemName,
@@ -98,7 +68,7 @@ namespace ScrumIt.Forms
                 };
                 foreach (var user in userList)
                 {
-                    if (user.UserName == allUsers[i].UserName)
+                    if (user.Username == allUsers[i].Username)
                     {
                         toolStripMenuItem.Checked = true;
                     }
@@ -127,9 +97,9 @@ namespace ScrumIt.Forms
                 validationFlag = false;
             }
             else
-            if (Int16.Parse(taskPriority) > 11 || Int16.Parse(taskPriority) < 0)
+            if (Int16.Parse(taskPriority) > 101 || Int16.Parse(taskPriority) < 0)
             {
-                MessageBox.Show(@"Możliwa wartość stopnia skomplikowania to liczba całkownita między 0 a 10");
+                MessageBox.Show(@"Możliwa wartość stopnia skomplikowania to liczba całkownita między 0 a 100");
                 validationFlag = false;
             }
 
@@ -140,7 +110,7 @@ namespace ScrumIt.Forms
                 validationFlag = false;
             }
             else
-            if (Int16.Parse(taskEstimatedTime) > 11 || Int16.Parse(taskEstimatedTime) < 0)
+            if (Int16.Parse(taskEstimatedTime) > 101 || Int16.Parse(taskEstimatedTime) < 0)
             {
                 MessageBox.Show(@"Możliwa wartość przewidywanego czasu zadania to liczba całkownita między 0 a 100");
                 validationFlag = false;
@@ -154,12 +124,15 @@ namespace ScrumIt.Forms
                 {
                     var userName = user.Name;
                     userNames.Add(userName);
+                    // TO DO 
                     //przypisz uzytkownika do zadania do bazki
                 }
             }
             if (validationFlag)
             {
-                //add task to db
+                // TO DO 
+                //update task to db
+                
                 this.Close();
             }
         }
@@ -192,6 +165,20 @@ namespace ScrumIt.Forms
             if (e.CloseReason == ToolStripDropDownCloseReason.ItemClicked)
             {
                 e.Cancel = true;
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (_userRole == "ScrumMaster")
+            {
+                // TO DO
+                //Usuń task z bazki
+            }
+            else
+            {
+                var tooltip = new ToolTip();
+                tooltip.SetToolTip(button1, "Tylko Scrum Master może usuwać zadania");
             }
         }
     }

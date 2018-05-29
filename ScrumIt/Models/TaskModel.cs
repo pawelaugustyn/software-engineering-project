@@ -12,10 +12,16 @@ namespace ScrumIt.Models
         public string TaskDesc { get; set; }
         public int TaskPriority { get; set; }
         public int TaskEstimatedTime { get; set; }
-        public int TaskStage { get; set; }
+        public TaskStages TaskStage { get; set; }
+        public string TaskColor { get; set; }
 
- 
- 
+        public enum TaskStages
+        {
+            ToDo = 1,
+            Doing = 2,
+            Completed = 3
+        }
+
         public static TaskModel GetTaskById(int taskid)
         {
             return TaskAccess.GetTaskById(taskid);
@@ -41,8 +47,25 @@ namespace ScrumIt.Models
 
         public static List<TaskModel> GetTasksBySprintId(int sprintid)
         {
-            return new List<TaskModel>();
-            //return TaskAccess.GetTasksBySprintId(sprintid);
+            //return new List<TaskModel>();
+            return TaskAccess.GetProjectTasksBySprintId(sprintid);
         }
+
+        public static bool CreateNewTask(TaskModel taskToAdd, List<UserModel> usersAssignedToTask)
+        {
+            return TaskAccess.CreateNewTask(taskToAdd, usersAssignedToTask);
+        }
+
+        public static bool SetNewColour(TaskModel task, string colour)
+        {
+            return TaskAccess.SetNewColour(task, colour);
+        }
+
+        // TO DO 
+        //Update task
+
+        //TO DO 
+        // (Optionally) Update task stage
+       
     }
 }

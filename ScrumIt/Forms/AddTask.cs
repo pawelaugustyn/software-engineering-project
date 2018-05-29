@@ -3,13 +3,19 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using MetroFramework.Forms;
+using ScrumIt.Models;
 
 namespace ScrumIt.Forms
 {
     public partial class AddTask : MetroForm
     {
-        public AddTask()
+        private int _projectId;
+        private int _sprintId;
+
+        public AddTask(int projectId, int sprintId)
         {
+            _projectId = projectId;
+            _sprintId = sprintId;
             InitializeComponent();
         }
 
@@ -19,25 +25,6 @@ namespace ScrumIt.Forms
         private void TaskForm_Load(object sender, EventArgs e)
         {
             addTaskButton.BackColor = _panelColor;
-
-            //pobierz uzykownikow danego projektu z bazki
-            var users = new[]
-            {
-                new
-                {
-                    UserName = "BM",
-                    FirstName = "Bartosz",
-                    LastName = "Nowak"
-                },
-                new
-                {
-                    UserName = "BM",
-                    FirstName = "Bartosz",
-                    LastName = "Nowak"
-                }
-            };
-
-            userListMenuStrip.Items.AddRange(createUsersListMenu(users));
         }
 
         private void addTaskButton_Click(object sender, EventArgs e)
@@ -58,9 +45,9 @@ namespace ScrumIt.Forms
                 validationFlag = false;
             }
             else
-            if (Int16.Parse(taskPriority) > 11 || Int16.Parse(taskPriority) < 0)
+            if (Int16.Parse(taskPriority) > 101 || Int16.Parse(taskPriority) < 0)
             {
-                MessageBox.Show(@"Możliwa wartość stopnia skomplikowania to liczba całkownita między 0 a 10");
+                MessageBox.Show(@"Możliwa wartość stopnia skomplikowania to liczba całkownita między 0 a 100");
                 validationFlag = false;
             }
 
@@ -71,26 +58,32 @@ namespace ScrumIt.Forms
                 validationFlag = false;
             }
             else
-            if (Int16.Parse(taskEstimatedTime) > 11 || Int16.Parse(taskEstimatedTime) < 0)
+            if (Int16.Parse(taskEstimatedTime) > 101 || Int16.Parse(taskEstimatedTime) < 0)
             {
                 MessageBox.Show(@"Możliwa wartość przewidywanego czasu zadania to liczba całkownita między 0 a 100");
                 validationFlag = false;
             }
 
-            var usersList = userListMenuStrip.Items;
-            var userNames = new List<string>();
-            foreach (ToolStripMenuItem user in usersList)
+            var sprintId = 0;
+            if (currentSptintRadio.Checked)
             {
-                if (user.Checked)
-                {
-                    var userName = user.Name;
-                    userNames.Add(userName);
-                    //przypisz uzytkownika do zadania do bazki
-                }
+                sprintId = _sprintId;
             }
+
             if (validationFlag)
             {
-                //add task to db
+                var task = new TaskModel
+                {
+                    TaskName = taskName,
+                    TaskDesc = taskDescription,
+                    TaskType = "T",
+                    TaskPriority = Int16.Parse(taskPriority),
+                    TaskEstimatedTime = Int16.Parse(taskEstimatedTime),
+                    TaskStage = TaskModel.TaskStages.ToDo,
+                    SprintId = sprintId,
+                    TaskColor = "#ffffff"
+                };
+                TaskModel.CreateNewTask(task, new List<UserModel>());
                 Close();
             }
         }
@@ -111,31 +104,6 @@ namespace ScrumIt.Forms
             {
                 e.Handled = true;
             }
-        }
-
-        private void addUsersButton_Click(object sender, EventArgs e)
-        {
-            userListMenuStrip.Show(addUsersButton, new Point(0, addUsersButton.Height));
-        }
-
-        private ToolStripItem[] createUsersListMenu(dynamic userList)
-        {
-            var toolStripItems = new ToolStripItem[userList.Length];
-            for (var i = 0; i < userList.Length; i++)
-            {
-                var toolStripMenuItemName = userList[i].UserName;
-                var toolStripMenuItemText = userList[i].FirstName + " " + userList[i].LastName + " ";
-                var toolStripMenuItem = new ToolStripMenuItem
-                {
-                    Name = toolStripMenuItemName,
-                    Text = toolStripMenuItemText,
-                    Image = Properties.Resources.cat2,
-                    CheckOnClick = true
-                };
-                toolStripItems[i] = toolStripMenuItem;
-            }
-
-            return toolStripItems;
         }
 
         private void userListMenuStrip_Closing(object sender, ToolStripDropDownClosingEventArgs e)

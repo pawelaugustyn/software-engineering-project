@@ -104,6 +104,7 @@
             // 
             // changePasswordButton
             // 
+            this.changePasswordButton.BackColor = System.Drawing.Color.Silver;
             this.changePasswordButton.FlatAppearance.BorderSize = 0;
             this.changePasswordButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.changePasswordButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
@@ -113,7 +114,7 @@
             this.changePasswordButton.Size = new System.Drawing.Size(277, 35);
             this.changePasswordButton.TabIndex = 3;
             this.changePasswordButton.Text = "Zmień hasło";
-            this.changePasswordButton.UseVisualStyleBackColor = true;
+            this.changePasswordButton.UseVisualStyleBackColor = false;
             this.changePasswordButton.Click += new System.EventHandler(this.changePasswordButton_Click);
             // 
             // tableLayoutPanel1
@@ -147,6 +148,7 @@
             this.userEmailTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.userEmailTextBox.BackColor = System.Drawing.Color.White;
             this.userEmailTextBox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.userEmailTextBox.Location = new System.Drawing.Point(141, 139);
             this.userEmailTextBox.Name = "userEmailTextBox";
@@ -159,6 +161,7 @@
             this.userLoginTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.userLoginTextBox.BackColor = System.Drawing.Color.White;
             this.userLoginTextBox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.userLoginTextBox.Location = new System.Drawing.Point(141, 105);
             this.userLoginTextBox.Name = "userLoginTextBox";
@@ -171,6 +174,7 @@
             this.userLastNameTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.userLastNameTextBox.BackColor = System.Drawing.Color.White;
             this.userLastNameTextBox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.userLastNameTextBox.Location = new System.Drawing.Point(141, 71);
             this.userLastNameTextBox.Name = "userLastNameTextBox";
@@ -183,6 +187,7 @@
             this.userNameTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.userNameTextBox.BackColor = System.Drawing.Color.White;
             this.userNameTextBox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.userNameTextBox.Location = new System.Drawing.Point(141, 37);
             this.userNameTextBox.Name = "userNameTextBox";
@@ -221,6 +226,7 @@
             this.userRoleTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.userRoleTextBox.BackColor = System.Drawing.Color.White;
             this.userRoleTextBox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.userRoleTextBox.Location = new System.Drawing.Point(141, 3);
             this.userRoleTextBox.Name = "userRoleTextBox";
@@ -326,16 +332,17 @@
             // 
             // submitPasswordChangeButton
             // 
+            this.submitPasswordChangeButton.BackColor = System.Drawing.Color.Silver;
             this.submitPasswordChangeButton.FlatAppearance.BorderSize = 0;
             this.submitPasswordChangeButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.submitPasswordChangeButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.submitPasswordChangeButton.ForeColor = System.Drawing.Color.White;
-            this.submitPasswordChangeButton.Location = new System.Drawing.Point(306, 329);
+            this.submitPasswordChangeButton.Location = new System.Drawing.Point(322, 328);
             this.submitPasswordChangeButton.Name = "submitPasswordChangeButton";
             this.submitPasswordChangeButton.Size = new System.Drawing.Size(200, 35);
             this.submitPasswordChangeButton.TabIndex = 6;
             this.submitPasswordChangeButton.Text = "Zmień hasło";
-            this.submitPasswordChangeButton.UseVisualStyleBackColor = true;
+            this.submitPasswordChangeButton.UseVisualStyleBackColor = false;
             this.submitPasswordChangeButton.Visible = false;
             this.submitPasswordChangeButton.Click += new System.EventHandler(this.submitPasswordChangeButton_Click);
             // 
@@ -349,7 +356,10 @@
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.userPhotoPictureBox);
             this.Controls.Add(this.changePasswordButton);
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "UserPanel";
+            this.Resizable = false;
             this.Style = MetroFramework.MetroColorStyle.Teal;
             this.Text = "ScrumIt!";
             this.Load += new System.EventHandler(this.UserPanel_Load);

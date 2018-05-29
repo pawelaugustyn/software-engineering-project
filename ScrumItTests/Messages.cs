@@ -13,7 +13,7 @@ namespace ScrumItTests
             var properties = typeof(T).GetProperties();
             var toDisplay = Environment.NewLine;
             foreach (var property in properties)
-                toDisplay += $"{property.Name}: {Objects.GetPropertyValue(given, property.Name)} {Environment.NewLine}";
+                toDisplay += $"{property.Name}: {given.GetPropertyValue(property.Name)} {Environment.NewLine}";
 
             return toDisplay;
         }

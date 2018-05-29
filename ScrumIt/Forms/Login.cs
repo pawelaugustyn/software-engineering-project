@@ -7,12 +7,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using MetroFramework;
 using MetroFramework.Forms;
+using ScrumIt.Models;
 
 namespace ScrumIt.Forms
 {
     public partial class Login : MetroForm
     {
+        private readonly Color _panelColor = ColorTranslator.FromHtml("#4AC1C1");
+        private readonly Color _guestColorButton = ColorTranslator.FromHtml("#eeeeee");
         public Login()
         {
             InitializeComponent();
@@ -43,10 +47,31 @@ namespace ScrumIt.Forms
                 MessageBox.Show("Niepoprawne dane logowania");
             }
         }
+        
 
-        private void GuestmetroLink_Click(object sender, EventArgs e)
+        private void Login_Load(object sender, EventArgs e)
         {
-            MessageBox.Show("zalogowano jako gość");
+            loginButton.BackColor = _panelColor;
+            guestButton.BackColor = _guestColorButton;
+            registerButton.BackColor = _panelColor;
+        }
+
+        private void guestButton_Click(object sender, EventArgs e)
+        {
+            var state = AppStateProvider.Instance;
+            state.CurrentUser = new UserModel();
+            this.Hide();
+            var view = new MainView();
+            //view.ShowDialog();
+            view.Show();
+
+        }
+
+        private void registerButton_Click(object sender, EventArgs e)
+        {
+            Register reg = new Register();
+            Hide();
+            reg.Show();
         }
     }
 }
