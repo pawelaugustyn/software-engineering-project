@@ -132,7 +132,32 @@ namespace ScrumIt.DataAccess
             return true;
         }
 
+        public static bool UpdateProject(ProjectModel updatedProject)
+        {
+            ValidateUpdatedProject(updatedProject);
+            using (new Connection())
+            {
+                var cmd = new NpgsqlCommand("UPDATE projects SET project_name = @name, project_color = @color WHERE project_id = @id ;")
+                {
+                    Connection = Connection.Conn
+                };
+                cmd.Parameters.AddWithValue("name", updatedProject.ProjectName);
+                cmd.Parameters.AddWithValue("color", updatedProject.ProjectColor);
+                cmd.Parameters.AddWithValue("id", updatedProject.ProjectId);
+                var result = cmd.ExecuteNonQuery();
+                if (result != 1) return false;
+            }
+
+            return true;
+        }
+
         private static void ValidateNewProject(ProjectModel proj)
+        {
+            ValidateProjectNameOnCreation(proj.ProjectName);
+            ValidateProjectColour(proj.ProjectColor);
+        }
+
+        private static void ValidateUpdatedProject(ProjectModel proj)
         {
             ValidateProjectNameOnCreation(proj.ProjectName);
             ValidateProjectColour(proj.ProjectColor);
