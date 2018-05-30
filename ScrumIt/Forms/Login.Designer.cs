@@ -53,11 +53,11 @@
             // 
             // guestButton
             // 
-            this.guestButton.BackColor = System.Drawing.Color.White;
+            this.guestButton.BackColor = System.Drawing.Color.LimeGreen;
             this.guestButton.FlatAppearance.BorderSize = 0;
             this.guestButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.guestButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.guestButton.ForeColor = System.Drawing.Color.DarkGray;
+            this.guestButton.ForeColor = System.Drawing.Color.White;
             this.guestButton.Location = new System.Drawing.Point(10, 194);
             this.guestButton.Name = "guestButton";
             this.guestButton.Size = new System.Drawing.Size(387, 31);
