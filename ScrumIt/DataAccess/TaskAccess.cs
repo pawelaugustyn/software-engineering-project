@@ -237,7 +237,7 @@ namespace ScrumIt.DataAccess
 
         private static void ValidateTaskName(string taskName)
         {
-            if (taskName.Length == 0)
+            if (string.IsNullOrEmpty(taskName))
                 throw new ArgumentException("Task name cannot be empty!");
         }
 
