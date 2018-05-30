@@ -27,14 +27,15 @@ namespace ScrumIt.DataAccess
                         tasks.Add(new TaskModel
                         {
                             TaskId = (int)reader[0],
-                            SprintId = (int)reader[1],
+                            SprintId = reader[1] == DBNull.Value ? 0 : (int)reader[1],
                             TaskType = (string)reader[2],
                             TaskName = (string)reader[3],
-                            TaskDesc = (string)reader[4],
+                            TaskDesc = reader[4] != DBNull.Value ? (string)reader[4] : "",
                             TaskPriority = (int)reader[5],
                             TaskEstimatedTime = (int)reader[6],
                             TaskStage = (TaskModel.TaskStages)reader[7],
-                            TaskColor = (string)reader[8]
+                            TaskColor = reader[8] != DBNull.Value ? (string)reader[8] : "#ffffff",
+                            BacklogProjectId = reader[9] == DBNull.Value ? 0 : (int)reader[9]
                         });
 
                     }
@@ -63,14 +64,15 @@ namespace ScrumIt.DataAccess
                         task = new TaskModel
                         {
                             TaskId = (int)reader[0],
-                            SprintId = (int)reader[1],
+                            SprintId = reader[1] == DBNull.Value ? 0 : (int)reader[1],
                             TaskType = (string)reader[2],
                             TaskName = (string)reader[3],
-                            TaskDesc = (string)reader[4],
+                            TaskDesc = reader[4] != DBNull.Value ? (string)reader[4] : "",
                             TaskPriority = (int)reader[5],
                             TaskEstimatedTime = (int)reader[6],
                             TaskStage = (TaskModel.TaskStages)reader[7],
-                            TaskColor = (string)reader[8]
+                            TaskColor = reader[8] != DBNull.Value ? (string)reader[8] : "#ffffff",
+                            BacklogProjectId = reader[9] == DBNull.Value ? 0 : (int)reader[9]
                         };
                         break;
                     }
@@ -106,7 +108,7 @@ namespace ScrumIt.DataAccess
             var tasks = new List<TaskModel>();
             using (new Connection())
             {
-                var cmd = new NpgsqlCommand("select tsk.* from tasks tsk where tsk.sprint_id = @sprintid order by tsk.sprint_id;")
+                var cmd = new NpgsqlCommand("select tsk.* from tasks tsk where tsk.sprint_id = @sprintid order by tsk.task_id;")
                 {
                     Connection = Connection.Conn
                 };
@@ -119,15 +121,51 @@ namespace ScrumIt.DataAccess
                         tasks.Add(new TaskModel
                         {
                             TaskId = (int)reader[0],
-                            SprintId = (int)reader[1],
+                            SprintId = reader[1] == DBNull.Value ? 0 : (int) reader[1],
                             TaskType = (string)reader[2],
                             TaskName = (string)reader[3],
-                            TaskDesc = (string)reader[4],
+                            TaskDesc = reader[4] != DBNull.Value ? (string)reader[4] : "",
                             TaskPriority = (int)reader[5],
                             TaskEstimatedTime = (int)reader[6],
                             TaskStage = (TaskModel.TaskStages)reader[7],
-                            TaskColor = (string)reader[8]
+                            TaskColor = reader[8] != DBNull.Value ? (string)reader[8] : "#ffffff",
+                            BacklogProjectId = reader[9] == DBNull.Value ? 0 : (int) reader[9]
+                        });
 
+                    }
+                }
+            }
+
+            return tasks;
+        }
+
+        public static List<TaskModel> GetProjectBacklogTasks(int projectId)
+        {
+            var tasks = new List<TaskModel>();
+            using (new Connection())
+            {
+                var cmd = new NpgsqlCommand("select tsk.* from tasks tsk where tsk.project_id = @projectid and tsk.sprint_id = 0 order by tsk.task_id;")
+                {
+                    Connection = Connection.Conn
+                };
+                cmd.Parameters.AddWithValue("projectid", projectId);
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+
+                        tasks.Add(new TaskModel
+                        {
+                            TaskId = (int)reader[0],
+                            SprintId = reader[1] == DBNull.Value ? 0 : (int)reader[1],
+                            TaskType = (string)reader[2],
+                            TaskName = (string)reader[3],
+                            TaskDesc = reader[4] != DBNull.Value ? (string)reader[4] : "",
+                            TaskPriority = (int)reader[5],
+                            TaskEstimatedTime = (int)reader[6],
+                            TaskStage = (TaskModel.TaskStages)reader[7],
+                            TaskColor = reader[8] != DBNull.Value ? (string)reader[8] : "#ffffff",
+                            BacklogProjectId = reader[9] == DBNull.Value ? 0 : (int)reader[9]
                         });
 
                     }
@@ -144,8 +182,8 @@ namespace ScrumIt.DataAccess
             ValidateNewTask(addedTask);
             using (new Connection())
             {
-                var cmd = new NpgsqlCommand("INSERT INTO tasks (task_id, sprint_id, task_name, task_desc, task_type, task_priority, task_estimated_time, task_stage, task_color)" +
-                                            "VALUES (DEFAULT, @sprint_id, @task_name, @task_desc,@task_type, @task_priority, @task_estimated_time, @task_stage, @task_color);")
+                var cmd = new NpgsqlCommand("INSERT INTO tasks (task_id, sprint_id, task_name, task_desc, task_type, task_priority, task_estimated_time, task_stage, task_color, project_id)" +
+                                            "VALUES (DEFAULT, @sprint_id, @task_name, @task_desc,@task_type, @task_priority, @task_estimated_time, @task_stage, @task_color, @project_id);")
                 {
                     Connection = Connection.Conn
                 };
@@ -157,6 +195,7 @@ namespace ScrumIt.DataAccess
                 cmd.Parameters.AddWithValue("task_estimated_time", addedTask.TaskEstimatedTime);
                 cmd.Parameters.AddWithValue("task_stage", (int)addedTask.TaskStage);
                 cmd.Parameters.AddWithValue("task_color", addedTask.TaskColor);
+                cmd.Parameters.AddWithValue("project_id", addedTask.BacklogProjectId);
                 cmd.ExecuteNonQuery();
 
                 cmd = new NpgsqlCommand("SELECT task_id FROM tasks ORDER BY task_id DESC LIMIT 1;")
@@ -172,7 +211,7 @@ namespace ScrumIt.DataAccess
                     }
                 }
 
-                if (usersAssignedToTask.Count != 0)
+                if (usersAssignedToTask != null && usersAssignedToTask.Count != 0)
                     AssignUsersToTask(addedTask, usersAssignedToTask);
             }
 
@@ -185,7 +224,7 @@ namespace ScrumIt.DataAccess
             {
                 // TODO
                 // Delete only these who you want to get rid of
-                var cmd = new NpgsqlCommand("DELETE FROM tasks_assigned_users WHERE task_id = @taskid;")
+                var cmd = new NpgsqlCommand("DELETE FROM tasks_assigned_users WHERE task_id = @task_id;")
                 {
                     Connection = Connection.Conn
                 };
@@ -206,6 +245,59 @@ namespace ScrumIt.DataAccess
             }
 
             return true;
+        }
+
+        public static void AssignFromBacklogToSprint(int taskid, int sprintId)
+        {
+            using (new Connection())
+            {
+                var cmd = new NpgsqlCommand("UPDATE tasks SET sprint_id = @sprint_id, project_id = 0 WHERE task_id = @task_id;")
+                {
+                    Connection = Connection.Conn
+                };
+                cmd.Parameters.AddWithValue("sprint_id", sprintId);
+                cmd.Parameters.AddWithValue("task_id", taskid);
+                try
+                {
+                    var res = cmd.ExecuteNonQuery();
+                    if (res != 1)
+                        throw new ArgumentException("Nie ma takiego zadania!");
+                }
+                catch (NpgsqlException)
+                {
+                    throw new ArgumentException("Sprint, do ktorego chcesz przypisac zadanie, nie istnieje!");
+                }
+            }
+        }
+
+        private static void DeassignUsersFromTask(int taskid)
+        {
+            using (new Connection())
+            {
+                var cmd = new NpgsqlCommand("DELETE FROM tasks_assigned_users WHERE task_id = @task_id;")
+                {
+                    Connection = Connection.Conn
+                };
+                cmd.Parameters.AddWithValue("task_id", taskid);
+                cmd.ExecuteNonQuery();
+
+            }
+        }
+
+        public static void RemoveTask(int taskid)
+        {
+            using (new Connection())
+            {
+                DeassignUsersFromTask(taskid);
+
+                var cmd = new NpgsqlCommand("DELETE FROM tasks WHERE task_id = @task_id;")
+                {
+                    Connection = Connection.Conn
+                };
+                cmd.Parameters.AddWithValue("task_id", taskid);
+                cmd.ExecuteNonQuery();
+
+            }
         }
 
         public static bool SetNewColour(TaskModel task, string colour)
@@ -233,6 +325,7 @@ namespace ScrumIt.DataAccess
             ValidateTaskPriority(addedTask.TaskPriority);
             ValidateTaskEstimatedTime(addedTask.TaskEstimatedTime);
             ValidateTaskColor(addedTask.TaskColor);
+            ValidateTaskAssignment(addedTask.BacklogProjectId, addedTask.SprintId);
         }
 
         private static void ValidateTaskName(string taskName)
@@ -257,6 +350,12 @@ namespace ScrumIt.DataAccess
         {
             if (!new Regex(@"^#[a-fA-F0-9]{6}").IsMatch(colour))
                 throw new ArgumentException("Provided string is not an RGB colour.");
+        }
+
+        private static void ValidateTaskAssignment(int backlogProjectId, int sprintId)
+        {
+            if (backlogProjectId == 0 && sprintId == 0)
+                throw new ArgumentException("Task must be assigned to either backlog or sprint!");
         }
     }
 }
