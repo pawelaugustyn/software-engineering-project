@@ -12,8 +12,16 @@ namespace ScrumIt.DataAccess
         {
             if (!_opened && _connCounter <= 0)
             {
-                Conn.Open();
-                _opened = true;
+                try
+                {
+                    Conn.Open();
+                    _opened = true;
+                }
+                catch (PostgresException error)
+                {
+                    if (error.SqlState == "53300")
+                        throw new ArgumentException("Nie mozna polaczyc z baza danych.");
+                }
             }
             _connCounter++;
         }

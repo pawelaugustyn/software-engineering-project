@@ -27,7 +27,7 @@ namespace ScrumIt.Forms
             _projectId = projectId;
             _userRole = AppStateProvider.Instance.CurrentUser.Role.ToString();
             var sprintModel = SprintModel.GetCurrentSprintForProject(_projectId);
-            _sprintId = sprintModel.SprintId+1;
+            _sprintId = sprintModel.SprintId;
             InitializeComponent();
         }
 
@@ -83,7 +83,7 @@ namespace ScrumIt.Forms
                 };
 
                 //Pobierz backlog
-                var backlogTasks = TaskModel.GetTasksBySprintId(0);
+                var backlogTasks = TaskModel.GetProjectBacklogTasks(_projectId);
 
                 var users = UserModel.GetUsersByProjectId(_projectId);
 
@@ -153,21 +153,26 @@ namespace ScrumIt.Forms
         private void panel_MouseUp(object sender, MouseEventArgs e, TaskModel task)
         {
             var width = scrumBoardPanel.ClientRectangle.Width;
+            var newStage = task.TaskStage;
             if (_mouseUpLocation.X < width / 4)
             {
                 ((Panel)sender).Location = new Point(width / 40, ((Panel)sender).Location.Y);
-                //update task stage
+                newStage = TaskModel.TaskStages.ToDo;
             }
 
             if (_mouseUpLocation.X > width / 4 && _mouseUpLocation.X < 7 * width / 12)
             {
                 ((Panel)sender).Location = new Point(width / 40 + width / 3, ((Panel)sender).Location.Y);
+                newStage = TaskModel.TaskStages.Doing;
             }
             if (_mouseUpLocation.X > 7 * width / 12)
             {
                 ((Panel)sender).Location = new Point(width / 40 + 2 * width / 3, ((Panel)sender).Location.Y);
+                newStage = TaskModel.TaskStages.Completed;
             }
-            //change task stage
+            
+            if (task.TaskStage != newStage)
+                TaskModel.UpdateTaskStage(task.TaskId, newStage);
         }
 
         private void panel_DoubleClick(int taskId)

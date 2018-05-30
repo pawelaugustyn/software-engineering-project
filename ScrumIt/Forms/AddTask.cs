@@ -64,10 +64,21 @@ namespace ScrumIt.Forms
                 validationFlag = false;
             }
 
+            if (!currentSptintRadio.Checked && !backlogRadio.Checked)
+            {
+                MessageBox.Show(@"Zadanie musi być dodane do sprintu bądź backlogu!");
+                validationFlag = false;
+            }
+
             var sprintId = 0;
+            var projectId = 0;
             if (currentSptintRadio.Checked)
             {
                 sprintId = _sprintId;
+            }
+            else
+            {
+                projectId = _projectId;
             }
 
             if (validationFlag)
@@ -81,10 +92,12 @@ namespace ScrumIt.Forms
                     TaskEstimatedTime = Int16.Parse(taskEstimatedTime),
                     TaskStage = TaskModel.TaskStages.ToDo,
                     SprintId = sprintId,
-                    TaskColor = "#ffffff"
+                    TaskColor = "#ffffff",
+                    BacklogProjectId = projectId
                 };
                 TaskModel.CreateNewTask(task, new List<UserModel>());
                 Close();
+
             }
         }
 
