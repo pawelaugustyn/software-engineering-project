@@ -16,7 +16,6 @@ namespace ScrumIt.Forms
     public partial class Login : MetroForm
     {
         private readonly Color _panelColor = ColorTranslator.FromHtml("#4AC1C1");
-        private readonly Color _guestColorButton = ColorTranslator.FromHtml("#eeeeee");
         public Login()
         {
             InitializeComponent();
@@ -52,7 +51,6 @@ namespace ScrumIt.Forms
         private void Login_Load(object sender, EventArgs e)
         {
             loginButton.BackColor = _panelColor;
-            guestButton.BackColor = _guestColorButton;
         }
 
         private void guestButton_Click(object sender, EventArgs e)
