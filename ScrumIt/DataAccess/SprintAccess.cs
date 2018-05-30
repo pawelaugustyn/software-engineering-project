@@ -24,7 +24,13 @@ namespace ScrumIt.DataAccess
                 {
                     while (reader.Read())
                     {
-                        sprint = new SprintModel((int)reader[0], (int)reader[1], (string)reader[2], (string)reader[3]);
+                        sprint = new SprintModel
+                        {
+                            SprintId = (int)reader[0],
+                            ParentProjectId = (int)reader[1],
+                            StartDateTime = (DateTime)reader[2],
+                            EndDateTime = (DateTime)reader[3]
+                        };
                         break;
                     }
                 }
@@ -138,9 +144,9 @@ namespace ScrumIt.DataAccess
             }
         }
 
-        public static int GetEstimatesOfTasksCompletedInSprint(int sprintid)
+        public static long GetEstimatesOfTasksCompletedInSprint(int sprintid)
         {
-            int estimates_of_completed_tasks = 0;
+            long estimates_of_completed_tasks = 0;
             using (new Connection())
             {
                 var cmd = new NpgsqlCommand("select sum(task_estimated_time) from tasks where sprint_id=@sprint_id and task_stage=3;")
@@ -152,7 +158,12 @@ namespace ScrumIt.DataAccess
                 {
                     while (reader.Read())
                     {
-                        estimates_of_completed_tasks = (int) reader[0];
+                        if (!reader.IsDBNull(0))
+                        {
+                            // Co zwracamy, gdy suma z bazy wynosi NULL ??
+                            estimates_of_completed_tasks = (long) reader[0];
+                        }
+
                         break;
                     }
                 }
@@ -161,12 +172,12 @@ namespace ScrumIt.DataAccess
             return estimates_of_completed_tasks;
         }
 
-        public static int GetEstimatesOfAlTasksInSprint(int sprintid)
+        public static long GetEstimatesOfAllTasksInSprint(int sprintid)
         {
-            int estimates_of_all_tasks = 0;
+            long estimates_of_all_tasks = 0;
             using (new Connection())
             {
-                var cmd = new NpgsqlCommand("select sum(task_estimated_time) from tasks where sprint_id=@sprint_id;")
+                var cmd = new NpgsqlCommand("select  sum(task_estimated_time) from tasks where sprint_id=@sprint_id;")
                 {
                     Connection = Connection.Conn
                 };
@@ -175,7 +186,12 @@ namespace ScrumIt.DataAccess
                 {
                     while (reader.Read())
                     {
-                        estimates_of_all_tasks = (int)reader[0];
+                        if (!reader.IsDBNull(0))
+                        {
+                            // Co zwracamy, gdy suma z bazy wynosi NULL ??
+                            estimates_of_all_tasks = (long) reader[0];
+                        }
+
                         break;
                     }
                 }
