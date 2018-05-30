@@ -27,7 +27,7 @@ namespace ScrumIt.Forms
             _projectId = projectId;
             _userRole = AppStateProvider.Instance.CurrentUser.Role.ToString();
             var sprintModel = SprintModel.GetCurrentSprintForProject(_projectId);
-            _sprintId = sprintModel.SprintId + 1;
+            _sprintId = sprintModel.SprintId;
             InitializeComponent();
         }
 
