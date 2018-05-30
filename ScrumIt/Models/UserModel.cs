@@ -58,6 +58,25 @@ namespace ScrumIt.Models
         }
 
         //pobierz userow przypisanych do tasku
+        public static bool AssignUserToTask(UserModel user, int taskid)
+        {
+            return UserAccess.AssignUserToTask(user, taskid);
+        }
+
+        public static bool AssignUserToProject(UserModel user, int projectid)
+        {
+            return UserAccess.AssignUserToProject(user, projectid);
+        }
+
+        public static bool DeleteUserFromTask(UserModel user, int taskid)
+        {
+            return UserAccess.DeleteUserFromTask(user, taskid);
+        }
+
+        public static bool DeleteUserFromProject(UserModel user, int projectid)
+        {
+            return UserAccess.DeleteUserFromProject(user, projectid);
+        }
     }
 
     public enum UserRoles

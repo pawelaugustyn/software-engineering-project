@@ -226,6 +226,94 @@ namespace ScrumIt.DataAccess
             }
         }
 
+        public static bool AssignUserToTask(UserModel user, int taskid)
+        {
+            using (new Connection())
+            {
+                //wartosc time_spent do tabeli wstawiamy na tym etapie zero ???
+                var cmd = new NpgsqlCommand("INSERT INTO tasks_assigned_users VALUES (@taskid, @userid, 0);")
+                {
+                    Connection = Connection.Conn
+                };
+                cmd.Parameters.AddWithValue("taskid", taskid);
+                cmd.Parameters.AddWithValue("userid", user.UserId);
+                try
+                {
+                    var result = cmd.ExecuteNonQuery();
+                    return result > 0;
+                }
+                catch (PostgresException)
+                {
+                    return false;
+                }
+               
+            }
+        }
+
+        public static bool AssignUserToProject(UserModel user, int projectid)
+        {
+            using (new Connection())
+            {
+                //wartosc time_spent do tabeli wstawiamy na tym etapie zero ???
+                var cmd = new NpgsqlCommand("INSERT INTO projects_has_users VALUES (@userid, @projectid);")
+                {
+                    Connection = Connection.Conn
+                };
+                cmd.Parameters.AddWithValue("userid", user.UserId);
+                cmd.Parameters.AddWithValue("projectid", projectid);
+                try
+                {
+                    var result = cmd.ExecuteNonQuery();
+                    return result > 0;
+                }
+                catch (PostgresException)
+                {
+                    return false;
+                }
+
+            }
+        }
+
+        public static bool DeleteUserFromTask(UserModel user, int taskid)
+        {
+            var currUser = AppStateProvider.Instance.CurrentUser;
+            if (currUser.Role != UserRoles.ScrumMaster)
+                throw new UnauthorizedAccessException("Not permitted for that operation.");
+
+            using (new Connection())
+            {
+                var cmd = new NpgsqlCommand("DELETE FROM tasks_assigned_users WHERE uid = @userid AND task_id=@taskid;")
+                {
+                    Connection = Connection.Conn
+                };
+                cmd.Parameters.AddWithValue("userid", user.UserId);
+                cmd.Parameters.AddWithValue("taskid", taskid);
+                var res = cmd.ExecuteNonQuery();
+
+                return res == 1;
+            }
+        }
+
+        public static bool DeleteUserFromProject(UserModel user, int projectid)
+        {
+            var currUser = AppStateProvider.Instance.CurrentUser;
+            if (currUser.Role != UserRoles.ScrumMaster)
+                throw new UnauthorizedAccessException("Not permitted for that operation.");
+
+            using (new Connection())
+            {
+                var cmd = new NpgsqlCommand("DELETE FROM projects_has_users WHERE uid = @userid AND project_id=@projectid;")
+                {
+                    Connection = Connection.Conn
+                };
+                cmd.Parameters.AddWithValue("userid", user.UserId);
+                cmd.Parameters.AddWithValue("projectid", projectid);
+                var res = cmd.ExecuteNonQuery();
+
+                return res == 1;
+            }
+        }
+
         private static void ValidateUser(UserModel addedUser, string password)
         {
             ValidateUsername(addedUser);
@@ -304,5 +392,7 @@ namespace ScrumIt.DataAccess
 
             return sb.ToString().ToLower();
         }
+
+
     }
 }
