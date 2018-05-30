@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
 using System.Net.Mail;
 using System.Security.Cryptography;
 using System.Text;
@@ -167,6 +169,45 @@ namespace ScrumIt.DataAccess
 
             return users;
         }
+
+        public static bool GetUserPicture(UserModel user)
+        {
+            using (new Connection())
+            {
+                var cmd = new NpgsqlCommand("select picture from users where uid = @uid;")
+                {
+                    Connection = Connection.Conn
+                };
+                cmd.Parameters.AddWithValue("uid", user.UserId);
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        // TODO
+                        var str = new BufferedStream(Stream.Null);
+                        var bw = new BinaryWriter(str);
+                        var outbyte = new byte[100];
+                        var startIndex = 0;
+                        var retval = reader.GetBytes(0, startIndex, outbyte, 0, 100);
+                        while (retval == 100)
+                        {
+                            bw.Write(outbyte);
+                            bw.Flush();
+                            startIndex += 100;
+                            retval = reader.GetBytes(0, startIndex, outbyte, 0, 100);
+                        }
+                        bw.Write(outbyte, 0, (int)100);
+                        bw.Flush();
+                        user.Avatar = Image.FromStream(str);
+                        bw.Close();
+                        str.Close();
+                    }
+                }
+            }
+
+            return true;
+        }
+
 
         public static bool Add(UserModel addedUser, string password)
         {
