@@ -91,6 +91,34 @@ namespace ScrumIt.DataAccess
             return project;
         }
 
+        public static ProjectModel GetProjectByName(string projectname)
+        {
+            var project = new ProjectModel();
+            using (new Connection())
+            {
+                var cmd = new NpgsqlCommand("select * from projects where project_name = @projectname;")
+                {
+                    Connection = Connection.Conn
+                };
+                cmd.Parameters.AddWithValue("projectname", projectname);
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        project = new ProjectModel
+                        {
+                            ProjectId = (int)reader[0],
+                            ProjectName = (string)reader[1],
+                            ProjectColor = (string)reader[2]
+                        };
+                        break;
+                    }
+                }
+            }
+
+            return project;
+        }
+
         public static bool CreateNewProject(ProjectModel addedProject)
         {
             if (AppStateProvider.Instance.CurrentUser.Role != UserRoles.ScrumMaster)
@@ -132,9 +160,58 @@ namespace ScrumIt.DataAccess
             return true;
         }
 
+        public static bool DeleteProject(ProjectModel deletedProject)
+        {
+            //usuwanie kaskadowe?
+            if (AppStateProvider.Instance.CurrentUser.Role != UserRoles.ScrumMaster)
+                throw new UnauthorizedAccessException("Not permitted for that operation.");
+
+            //
+            // wywolac metody dla projects_has_users, tasks i sprints lub poczekac na zmiany w bazie
+            //
+            using (new Connection())
+            {
+                var cmd = new NpgsqlCommand("DELETE FROM projects WHERE project_id=@projectid;")
+                {
+                    Connection = Connection.Conn
+                };
+                cmd.Parameters.AddWithValue("projectid", deletedProject.ProjectId);
+                var result = cmd.ExecuteNonQuery();
+                if (result != 1) return false;
+                
+
+            }
+            return true;
+        }
+
         public static bool UpdateProject(ProjectModel updatedProject)
         {
+            if (AppStateProvider.Instance.CurrentUser.Role != UserRoles.ScrumMaster)
+                throw new UnauthorizedAccessException("Not permitted for that operation.");
+
             ValidateUpdatedProject(updatedProject);
+            var nameIsDifferent = false;
+            using (new Connection())
+            {
+                //sprawdzamy czy zmienila sie nazwa projektu , jesli tak, to spradzamy czy nowa nazwa nie jest taka sama jak nazwa innego isteniejacego juz projektu
+                var cmd = new NpgsqlCommand("SELECT project_name FROM projects WHERE project_id = @projectid;")
+                {
+                    Connection = Connection.Conn
+                };
+                cmd.Parameters.AddWithValue("projectid", updatedProject.ProjectId);
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        if (updatedProject.ProjectName != (string)reader[0])
+                            nameIsDifferent = true;
+                    }
+                }
+            }
+
+            if (nameIsDifferent)
+                ValidateProjectNameIsAvailable(updatedProject.ProjectName);
+            // aktualizowanie w bazie
             using (new Connection())
             {
                 var cmd = new NpgsqlCommand("UPDATE projects SET project_name = @name, project_color = @color WHERE project_id = @id ;")
@@ -159,7 +236,7 @@ namespace ScrumIt.DataAccess
 
         private static void ValidateUpdatedProject(ProjectModel proj)
         {
-            ValidateProjectNameOnCreation(proj.ProjectName);
+            ValidateProjectNameContainsOnlyAllowableCharacters(proj.ProjectName);
             ValidateProjectColour(proj.ProjectColor);
         }
 
