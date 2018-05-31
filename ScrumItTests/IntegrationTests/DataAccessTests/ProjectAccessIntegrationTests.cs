@@ -131,5 +131,50 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
 
             Assert.That(isAddedSuccessful, Is.False, $"Adding project should not be successful {Messages.Display(projectToAdd)}.");
         }
+
+        [Test]
+        public void DeleteProjectWithUniqueName()
+        {
+            //TODO: ProjectAcces.Delete()
+            /*
+            var projectToAdd = new ProjectModel
+            {
+                ProjectName = "addTestProject".WithUniqueName(),
+                ProjectColor = "#ff0000"
+            };
+            var projectWithTheSameName = ProjectAccess.GetProjectByName(projectToAdd.ProjectName);
+            Assert.That(projectWithTheSameName.IsDeepEqual(new ProjectModel()), Is.True, "Project should not exist.");
+
+            ProjectAccess.CreateNewProject(projectToAdd);
+            var projectAfterAdd = ProjectAccess.GetProjectByName(projectToAdd.ProjectName);
+
+            Assertion.Equals(projectToAdd, projectAfterAdd, "Project with unique name not added correctly to DB. ");
+
+            var deletedSuccessful = ProjectAccess.Delete(projectAfterAdd);
+            Assert.That(deletedSuccessful, Is.True, $"Deleting should be successful {Messages.Display(projectAfterAdd)}.");
+
+            var projectAfterDelete = ProjectAccess.GetProjectByName(projectToAdd.ProjectName);
+            Assert.That(projectAfterDelete.IsDeepEqual(new ProjectModel()), Is.True, $"Project {Messages.Display(projectAfterDelete)} should be deleted.");
+            */
+        }
+
+        [Test]
+        public void DeleteEmptyOrInvalidProjectShouldDoNothing()
+        {
+            //TODO: ProjectAcces.Delete()
+            /*
+            var projectToDelete = new ProjectModel();
+            var deletedSuccessful = ProjectAccess.Delete(projectToDelete);
+            Assert.That(deletedSuccessful, Is.False, $"Deleting project should not be successful {Messages.Display(projectToDelete)}.");
+
+            projectToDelete = new ProjectModel
+            {
+                ProjectName = "deleteTestProject",
+            };
+
+            deletedSuccessful = ProjectAccess.Delete(projectToDelete);
+            Assert.That(deletedSuccessful, Is.False, $"Deleting project should not be successful {Messages.Display(projectToDelete)}.");
+            */
+        }
     }
 }
