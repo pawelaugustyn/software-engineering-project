@@ -228,6 +228,40 @@ namespace ScrumIt.DataAccess
             return true;
         }
 
+        public static bool AddNewUserToProject(int userId, int projectId)
+        {
+            if (AppStateProvider.Instance.CurrentUser.Role != UserRoles.ScrumMaster)
+                throw new UnauthorizedAccessException("Not permitted for that operation.");
+
+            using (new Connection())
+            {
+                var cmd = new NpgsqlCommand("SELECT uid FROM projects_has_users WHERE project_id=@projectid;")
+                {
+                    Connection = Connection.Conn
+                };
+                cmd.Parameters.AddWithValue("projectid", projectId);
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        if ( userId == (int)reader[0])
+                            throw new ArgumentException("This user is already assigned to project");
+                    }
+                }
+
+                cmd = new NpgsqlCommand("INSERT INTO projects_has_users VALUES(@userid, @projectid);")
+                {
+                    Connection = Connection.Conn
+                };
+                cmd.Parameters.AddWithValue("userid", userId);
+                cmd.Parameters.AddWithValue("projectid", projectId);
+                var result = cmd.ExecuteNonQuery();
+                if (result != 1) return false;
+            }
+
+            return true;
+        }
+
         private static void ValidateNewProject(ProjectModel proj)
         {
             ValidateProjectNameOnCreation(proj.ProjectName);
