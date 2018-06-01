@@ -162,13 +162,9 @@ namespace ScrumIt.DataAccess
 
         public static bool DeleteProject(ProjectModel deletedProject)
         {
-            //usuwanie kaskadowe?
             if (AppStateProvider.Instance.CurrentUser.Role != UserRoles.ScrumMaster)
                 throw new UnauthorizedAccessException("Not permitted for that operation.");
 
-            //
-            // wywolac metody dla projects_has_users, tasks i sprints lub poczekac na zmiany w bazie
-            //
             using (new Connection())
             {
                 var cmd = new NpgsqlCommand("DELETE FROM projects WHERE project_id=@projectid;")
@@ -178,8 +174,6 @@ namespace ScrumIt.DataAccess
                 cmd.Parameters.AddWithValue("projectid", deletedProject.ProjectId);
                 var result = cmd.ExecuteNonQuery();
                 if (result != 1) return false;
-                
-
             }
             return true;
         }
