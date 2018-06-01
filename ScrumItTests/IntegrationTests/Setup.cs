@@ -53,8 +53,7 @@ namespace ScrumItTests.IntegrationTests
             {
                 foreach (var user in _userList)
                 {
-                    //TODO: Delete user
-                    //UserModel.Delete(user);
+                    UserModel.Delete(user);
                 }
             }
         }

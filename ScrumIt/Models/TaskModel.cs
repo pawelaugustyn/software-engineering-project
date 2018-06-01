@@ -14,6 +14,7 @@ namespace ScrumIt.Models
         public int TaskEstimatedTime { get; set; }
         public TaskStages TaskStage { get; set; }
         public string TaskColor { get; set; }
+        public int BacklogProjectId { get; set; }
 
         public enum TaskStages
         {
@@ -51,6 +52,11 @@ namespace ScrumIt.Models
             return TaskAccess.GetProjectTasksBySprintId(sprintid);
         }
 
+        public static List<TaskModel> GetProjectBacklogTasks(int projectid)
+        {
+            return TaskAccess.GetProjectBacklogTasks(projectid);
+        }
+
         public static bool CreateNewTask(TaskModel taskToAdd, List<UserModel> usersAssignedToTask)
         {
             return TaskAccess.CreateNewTask(taskToAdd, usersAssignedToTask);
@@ -61,11 +67,22 @@ namespace ScrumIt.Models
             return TaskAccess.SetNewColour(task, colour);
         }
 
-        // TO DO 
+        // TODO 
         //Update task
 
-        //TO DO 
-        // (Optionally) Update task stage
-       
+        public static void UpdateTaskStage(int taskid, TaskStages newstage)
+        {
+            TaskAccess.UpdateTaskStage(taskid, newstage);
+        }
+
+        public static void AssignFromBacklogToSprint(int taskid, int sprintId)
+        {
+            TaskAccess.AssignFromBacklogToSprint(taskid, sprintId);
+        }
+
+        public static void RemoveTask(int taskid)
+        {
+            TaskAccess.RemoveTask(taskid);
+        }
     }
 }
