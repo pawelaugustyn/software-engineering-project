@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using ScrumIt.DataAccess;
 
@@ -12,8 +13,17 @@ namespace ScrumIt.Models
         public string Lastname { get; set; }
         public UserRoles Role { get; set; } = UserRoles.Guest;
         public string Email { get; set; }
-        public Image Avatar { get; set; }
-        
+
+        public Image Avatar
+        {
+            get { return AppStateProvider.Instance.GetUserPicture(UserId); }
+            set
+            {
+                if (value == null) throw new ArgumentNullException(nameof(value));
+                Avatar = AppStateProvider.Instance.SetUserPicture(UserId, value);
+            }
+        }
+
 
         public static bool LoginAs(string username, string password)
         {
@@ -61,12 +71,6 @@ namespace ScrumIt.Models
 
         //TODO
         //pobierz userow przypisanych do tasku
-        public static bool GetUserPicture(UserModel user)
-        {
-            if (user.Avatar == null)
-                return UserAccess.GetUserPicture(user);
-            return true;
-        }
     }
 
     public enum UserRoles

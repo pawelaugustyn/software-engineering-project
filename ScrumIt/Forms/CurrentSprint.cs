@@ -405,7 +405,7 @@ namespace ScrumIt.Forms
                 {
                     Name = toolStripMenuItemName,
                     Text = toolStripMenuItemText,
-                    Image = Properties.Resources.cat2
+                    Image = user.Avatar
                 };
                 toolStripItems[index++] = toolStripMenuItem;
             }
@@ -500,6 +500,8 @@ namespace ScrumIt.Forms
             };
 
             var userPhotos = new[] { "Nowak1", "Nowak2", "Nowak3", "Nowak4" };
+            //TODO
+            //Load pictures for users
             var pictureBoxes = new List<PictureBox>();
             var location = 15;
             foreach (var user in userPhotos)

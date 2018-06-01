@@ -27,7 +27,7 @@ namespace ScrumIt.Forms
             userLastNameTextBox.Text = user.Lastname;
             userLoginTextBox.Text = user.Username;
             userRoleTextBox.Text = user.Role.ToString();
-            userPhotoPictureBox.Image = Properties.Resources.cat2;
+            userPhotoPictureBox.Image = AppStateProvider.Instance.GetUserPicture(user.UserId);
         }
 
         private void changePasswordButton_Click(object sender, System.EventArgs e)
