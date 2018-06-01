@@ -81,8 +81,6 @@ namespace ScrumIt.DataAccess
 
             return task;
         }
-
-
         //zaktualizuj w bazie dane zadanie nadajac mu nowy stage (przeciagniecia miedzy kolumnami w sprincie)
         public static bool UpdateTaskStage(int taskid, TaskModel.TaskStages newstage)
         {
