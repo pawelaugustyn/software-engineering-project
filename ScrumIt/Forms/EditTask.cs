@@ -63,7 +63,7 @@ namespace ScrumIt.Forms
                 {
                     Name = toolStripMenuItemName,
                     Text = toolStripMenuItemText,
-                    Image = Properties.Resources.cat2,
+                    Image = allUsers[i].Avatar,
                     CheckOnClick = true
                 };
                 foreach (var user in userList)
