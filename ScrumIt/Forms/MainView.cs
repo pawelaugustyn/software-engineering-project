@@ -59,6 +59,7 @@ namespace ScrumIt.Forms
                 ColumnCount = 1,
                 RowCount = 0
             };
+
             //kolumny
             panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
 
