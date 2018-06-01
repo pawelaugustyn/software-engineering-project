@@ -137,31 +137,44 @@ Tasks:
 **Uni Tests**
 1. 
 **Integration Tests:**
-2. UserAccessIntegrationTests 
-- AddUserWithUniqueUsername 
-- GetUserByIdShouldReturnCorrectUser
-- GetUserByLoginShouldReturnCorrectUser 
-- GetUsersByLastNameShouldReturnCorrectUser 
-- GetUsersByProjectIdShouldReturnCorrectUsers 
-- LoginAsWithCorrectCredentialsShouldPass 
-- DeleteUserWithUniqueUsername
-To do:
-     1. Log in
-    - incorrect login 
-    - incorrest password 
-    - incorrect login and password
-    - empty login
-    - empty password
-    - empty login and password
-    - go as guest
-    2.
-    - add user that already exist
-    - delete user that not exist
-    - add/delete user with incorrect credential
+2. UserAccessIntegrationTests
+    ```
+    - GetUserByIdShouldReturnCorrectUser
+    - GetUserByLoginShouldReturnCorrectUser 
+    - GetUsersByLastNameShouldReturnCorrectUser 
+    - GetUsersByProjectIdShouldReturnCorrectUsers 
+    - LoginAsWithCorrectCredentialsShouldPass 
+    - LoginAsWithEmptyCredentialsShouldFail 
+    - LoginAsWithIncorrectCredentialsShouldFail 
+    - AddUserWithUniqueUsername 
+    - AddUserThatAlreadyExist 
+    - AddEmptyUserShouldThrow 
+    - DeleteEmptyOrInvalidUserShouldDoNothing
+    - DeleteUserWithUniqueUsername
+    ```
+TO DO:
+    - delete admin, yourself 
+    - add with unauthorized access
+    
 3. TaskAccessIntegrationTests 
+    - all Get method with correct and with incorrect values (also null and empty)
+    - update, create with correct and with incorrect values (also null and empty)
+    - assign user to task (correct list, unknown user, the same user twice)
+    - set new color (restrictions, is successful, is it valid color)
+**consider if any can (or should) throw exception. Check it!**
 4. SprintAccessIntegrationTests 
+    - all Get method with:
+        - correct values
+        - incorrect values (also null and empty), consider date (start should be earlier than stop, weird date)
+    **consider if any can (or should) throw exception. Check it!**
 5. ProjectAccessIntegrationTests 
+   - all Get method with correct and with incorrect values (also null and empty)
+    - create with correct and with incorrect values (also null and empty)
+        - check if project color is correct color,
+        - unique project name
+        **consider if any can (or should) throw exception. Check it!**
 6. ConnectionIntegrationTests
+    -   check if it is possible to connect with db
 
     
     

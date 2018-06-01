@@ -24,7 +24,7 @@ namespace ScrumIt.DataAccess
                 {
                     Connection = Connection.Conn
                 };
-                cmd.Parameters.AddWithValue("username", username.ToLower());
+                cmd.Parameters.AddWithValue("username", username?.ToLower());
                 cmd.Parameters.AddWithValue("pass", EncryptMd5(password));
                 using (var reader = cmd.ExecuteReader())
                 {
@@ -86,7 +86,7 @@ namespace ScrumIt.DataAccess
                 {
                     Connection = Connection.Conn
                 };
-                cmd.Parameters.AddWithValue("lastname", lastname.ToLower() + '%');
+                cmd.Parameters.AddWithValue("lastname", lastname?.ToLower() + '%');
                 using (var reader = cmd.ExecuteReader())
                 {
                     while (reader.Read())
@@ -116,7 +116,7 @@ namespace ScrumIt.DataAccess
                 {
                     Connection = Connection.Conn
                 };
-                cmd.Parameters.AddWithValue("username", username.ToLower() + '%');
+                cmd.Parameters.AddWithValue("username", username?.ToLower() + '%');
                 using (var reader = cmd.ExecuteReader())
                 {
                     while (reader.Read())
@@ -299,7 +299,7 @@ namespace ScrumIt.DataAccess
 
         private static void ValidateUsernameFormat(string username)
         {
-            if (username.Length == 0)
+            if (string.IsNullOrEmpty(username))
                 throw new ArgumentException("Username cannot be empty!");
             if (!new Regex(@"^[a-zA-Z0-9()-]*$").IsMatch(username))
                 throw new ArgumentException("Username must contain only alphanumeric characters!");
@@ -311,11 +311,11 @@ namespace ScrumIt.DataAccess
         {
             using (new Connection())
             {
-                var cmd = new NpgsqlCommand("SELECT lower(username) FROM users WHERE lower(username) LIKE 'username';")
+                var cmd = new NpgsqlCommand("SELECT username FROM users WHERE lower(username) LIKE @username;")
                 {
                     Connection = Connection.Conn
                 };
-                cmd.Parameters.AddWithValue("username", username.ToLower());
+                cmd.Parameters.AddWithValue("username", username.ToLower() + '%');
                 using (var reader = cmd.ExecuteReader())
                 {
                     while (reader.Read())
