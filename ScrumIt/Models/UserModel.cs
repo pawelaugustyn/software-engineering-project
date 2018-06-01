@@ -13,14 +13,14 @@ namespace ScrumIt.Models
         public string Lastname { get; set; }
         public UserRoles Role { get; set; } = UserRoles.Guest;
         public string Email { get; set; }
-
+        
         public Image Avatar
         {
             get { return AppStateProvider.Instance.GetUserPicture(UserId); }
             set
             {
                 if (value == null) throw new ArgumentNullException(nameof(value));
-                Avatar = AppStateProvider.Instance.SetUserPicture(UserId, value);
+                AppStateProvider.Instance.SetUserPicture(UserId, value, false);
             }
         }
 

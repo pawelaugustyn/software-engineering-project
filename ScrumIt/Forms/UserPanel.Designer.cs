@@ -49,6 +49,7 @@
             this.newPasswordTextBox = new System.Windows.Forms.TextBox();
             this.confirmNewPasswordTextBox = new System.Windows.Forms.TextBox();
             this.submitPasswordChangeButton = new System.Windows.Forms.Button();
+            this.loadPictureDialog = new System.Windows.Forms.OpenFileDialog();
             ((System.ComponentModel.ISupportInitialize)(this.userPhotoPictureBox)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
             this.changePasswordLayoutTablePanel.SuspendLayout();
@@ -63,6 +64,7 @@
             this.userPhotoPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.userPhotoPictureBox.TabIndex = 0;
             this.userPhotoPictureBox.TabStop = false;
+            this.userPhotoPictureBox.Click += new System.EventHandler(this.userPhotoPictureBox_Click);
             // 
             // userRoleLabel
             // 
@@ -367,6 +369,10 @@
             this.submitPasswordChangeButton.Visible = false;
             this.submitPasswordChangeButton.Click += new System.EventHandler(this.submitPasswordChangeButton_Click);
             // 
+            // loadPictureDialog
+            // 
+            this.loadPictureDialog.FileName = "loadPictureDialog";
+            // 
             // UserPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -418,5 +424,6 @@
         private System.Windows.Forms.TextBox oldPasswordTextBox;
         private System.Windows.Forms.TextBox newPasswordTextBox;
         private System.Windows.Forms.TextBox confirmNewPasswordTextBox;
+        private System.Windows.Forms.OpenFileDialog loadPictureDialog;
     }
 }

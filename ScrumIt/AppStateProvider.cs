@@ -37,9 +37,20 @@ namespace ScrumIt
             return SetUserPicture(uid, img);
         }
 
-        public Image SetUserPicture(int uid, Image img)
+        public Image SetUserPicture(int uid, Image img, bool skipExisting=true)
         {
-            _userPics.Add(uid, img);
+            try
+            {
+                _userPics.Add(uid, img);
+            }
+            catch (ArgumentException)
+            {
+                if (skipExisting) return UserAccess.GetUserPicture(uid);
+                _userPics.Remove(uid);
+                return SetUserPicture(uid, img);
+            }
+
+            UserAccess.SetUserPicture(uid, img);
             return UserAccess.GetUserPicture(uid);
         }
 
@@ -61,7 +72,7 @@ namespace ScrumIt
             }
         }
 
-        public Image LoadImage(string filePath)
+        public static Image LoadImage(string filePath)
         {
             try
             {
