@@ -47,17 +47,17 @@ namespace ScrumIt.Forms
 
         private void Draw_Projects_Table()
         {
-            TableLayoutPanel panel = new TableLayoutPanel();
-            panel.Location = new System.Drawing.Point(50, 150);
-            panel.Name = "ProjectsTable";
-            panel.Size = new System.Drawing.Size(400, 400);
-            panel.AutoScroll = true;
-            panel.MaximumSize = new System.Drawing.Size(400,400);
+            TableLayoutPanel panel = new TableLayoutPanel {
+                Location = new System.Drawing.Point(50, 150),
+            Name = "ProjectsTable",
+            Size = new System.Drawing.Size(400, 400),
+            AutoScroll = true,
+            MaximumSize = new System.Drawing.Size(400, 400),
 
             // ilosc kolumn i wierszy na poczatku - reszta dodana dynamicznie
-            panel.ColumnCount = 1;
-            panel.RowCount = 0;
-
+            ColumnCount = 1,
+            RowCount = 0
+        };
             //kolumny
             panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
 

@@ -168,6 +168,35 @@ namespace ScrumIt.DataAccess
             return users;
         }
 
+        public static List<UserModel> GetAllUsers()
+        {
+            var users = new List<UserModel>();
+            using (new Connection())
+            {
+                var cmd = new NpgsqlCommand("select * from users order by uid;")
+                {
+                    Connection = Connection.Conn
+                };
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        users.Add(new UserModel
+                        {
+                            UserId = (int)reader[0],
+                            Username = (string)reader[1],
+                            Firstname = (string)reader[3],
+                            Lastname = (string)reader[4],
+                            Role = (UserRoles)reader[5],
+                            Email = (string)reader[6]
+                        });
+                    }
+                }
+            }
+
+            return users;
+        }
+
         public static bool Add(UserModel addedUser, string password)
         {
             if (AppStateProvider.Instance.CurrentUser.Role != UserRoles.ScrumMaster)
@@ -225,6 +254,34 @@ namespace ScrumIt.DataAccess
                 return res == 1;
             }
         }
+
+        public static bool UpdateUserData(UserModel updatedUser)
+        {
+            if (AppStateProvider.Instance.CurrentUser.Role == UserRoles.Guest)
+                throw new UnauthorizedAccessException("Not permitted for that operation.");
+            if (AppStateProvider.Instance.CurrentUser.Role == UserRoles.Developer && AppStateProvider.Instance.CurrentUser.UserId != updatedUser.UserId)
+                throw new UnauthorizedAccessException("Not permitted for that operation - you can't change other person's data.");
+            ValidateUsername(updatedUser);
+            using (new Connection())
+            {
+                var cmd = new NpgsqlCommand("UPDATE users SET username = @username, first_name = @firstname, last_name = @lastname, role = @role, email = @email WHERE uid = @userid;")
+                {
+                    Connection = Connection.Conn
+                };
+                cmd.Parameters.AddWithValue("username", updatedUser.Username);
+                cmd.Parameters.AddWithValue("firstname", updatedUser.Firstname);
+                cmd.Parameters.AddWithValue("lastname", updatedUser.Lastname);
+                cmd.Parameters.AddWithValue("role", (int)updatedUser.Role);
+                cmd.Parameters.AddWithValue("email", updatedUser.Email);
+
+                cmd.Parameters.AddWithValue("userid", updatedUser.UserId);
+                var result = cmd.ExecuteNonQuery();
+                if (result != 1) return false;
+
+                return true;
+            }
+        }
+
 
         private static void ValidateUser(UserModel addedUser, string password)
         {
