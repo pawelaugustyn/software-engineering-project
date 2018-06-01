@@ -184,26 +184,10 @@ namespace ScrumIt.DataAccess
                 throw new UnauthorizedAccessException("Not permitted for that operation.");
 
             ValidateUpdatedProject(updatedProject);
-            var nameIsDifferent = false;
-            using (new Connection())
-            {
-                //sprawdzamy czy zmienila sie nazwa projektu , jesli tak, to spradzamy czy nowa nazwa nie jest taka sama jak nazwa innego isteniejacego juz projektu
-                var cmd = new NpgsqlCommand("SELECT project_name FROM projects WHERE project_id = @projectid;")
-                {
-                    Connection = Connection.Conn
-                };
-                cmd.Parameters.AddWithValue("projectid", updatedProject.ProjectId);
-                using (var reader = cmd.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        if (updatedProject.ProjectName != (string)reader[0])
-                            nameIsDifferent = true;
-                    }
-                }
-            }
-
-            if (nameIsDifferent)
+            
+            //sprawdzamy czy zmienila sie nazwa projektu, jesli tak, to spradzamy czy nowa nazwa nie jest taka sama jak nazwa innego isteniejacego juz projektu
+            ProjectModel project = GetProjectById(updatedProject.ProjectId);
+            if (project.ProjectName != updatedProject.ProjectName)
                 ValidateProjectNameIsAvailable(updatedProject.ProjectName);
             // aktualizowanie w bazie
             using (new Connection())
@@ -229,28 +213,21 @@ namespace ScrumIt.DataAccess
 
             using (new Connection())
             {
-                var cmd = new NpgsqlCommand("SELECT uid FROM projects_has_users WHERE project_id=@projectid;")
+                try
                 {
-                    Connection = Connection.Conn
-                };
-                cmd.Parameters.AddWithValue("projectid", projectId);
-                using (var reader = cmd.ExecuteReader())
-                {
-                    while (reader.Read())
+                    var cmd = new NpgsqlCommand("INSERT INTO projects_has_users VALUES(@userid, @projectid);")
                     {
-                        if ( userId == (int)reader[0])
-                            throw new ArgumentException("This user is already assigned to project");
-                    }
+                        Connection = Connection.Conn
+                    };
+                    cmd.Parameters.AddWithValue("userid", userId);
+                    cmd.Parameters.AddWithValue("projectid", projectId);
+                    var result = cmd.ExecuteNonQuery();
+                    if (result != 1) return false;
                 }
-
-                cmd = new NpgsqlCommand("INSERT INTO projects_has_users VALUES(@userid, @projectid);")
+                catch (NpgsqlException)
                 {
-                    Connection = Connection.Conn
-                };
-                cmd.Parameters.AddWithValue("userid", userId);
-                cmd.Parameters.AddWithValue("projectid", projectId);
-                var result = cmd.ExecuteNonQuery();
-                if (result != 1) return false;
+                    throw new Exception("User is already assigned to this project");
+                }
             }
 
             return true;
