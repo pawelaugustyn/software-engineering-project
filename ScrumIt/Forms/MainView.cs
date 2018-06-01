@@ -47,17 +47,18 @@ namespace ScrumIt.Forms
 
         private void Draw_Projects_Table()
         {
-            TableLayoutPanel panel = new TableLayoutPanel {
+            TableLayoutPanel panel = new TableLayoutPanel
+            {
                 Location = new System.Drawing.Point(50, 150),
-            Name = "ProjectsTable",
-            Size = new System.Drawing.Size(400, 400),
-            AutoScroll = true,
-            MaximumSize = new System.Drawing.Size(400, 400),
+                Name = "ProjectsTable",
+                Size = new System.Drawing.Size(400, 400),
+                AutoScroll = true,
+                MaximumSize = new System.Drawing.Size(400, 400),
 
-            // ilosc kolumn i wierszy na poczatku - reszta dodana dynamicznie
-            ColumnCount = 1,
-            RowCount = 0
-        };
+                // ilosc kolumn i wierszy na poczatku - reszta dodana dynamicznie
+                ColumnCount = 1,
+                RowCount = 0
+            };
             //kolumny
             panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
 
@@ -66,7 +67,8 @@ namespace ScrumIt.Forms
             panel.RowCount = panel.RowCount + 1;
             panel.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
             MetroButton newProject = new MetroButton();
-            newProject.Click += delegate {
+            newProject.Click += delegate
+            {
                 var add = new AddProject();
                 add.FormClosing += delegate
                 {
@@ -75,8 +77,6 @@ namespace ScrumIt.Forms
                     MainView_Load(null, EventArgs.Empty);
                 };
                 add.ShowDialog();
-
-
             };
             newProject.Text = "Stwórz nowy projekt";
             newProject.Name = "newProjectButton";
@@ -164,7 +164,7 @@ namespace ScrumIt.Forms
                     var reg = new Register();
                     reg.Show();
                 }
-                
+
                 if (propertiesComboBox.SelectedIndex == 3)
                 {
                     MessageBox.Show("wylogowano");

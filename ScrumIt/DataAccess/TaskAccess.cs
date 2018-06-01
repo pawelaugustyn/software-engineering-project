@@ -79,43 +79,6 @@ namespace ScrumIt.DataAccess
 
             return task;
         }
-
-        public static TaskModel GetBacklogByProjectId(int projectid)
-        {
-            var task = new TaskModel();
-            //using (new Connection())
-            //{
-            //    var cmd = new NpgsqlCommand(
-            //        "select * from tasks where task_id = @taskid;")
-            //    {
-            //        Connection = Connection.Conn
-            //    };
-            //    cmd.Parameters.AddWithValue("taskid", taskid);
-            //    using (var reader = cmd.ExecuteReader())
-            //    {
-            //        while (reader.Read())
-            //        {
-
-            //            task = new TaskModel
-            //            {
-            //                TaskId = (int)reader[0],
-            //                SprintId = (int)reader[1],
-            //                TaskType = (string)reader[2],
-            //                TaskName = (string)reader[3],
-            //                TaskDesc = (string)reader[4],
-            //                TaskPriority = (int)reader[5],
-            //                TaskEstimatedTime = (int)reader[6],
-            //                TaskStage = (TaskModel.TaskStages)reader[7],
-
-            //            };
-            //            break;
-            //        }
-            //    }
-            //}
-
-            return task;
-        }
-
         //zaktualizuj w bazie dane zadanie nadajac mu nowy stage (przeciagniecia miedzy kolumnami w sprincie)
         public static bool UpdateTaskStage(int taskid, TaskModel.TaskStages newstage)
         {
