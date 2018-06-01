@@ -91,6 +91,34 @@ namespace ScrumIt.DataAccess
             return project;
         }
 
+        public static ProjectModel GetProjectByName(string projectname)
+        {
+            var project = new ProjectModel();
+            using (new Connection())
+            {
+                var cmd = new NpgsqlCommand("select * from projects where project_name = @projectname;")
+                {
+                    Connection = Connection.Conn
+                };
+                cmd.Parameters.AddWithValue("projectname", projectname);
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        project = new ProjectModel
+                        {
+                            ProjectId = (int)reader[0],
+                            ProjectName = (string)reader[1],
+                            ProjectColor = (string)reader[2]
+                        };
+                        break;
+                    }
+                }
+            }
+
+            return project;
+        }
+
         public static bool CreateNewProject(ProjectModel addedProject)
         {
             if (AppStateProvider.Instance.CurrentUser.Role != UserRoles.ScrumMaster)
@@ -205,10 +233,15 @@ namespace ScrumIt.DataAccess
             return true;
         }
 
-
         private static void ValidateNewProject(ProjectModel proj)
         {
             ValidateProjectNameOnCreation(proj.ProjectName);
+            ValidateProjectColour(proj.ProjectColor);
+        }
+
+        private static void ValidateUpdatedProject(ProjectModel proj)
+        {
+            ValidateProjectNameContainsOnlyAllowableCharacters(proj.ProjectName);
             ValidateProjectColour(proj.ProjectColor);
         }
 
