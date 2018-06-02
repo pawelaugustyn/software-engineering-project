@@ -18,8 +18,8 @@ namespace ScrumIt.Models
  
         public static ProjectModel GetProjectByName(string projectname)
         {
-            //return new ProjectModel();
-            return ProjectAccess.GetProjectByName(projectname);
+            return new ProjectModel();
+            //return ProjectAccess.GetProjectByName(projectname);
         }
 
         public static bool CreateNewProject(ProjectModel addedProject)
