@@ -226,7 +226,7 @@ namespace ScrumIt.DataAccess
                 }
                 catch (NpgsqlException)
                 {
-                    throw new Exception("User is already assigned to this project");
+                    throw new NpgsqlException("User is already assigned to this project");
                 }
             }
 
