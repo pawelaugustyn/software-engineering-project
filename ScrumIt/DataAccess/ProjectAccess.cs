@@ -13,7 +13,7 @@ namespace ScrumIt.DataAccess
             var projects = new List<ProjectModel>();
             using (new Connection())
             {
-                var cmd = new NpgsqlCommand("select * from projects;")
+                var cmd = new NpgsqlCommand("select * from projects order by project_id;")
                 {
                     Connection = Connection.Conn
                 };

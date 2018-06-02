@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
 using System.Net.Mail;
 using System.Security.Cryptography;
 using System.Text;
@@ -11,6 +13,8 @@ namespace ScrumIt.DataAccess
 {
     internal class UserAccess
     {
+        private static Image _defaultPic = new Bitmap(64, 64);
+
         public static UserModel LoginAs(string username, string password)
         {
             var currentUser = new UserModel();
@@ -166,6 +170,104 @@ namespace ScrumIt.DataAccess
             }
 
             return users;
+        }
+
+        public static Dictionary<int, Image> GetUserPicture(List<int> uids)
+        {
+            var dict = new Dictionary<int, Image>();
+            using (new Connection())
+            {
+                foreach (var uid in uids)
+                {
+                    dict.Add(uid, GetUserPicture(uid));
+                }
+            }
+
+            return dict;
+        }
+
+        public static bool GetUserPicture(UserModel user)
+        {
+            user.Avatar = GetUserPicture(user.UserId);
+
+            return !user.Avatar.Equals(Image.FromStream(Stream.Null));
+        }
+
+        public static Image GetUserPicture(int uid)
+        {
+            var picture = _defaultPic;
+            using (new Connection())
+            {
+                var cmd = new NpgsqlCommand("select picture from users where uid = @uid;")
+                {
+                    Connection = Connection.Conn
+                };
+                cmd.Parameters.AddWithValue("uid", uid);
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        if (reader[0] == DBNull.Value)
+                            break;
+                        var str = new BufferedStream(new MemoryStream());
+                        var bw = new BinaryWriter(str);
+                        var outbyte = new byte[100];
+                        var startIndex = 0;
+                        var retval = reader.GetBytes(0, startIndex, outbyte, 0, 100);
+                        while (retval == 100)
+                        {
+                            bw.Write(outbyte);
+                            bw.Flush();
+                            startIndex += 100;
+                            retval = reader.GetBytes(0, startIndex, outbyte, 0, 100);
+                        }
+                        bw.Write(outbyte, 0, 100);
+                        bw.Flush();
+                        try
+                        {
+                            picture = Image.FromStream(str);
+                        }
+                        catch (Exception)
+                        {
+                            // ignored
+                        }
+                        bw.Close();
+                        str.Close();
+                    }
+                }
+            }
+
+            return picture;
+        }
+
+        public static bool SetUserPicture(UserModel user)
+        {
+            return SetUserPicture(user.UserId, user.Avatar);
+        }
+
+        public static bool SetUserPicture(int uid, Image img)
+        {
+            using (new Connection())
+            {
+                var cmd = new NpgsqlCommand("update users set picture = @picture where uid = @uid;")
+                {
+                    Connection = Connection.Conn
+                };
+                cmd.Parameters.AddWithValue("uid", uid);
+                cmd.Parameters.AddWithValue("picture", ImageToByte(img));
+                var res = cmd.ExecuteNonQuery();
+
+                AppStateProvider.Instance.SetUserPicture(uid, img);
+
+                return res == 1;
+            }
+        }
+
+        private static byte[] ImageToByte(Image img)
+        {
+            var converter = new ImageConverter();
+
+            return (byte[])converter.ConvertTo(img, typeof(byte[]));
         }
 
         public static List<UserModel> GetAllUsers()
