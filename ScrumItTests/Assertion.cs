@@ -11,7 +11,7 @@ namespace ScrumItTests
         {
             try
             {
-                given.ShouldDeepEqual(expected);
+                given.ShouldDeepEqual(expected, new ObjectsWithExceptionComparer());
             }
             catch (DeepEqualException e)
             {
@@ -25,7 +25,7 @@ namespace ScrumItTests
 
             foreach (var given in givenList)
             {
-                var isEqual = given.IsDeepEqual(expected);
+                var isEqual = given.IsDeepEqual(expected, new ObjectsComparer());
                 if (!isEqual) continue;
                 user = given;
                 break;
