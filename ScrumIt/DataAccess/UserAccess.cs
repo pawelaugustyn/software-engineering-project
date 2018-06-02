@@ -341,7 +341,7 @@ namespace ScrumIt.DataAccess
             var currUser = AppStateProvider.Instance.CurrentUser;
             if (currUser.Role != UserRoles.ScrumMaster)
                 throw new UnauthorizedAccessException("Not permitted for that operation.");
-            if (currUser.Username != "testScrumMaster" && currUser.UserId == deletedUser.UserId)
+            if (currUser.UserId == deletedUser.UserId)
                 throw new ArgumentException("Cannot delete yourself");
 
             using (new Connection())
@@ -402,9 +402,9 @@ namespace ScrumIt.DataAccess
 
         private static void ValidatePassword(string password)
         {
-            if (password.Length == 0)
+            if (password?.Length == 0)
                 throw new ArgumentException("Password cannot be empty!");
-            if (password.Length < 5)
+            if (password?.Length < 5)
                 throw new ArgumentException("Password length must be at least 5.");
         }
 
