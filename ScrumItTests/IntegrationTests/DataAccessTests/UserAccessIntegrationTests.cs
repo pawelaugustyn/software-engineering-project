@@ -27,18 +27,18 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
                 Email = "testScrumMaster@test.com"
             };
 
+            AppStateProvider.Instance.CurrentUser = _user;
+
+            UserAccess.Add(_user, Password);
+            Setup.RegisterToDeleteAfterTestExecution(_user);
+
+            _guest = new UserModel();
+
             _project = new ProjectModel
             {
                 ProjectName = "TestProject".WithUniqueName(),
                 ProjectColor = "#ff0000"
             };
-
-            _guest = new UserModel();
-
-            AppStateProvider.Instance.CurrentUser = _user;
-
-            UserAccess.Add(_user, Password);
-            Setup.RegisterToDeleteAfterTestExecution(_user);
 
             ProjectAccess.CreateNewProject(_project);
             Setup.RegisterToDeleteAfterTestExecution(_project);
@@ -52,8 +52,8 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
 
         [Test]
         [TestCase("", "")]
-        [TestCase("testScrumMaster", "")]
-        [TestCase("", "testScrumMaster")]
+        [TestCase("admin", "")]
+        [TestCase("", Password)]
         public void LoginAsWithEmptyCredentialsShouldFail(string username, string password)
         {
             var user = UserAccess.LoginAs(username, password);
@@ -63,8 +63,8 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
 
         [Test]
         [TestCase("incorrectLogin", "incorrectPassword")]
-        [TestCase("testScrumMaster", "incorrectPassword")]
-        [TestCase("incorrectLogin", "testScrumMaster")]
+        [TestCase("admin", "incorrectPassword")]
+        [TestCase("incorrectLogin", Password)]
         public void LoginAsWithIncorrectCredentialsShouldFail(string username, string password)
         {
             var user = UserAccess.LoginAs(username, password);
@@ -78,7 +78,6 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
             var user = UserAccess.LoginAs(_user.Username, Password);
 
             Assertion.Equals(user, _user);
-
         }
 
         [Test]
@@ -90,6 +89,14 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
         }
 
         [Test]
+        public void GetUserByIdShouldNotReturnCorrectUser()
+        {
+            var user = UserAccess.GetUserById(-1);
+
+            Assertion.Equals(user, _guest);
+        }
+
+        [Test]
         public void GetUsersByLastNameShouldReturnCorrectUser()
         {
             var users = UserAccess.GetUsersByLastName(_user.Lastname);
@@ -98,11 +105,27 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
         }
 
         [Test]
-        public void GetUserByLoginShouldReturnCorrectUser()
+        public void GetUsersByLastNameShouldNotReturnCorrectUser()
+        {
+            var users = UserAccess.GetUsersByLastName("incorrectLastname");
+
+            users.ListNotContains(_user);
+        }
+
+        [Test]
+        public void GetUserByUsernameShouldReturnCorrectUser()
         {
             var user = UserAccess.GetUserByUsername(_user.Username);
 
             Assertion.Equals(user, _user);
+        }
+
+        [Test]
+        public void GetUserByUsernameShouldNotReturnCorrectUser()
+        {
+            var user = UserAccess.GetUserByUsername("incorrectUsername");
+
+            Assertion.Equals(user, _guest);
         }
 
         [Test]
@@ -111,6 +134,22 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
             var users = UserAccess.GetUsersByProjectId(_project.ProjectId);
 
             users.ListContains(AppStateProvider.Instance.CurrentUser);
+        }
+
+        [Test]
+        public void GetUsersByProjectIdShouldNotReturnCorrectUsers()
+        {
+            var users = UserAccess.GetUsersByProjectId(-1);
+
+            users.ListNotContains(AppStateProvider.Instance.CurrentUser);
+        }
+
+        [Test]
+        public void GetAllUsersShouldReturnCorrectUsers()
+        {
+            var users = UserAccess.GetAllUsers();
+
+            users.ListContains(_user);
         }
 
         [Test]
@@ -172,8 +211,10 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
         }
 
         [Test]
-        public void DeleteUserWithUniqueUsername()
+        public void X_AddEmptyUserWhenUnauthorizedShouldThrow()
         {
+            AppStateProvider.Instance.CurrentUser = _user;
+
             var userToAdd = new UserModel
             {
                 Username = "addUser".WithUniqueName(),
@@ -185,15 +226,41 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
             var userWithTheSameUsername = UserAccess.GetUserByUsername(userToAdd.Username);
             Assert.That(userWithTheSameUsername.IsDeepEqual(new UserModel()), Is.True, "User should not exist.");
 
-            UserAccess.Add(userToAdd, "addUser");
-            var userAfterAdd = UserAccess.GetUserByUsername(userToAdd.Username);
+            var isAddedSuccessful = false;
 
-            Assertion.Equals(userToAdd, userAfterAdd, "User with unique username not added correctly to DB. ");
+            UserModel.Logout();
+
+            Assert.Throws<UnauthorizedAccessException>(delegate { isAddedSuccessful = UserAccess.Add(userToAdd, "addUser"); },
+                "Exception should be thrown, because it should not be possible to add user if you are not scrum master.");
+
+            Assert.That(isAddedSuccessful, Is.False, $"Adding user should not be successful {Messages.Display(userToAdd)}.");
+
+            AppStateProvider.Instance.CurrentUser = _user;
+        }
+
+        [Test]
+        public void DeleteUserWithUniqueUsername()
+        {
+            var userToAddAndDelete = new UserModel
+            {
+                Username = "deleteUser".WithUniqueName(),
+                Firstname = "delete",
+                Lastname = "User",
+                Role = UserRoles.Developer,
+                Email = "deleteUser@test.com"
+            };
+            var userWithTheSameUsername = UserAccess.GetUserByUsername(userToAddAndDelete.Username);
+            Assert.That(userWithTheSameUsername.IsDeepEqual(new UserModel()), Is.True, "User should not exist.");
+
+            UserAccess.Add(userToAddAndDelete, "deleteUser");
+            var userAfterAdd = UserAccess.GetUserByUsername(userToAddAndDelete.Username);
+
+            Assertion.Equals(userToAddAndDelete, userAfterAdd, "User with unique username not added correctly to DB. ");
 
             var deletedSyccessful = UserAccess.Delete(userAfterAdd);
             Assert.That(deletedSyccessful, Is.True, $"Deleting should be successful {Messages.Display(userAfterAdd)}.");
 
-            var userAfterDelete = UserAccess.GetUserByUsername(userToAdd.Username);
+            var userAfterDelete = UserAccess.GetUserByUsername(userToAddAndDelete.Username);
             Assert.That(userAfterDelete.IsDeepEqual(new UserModel()), Is.True, $"User {Messages.Display(userAfterDelete)} should be deleted.");
         }
 
@@ -211,6 +278,48 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
 
             deletedSyccessful = UserAccess.Delete(userToDelete);
             Assert.That(deletedSyccessful, Is.False, $"Deleting user should not be successful {Messages.Display(userToDelete)}.");
+        }
+
+        [Test]
+        public void DeleteYourselfShouldThrow()
+        {
+            var deletedSyccessful = false;
+            Assert.Throws<ArgumentException>(delegate { deletedSyccessful = UserAccess.Delete(_user); },
+                "Exception should be thrown, because it should not be possible to delete yourself.");
+
+            Assert.That(deletedSyccessful, Is.False, $"Deleting user should not be successful {Messages.Display(_user)}.");
+        }
+
+        [Test]
+        public void X_DeleteUserWhenUnauthorizedShouldThrow()
+        {
+            AppStateProvider.Instance.CurrentUser = _user;
+
+            var userToAddAndDelete = new UserModel
+            {
+                Username = "deleteUser".WithUniqueName(),
+                Firstname = "delete",
+                Lastname = "User",
+                Role = UserRoles.Developer,
+                Email = "deleteUser@test.com"
+            };
+            var userWithTheSameUsername = UserAccess.GetUserByUsername(userToAddAndDelete.Username);
+            Assert.That(userWithTheSameUsername.IsDeepEqual(new UserModel()), Is.True, "User should not exist.");
+
+            UserAccess.Add(userToAddAndDelete, "deleteUser");
+            var userAfterAdd = UserAccess.GetUserByUsername(userToAddAndDelete.Username);
+
+            Assertion.Equals(userToAddAndDelete, userAfterAdd, "User with unique username not added correctly to DB. ");
+
+            var deletedSyccessful = true;
+            UserModel.Logout();
+
+            Assert.Throws<UnauthorizedAccessException>(delegate { deletedSyccessful = UserAccess.Delete(userToAddAndDelete); },
+                "Exception should be thrown, because it should not be possible to delete user if you are not scrum master.");
+
+            Assert.That(deletedSyccessful, Is.True, $"Deleting user should not be successful {Messages.Display(userToAddAndDelete)}.");
+
+            AppStateProvider.Instance.CurrentUser = _user;
         }
     }
 }
