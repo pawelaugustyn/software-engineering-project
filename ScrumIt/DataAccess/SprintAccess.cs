@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Npgsql;
 using ScrumIt.Models;
 
@@ -155,6 +152,19 @@ namespace ScrumIt.DataAccess
                 cmd.Parameters.AddWithValue("start", startDate);
                 cmd.Parameters.AddWithValue("end", endDate);
                 var result = cmd.ExecuteNonQuery();
+
+                cmd = new NpgsqlCommand("SELECT sprint_id FROM sprints ORDER BY sprint_id DESC LIMIT 1;")
+                {
+                    Connection = Connection.Conn
+                };
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        addedSprint.SprintId = (int)reader[0];
+                        break;
+                    }
+                }
                 if (result != 1) return false;
             }
 

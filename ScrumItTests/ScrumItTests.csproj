@@ -59,6 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assertion.cs" />
+    <Compile Include="IntegrationTests\DataAccessTests\TaskAccessIntegrationTests.cs" />
     <Compile Include="IntegrationTests\DataAccessTests\UserAccessIntegrationTests.cs" />
     <Compile Include="IntegrationTests\IntegrationTestAttribute.cs" />
     <Compile Include="IntegrationTests\Setup.cs" />

@@ -25,12 +25,11 @@ namespace ScrumItTests.IntegrationTests
         [OneTimeTearDown]
         public static void GlobalTeardown()
         {
-            if (!_projectList.Any())
+            if (!_taskModelList.Any())
             {
-                foreach (var project in _projectList)
+                foreach (var task in _taskModelList)
                 {
-                    //TODO: Delete project
-                    //ProjectModel.Delete(project);
+                    TaskModel.RemoveTask(task.TaskId);
                 }
             }
             if (!_sprintModelList.Any())
@@ -41,12 +40,11 @@ namespace ScrumItTests.IntegrationTests
                     //SprintModel.Delete(sprint);
                 }
             }
-            if (!_taskModelList.Any())
+            if (!_projectList.Any())
             {
-                foreach (var task in _taskModelList)
+                foreach (var project in _projectList)
                 {
-                    //TODO: Delete task
-                    //TaskModel.Delete(task);
+                    ProjectModel.DeleteProject(project);
                 }
             }
             if (!_userList.Any())
