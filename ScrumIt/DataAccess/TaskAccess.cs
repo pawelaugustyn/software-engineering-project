@@ -331,31 +331,31 @@ namespace ScrumIt.DataAccess
         private static void ValidateTaskName(string taskName)
         {
             if (string.IsNullOrEmpty(taskName))
-                throw new ArgumentException("Task name cannot be empty!");
+                throw new ArgumentException("Nazwa zadania nie może być pusta!");
         }
 
         private static void ValidateTaskPriority(int taskPriority)
         {
-            if (taskPriority < 0 || taskPriority > 100)
-                throw new ArgumentException("Task priority must be between 0 and 100.");
+            if (taskPriority < 1 || taskPriority > 100)
+                throw new ArgumentException("Priorytet zadania musi zawierać się pomiędzy 1 a 100.");
         }
 
         private static void ValidateTaskEstimatedTime(int estimatedTime)
         {
-            if (estimatedTime < 0)
-                throw new ArgumentException("Estimated time cannot be lower than zero!");
+            if (estimatedTime < 1 || estimatedTime > 100)
+                throw new ArgumentException("Szacowany czas musi zawierać się pomiędzy 1 a 100.");
         }
 
         private static void ValidateTaskColor(string colour)
         {
             if (!new Regex(@"^#[a-fA-F0-9]{6}").IsMatch(colour))
-                throw new ArgumentException("Provided string is not an RGB colour.");
+                throw new ArgumentException("Nie podano prawidłowego oznaczenia RGB koloru.");
         }
 
         private static void ValidateTaskAssignment(int backlogProjectId, int sprintId)
         {
             if (backlogProjectId == 0 && sprintId == 0)
-                throw new ArgumentException("Task must be assigned to either backlog or sprint!");
+                throw new ArgumentException("Zadanie musi być przypisane do sprintu lub backlogu!");
         }
     }
 }
