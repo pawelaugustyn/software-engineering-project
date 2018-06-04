@@ -172,8 +172,12 @@ namespace ScrumIt.Forms
         {
             if (_userRole == "ScrumMaster")
             {
-                TaskModel.RemoveTask(_taskId);
-                Close();
+                DialogResult dialogResult = MessageBox.Show("Jesteś pewny, że chcesz usunąć to zadanie? ", "Usuń zadanie", MessageBoxButtons.YesNo);
+                if (dialogResult == DialogResult.Yes)
+                {
+                    TaskModel.RemoveTask(_taskId);
+                    Close();
+                }
             }
             else
             {

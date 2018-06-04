@@ -306,7 +306,10 @@
             this.Controls.Add(this.userPhotoPictureBox);
             this.Controls.Add(this.changePasswordLayoutTablePanel);
             this.Controls.Add(this.tableLayoutPanel1);
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "Register";
+            this.Resizable = false;
             this.Text = "ScrumIt!";
             this.TopMost = true;
             this.Load += new System.EventHandler(this.Register_Load);
