@@ -38,36 +38,47 @@ namespace ScrumIt.Forms
             }
 
             var taskDescription = taskDescriptionTextBox.Text;
-            var taskPriority = priorityTextBox.Text;
-            if (taskPriority == "")
+            short taskPriority = -1;
+            if (priorityTextBox.Text == "" || !Int16.TryParse(priorityTextBox.Text, out taskPriority))
             {
                 MessageBox.Show(@"Uzupełnij stopień skomplikowania zadania");
                 validationFlag = false;
             }
             else
-            if (Int16.Parse(taskPriority) > 101 || Int16.Parse(taskPriority) < 0)
+            if (taskPriority > 100 || taskPriority < 1)
             {
                 MessageBox.Show(@"Możliwa wartość stopnia skomplikowania to liczba całkownita między 0 a 100");
                 validationFlag = false;
             }
 
-            var taskEstimatedTime = estimatedTimeTextBox.Text;
-            if (taskEstimatedTime == "")
+            short taskEstimatedTime = -1;
+            if (estimatedTimeTextBox.Text == "" || !Int16.TryParse(estimatedTimeTextBox.Text, out taskEstimatedTime))
             {
                 MessageBox.Show(@"Uzupełnij przewidywany czas zadania");
                 validationFlag = false;
             }
             else
-            if (Int16.Parse(taskEstimatedTime) > 101 || Int16.Parse(taskEstimatedTime) < 0)
+            if (taskEstimatedTime > 100 || taskEstimatedTime < 1)
             {
                 MessageBox.Show(@"Możliwa wartość przewidywanego czasu zadania to liczba całkownita między 0 a 100");
                 validationFlag = false;
             }
 
+            if (!currentSptintRadio.Checked && !backlogRadio.Checked)
+            {
+                MessageBox.Show(@"Zadanie musi być dodane do sprintu bądź backlogu!");
+                validationFlag = false;
+            }
+
             var sprintId = 0;
+            var projectId = 0;
             if (currentSptintRadio.Checked)
             {
                 sprintId = _sprintId;
+            }
+            else
+            {
+                projectId = _projectId;
             }
 
             if (validationFlag)
@@ -77,14 +88,16 @@ namespace ScrumIt.Forms
                     TaskName = taskName,
                     TaskDesc = taskDescription,
                     TaskType = "T",
-                    TaskPriority = Int16.Parse(taskPriority),
-                    TaskEstimatedTime = Int16.Parse(taskEstimatedTime),
+                    TaskPriority = taskPriority,
+                    TaskEstimatedTime = taskEstimatedTime,
                     TaskStage = TaskModel.TaskStages.ToDo,
                     SprintId = sprintId,
-                    TaskColor = "#ffffff"
+                    TaskColor = "#ffffff",
+                    BacklogProjectId = projectId
                 };
                 TaskModel.CreateNewTask(task, new List<UserModel>());
                 Close();
+
             }
         }
 

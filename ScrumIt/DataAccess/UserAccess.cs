@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
 using System.Net.Mail;
 using System.Security.Cryptography;
 using System.Text;
@@ -11,6 +13,8 @@ namespace ScrumIt.DataAccess
 {
     internal class UserAccess
     {
+        private static Image _defaultPic = new Bitmap(64, 64);
+
         public static UserModel LoginAs(string username, string password)
         {
             var currentUser = new UserModel();
@@ -24,7 +28,7 @@ namespace ScrumIt.DataAccess
                 {
                     Connection = Connection.Conn
                 };
-                cmd.Parameters.AddWithValue("username", username.ToLower());
+                cmd.Parameters.AddWithValue("username", username?.ToLower());
                 cmd.Parameters.AddWithValue("pass", EncryptMd5(password));
                 using (var reader = cmd.ExecuteReader())
                 {
@@ -86,7 +90,7 @@ namespace ScrumIt.DataAccess
                 {
                     Connection = Connection.Conn
                 };
-                cmd.Parameters.AddWithValue("lastname", lastname.ToLower() + '%');
+                cmd.Parameters.AddWithValue("lastname", lastname?.ToLower() + '%');
                 using (var reader = cmd.ExecuteReader())
                 {
                     while (reader.Read())
@@ -116,7 +120,7 @@ namespace ScrumIt.DataAccess
                 {
                     Connection = Connection.Conn
                 };
-                cmd.Parameters.AddWithValue("username", username.ToLower() + '%');
+                cmd.Parameters.AddWithValue("username", username?.ToLower() + '%');
                 using (var reader = cmd.ExecuteReader())
                 {
                     while (reader.Read())
@@ -148,6 +152,133 @@ namespace ScrumIt.DataAccess
                     Connection = Connection.Conn
                 };
                 cmd.Parameters.AddWithValue("projectid", projectid);
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        users.Add(new UserModel
+                        {
+                            UserId = (int)reader[0],
+                            Username = (string)reader[1],
+                            Firstname = (string)reader[3],
+                            Lastname = (string)reader[4],
+                            Role = (UserRoles)reader[5],
+                            Email = (string)reader[6]
+                        });
+                    }
+                }
+            }
+
+            return users;
+        }
+
+        public static Dictionary<int, Image> GetUserPicture(List<int> uids)
+        {
+            var dict = new Dictionary<int, Image>();
+            using (new Connection())
+            {
+                foreach (var uid in uids)
+                {
+                    dict.Add(uid, GetUserPicture(uid));
+                }
+            }
+
+            return dict;
+        }
+
+        public static bool GetUserPicture(UserModel user)
+        {
+            user.Avatar = GetUserPicture(user.UserId);
+
+            return !user.Avatar.Equals(Image.FromStream(Stream.Null));
+        }
+
+        public static Image GetUserPicture(int uid)
+        {
+            var picture = _defaultPic;
+            using (new Connection())
+            {
+                var cmd = new NpgsqlCommand("select picture from users where uid = @uid;")
+                {
+                    Connection = Connection.Conn
+                };
+                cmd.Parameters.AddWithValue("uid", uid);
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        if (reader[0] == DBNull.Value)
+                            break;
+                        var str = new BufferedStream(new MemoryStream());
+                        var bw = new BinaryWriter(str);
+                        var outbyte = new byte[100];
+                        var startIndex = 0;
+                        var retval = reader.GetBytes(0, startIndex, outbyte, 0, 100);
+                        while (retval == 100)
+                        {
+                            bw.Write(outbyte);
+                            bw.Flush();
+                            startIndex += 100;
+                            retval = reader.GetBytes(0, startIndex, outbyte, 0, 100);
+                        }
+                        bw.Write(outbyte, 0, 100);
+                        bw.Flush();
+                        try
+                        {
+                            picture = Image.FromStream(str);
+                        }
+                        catch (Exception)
+                        {
+                            // ignored
+                        }
+                        bw.Close();
+                        str.Close();
+                    }
+                }
+            }
+
+            return picture;
+        }
+
+        public static bool SetUserPicture(UserModel user)
+        {
+            return SetUserPicture(user.UserId, user.Avatar);
+        }
+
+        public static bool SetUserPicture(int uid, Image img)
+        {
+            using (new Connection())
+            {
+                var cmd = new NpgsqlCommand("update users set picture = @picture where uid = @uid;")
+                {
+                    Connection = Connection.Conn
+                };
+                cmd.Parameters.AddWithValue("uid", uid);
+                cmd.Parameters.AddWithValue("picture", ImageToByte(img));
+                var res = cmd.ExecuteNonQuery();
+
+                AppStateProvider.Instance.SetUserPicture(uid, img);
+
+                return res == 1;
+            }
+        }
+
+        private static byte[] ImageToByte(Image img)
+        {
+            var converter = new ImageConverter();
+
+            return (byte[])converter.ConvertTo(img, typeof(byte[]));
+        }
+
+        public static List<UserModel> GetAllUsers()
+        {
+            var users = new List<UserModel>();
+            using (new Connection())
+            {
+                var cmd = new NpgsqlCommand("select * from users order by uid;")
+                {
+                    Connection = Connection.Conn
+                };
                 using (var reader = cmd.ExecuteReader())
                 {
                     while (reader.Read())
@@ -210,7 +341,7 @@ namespace ScrumIt.DataAccess
             var currUser = AppStateProvider.Instance.CurrentUser;
             if (currUser.Role != UserRoles.ScrumMaster)
                 throw new UnauthorizedAccessException("Not permitted for that operation.");
-            if (currUser.Username != "testScrumMaster" && currUser.UserId == deletedUser.UserId)
+            if (currUser.UserId == deletedUser.UserId)
                 throw new ArgumentException("Cannot delete yourself");
 
             using (new Connection())
@@ -225,6 +356,34 @@ namespace ScrumIt.DataAccess
                 return res == 1;
             }
         }
+
+        public static bool UpdateUserData(UserModel updatedUser)
+        {
+            if (AppStateProvider.Instance.CurrentUser.Role == UserRoles.Guest)
+                throw new UnauthorizedAccessException("Not permitted for that operation.");
+            if (AppStateProvider.Instance.CurrentUser.Role == UserRoles.Developer && AppStateProvider.Instance.CurrentUser.UserId != updatedUser.UserId)
+                throw new UnauthorizedAccessException("Not permitted for that operation - you can't change other person's data.");
+            ValidateUsername(updatedUser);
+            using (new Connection())
+            {
+                var cmd = new NpgsqlCommand("UPDATE users SET username = @username, first_name = @firstname, last_name = @lastname, role = @role, email = @email WHERE uid = @userid;")
+                {
+                    Connection = Connection.Conn
+                };
+                cmd.Parameters.AddWithValue("username", updatedUser.Username);
+                cmd.Parameters.AddWithValue("firstname", updatedUser.Firstname);
+                cmd.Parameters.AddWithValue("lastname", updatedUser.Lastname);
+                cmd.Parameters.AddWithValue("role", (int)updatedUser.Role);
+                cmd.Parameters.AddWithValue("email", updatedUser.Email);
+
+                cmd.Parameters.AddWithValue("userid", updatedUser.UserId);
+                var result = cmd.ExecuteNonQuery();
+                if (result != 1) return false;
+
+                return true;
+            }
+        }
+
 
         private static void ValidateUser(UserModel addedUser, string password)
         {
@@ -242,7 +401,7 @@ namespace ScrumIt.DataAccess
 
         private static void ValidateUsernameFormat(string username)
         {
-            if (username.Length == 0)
+            if (string.IsNullOrEmpty(username))
                 throw new ArgumentException("Username cannot be empty!");
             if (!new Regex(@"^[a-zA-Z0-9()-]*$").IsMatch(username))
                 throw new ArgumentException("Username must contain only alphanumeric characters!");
@@ -254,11 +413,11 @@ namespace ScrumIt.DataAccess
         {
             using (new Connection())
             {
-                var cmd = new NpgsqlCommand("SELECT lower(username) FROM users WHERE lower(username) LIKE 'username';")
+                var cmd = new NpgsqlCommand("SELECT username FROM users WHERE lower(username) LIKE @username;")
                 {
                     Connection = Connection.Conn
                 };
-                cmd.Parameters.AddWithValue("username", username.ToLower());
+                cmd.Parameters.AddWithValue("username", username.ToLower() + '%');
                 using (var reader = cmd.ExecuteReader())
                 {
                     while (reader.Read())
@@ -271,9 +430,9 @@ namespace ScrumIt.DataAccess
 
         private static void ValidatePassword(string password)
         {
-            if (password.Length == 0)
+            if (password?.Length == 0)
                 throw new ArgumentException("Password cannot be empty!");
-            if (password.Length < 5)
+            if (password?.Length < 5)
                 throw new ArgumentException("Password length must be at least 5.");
         }
 

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using MetroFramework.Forms;
@@ -53,8 +54,16 @@ namespace ScrumIt.Forms
         {
             if (_userRole != "Guest")
             {
-                // update task
-                this.Close();
+                try
+                {
+                    TaskModel.AssignFromBacklogToSprint(_taskId, _sprintId);
+                }
+                catch (ArgumentException error)
+                {
+                    MessageBox.Show(@""+error.Message+"");
+                }
+
+                Close();
             }
         }
     }

@@ -137,31 +137,53 @@ Tasks:
 **Uni Tests**
 1. 
 **Integration Tests:**
-2. UserAccessIntegrationTests 
-- AddUserWithUniqueUsername 
-- GetUserByIdShouldReturnCorrectUser
-- GetUserByLoginShouldReturnCorrectUser 
-- GetUsersByLastNameShouldReturnCorrectUser 
-- GetUsersByProjectIdShouldReturnCorrectUsers 
-- LoginAsWithCorrectCredentialsShouldPass 
-- DeleteUserWithUniqueUsername
-To do:
-     1. Log in
-    - incorrect login 
-    - incorrest password 
-    - incorrect login and password
-    - empty login
-    - empty password
-    - empty login and password
-    - go as guest
-    2.
-    - add user that already exist
-    - delete user that not exist
-    - add/delete user with incorrect credential
+2. UserAccessIntegrationTests
+    ```
+      AddEmptyUserShouldThrow [0:00.262] Success
+      AddUserThatAlreadyExistShouldThrow [0:00.629] Success
+      AddUserWithUniqueUsername [0:00.533] Success
+      DeleteEmptyOrInvalidUserShouldDoNothing [0:00.111] Success
+      DeleteUserWithUniqueUsername [0:00.630] Success
+      DeleteYourselfShouldThrow [0:00.230] Success
+      GetAllUsersShouldReturnCorrectUsers [0:00.191] Success
+      GetUserByIdShouldNotReturnCorrectUser [0:00.056] Success
+      GetUserByIdShouldReturnCorrectUser [0:00.059] Success
+      GetUserByUsernameShouldNotReturnCorrectUser [0:00.058] Success
+      GetUserByUsernameShouldReturnCorrectUser [0:00.061] Success
+      GetUsersByLastNameShouldNotReturnCorrectUser [0:00.059] Success
+      GetUsersByLastNameShouldReturnCorrectUser [0:00.060] Success
+      GetUsersByProjectIdShouldNotReturnCorrectUsers [0:00.062] Success
+      GetUsersByProjectIdShouldReturnCorrectUsers [0:00.066] Success
+      LoginAsWithCorrectCredentialsShouldPass [0:00.060] Success
+      LoginAsWithEmptyCredentialsShouldFail (3 tests) [0:00.191] Success
+      LoginAsWithIncorrectCredentialsShouldFail (3 tests) [0:00.189] Success
+      X_AddEmptyUserWhenUnauthorizedShouldThrow [0:00.060] Success
+      X_DeleteUserWhenUnauthorizedShouldThrow [0:00.522] Success
+    ```
+    **TO DO:**
+    - SetUserPicture and GetUserPicture
+    
 3. TaskAccessIntegrationTests 
+    - all Get method with correct and with incorrect values (also null and empty)
+    - update, create with correct and with incorrect values (also null and empty)
+    - assign user to task (correct list, unknown user, the same user twice)
+    - set new color (restrictions, is successful, is it valid color)
+**consider if any can (or should) throw exception. Check it!**
 4. SprintAccessIntegrationTests 
+    - all Get method with:
+        - correct values
+        - incorrect values (also null and empty), consider date (start should be earlier than stop, weird date)
+    **consider if any can (or should) throw exception. Check it!**
 5. ProjectAccessIntegrationTests 
+   - all Get method with correct and with incorrect values (also null and empty)
+    - create with correct and with incorrect values (also null and empty)
+        - check if project color is correct color,
+        - unique project name
+        **consider if any can (or should) throw exception. Check it!**
 6. ConnectionIntegrationTests
+    -   check if it is possible to connect with db
+7. AppStateProviderIntegrationTests
+    - All methods
 
     
     
