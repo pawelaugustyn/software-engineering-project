@@ -266,7 +266,32 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
         }
 
         [Test]
-        public void UpdateProjectWithWrongOrEmptyColourShouldThrow()
+        public void UpdateProjectToEmptyProjectShouldThrow()
+        {
+            AppStateProvider.Instance.CurrentUser = _user;
+
+            var projectToAddandUpdate = new ProjectModel
+            {
+                ProjectName = "addTestProject".WithUniqueName(),
+                ProjectColor = "#ff0000"
+            };
+            var projectWithTheSameName = ProjectAccess.GetProjectByName(projectToAddandUpdate.ProjectName);
+            Assert.That(projectWithTheSameName.IsDeepEqual(new ProjectModel()), Is.True, "Project should not exist.");
+
+            var isAddedSuccessful = ProjectAccess.CreateNewProject(projectToAddandUpdate);
+            Assert.That(isAddedSuccessful, Is.True, $"Adding project should be successful {Messages.Display(projectToAddandUpdate)}.");
+
+            projectToAddandUpdate = new ProjectModel();
+            var isUpdatedSuccessful = false;
+
+            Assert.Throws<ArgumentNullException>(delegate { isUpdatedSuccessful = ProjectAccess.UpdateProject(projectToAddandUpdate); },
+                "Exception should be thrown, because it should not be possible to update project to empty project.");
+
+            Assert.That(isUpdatedSuccessful, Is.False, $"Updating project should not be successful {Messages.Display(projectToAddandUpdate)}.");
+        }
+
+        [Test]
+        public void UpdateProjectWithWrongColourShouldThrow()
         {
             AppStateProvider.Instance.CurrentUser = _user;
 
@@ -286,14 +311,6 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
 
             Assert.Throws<ArgumentException>(delegate { isUpdatedSuccessful = ProjectAccess.UpdateProject(projectToAddandUpdate); },
                 "Exception should be thrown, because it should not be possible to update project with wrong colour string.");
-
-            Assert.That(isUpdatedSuccessful, Is.False, $"Updating project should not be successful {Messages.Display(projectToAddandUpdate)}.");
-
-            projectToAddandUpdate = new ProjectModel();
-            isUpdatedSuccessful = false;
-
-            Assert.Throws<ArgumentNullException>(delegate { isUpdatedSuccessful = ProjectAccess.UpdateProject(projectToAddandUpdate); },
-                "Exception should be thrown, because it should not be possible to update project to empty project.");
 
             Assert.That(isUpdatedSuccessful, Is.False, $"Updating project should not be successful {Messages.Display(projectToAddandUpdate)}.");
         }
