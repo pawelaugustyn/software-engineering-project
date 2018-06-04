@@ -64,7 +64,7 @@ namespace ScrumIt.Forms
                 validationFlag = false;
             }
 
-            if (!currentSptintRadio.Checked && !backlogRadio.Checked)
+            if (!currentSprintRadio.Checked && !backlogRadio.Checked)
             {
                 MessageBox.Show(@"Zadanie musi być dodane do sprintu bądź backlogu!");
                 validationFlag = false;
@@ -72,7 +72,7 @@ namespace ScrumIt.Forms
 
             var sprintId = 0;
             var projectId = 0;
-            if (currentSptintRadio.Checked)
+            if (currentSprintRadio.Checked)
             {
                 sprintId = _sprintId;
             }

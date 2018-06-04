@@ -23,14 +23,25 @@ namespace ScrumIt.Forms
         
         private void addProjectButton_Click(object sender, EventArgs e)
         {
-            var name = projecctNameTextBox.Text;
+            var name = projectNameTextBox.Text;
             var color = changeColorButton.BackColor;
 
             if (name != "")
             {
-                ProjectModel.CreateNewProject(new ProjectModel { ProjectName = name, ProjectColor = ToHexValue(color) });
-                MessageBox.Show("Pomyślnie dodano nowy projekt");
-                this.Close();
+                try
+                {
+                    ProjectModel.CreateNewProject(new ProjectModel
+                    {
+                        ProjectName = name,
+                        ProjectColor = ToHexValue(color)
+                    });
+                    MessageBox.Show("Pomyślnie dodano nowy projekt");
+                    this.Close();
+                }
+                catch (ArgumentException err)
+                {
+                    MessageBox.Show(err.Message);
+                }
             }
             else
             {
