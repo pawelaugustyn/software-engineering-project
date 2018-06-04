@@ -39,7 +39,7 @@ namespace ScrumIt.Forms
             priorityTextBox.BackColor = Color.White;
             estimatedTimeTextBox.BackColor = Color.White;
 
-            // TO DO
+            // TODO
             // Pobierz userow przypisanych do zadania
             var users = new List<UserModel>
             {
@@ -63,7 +63,7 @@ namespace ScrumIt.Forms
                 {
                     Name = toolStripMenuItemName,
                     Text = toolStripMenuItemText,
-                    Image = Properties.Resources.cat2,
+                    Image = allUsers[i].Avatar,
                     CheckOnClick = true
                 };
                 foreach (var user in userList)
@@ -124,13 +124,13 @@ namespace ScrumIt.Forms
                 {
                     var userName = user.Name;
                     userNames.Add(userName);
-                    // TO DO 
+                    // TODO 
                     //przypisz uzytkownika do zadania do bazki
                 }
             }
             if (validationFlag)
             {
-                // TO DO 
+                // TODO 
                 //update task to db
                 
                 this.Close();
@@ -172,8 +172,8 @@ namespace ScrumIt.Forms
         {
             if (_userRole == "ScrumMaster")
             {
-                // TO DO
-                //Usuń task z bazki
+                TaskModel.RemoveTask(_taskId);
+                Close();
             }
             else
             {

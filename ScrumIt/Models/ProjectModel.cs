@@ -8,7 +8,6 @@ namespace ScrumIt.Models
         public int ProjectId { get; set; } = 0;
         public string ProjectName { get; set; }
         public string ProjectColor { get; set; }
-        //public int TeamId { get; set; }
  
  
         public static ProjectModel GetProjectById(int projectid)
@@ -18,7 +17,7 @@ namespace ScrumIt.Models
  
         public static ProjectModel GetProjectByName(string projectname)
         {
-            return new ProjectModel();
+            return ProjectAccess.GetProjectByName(projectname);
         }
 
         public static bool CreateNewProject(ProjectModel addedProject)

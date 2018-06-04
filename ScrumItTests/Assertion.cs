@@ -11,7 +11,7 @@ namespace ScrumItTests
         {
             try
             {
-                given.ShouldDeepEqual(expected);
+                given.ShouldDeepEqual(expected, new ObjectsWithExceptionComparer());
             }
             catch (DeepEqualException e)
             {
@@ -19,18 +19,33 @@ namespace ScrumItTests
             }
         }
 
-        public static void ListContains<T>(this List<T> givenList, T expected)
+        public static void ListContains<T>(this List<T> givenList, T expectedItem)
+        {
+            var user = GetItemFromList(givenList, expectedItem);
+
+            Assert.That(user, !Is.EqualTo(default(T)), $"Element do not exist on the list. Expected: {Messages.Display(expectedItem)}");
+        }
+
+        public static void ListNotContains<T>(this List<T> givenList, T expectedItem)
+        {
+            var user = GetItemFromList(givenList, expectedItem);
+
+            Assert.That(user, Is.EqualTo(default(T)), $"Element should not exist on the list. Element: {Messages.Display(expectedItem)}");
+        }
+
+        private static T GetItemFromList<T>(IEnumerable<T> givenList, T expectedItem)
         {
             var user = default(T);
 
             foreach (var given in givenList)
             {
-                var isEqual = given.IsDeepEqual(expected);
+                var isEqual = given.IsDeepEqual(expectedItem, new ObjectsComparer());
                 if (!isEqual) continue;
                 user = given;
                 break;
             }
-            Assert.That(user, !Is.EqualTo(default(T)), $"Element do not exist on the list. Expected: {Messages.Display(expected)}");
+
+            return user;
         }
     }
 }

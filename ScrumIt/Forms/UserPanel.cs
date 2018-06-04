@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 using MetroFramework.Forms;
 using ScrumIt.Models;
@@ -27,7 +28,7 @@ namespace ScrumIt.Forms
             userLastNameTextBox.Text = user.Lastname;
             userLoginTextBox.Text = user.Username;
             userRoleTextBox.Text = user.Role.ToString();
-            userPhotoPictureBox.Image = Properties.Resources.cat2;
+            userPhotoPictureBox.Image = user.Avatar;
         }
 
         private void changePasswordButton_Click(object sender, System.EventArgs e)
@@ -51,6 +52,24 @@ namespace ScrumIt.Forms
             else
             {
                 MessageBox.Show(@"Wprowadzone nowe hasła nie są identyczne");
+            }
+        }
+
+        private void userPhotoPictureBox_Click(object sender, System.EventArgs e)
+        {
+            if (loadPictureDialog.ShowDialog() == DialogResult.OK)
+            {
+                var user = AppStateProvider.Instance.CurrentUser;
+                try
+                {
+                    user.Avatar = AppStateProvider.LoadImage(loadPictureDialog.FileName);
+                    MessageBox.Show(@"Pomyślnie zmieniono zdjęcie.");
+                    userPhotoPictureBox.Image = user.Avatar;
+                }
+                catch (ArgumentException err)
+                {
+                    MessageBox.Show(err.Message);
+                }
             }
         }
     }

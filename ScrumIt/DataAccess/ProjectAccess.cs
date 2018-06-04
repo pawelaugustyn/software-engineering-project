@@ -13,7 +13,7 @@ namespace ScrumIt.DataAccess
             var projects = new List<ProjectModel>();
             using (new Connection())
             {
-                var cmd = new NpgsqlCommand("select * from projects;")
+                var cmd = new NpgsqlCommand("select * from projects order by project_id;")
                 {
                     Connection = Connection.Conn
                 };
@@ -91,6 +91,34 @@ namespace ScrumIt.DataAccess
             return project;
         }
 
+        public static ProjectModel GetProjectByName(string projectname)
+        {
+            var project = new ProjectModel();
+            using (new Connection())
+            {
+                var cmd = new NpgsqlCommand("select * from projects where project_name = @projectname;")
+                {
+                    Connection = Connection.Conn
+                };
+                cmd.Parameters.AddWithValue("projectname", projectname);
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        project = new ProjectModel
+                        {
+                            ProjectId = (int)reader[0],
+                            ProjectName = (string)reader[1],
+                            ProjectColor = (string)reader[2]
+                        };
+                        break;
+                    }
+                }
+            }
+
+            return project;
+        }
+
         public static bool CreateNewProject(ProjectModel addedProject)
         {
             if (AppStateProvider.Instance.CurrentUser.Role != UserRoles.ScrumMaster)
@@ -132,9 +160,88 @@ namespace ScrumIt.DataAccess
             return true;
         }
 
+        public static bool DeleteProject(ProjectModel deletedProject)
+        {
+            if (AppStateProvider.Instance.CurrentUser.Role != UserRoles.ScrumMaster)
+                throw new UnauthorizedAccessException("Not permitted for that operation.");
+
+            using (new Connection())
+            {
+                var cmd = new NpgsqlCommand("DELETE FROM projects WHERE project_id=@projectid;")
+                {
+                    Connection = Connection.Conn
+                };
+                cmd.Parameters.AddWithValue("projectid", deletedProject.ProjectId);
+                var result = cmd.ExecuteNonQuery();
+                if (result != 1) return false;
+            }
+            return true;
+        }
+
+        public static bool UpdateProject(ProjectModel updatedProject)
+        {
+            if (AppStateProvider.Instance.CurrentUser.Role != UserRoles.ScrumMaster)
+                throw new UnauthorizedAccessException("Not permitted for that operation.");
+
+            ValidateUpdatedProject(updatedProject);
+            
+            //sprawdzamy czy zmienila sie nazwa projektu, jesli tak, to spradzamy czy nowa nazwa nie jest taka sama jak nazwa innego isteniejacego juz projektu
+            ProjectModel project = GetProjectById(updatedProject.ProjectId);
+            if (project.ProjectName != updatedProject.ProjectName)
+                ValidateProjectNameIsAvailable(updatedProject.ProjectName);
+            // aktualizowanie w bazie
+            using (new Connection())
+            {
+                var cmd = new NpgsqlCommand("UPDATE projects SET project_name = @name, project_color = @color WHERE project_id = @id ;")
+                {
+                    Connection = Connection.Conn
+                };
+                cmd.Parameters.AddWithValue("name", updatedProject.ProjectName);
+                cmd.Parameters.AddWithValue("color", updatedProject.ProjectColor);
+                cmd.Parameters.AddWithValue("id", updatedProject.ProjectId);
+                var result = cmd.ExecuteNonQuery();
+                if (result != 1) return false;
+            }
+
+            return true;
+        }
+
+        public static bool AddNewUserToProject(int userId, int projectId)
+        {
+            if (AppStateProvider.Instance.CurrentUser.Role != UserRoles.ScrumMaster)
+                throw new UnauthorizedAccessException("Not permitted for that operation.");
+
+            using (new Connection())
+            {
+                try
+                {
+                    var cmd = new NpgsqlCommand("INSERT INTO projects_has_users VALUES(@userid, @projectid);")
+                    {
+                        Connection = Connection.Conn
+                    };
+                    cmd.Parameters.AddWithValue("userid", userId);
+                    cmd.Parameters.AddWithValue("projectid", projectId);
+                    var result = cmd.ExecuteNonQuery();
+                    if (result != 1) return false;
+                }
+                catch (NpgsqlException)
+                {
+                    throw new NpgsqlException("User is already assigned to this project");
+                }
+            }
+
+            return true;
+        }
+
         private static void ValidateNewProject(ProjectModel proj)
         {
             ValidateProjectNameOnCreation(proj.ProjectName);
+            ValidateProjectColour(proj.ProjectColor);
+        }
+
+        private static void ValidateUpdatedProject(ProjectModel proj)
+        {
+            ValidateProjectNameContainsOnlyAllowableCharacters(proj.ProjectName);
             ValidateProjectColour(proj.ProjectColor);
         }
 
