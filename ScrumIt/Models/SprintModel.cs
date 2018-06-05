@@ -49,7 +49,14 @@ namespace ScrumIt.Models
             return SprintAccess.GetSprintByProjectIdAndDate(projectid, DateTime.Now);
         }
 
-        // TO DO
-        //pobierz historyczne sprinty
+        public static List<SprintModel> GetHistoricalSprintModels(int projectId)
+        {
+            return SprintAccess.GetOldSprintsByProjectId(projectId);
+        }
+
+        public static void CreateNewSprint(SprintModel sprint, int projectId)
+        {
+            SprintAccess.CreateNewSprintForProject(sprint, projectId);
+        }
     }
 }
