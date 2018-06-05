@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 using MetroFramework.Forms;
 using ScrumIt.Models;
@@ -21,22 +22,29 @@ namespace ScrumIt.Forms
 
         private void registeButton_Click(object sender, System.EventArgs e)
         {
-            if (ValidateInput())
+            try
             {
-                var newUser = new UserModel
+                if (ValidateInput())
                 {
-                    Username = userLoginTextBox.Text,
-                    Firstname = userNameTextBox.Text,
-                    Lastname = userLastNameTextBox.Text,
-                    Email = userEmailTextBox.Text,
-                    Role = UserRoles.Developer, //tu bedzie combobox
-                    //Image
+                    var newUser = new UserModel
+                    {
+                        Username = userLoginTextBox.Text,
+                        Firstname = userNameTextBox.Text,
+                        Lastname = userLastNameTextBox.Text,
+                        Email = userEmailTextBox.Text,
+                        Role = UserRoles.Developer, //tu bedzie combobox
+                        //Image
 
-                };
-               // UserModel.Add(newUser, newPasswordTextBox.Text);
+                    };
+                    // UserModel.Add(newUser, newPasswordTextBox.Text);
 
-                MessageBox.Show("Pomyślnie stworzono użytkownika");
-                this.Close();
+                    MessageBox.Show("Pomyślnie stworzono użytkownika");
+                    this.Close();
+                }
+            }
+            catch (Exception err)
+            {
+                MessageBox.Show(err.Message);
             }
         }
 
@@ -89,6 +97,8 @@ namespace ScrumIt.Forms
 
         private void userPhotoPictureBox_Click(object sender, System.EventArgs e)
         {
+            // TO DO
+            //If it's need try catch block? 
             using (OpenFileDialog dlg = new OpenFileDialog())
             {
                 dlg.Title = "Wybierz obraz";

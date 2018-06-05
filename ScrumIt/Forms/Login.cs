@@ -33,17 +33,24 @@ namespace ScrumIt.Forms
 
         private void loginButton_Click(object sender, EventArgs e)
         {
-            //jeśli użytkownik znajduje sie w bazie to ukrywamy formularz Login i wchodzimy do mainView
-            if (Models.UserModel.LoginAs(loginTextBox.Text, passwordTextBox.Text))
+            try
             {
-                this.Hide();
-                var view = new MainView();
-                //view.ShowDialog();
-                view.Show();
+                //jeśli użytkownik znajduje sie w bazie to ukrywamy formularz Login i wchodzimy do mainView
+                if (Models.UserModel.LoginAs(loginTextBox.Text, passwordTextBox.Text))
+                {
+                    this.Hide();
+                    var view = new MainView();
+                    //view.ShowDialog();
+                    view.Show();
+                }
+                else
+                {
+                    MessageBox.Show("Niepoprawne dane logowania");
+                }
             }
-            else
+            catch (Exception err)
             {
-                MessageBox.Show("Niepoprawne dane logowania");
+                MessageBox.Show(err.Message);
             }
         }
         
@@ -55,12 +62,19 @@ namespace ScrumIt.Forms
 
         private void guestButton_Click(object sender, EventArgs e)
         {
-            var state = AppStateProvider.Instance;
-            state.CurrentUser = new UserModel();
-            this.Hide();
-            var view = new MainView();
-            //view.ShowDialog();
-            view.Show();
+            try
+            {
+                var state = AppStateProvider.Instance;
+                state.CurrentUser = new UserModel();
+                this.Hide();
+                var view = new MainView();
+                //view.ShowDialog();
+                view.Show();
+            }
+            catch (Exception err)
+            {
+                MessageBox.Show(err.Message);
+            }
 
         }
 

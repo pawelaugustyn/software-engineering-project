@@ -83,20 +83,27 @@ namespace ScrumIt.Forms
 
             if (validationFlag)
             {
-                var task = new TaskModel
+                try
                 {
-                    TaskName = taskName,
-                    TaskDesc = taskDescription,
-                    TaskType = "T",
-                    TaskPriority = taskPriority,
-                    TaskEstimatedTime = taskEstimatedTime,
-                    TaskStage = TaskModel.TaskStages.ToDo,
-                    SprintId = sprintId,
-                    TaskColor = "#ffffff",
-                    BacklogProjectId = projectId
-                };
-                TaskModel.CreateNewTask(task, new List<UserModel>());
-                Close();
+                    var task = new TaskModel
+                    {
+                        TaskName = taskName,
+                        TaskDesc = taskDescription,
+                        TaskType = "T",
+                        TaskPriority = taskPriority,
+                        TaskEstimatedTime = taskEstimatedTime,
+                        TaskStage = TaskModel.TaskStages.ToDo,
+                        SprintId = sprintId,
+                        TaskColor = "#ffffff",
+                        BacklogProjectId = projectId
+                    };
+                    TaskModel.CreateNewTask(task, new List<UserModel>());
+                    Close();
+                }
+                catch (Exception err)
+                {
+                    MessageBox.Show(err.Message);
+                }
 
             }
         }
