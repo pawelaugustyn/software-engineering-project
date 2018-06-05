@@ -40,13 +40,13 @@ namespace ScrumIt.Forms
             this.properiesComboBox = new System.Windows.Forms.ComboBox();
             this.scrumBoardPanel = new System.Windows.Forms.Panel();
             this.headerPanel = new System.Windows.Forms.Panel();
-            this.metroLabel1 = new MetroFramework.Controls.MetroLabel();
             this.bottomPanel = new System.Windows.Forms.Panel();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
             this.historyMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.backlogMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.userListMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.propertiesComboBox = new MetroFramework.Controls.MetroComboBox();
+            this.progressBar = new System.Windows.Forms.Panel();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -202,15 +202,6 @@ namespace ScrumIt.Forms
             this.headerPanel.TabIndex = 7;
             this.headerPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint_1);
             // 
-            // metroLabel1
-            // 
-            this.metroLabel1.AutoSize = true;
-            this.metroLabel1.Location = new System.Drawing.Point(120, 688);
-            this.metroLabel1.Name = "metroLabel1";
-            this.metroLabel1.Size = new System.Drawing.Size(142, 19);
-            this.metroLabel1.TabIndex = 8;
-            this.metroLabel1.Text = "tu bedzie progress bar";
-            // 
             // bottomPanel
             // 
             this.bottomPanel.Location = new System.Drawing.Point(26, 632);
@@ -244,21 +235,29 @@ namespace ScrumIt.Forms
             // 
             this.propertiesComboBox.FormattingEnabled = true;
             this.propertiesComboBox.ItemHeight = 23;
-            this.propertiesComboBox.Location = new System.Drawing.Point(1130, 11);
+            this.propertiesComboBox.Location = new System.Drawing.Point(1176, 4);
             this.propertiesComboBox.Margin = new System.Windows.Forms.Padding(2);
             this.propertiesComboBox.Name = "propertiesComboBox";
-            this.propertiesComboBox.Size = new System.Drawing.Size(169, 29);
+            this.propertiesComboBox.Size = new System.Drawing.Size(150, 29);
             this.propertiesComboBox.TabIndex = 11;
             this.propertiesComboBox.SelectedIndexChanged += new System.EventHandler(this.propertiesComboBox_SelectedIndexChanged);
+            // 
+            // progressBar
+            // 
+            this.progressBar.Location = new System.Drawing.Point(27, 672);
+            this.progressBar.Name = "progressBar";
+            this.progressBar.Size = new System.Drawing.Size(1313, 26);
+            this.progressBar.TabIndex = 12;
+            this.progressBar.Paint += new System.Windows.Forms.PaintEventHandler(this.progressBar_Paint);
             // 
             // CurrentSprint
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1366, 768);
+            this.Controls.Add(this.progressBar);
             this.Controls.Add(this.propertiesComboBox);
             this.Controls.Add(this.bottomPanel);
-            this.Controls.Add(this.metroLabel1);
             this.Controls.Add(this.headerPanel);
             this.Controls.Add(this.scrumBoardPanel);
             this.Controls.Add(this.properiesComboBox);
@@ -278,7 +277,6 @@ namespace ScrumIt.Forms
             this.Load += new System.EventHandler(this.CurrentSprint_Load);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -287,7 +285,6 @@ namespace ScrumIt.Forms
         private System.Windows.Forms.ComboBox properiesComboBox;
         private System.Windows.Forms.Panel scrumBoardPanel;
         private System.Windows.Forms.Panel headerPanel;
-        private MetroFramework.Controls.MetroLabel metroLabel1;
         private System.Windows.Forms.Button currentSprintButton;
         private System.Windows.Forms.Button addTaskButton;
         private System.Windows.Forms.Panel bottomPanel;
@@ -299,5 +296,6 @@ namespace ScrumIt.Forms
         private System.Windows.Forms.ContextMenuStrip backlogMenuStrip;
         private System.Windows.Forms.ContextMenuStrip userListMenuStrip;
         private MetroFramework.Controls.MetroComboBox propertiesComboBox;
+        private System.Windows.Forms.Panel progressBar;
     }
 }

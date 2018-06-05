@@ -38,7 +38,7 @@ namespace ScrumIt.Forms
         private void CurrentSprint_Load(object sender, EventArgs e)
         {
             var taskList = TaskModel.GetTasksBySprintId(_sprintId);
-            
+
             var index = 0;
             foreach (var task in taskList)
             {
@@ -97,6 +97,13 @@ namespace ScrumIt.Forms
 
         private void panel1_Paint(object sender, PaintEventArgs e)
         {
+            if (_userRole == "Guest")
+            {
+                addTaskButton.BackColor = ColorTranslator.FromHtml("#eeeeee");
+                addTaskButton.ForeColor = Color.DarkGray;
+                var addTaskToolTip = new ToolTip();
+                addTaskToolTip.SetToolTip(addTaskButton, "Zaloguj się aby dodać zadanie");
+            }
             PrepareLayout(e);
         }
 
@@ -281,11 +288,6 @@ namespace ScrumIt.Forms
                 addTask.FormClosed += delegate { addTask_FormClosed(); };
                 addTask.Show();
             }
-            else
-            {
-                var addTaskToolTip = new ToolTip();
-                addTaskToolTip.SetToolTip(addTaskButton, "Zaloguj się aby dodać zadanie");
-            }
         }
 
         private void historyToolStripMenuItem_Click(int sprintId)
@@ -389,7 +391,6 @@ namespace ScrumIt.Forms
                 };
                 toolStripItems[i] = toolStripMenuItem;
             }
-
             return toolStripItems;
         }
 
@@ -421,7 +422,7 @@ namespace ScrumIt.Forms
             var taskPanelName = "taskPanel" + index;
             var taskId = task.TaskId;
             var positionX = width / 40;
-            
+
             switch (stageTemp)
             {
                 case TaskModel.TaskStages.Doing:
@@ -730,7 +731,7 @@ namespace ScrumIt.Forms
                     UserPanel userPanel = new UserPanel();
                     userPanel.Show();
                 }
-                
+
                 //opcja wyloguj
                 if (propertiesComboBox.SelectedIndex == 3)
                 {
@@ -797,6 +798,48 @@ namespace ScrumIt.Forms
             return "#" + color.R.ToString("X2") +
                    color.G.ToString("X2") +
                    color.B.ToString("X2");
+        }
+
+        private void progressBar_Paint(object sender, PaintEventArgs e)
+        {
+            var taskList = TaskModel.GetTasksBySprintId(_sprintId);
+            var sum = 0;
+            var done = 0;
+            var todo = 0;
+            var doing = 0;
+            foreach (var task in taskList)
+            {
+                sum += task.TaskPriority;
+                if (task.TaskStage == TaskModel.TaskStages.ToDo)
+                {
+                    todo += task.TaskPriority;
+                }
+
+                if (task.TaskStage == TaskModel.TaskStages.Doing)
+                {
+                    doing += task.TaskPriority;
+                }
+
+                if (task.TaskStage == TaskModel.TaskStages.Completed)
+                {
+                    done += task.TaskPriority;
+                }
+            }
+            var width = progressBar.ClientRectangle.Width;
+            var height = progressBar.ClientRectangle.Height;
+
+            SolidBrush greenBrush = new SolidBrush(Color.GreenYellow);
+            SolidBrush yellowBrush = new SolidBrush(Color.Yellow);
+            SolidBrush redBrush = new SolidBrush(Color.Red);
+            Graphics g = e.Graphics;
+            g.FillRectangle(redBrush, new Rectangle(0, 0, width*todo/sum, height));
+            g.FillRectangle(yellowBrush, new Rectangle(width * todo / sum, 0, width * doing / sum + width * todo / sum, height));
+            g.FillRectangle(greenBrush, new Rectangle(width * doing / sum + width * todo / sum, 0, width , height));
+            greenBrush.Dispose();
+            yellowBrush.Dispose();
+            redBrush.Dispose();
+            g.Dispose();
+
         }
     }
 }
