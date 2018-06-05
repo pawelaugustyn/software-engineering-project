@@ -218,7 +218,7 @@ namespace ScrumIt.DataAccess
             return true;
         }
 
-        public static void AssignUsersToTask(TaskModel taskToAssignTo, List<UserModel> usersToAssign)
+        public static bool AssignUsersToTask(TaskModel taskToAssignTo, List<UserModel> usersToAssign)
         {
             using (new Connection())
             {
