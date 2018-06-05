@@ -14,7 +14,7 @@ namespace ScrumIt.DataAccess
             var tasks = new List<TaskModel>();
             using (new Connection())
             {
-                var cmd = new NpgsqlCommand("select tsk.* from tasks tsk join sprints spr using(sprint_id) where spr.project_id = @projectid order by spr.sprint_id;")
+                var cmd = new NpgsqlCommand("select tsk.* from tasks tsk join projects pr using(project_id) where pr.project_id = @projectid order by pr.project_id;")
                 {
                     Connection = Connection.Conn
                 };
@@ -121,7 +121,7 @@ namespace ScrumIt.DataAccess
                         tasks.Add(new TaskModel
                         {
                             TaskId = (int)reader[0],
-                            SprintId = reader[1] == DBNull.Value ? 0 : (int) reader[1],
+                            SprintId = reader[1] == DBNull.Value ? 0 : (int)reader[1],
                             TaskType = (string)reader[2],
                             TaskName = (string)reader[3],
                             TaskDesc = reader[4] != DBNull.Value ? (string)reader[4] : "",
@@ -129,7 +129,7 @@ namespace ScrumIt.DataAccess
                             TaskEstimatedTime = (int)reader[6],
                             TaskStage = (TaskModel.TaskStages)reader[7],
                             TaskColor = reader[8] != DBNull.Value ? (string)reader[8] : "#ffffff",
-                            BacklogProjectId = reader[9] == DBNull.Value ? 0 : (int) reader[9]
+                            BacklogProjectId = reader[9] == DBNull.Value ? 0 : (int)reader[9]
                         });
 
                     }
@@ -144,7 +144,7 @@ namespace ScrumIt.DataAccess
             var tasks = new List<TaskModel>();
             using (new Connection())
             {
-                var cmd = new NpgsqlCommand("select tsk.* from tasks tsk where tsk.project_id = @projectid and tsk.sprint_id = 0 order by tsk.task_id;")
+                var cmd = new NpgsqlCommand("select tsk.* from tasks tsk where tsk.project_id = @projectid and tsk.sprint_id is null order by tsk.task_id;")
                 {
                     Connection = Connection.Conn
                 };
@@ -187,7 +187,7 @@ namespace ScrumIt.DataAccess
                 {
                     Connection = Connection.Conn
                 };
-                cmd.Parameters.AddWithValue("sprint_id", addedTask.SprintId);
+                cmd.Parameters.AddWithValue("sprint_id", addedTask.SprintId != 0 ? (IConvertible)addedTask.SprintId : DBNull.Value);
                 cmd.Parameters.AddWithValue("task_name", addedTask.TaskName);
                 cmd.Parameters.AddWithValue("task_desc", addedTask.TaskDesc);
                 cmd.Parameters.AddWithValue("task_type", addedTask.TaskType);
@@ -245,15 +245,15 @@ namespace ScrumIt.DataAccess
             }
         }
 
-        public static void AssignFromBacklogToSprint(int taskid, int sprintId)
+        public static bool AssignFromBacklogToSprint(int taskid, int sprintId)
         {
             using (new Connection())
             {
-                var cmd = new NpgsqlCommand("UPDATE tasks SET sprint_id = @sprint_id, project_id = 0 WHERE task_id = @task_id;")
+                var cmd = new NpgsqlCommand("UPDATE tasks SET sprint_id = @sprint_id WHERE task_id = @task_id;")
                 {
                     Connection = Connection.Conn
                 };
-                cmd.Parameters.AddWithValue("sprint_id", sprintId);
+                cmd.Parameters.AddWithValue("sprint_id", sprintId != 0 ? (IConvertible)sprintId : DBNull.Value);
                 cmd.Parameters.AddWithValue("task_id", taskid);
                 try
                 {
@@ -265,6 +265,7 @@ namespace ScrumIt.DataAccess
                 {
                     throw new ArgumentException("Sprint, do ktorego chcesz przypisac zadanie, nie istnieje!");
                 }
+                return true;
             }
         }
 
