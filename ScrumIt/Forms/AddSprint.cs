@@ -58,11 +58,18 @@ namespace ScrumIt.Forms
 
             if (!validationFlag)
             {
-                var sprint = new SprintModel(0, _projectId, startDate, endDate);
-                SprintModel.CreateNewSprint(sprint, _projectId);
-                Close();
-                var manageProj = new ManageProject(_projectId);
-                manageProj.Show();
+                try
+                {
+                    var sprint = new SprintModel(0, _projectId, startDate, endDate);
+                    SprintModel.CreateNewSprint(sprint, _projectId);
+                    Close();
+                    var manageProj = new ManageProject(_projectId);
+                    manageProj.Show();
+                }
+                catch (Exception err)
+                {
+                    MessageBox.Show(err.Message);
+                }
             }
         }
     }
