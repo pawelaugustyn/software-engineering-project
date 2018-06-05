@@ -20,6 +20,7 @@ namespace ScrumIt.Forms
         private void ManageProject_Load(object sender, System.EventArgs e)
         {
             editProjectButton.BackColor = _panelColor;
+            addSprintButton.BackColor = _panelColor;
             var project = ProjectModel.GetProjectById(_projectId);
             changeNameTextBox.Text = project.ProjectName;
 
@@ -109,6 +110,13 @@ namespace ScrumIt.Forms
 
                 Close();
             }
+        }
+
+        private void addSprintButton_Click(object sender, System.EventArgs e)
+        {
+            var addSprint = new AddSprint(_projectId);
+            Hide();
+            addSprint.Show();
         }
     }
 }

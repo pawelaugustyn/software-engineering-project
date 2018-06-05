@@ -25,23 +25,60 @@ namespace ScrumIt.Forms
         {
             var name = projectNameTextBox.Text;
             var color = changeColorButton.BackColor;
-
+            var endSprintDate = endSprintTextBox.Text;
+            DateTime endDateFormat;
+            DateTime startDateFormat = DateTime.Now;
+            var validationFlag = false;
             if (name != "")
             {
-                try
+                if (!DateTime.TryParse(endSprintDate, out endDateFormat))
                 {
-                    ProjectModel.CreateNewProject(new ProjectModel
+                    MessageBox.Show(@"Zły format daty. Wpisz zgodnie ze wzorem rrrr-mm-dd");
+                    validationFlag = true;
+                }
+                else
+                {
+                    if (endDateFormat <= startDateFormat)
                     {
-                        ProjectName = name,
-                        ProjectColor = ToHexValue(color)
-                    });
-                    MessageBox.Show("Pomyślnie dodano nowy projekt");
-                    this.Close();
+                        MessageBox.Show(@"Data rozpoczęcia powinna być wcześniejszą datą niż data zakończenia");
+                        validationFlag = true;
+                    }
+                    else
+                    if (endDateFormat.Month * 31 + endDateFormat.Day - startDateFormat.Month * 31 - startDateFormat.Day < 3)
+                    {
+                        MessageBox.Show(@"Sprint musi być dłuższy niż 3 dni");
+                        validationFlag = true;
+                    }
+                    else
+                    if (endDateFormat.Month * 31 + endDateFormat.Day - startDateFormat.Month * 31 - startDateFormat.Day > 20)
+                    {
+                        MessageBox.Show(@"Sprint musi być krótszy niż 21 dni");
+                        validationFlag = true;
+                    }
                 }
-                catch (ArgumentException err)
+
+                if (!validationFlag)
                 {
-                    MessageBox.Show(err.Message);
+                    try
+                    {
+                        ProjectModel.CreateNewProject(new ProjectModel
+                        {
+                            ProjectName = name,
+                            ProjectColor = ToHexValue(color)
+                        });
+                        var projectId = ProjectModel.GetProjectByName(name).ProjectId;
+                        var sprint = new SprintModel(0, projectId, DateTime.Now.ToString(), endSprintDate);
+                        SprintModel.CreateNewSprint(sprint, projectId);
+
+                        MessageBox.Show("Pomyślnie dodano nowy projekt");
+                        this.Close();
+                    }
+                    catch (ArgumentException err)
+                    {
+                        MessageBox.Show(err.Message);
+                    }
                 }
+                
             }
             else
             {
