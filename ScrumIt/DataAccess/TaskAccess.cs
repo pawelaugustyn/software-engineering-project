@@ -243,6 +243,8 @@ namespace ScrumIt.DataAccess
                     cmd.ExecuteNonQuery();
                 }
             }
+
+            return true;
         }
 
         public static bool AssignFromBacklogToSprint(int taskid, int sprintId)
