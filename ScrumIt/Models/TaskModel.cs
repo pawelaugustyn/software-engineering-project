@@ -84,5 +84,10 @@ namespace ScrumIt.Models
         {
             TaskAccess.RemoveTask(taskid);
         }
+
+        public static void AssignUsersToTask(TaskModel taskToAssignTo, List<UserModel> usersToAssign)
+        {
+            TaskAccess.AssignUsersToTask(taskToAssignTo, usersToAssign);
+        }
     }
 }

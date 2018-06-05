@@ -218,7 +218,7 @@ namespace ScrumIt.DataAccess
             return true;
         }
 
-        public static bool AssignUsersToTask(TaskModel taskToAssignTo, List<UserModel> usersToAssign)
+        public static void AssignUsersToTask(TaskModel taskToAssignTo, List<UserModel> usersToAssign)
         {
             using (new Connection())
             {
@@ -243,8 +243,6 @@ namespace ScrumIt.DataAccess
                     cmd.ExecuteNonQuery();
                 }
             }
-
-            return true;
         }
 
         public static void AssignFromBacklogToSprint(int taskid, int sprintId)

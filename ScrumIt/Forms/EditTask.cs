@@ -65,11 +65,11 @@ namespace ScrumIt.Forms
                 var toolStripItems = new ToolStripItem[allUsers.Count];
                 for (var i = 0; i < allUsers.Count; i++)
                 {
-                    var toolStripMenuItemName = allUsers[i].Username;
+                    var toolStripMenuItemName = allUsers[i].UserId;
                     var toolStripMenuItemText = allUsers[i].Firstname + " " + allUsers[i].Lastname + " ";
                     var toolStripMenuItem = new ToolStripMenuItem
                     {
-                        Name = toolStripMenuItemName,
+                        Name = toolStripMenuItemName.ToString(),
                         Text = toolStripMenuItemText,
                         Image = allUsers[i].Avatar,
                         CheckOnClick = true
@@ -140,15 +140,28 @@ namespace ScrumIt.Forms
                 {
                     var userName = user.Name;
                     userNames.Add(userName);
-                    // TODO 
-                    //przypisz uzytkownika do zadania do bazki
                 }
+            }
+
+            var userModels = new List<UserModel>();
+            foreach (var user in userNames)
+            {
+                userModels.Add(UserModel.GetUserById(Int32.Parse(user)));
             }
             if (validationFlag)
             {
-                // TODO 
-                //update task to db
-                
+                try
+                {
+                    var task = TaskModel.GetTaskById(_taskId);
+                    TaskModel.AssignUsersToTask(task, userModels);
+                    // TO DO 
+                    // Update task
+                }
+                catch (Exception err)
+                {
+                    MessageBox.Show(err.Message);
+                }
+
                 this.Close();
             }
         }
