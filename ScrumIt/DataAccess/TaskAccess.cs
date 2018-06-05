@@ -319,6 +319,29 @@ namespace ScrumIt.DataAccess
             }
         }
 
+        public static bool UpdateTask(TaskModel task)
+        {
+            if (AppStateProvider.Instance.CurrentUser.Role == UserRoles.Guest)
+                throw new UnauthorizedAccessException("Not permitted for that operation.");
+            ValidateUpdatedTask(task);
+            using (new Connection())
+            {
+                var cmd = new NpgsqlCommand("UPDATE tasks SET task_name=@name, task_desc=@desc, task_priority=@priority, task_estimated_time=@estimatedtime WHERE task_id=@id")
+                {
+                    Connection = Connection.Conn
+                };
+                cmd.Parameters.AddWithValue("id", task.TaskId);
+                cmd.Parameters.AddWithValue("estimatedtime", task.TaskEstimatedTime);
+                cmd.Parameters.AddWithValue("name", task.TaskName);
+                cmd.Parameters.AddWithValue("priority", task.TaskPriority);
+                cmd.Parameters.AddWithValue("desc", task.TaskDesc);
+
+                var result = cmd.ExecuteNonQuery();
+                if (result != 1) return false;
+            }
+                return true;
+        }
+
         private static void ValidateNewTask(TaskModel addedTask)
         {
             ValidateTaskName(addedTask.TaskName);
@@ -326,6 +349,13 @@ namespace ScrumIt.DataAccess
             ValidateTaskEstimatedTime(addedTask.TaskEstimatedTime);
             ValidateTaskColor(addedTask.TaskColor);
             ValidateTaskAssignment(addedTask.BacklogProjectId, addedTask.SprintId);
+        }
+
+        private static void ValidateUpdatedTask(TaskModel updatedTask)
+        {
+            ValidateTaskName(updatedTask.TaskName);
+            ValidateTaskPriority(updatedTask.TaskPriority);
+            ValidateTaskEstimatedTime(updatedTask.TaskEstimatedTime);
         }
 
         private static void ValidateTaskName(string taskName)
