@@ -153,6 +153,9 @@ namespace ScrumIt.DataAccess
                 cmd.Parameters.AddWithValue("end", endDate);
                 var result = cmd.ExecuteNonQuery();
 
+                if (result != 1)
+                    return false;
+
                 cmd = new NpgsqlCommand("SELECT sprint_id FROM sprints ORDER BY sprint_id DESC LIMIT 1;")
                 {
                     Connection = Connection.Conn
@@ -165,7 +168,6 @@ namespace ScrumIt.DataAccess
                         break;
                     }
                 }
-                if (result != 1) return false;
             }
 
             return true;
