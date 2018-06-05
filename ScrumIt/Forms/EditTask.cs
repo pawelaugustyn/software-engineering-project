@@ -154,8 +154,14 @@ namespace ScrumIt.Forms
                 {
                     var task = TaskModel.GetTaskById(_taskId);
                     TaskModel.AssignUsersToTask(task, userModels);
-                    // TO DO 
-                    // Update task
+                    task.TaskName = taskName;
+                    task.TaskDesc = taskDescription;
+                    task.TaskPriority = Int32.Parse(taskPriority);
+                    task.TaskEstimatedTime = Int32.Parse(taskEstimatedTime);
+                    if (TaskModel.UpdateTask(task))
+                    {
+                        MessageBox.Show(@"Zaktualizowano zmiany zadania");
+                    }
                 }
                 catch (Exception err)
                 {
