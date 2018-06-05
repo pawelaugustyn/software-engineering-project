@@ -122,10 +122,18 @@ namespace ScrumIt.Forms
             DialogResult dialogResult = MessageBox.Show("Jesteś pewny, że chcesz usunąć ten projekt? ", "Usuń projekt", MessageBoxButtons.YesNo);
             if (dialogResult == DialogResult.Yes)
             {
-                // TO DO
-                // delete project from db
-
-                Close();
+                try
+                {
+                    var project = ProjectModel.GetProjectById(_projectId);
+                    ProjectModel.DeleteProject(project);
+                    Close();
+                    var mainView = new MainView();
+                    mainView.Show();
+                }
+                catch (Exception err)
+                {
+                    MessageBox.Show(err.Message);
+                }
             }
         }
 
@@ -135,5 +143,6 @@ namespace ScrumIt.Forms
             Hide();
             addSprint.Show();
         }
+        
     }
 }

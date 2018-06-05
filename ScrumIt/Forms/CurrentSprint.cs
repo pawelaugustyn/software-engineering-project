@@ -225,6 +225,22 @@ namespace ScrumIt.Forms
             CurrentSprint_Load(null, EventArgs.Empty);
         }
 
+        private void proj_FormClosed()
+        {
+            try
+            {
+                var proj = ProjectModel.GetProjectById(_projectId);
+                if (proj.ProjectId == 0)
+                {
+                    Close();
+                }
+            }
+            catch (Exception err)
+            {
+                MessageBox.Show(err.Message);
+            }
+        }
+
         private void addTask_FormClosed()
         {
             scrumBoardPanel.Controls.Clear();
@@ -747,8 +763,8 @@ namespace ScrumIt.Forms
         {
             if (e.CloseReason == CloseReason.UserClosing)
             {
-                UserModel.Logout();
-                Application.Exit();
+                var mainView = new MainView();
+                mainView.Show();
             }
         }
 
@@ -778,6 +794,7 @@ namespace ScrumIt.Forms
                 if (propertiesComboBox.SelectedIndex == 4)
                 {
                     var proj = new ManageProject(_projectId);
+                    proj.FormClosed += delegate { proj_FormClosed(); };
                     proj.Show();
                 }
                 if (propertiesComboBox.SelectedIndex == 5)
