@@ -9,12 +9,12 @@ namespace ScrumIt.Models
         public string ProjectName { get; set; }
         public string ProjectColor { get; set; }
  
- 
+
         public static ProjectModel GetProjectById(int projectid)
         {
             return ProjectAccess.GetProjectById(projectid);
         }
- 
+
         public static ProjectModel GetProjectByName(string projectname)
         {
             return ProjectAccess.GetProjectByName(projectname);
@@ -23,6 +23,11 @@ namespace ScrumIt.Models
         public static bool CreateNewProject(ProjectModel addedProject)
         {
             return ProjectAccess.CreateNewProject(addedProject);
+        }
+
+        public static bool DeleteProject(ProjectModel deletedProject)
+        {
+            return ProjectAccess.DeleteProject(deletedProject);
         }
     }
 }

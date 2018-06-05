@@ -317,7 +317,10 @@ namespace ScrumIt.DataAccess
                 cmd.Parameters.AddWithValue("last_name", addedUser.Lastname);
                 cmd.Parameters.AddWithValue("role", (int)addedUser.Role);
                 cmd.Parameters.AddWithValue("email", addedUser.Email);
-                cmd.ExecuteNonQuery();
+                var result = cmd.ExecuteNonQuery();
+
+                if (result != 1)
+                    return false;
 
                 cmd = new NpgsqlCommand("SELECT uid FROM users ORDER BY uid DESC LIMIT 1;")
                 {
