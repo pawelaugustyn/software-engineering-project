@@ -135,18 +135,18 @@ namespace ScrumIt.DataAccess
             }
         }
 
-        public static bool CreateNewSprintForProject(SprintModel addedSprint, int projectId)
+        public static bool CreateNewSprintForProject(SprintModel addedSprint)
         {
             if (AppStateProvider.Instance.CurrentUser.Role != UserRoles.ScrumMaster)
                 throw new UnauthorizedAccessException("Not permitted for that operation.");
-
+            ValidateNewSprint(addedSprint);
             using (new Connection())
             {
                 var cmd = new NpgsqlCommand("INSERT INTO sprints VALUES (DEFAULT, @projectid, @start::timestamp, @end::timestamp);")
                 {
                     Connection = Connection.Conn
                 };
-                cmd.Parameters.AddWithValue("projectid", projectId);
+                cmd.Parameters.AddWithValue("projectid", addedSprint.ParentProjectId);
                 string startDate = addedSprint.StartDateTime.ToString("yyyy-MM-dd hh:mm:ss");
                 string endDate = addedSprint.EndDateTime.ToString("yyyy-MM-dd hh:mm:ss");
                 cmd.Parameters.AddWithValue("start", startDate);
@@ -201,6 +201,58 @@ namespace ScrumIt.DataAccess
                 }
             }
             return sprints;
+        }
+        
+        public static DateTime? GetEndOfLastSprintByProjectId(int projectId)
+        {
+            DateTime? endDate = null;
+            using (new Connection())
+            {
+                var cmd = new NpgsqlCommand("select max(sprint_end) from sprints where project_id = @projectid;")
+                {
+                    Connection = Connection.Conn
+                };
+                cmd.Parameters.AddWithValue("projectid", projectId);
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        if (reader[0] != DBNull.Value)
+                            endDate = reader.GetDateTime(0);
+                    }
+                }
+            }
+            return endDate;
+        }
+
+        private static void ValidateNewSprint(SprintModel addedSprint)
+        {
+            ValidateStartDate(addedSprint);
+            ValidateEndDate(addedSprint.EndDateTime);
+        }
+
+        private static void ValidateStartDate(SprintModel sprint)
+        {
+            if (sprint.StartDateTime == null)
+                throw new ArgumentException("Sprint's start date is not initialized");
+
+            //sprawdzamy, czy data rozpoczecia nowego sprintu jest pozniejsza niz data zakonczenia ostatniego istniejacego juz sprintu
+            DateTime? endOfLastSprint = GetEndOfLastSprintByProjectId(sprint.ParentProjectId);
+            if (endOfLastSprint != null)
+            {
+                if (endOfLastSprint >= sprint.StartDateTime)
+                    throw new ArgumentException("Sprint starts before existing sprint is finished.");
+            }
+            
+        }
+
+        private static void ValidateEndDate(DateTime endDate)
+        {
+            if (endDate == null)
+                throw new ArgumentException("Sprint's start date is not initialized");
+            // TODO
+            // czy tu potrzebna jest inna walidacja?
+            // ograniczenie na dlugosc sprintu (3-31 dni) jest zrobione na frontendzie
         }
     }
 }

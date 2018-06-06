@@ -61,7 +61,7 @@ namespace ScrumIt.Forms
                 try
                 {
                     var sprint = new SprintModel(0, _projectId, startDate, endDate);
-                    SprintModel.CreateNewSprint(sprint, _projectId);
+                    SprintModel.CreateNewSprint(sprint);
                     Close();
                     var manageProj = new ManageProject(_projectId);
                     manageProj.Show();
