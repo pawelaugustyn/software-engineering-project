@@ -15,8 +15,19 @@ namespace ScrumItTests
             }
             catch (DeepEqualException e)
             {
-                Assert.That(false, Is.True, $"{message} {Environment.NewLine} Element not found.{Environment.NewLine} {e.Message}");
+                Assert.That(false, Is.True, $"{message} {Environment.NewLine} {e.Message}Element: {Environment.NewLine}{Messages.Display(given)}{Environment.NewLine} should be equal to {Environment.NewLine}{Messages.Display(expected)}.{Environment.NewLine}");
             }
+        }
+
+        public static void NotEquals<T>(T given, T expected, string message = "")
+        {
+            try
+            {
+                given.ShouldDeepEqual(expected, new ObjectsWithExceptionComparer());
+
+                Assert.That(false, Is.True, $"{message} {Environment.NewLine} Elements: {Environment.NewLine}{Messages.Display(given)}{Environment.NewLine} should not be equal.{Environment.NewLine}");
+            }
+            catch (DeepEqualException) { }
         }
 
         public static void ListContains<T>(this List<T> givenList, T expectedItem)
@@ -26,11 +37,11 @@ namespace ScrumItTests
             Assert.That(user, !Is.EqualTo(default(T)), $"Element do not exist on the list. Expected: {Messages.Display(expectedItem)}");
         }
 
-        public static void ListNotContains<T>(this List<T> givenList, T expectedItem)
+        public static void ListNotContains<T>(this List<T> givenList, T notExpectedItem)
         {
-            var user = GetItemFromList(givenList, expectedItem);
+            var user = GetItemFromList(givenList, notExpectedItem);
 
-            Assert.That(user, Is.EqualTo(default(T)), $"Element should not exist on the list. Element: {Messages.Display(expectedItem)}");
+            Assert.That(user, Is.EqualTo(default(T)), $"Element should not exist on the list. Element: {Messages.Display(notExpectedItem)}");
         }
 
         private static T GetItemFromList<T>(IEnumerable<T> givenList, T expectedItem)

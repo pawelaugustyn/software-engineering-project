@@ -83,28 +83,34 @@ namespace ScrumIt.Forms
 
             if (validationFlag)
             {
-                var task = new TaskModel
+                try
                 {
-                    TaskName = taskName,
-                    TaskDesc = taskDescription,
-                    TaskType = "T",
-                    TaskPriority = taskPriority,
-                    TaskEstimatedTime = taskEstimatedTime,
-                    TaskStage = TaskModel.TaskStages.ToDo,
-                    SprintId = sprintId,
-                    TaskColor = "#ffffff",
-                    BacklogProjectId = projectId
-                };
-                TaskModel.CreateNewTask(task, new List<UserModel>());
-                Close();
+                    var task = new TaskModel
+                    {
+                        TaskName = taskName,
+                        TaskDesc = taskDescription,
+                        TaskType = "T",
+                        TaskPriority = taskPriority,
+                        TaskEstimatedTime = taskEstimatedTime,
+                        TaskStage = TaskModel.TaskStages.ToDo,
+                        SprintId = sprintId,
+                        TaskColor = "#ffffff",
+                        BacklogProjectId = projectId
+                    };
+                    TaskModel.CreateNewTask(task, new List<UserModel>());
+                    Close();
+                }
+                catch (Exception err)
+                {
+                    MessageBox.Show(err.Message);
+                }
 
             }
         }
 
         private void priorityTextBox_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) &&
-                (e.KeyChar != '.'))
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
             {
                 e.Handled = true;
             }
@@ -112,8 +118,7 @@ namespace ScrumIt.Forms
 
         private void estimatedTimeTextBox_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) &&
-                (e.KeyChar != '.'))
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
             {
                 e.Handled = true;
             }

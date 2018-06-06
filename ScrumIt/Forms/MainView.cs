@@ -16,7 +16,15 @@ namespace ScrumIt.Forms
         private readonly Color _panelColor = ColorTranslator.FromHtml("#4AC1C1");
         public MainView()
         {
-            _userRole = AppStateProvider.Instance.CurrentUser.Role.ToString();
+            try
+            {
+                _userRole = AppStateProvider.Instance.CurrentUser.Role.ToString();
+            }
+            catch (Exception err)
+            {
+                MessageBox.Show(err.Message);
+            }
+
             InitializeComponent();
         }
 
@@ -102,46 +110,56 @@ namespace ScrumIt.Forms
             #region projectsButtons
             //pozostale wiersze
             //pobranie projektow danego uzytkownika i wpisanie ich numerow ID oraz nazw do słownika projects
-            List<ProjectModel> projectsList;
-            if (_userRole == "Guest")
+            try
             {
-                projectsList = ProjectAccess.GetAllProjects();
-            }
-            else
-            {
-                projectsList = ProjectAccess.GetProjectsByUserId(AppStateProvider.Instance.CurrentUser.UserId);
-            }
-            var projects = new Dictionary<int, string>();
-            for (int i = 0; i < projectsList.Count; i++)
-                projects.Add(projectsList[i].ProjectId, projectsList[i].ProjectName);
-
-            foreach (KeyValuePair<int, string> dict in projects)
-            {
-                panel.RowCount = panel.RowCount + 1;
-                panel.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
-                //panel.Controls.Add(new Label() { Text = projectsNames[i],/* TextAlign = ContentAlignment.MiddleCenter*/ }, 0, panel.RowCount - 1);
-
-                var b = new Button();
-                b.FlatStyle = FlatStyle.Flat;
-                b.Font = new Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-                b.BackColor = _panelColor;
-                b.ForeColor = Color.White;
-                b.FlatAppearance.BorderColor = Color.White;
-                b.FlatAppearance.BorderSize = 0;
-                b.Click += delegate
+                List<ProjectModel> projectsList;
+                if (_userRole == "Guest")
                 {
-                    var sprint = new CurrentSprint(dict.Key);
-                    sprint.Show();
-                    this.Hide();
-                    //MessageBox.Show("Buttonclick");
-                };
-                b.Text = dict.Value;
-                b.Name = dict.Value + "Button";
-                b.Size = new System.Drawing.Size(400, 40);
-                panel.Controls.Add(b, 0, panel.RowCount - 1);
+                    projectsList = ProjectAccess.GetAllProjects();
+                }
+                else
+                {
+                    projectsList = ProjectAccess.GetProjectsByUserId(AppStateProvider.Instance.CurrentUser.UserId);
+                }
+
+                var projects = new Dictionary<int, string>();
+                for (int i = 0; i < projectsList.Count; i++)
+                    projects.Add(projectsList[i].ProjectId, projectsList[i].ProjectName);
+
+                foreach (KeyValuePair<int, string> dict in projects)
+                {
+                    panel.RowCount = panel.RowCount + 1;
+                    panel.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
+                    //panel.Controls.Add(new Label() { Text = projectsNames[i],/* TextAlign = ContentAlignment.MiddleCenter*/ }, 0, panel.RowCount - 1);
+
+                    var b = new Button();
+                    b.FlatStyle = FlatStyle.Flat;
+                    b.Font = new Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point,
+                        ((byte) (238)));
+                    b.BackColor = _panelColor;
+                    b.ForeColor = Color.White;
+                    b.FlatAppearance.BorderColor = Color.White;
+                    b.FlatAppearance.BorderSize = 0;
+                    b.Click += delegate
+                    {
+                        var sprint = new CurrentSprint(dict.Key);
+                        sprint.Show();
+                        this.Hide();
+                        //MessageBox.Show("Buttonclick");
+                    };
+                    b.Text = dict.Value;
+                    b.Name = dict.Value + "Button";
+                    b.Size = new System.Drawing.Size(400, 40);
+                    panel.Controls.Add(b, 0, panel.RowCount - 1);
+
+                }
 
             }
-            #endregion
+            catch (Exception err)
+            {
+                MessageBox.Show(err.Message);
+            }
+                #endregion
 
             Controls.Add(panel);
         }

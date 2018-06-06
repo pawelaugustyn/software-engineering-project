@@ -37,17 +37,25 @@ namespace ScrumIt.Forms
                 addTaskButton.BackColor = _panelColor;
             }
 
-            TaskModel task = TaskModel.GetTaskById(_taskId);
+            try
+            {
+                TaskModel task = TaskModel.GetTaskById(_taskId);
 
-            taskNameTextBox.Text = task.TaskName;
-            taskDescriptionTextBox.Text = task.TaskDesc;
-            priorityTextBox.Text = task.TaskPriority.ToString();
-            estimatedTimeTextBox.Text = task.TaskEstimatedTime.ToString();
 
-            taskNameTextBox.BackColor = Color.White;
-            taskDescriptionTextBox.BackColor = Color.White;
-            priorityTextBox.BackColor = Color.White;
-            estimatedTimeTextBox.BackColor = Color.White;
+                taskNameTextBox.Text = task.TaskName;
+                taskDescriptionTextBox.Text = task.TaskDesc;
+                priorityTextBox.Text = task.TaskPriority.ToString();
+                estimatedTimeTextBox.Text = task.TaskEstimatedTime.ToString();
+
+                taskNameTextBox.BackColor = Color.White;
+                taskDescriptionTextBox.BackColor = Color.White;
+                priorityTextBox.BackColor = Color.White;
+                estimatedTimeTextBox.BackColor = Color.White;
+            }
+            catch (Exception err)
+            {
+                MessageBox.Show(err.Message);
+            }
         }
 
         private void addTaskButton_Click(object sender, System.EventArgs e)

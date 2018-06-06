@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using MetroFramework.Forms;
+using ScrumIt.DataAccess;
 using ScrumIt.Models;
 
 namespace ScrumIt.Forms
@@ -26,57 +27,66 @@ namespace ScrumIt.Forms
         private void EditTask_Load(object sender, System.EventArgs e)
         {
             editTaskButton.BackColor = _panelColor;
-
-            var task = TaskModel.GetTaskById(_taskId);
-
-            taskNameTextBox.Text = task.TaskName;
-            taskDescriptionTextBox.Text = task.TaskDesc;
-            priorityTextBox.Text = task.TaskPriority.ToString();
-            estimatedTimeTextBox.Text = task.TaskEstimatedTime.ToString();
-
-            taskNameTextBox.BackColor = Color.White;
-            taskDescriptionTextBox.BackColor = Color.White;
-            priorityTextBox.BackColor = Color.White;
-            estimatedTimeTextBox.BackColor = Color.White;
-
-            // TODO
-            // Pobierz userow przypisanych do zadania
-            var users = new List<UserModel>
+            try
             {
-                UserModel.GetUserById(1)
-            };
+                var task = TaskModel.GetTaskById(_taskId);
 
-            userListMenuStrip.Items.AddRange(createUsersListMenu(users));
+                taskNameTextBox.Text = task.TaskName;
+                taskDescriptionTextBox.Text = task.TaskDesc;
+                priorityTextBox.Text = task.TaskPriority.ToString();
+                estimatedTimeTextBox.Text = task.TaskEstimatedTime.ToString();
+
+                taskNameTextBox.BackColor = Color.White;
+                taskDescriptionTextBox.BackColor = Color.White;
+                priorityTextBox.BackColor = Color.White;
+                estimatedTimeTextBox.BackColor = Color.White;
+
+                var users = UserAccess.GetUsersByTaskId(_taskId);
+                userListMenuStrip.Items.AddRange(createUsersListMenu(users));
+            }
+            catch (Exception err)
+            {
+                MessageBox.Show(err.Message);
+            }
         }
 
         private ToolStripItem[] createUsersListMenu(List<UserModel> userList)
         {
-            //pobierz wszystkich uzytkownikow z bazki
-            var allUsers = UserModel.GetUsersByProjectId(_projectId);
-            
-            var toolStripItems = new ToolStripItem[allUsers.Count];
-            for (var i = 0; i < allUsers.Count; i++)
+            try
             {
-                var toolStripMenuItemName = allUsers[i].Username;
-                var toolStripMenuItemText = allUsers[i].Firstname + " " + allUsers[i].Lastname + " ";
-                var toolStripMenuItem = new ToolStripMenuItem
+                var allUsers = UserModel.GetUsersByProjectId(_projectId);
+
+                var toolStripItems = new ToolStripItem[allUsers.Count];
+                for (var i = 0; i < allUsers.Count; i++)
                 {
-                    Name = toolStripMenuItemName,
-                    Text = toolStripMenuItemText,
-                    Image = allUsers[i].Avatar,
-                    CheckOnClick = true
-                };
-                foreach (var user in userList)
-                {
-                    if (user.Username == allUsers[i].Username)
+                    var toolStripMenuItemName = allUsers[i].UserId;
+                    var toolStripMenuItemText = allUsers[i].Firstname + " " + allUsers[i].Lastname + " ";
+                    var toolStripMenuItem = new ToolStripMenuItem
                     {
-                        toolStripMenuItem.Checked = true;
+                        Name = toolStripMenuItemName.ToString(),
+                        Text = toolStripMenuItemText,
+                        Image = allUsers[i].Avatar,
+                        CheckOnClick = true
+                    };
+                    foreach (var user in userList)
+                    {
+                        if (user.Username == allUsers[i].Username)
+                        {
+                            toolStripMenuItem.Checked = true;
+                        }
                     }
+
+                    toolStripItems[i] = toolStripMenuItem;
                 }
-                toolStripItems[i] = toolStripMenuItem;
+
+                return toolStripItems;
+            }
+            catch (Exception err)
+            {
+                MessageBox.Show(err.Message);
+                return null;
             }
 
-            return toolStripItems;
         }
 
         private void editTaskButton_Click(object sender, System.EventArgs e)
@@ -124,15 +134,34 @@ namespace ScrumIt.Forms
                 {
                     var userName = user.Name;
                     userNames.Add(userName);
-                    // TODO 
-                    //przypisz uzytkownika do zadania do bazki
                 }
+            }
+
+            var userModels = new List<UserModel>();
+            foreach (var user in userNames)
+            {
+                userModels.Add(UserModel.GetUserById(Int32.Parse(user)));
             }
             if (validationFlag)
             {
-                // TODO 
-                //update task to db
-                
+                try
+                {
+                    var task = TaskModel.GetTaskById(_taskId);
+                    TaskModel.AssignUsersToTask(task, userModels);
+                    task.TaskName = taskName;
+                    task.TaskDesc = taskDescription;
+                    task.TaskPriority = Int32.Parse(taskPriority);
+                    task.TaskEstimatedTime = Int32.Parse(taskEstimatedTime);
+                    if (TaskModel.UpdateTask(task))
+                    {
+                        MessageBox.Show(@"Zaktualizowano zmiany zadania");
+                    }
+                }
+                catch (Exception err)
+                {
+                    MessageBox.Show(err.Message);
+                }
+
                 this.Close();
             }
         }
@@ -172,11 +201,19 @@ namespace ScrumIt.Forms
         {
             if (_userRole == "ScrumMaster")
             {
-                DialogResult dialogResult = MessageBox.Show("Jesteś pewny, że chcesz usunąć to zadanie? ", "Usuń zadanie", MessageBoxButtons.YesNo);
-                if (dialogResult == DialogResult.Yes)
+                try
                 {
-                    TaskModel.RemoveTask(_taskId);
-                    Close();
+                    DialogResult dialogResult = MessageBox.Show("Jesteś pewny, że chcesz usunąć to zadanie? ",
+                        "Usuń zadanie", MessageBoxButtons.YesNo);
+                    if (dialogResult == DialogResult.Yes)
+                    {
+                        TaskModel.RemoveTask(_taskId);
+                        Close();
+                    }
+                }
+                catch (Exception err)
+                {
+                    MessageBox.Show(err.Message);
                 }
             }
             else

@@ -164,6 +164,16 @@ Tasks:
     - SetUserPicture and GetUserPicture
     
 3. TaskAccessIntegrationTests 
+	```
+      AssignFromBacklogToSprint [0:00.396] Success
+      AssignUsersToTask [0:00.154] Success
+      GetProjectBacklogTasksReturnCorrectTasks [0:00.063] Success
+      GetProjectTasksByProjectIdShouldReturnCorrectTasks [0:00.062] Success
+      GetProjectTasksBySprintIdReturnCorrectTasks [0:00.068] Success
+      GetTaskByIdShouldReturnCorrectTasks [0:00.065] Success
+      UpdateTaskStage [0:00.117] Success
+	```
+	
     - all Get method with correct and with incorrect values (also null and empty)
     - update, create with correct and with incorrect values (also null and empty)
     - assign user to task (correct list, unknown user, the same user twice)

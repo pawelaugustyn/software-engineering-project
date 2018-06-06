@@ -2,7 +2,6 @@
 using System.Drawing;
 using System.Windows.Forms;
 using MetroFramework.Forms;
-using ScrumIt.Models;
 
 namespace ScrumIt.Forms
 {

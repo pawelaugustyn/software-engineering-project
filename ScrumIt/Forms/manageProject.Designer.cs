@@ -35,11 +35,12 @@
             this.changeNameButton = new System.Windows.Forms.Label();
             this.changeCollorLabel = new System.Windows.Forms.Label();
             this.changeNameTextBox = new System.Windows.Forms.TextBox();
+            this.changeColorButton = new System.Windows.Forms.Button();
             this.userListMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.editProjectButton = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
-            this.changeColorButton = new System.Windows.Forms.Button();
+            this.addSprintButton = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -133,6 +134,19 @@
             this.changeNameTextBox.Size = new System.Drawing.Size(197, 29);
             this.changeNameTextBox.TabIndex = 2;
             // 
+            // changeColorButton
+            // 
+            this.changeColorButton.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.changeColorButton.BackColor = System.Drawing.Color.Red;
+            this.changeColorButton.Location = new System.Drawing.Point(205, 38);
+            this.changeColorButton.Name = "changeColorButton";
+            this.changeColorButton.Size = new System.Drawing.Size(197, 29);
+            this.changeColorButton.TabIndex = 17;
+            this.changeColorButton.UseVisualStyleBackColor = false;
+            this.changeColorButton.Click += new System.EventHandler(this.changeColoButton_Click);
+            // 
             // userListMenuStrip
             // 
             this.userListMenuStrip.Name = "userListMenuStrip";
@@ -170,24 +184,27 @@
             this.button1.UseVisualStyleBackColor = false;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
-            // changeColorButton
+            // addSprintButton
             // 
-            this.changeColorButton.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.changeColorButton.BackColor = System.Drawing.Color.Red;
-            this.changeColorButton.Location = new System.Drawing.Point(205, 38);
-            this.changeColorButton.Name = "changeColorButton";
-            this.changeColorButton.Size = new System.Drawing.Size(197, 29);
-            this.changeColorButton.TabIndex = 17;
-            this.changeColorButton.UseVisualStyleBackColor = false;
-            this.changeColorButton.Click += new System.EventHandler(this.changeColoButton_Click);
+            this.addSprintButton.BackColor = System.Drawing.Color.Silver;
+            this.addSprintButton.FlatAppearance.BorderSize = 0;
+            this.addSprintButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.addSprintButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.addSprintButton.ForeColor = System.Drawing.Color.White;
+            this.addSprintButton.Location = new System.Drawing.Point(23, 257);
+            this.addSprintButton.Name = "addSprintButton";
+            this.addSprintButton.Size = new System.Drawing.Size(405, 31);
+            this.addSprintButton.TabIndex = 6;
+            this.addSprintButton.Text = "Dodaj Sprint";
+            this.addSprintButton.UseVisualStyleBackColor = false;
+            this.addSprintButton.Click += new System.EventHandler(this.addSprintButton_Click);
             // 
             // ManageProject
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(451, 270);
+            this.ClientSize = new System.Drawing.Size(451, 308);
+            this.Controls.Add(this.addSprintButton);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.editProjectButton);
             this.Controls.Add(this.tableLayoutPanel1);
@@ -216,5 +233,6 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.ColorDialog colorDialog1;
         private System.Windows.Forms.Button changeColorButton;
+        private System.Windows.Forms.Button addSprintButton;
     }
 }
