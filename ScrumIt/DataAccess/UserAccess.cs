@@ -417,6 +417,22 @@ namespace ScrumIt.DataAccess
             }
         }
 
+        public static bool UpdateUserPassword(string password)
+        {
+            var userId = AppStateProvider.Instance.CurrentUser.UserId;
+            using (new Connection())
+            {
+                var cmd = new NpgsqlCommand("UPDATE users SET pass=@password where uid=@id")
+                {
+                    Connection = Connection.Conn
+                };
+                cmd.Parameters.AddWithValue("password", EncryptMd5(password));
+                cmd.Parameters.AddWithValue("id", userId);
+                var result = cmd.ExecuteNonQuery();
+                if (result != 1) return false;
+            }
+            return true;
+        }
 
         private static void ValidateUser(UserModel addedUser, string password)
         {
