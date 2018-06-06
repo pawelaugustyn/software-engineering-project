@@ -142,6 +142,36 @@ namespace ScrumIt.DataAccess
             return user;
         }
 
+        public static List<UserModel> GetUsersByTaskId(int taskid)
+        {
+            var users = new List<UserModel>();
+            using (new Connection())
+            {
+                var cmd = new NpgsqlCommand("select b.* from tasks_assigned_users a join users b using(uid) where a.task_id = @taskid order by b.username;")
+                {
+                Connection = Connection.Conn
+                };
+                cmd.Parameters.AddWithValue("taskid", taskid);
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        users.Add(new UserModel
+                        {
+                            UserId = (int)reader[0],
+                            Username = (string)reader[1],
+                            Firstname = (string)reader[3],
+                            Lastname = (string)reader[4],
+                            Role = (UserRoles)reader[5],
+                            Email = (string)reader[6]
+                        });
+                    }
+                }
+            }
+
+            return users;
+        }
+
         public static List<UserModel> GetUsersByProjectId(int projectid)
         {
             var users = new List<UserModel>();

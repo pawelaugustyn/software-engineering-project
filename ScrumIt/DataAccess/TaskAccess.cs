@@ -232,12 +232,14 @@ namespace ScrumIt.DataAccess
                 cmd.ExecuteNonQuery();
 
                 var usersToAdd = usersToAssign.Select(o => o.UserId).ToList().Distinct();
-                cmd = new NpgsqlCommand("INSERT INTO tasks_assigned_users VALUES (@task_id, @uid, 0);")
-                {
-                    Connection = Connection.Conn
-                };
+
                 foreach (var userId in usersToAdd)
                 {
+                    cmd = new NpgsqlCommand("INSERT INTO tasks_assigned_users VALUES (@task_id, @uid, 0);")
+                    {
+                        Connection = Connection.Conn
+                    };
+
                     cmd.Parameters.AddWithValue("task_id", taskToAssignTo.TaskId);
                     cmd.Parameters.AddWithValue("uid", userId);
                     cmd.ExecuteNonQuery();
@@ -340,7 +342,7 @@ namespace ScrumIt.DataAccess
                 var result = cmd.ExecuteNonQuery();
                 if (result != 1) return false;
             }
-                return true;
+            return true;
         }
 
         private static void ValidateNewTask(TaskModel addedTask)

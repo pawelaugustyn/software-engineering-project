@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using MetroFramework.Forms;
+using ScrumIt.DataAccess;
 using ScrumIt.Models;
 
 namespace ScrumIt.Forms
@@ -40,14 +41,7 @@ namespace ScrumIt.Forms
                 priorityTextBox.BackColor = Color.White;
                 estimatedTimeTextBox.BackColor = Color.White;
 
-                // TODO
-                // Pobierz userow przypisanych do zadania
-
-                var users = new List<UserModel>
-                {
-                    UserModel.GetUserById(1)
-                };
-
+                var users = UserAccess.GetUsersByTaskId(_taskId);
                 userListMenuStrip.Items.AddRange(createUsersListMenu(users));
             }
             catch (Exception err)
