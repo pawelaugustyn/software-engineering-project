@@ -249,7 +249,7 @@ namespace ScrumIt.DataAccess
         private static void ValidateEndDate(DateTime endDate)
         {
             if (endDate == null)
-                throw new ArgumentException("Sprint's start date is not initialized");
+                throw new ArgumentException("Sprint's end date is not initialized");
             // TODO
             // czy tu potrzebna jest inna walidacja?
             // ograniczenie na dlugosc sprintu (3-31 dni) jest zrobione na frontendzie
