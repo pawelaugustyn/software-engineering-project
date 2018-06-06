@@ -49,6 +49,11 @@ namespace ScrumIt.Models
             return SprintAccess.GetSprintByProjectIdAndDate(projectid, DateTime.Now);
         }
 
+        public static SprintModel GetMostRecentSprintForProject(int projectid)
+        {
+            return SprintAccess.GetMostRecentSprintByProjectId(projectid, DateTime.Now);
+        }
+
         public static List<SprintModel> GetHistoricalSprintModels(int projectId)
         {
             return SprintAccess.GetOldSprintsByProjectId(projectId);

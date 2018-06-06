@@ -28,7 +28,7 @@ namespace ScrumIt.Forms
             try
             {
                 _userRole = AppStateProvider.Instance.CurrentUser.Role.ToString();
-                var sprintModel = SprintModel.GetCurrentSprintForProject(_projectId);
+                var sprintModel = SprintModel.GetMostRecentSprintForProject(_projectId);
                 _sprintId = sprintModel.SprintId;
             }
             catch (Exception err)

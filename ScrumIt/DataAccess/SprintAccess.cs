@@ -32,7 +32,7 @@ namespace ScrumIt.DataAccess
 
         public static SprintModel GetSprintByProjectIdAndDate(int projectid, DateTime time)
         {
-            SprintModel sprint = new SprintModel();
+            SprintModel sprint = null;// = new SprintModel();
             using (new Connection())
             {
                 var cmd = new NpgsqlCommand("select * from sprints where project_id = @projectid and sprint_start < @datestart::timestamp and sprint_end > @dateend::timestamp;")
@@ -60,6 +60,7 @@ namespace ScrumIt.DataAccess
             }
 
             return sprint;
+
         }
 
         //pobierz najchetniej obecny sprint, jesli nie istnieje to najblizszy zaplanowany sprint, jesli nie ma zaplanowanych sprintow do przodu to ostatni ukonczony
@@ -78,11 +79,10 @@ namespace ScrumIt.DataAccess
                     //jesli nie ma current sprintu, pobierz z bazy wszystkie sprinty dla danego projektu, uszereguj rosnaco pod wzgledem daty startu i wez pierwszy rekord, czyli pierwszy zaplanowany sprint
 
                     var cmd = new NpgsqlCommand(
-                        "select * from sprints where project_id = @projectid and sprint_start > @currentdate order by sprint_start top 1;")
+                        "select * from sprints where project_id = @projectid and sprint_start > @currentdate::timestamp order by sprint_start limit 1;")
                     {
                         Connection = Connection.Conn
                     };
-
                     cmd.Parameters.AddWithValue("projectid", projectid);
                     string datetime = time.ToString("yyyy-MM-dd hh:mm:ss");
                     cmd.Parameters.AddWithValue("currentdate", datetime);
@@ -95,39 +95,40 @@ namespace ScrumIt.DataAccess
                             checkIfAnyResults = true;
                             sprint = new SprintModel
                             {
+                                SprintId = (int) reader[0],
+                                ParentProjectId = (int) reader[1],
+                                StartDateTime = (DateTime) reader[2],
+                                EndDateTime = (DateTime) reader[3]
+                            };
+                            break; //ten oto break powinien byc chyba wyrzucony, i sprawdzanie czy faktycznie byla to jedna wartosc powinna byc robiona przez test
+                        }
+
+                        //ostatni ukonczony sprint
+                        //jesli nie ma zaplanowanego kolejnego sprintu, pobierz z bazy wszystkie sprinty dla danego projektu, uszereguj malejaco pod wzgledem daty zakonczenia i wez pierwszy rekord, czyli ostatni ukonczony sprint
+                        if (checkIfAnyResults)
+                            return sprint;
+                    }
+
+                    cmd = new NpgsqlCommand(
+                            "select * from sprints where project_id = @projectid and sprint_end < @currentdate::timestamp order by sprint_end desc limit 1;")
+                    {
+                        Connection = Connection.Conn
+                    };
+
+                    cmd.Parameters.AddWithValue("projectid", projectid);
+                    cmd.Parameters.AddWithValue("currentdate", datetime);
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            sprint = new SprintModel
+                            {
                                 SprintId = (int)reader[0],
                                 ParentProjectId = (int)reader[1],
                                 StartDateTime = (DateTime)reader[2],
                                 EndDateTime = (DateTime)reader[3]
                             };
-                            break; //ten oto break powinien byc chyba wyrzucony, i sprawdzanie czy faktycznie byla to jedna wartosc powinna byc robiona przez test
-                        }
-                        //ostatni ukonczony sprint
-                        //jesli nie ma zaplanowanego kolejnego sprintu, pobierz z bazy wszystkie sprinty dla danego projektu, uszereguj malejaco pod wzgledem daty zakonczenia i wez pierwszy rekord, czyli ostatni ukonczony sprint
-                        if (!checkIfAnyResults)
-                        {
-                            cmd = new NpgsqlCommand(
-                                "select * from sprints where project_id = @projectid and sprint_end < @currentdate order by sprint_end desc top 1;")
-                            {
-                                Connection = Connection.Conn
-                            };
-
-                            cmd.Parameters.AddWithValue("projectid", projectid);
-                            cmd.Parameters.AddWithValue("currentdate", datetime);
-                            using (var reader2 = cmd.ExecuteReader())
-                            {
-                                while (reader2.Read())
-                                {
-                                    sprint = new SprintModel
-                                    {
-                                        SprintId = (int)reader[0],
-                                        ParentProjectId = (int)reader[1],
-                                        StartDateTime = (DateTime)reader[2],
-                                        EndDateTime = (DateTime)reader[3]
-                                    };
-                                    break;
-                                }
-                            }
+                            break;
                         }
                     }
                 }
