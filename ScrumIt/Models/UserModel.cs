@@ -57,7 +57,7 @@ namespace ScrumIt.Models
         public static List<UserModel> GetUsersByProjectId(int projectid)
         {
             return UserAccess.GetUsersByProjectId(projectid);
-        }
+        } 
 
         public static bool Add(UserModel addedUser, string password)
         {
@@ -68,9 +68,10 @@ namespace ScrumIt.Models
         {
             return UserAccess.Delete(deletedUser);
         }
-
-        //TODO
-        //pobierz userow przypisanych do tasku
+        public static List<UserModel> GetUsersByTaskId(int projectid)
+        {
+            return UserAccess.GetUsersByTaskId(projectid);
+        }
     }
 
     public enum UserRoles

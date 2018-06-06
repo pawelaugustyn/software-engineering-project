@@ -25,9 +25,9 @@ namespace ScrumIt.Models
             return ProjectAccess.CreateNewProject(addedProject);
         }
 
-        public static bool DeleteProject(ProjectModel deletedProject)
+        public static bool DeleteProject(ProjectModel projectToDelete)
         {
-            return ProjectAccess.DeleteProject(deletedProject);
+            return ProjectAccess.DeleteProject(projectToDelete);
         }
     }
 }

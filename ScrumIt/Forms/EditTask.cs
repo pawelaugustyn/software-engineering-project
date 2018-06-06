@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using MetroFramework.Forms;
+using ScrumIt.DataAccess;
 using ScrumIt.Models;
 
 namespace ScrumIt.Forms
@@ -40,14 +41,7 @@ namespace ScrumIt.Forms
                 priorityTextBox.BackColor = Color.White;
                 estimatedTimeTextBox.BackColor = Color.White;
 
-                // TODO
-                // Pobierz userow przypisanych do zadania
-
-                var users = new List<UserModel>
-                {
-                    UserModel.GetUserById(1)
-                };
-
+                var users = UserAccess.GetUsersByTaskId(_taskId);
                 userListMenuStrip.Items.AddRange(createUsersListMenu(users));
             }
             catch (Exception err)
@@ -65,11 +59,11 @@ namespace ScrumIt.Forms
                 var toolStripItems = new ToolStripItem[allUsers.Count];
                 for (var i = 0; i < allUsers.Count; i++)
                 {
-                    var toolStripMenuItemName = allUsers[i].Username;
+                    var toolStripMenuItemName = allUsers[i].UserId;
                     var toolStripMenuItemText = allUsers[i].Firstname + " " + allUsers[i].Lastname + " ";
                     var toolStripMenuItem = new ToolStripMenuItem
                     {
-                        Name = toolStripMenuItemName,
+                        Name = toolStripMenuItemName.ToString(),
                         Text = toolStripMenuItemText,
                         Image = allUsers[i].Avatar,
                         CheckOnClick = true
@@ -140,15 +134,34 @@ namespace ScrumIt.Forms
                 {
                     var userName = user.Name;
                     userNames.Add(userName);
-                    // TODO 
-                    //przypisz uzytkownika do zadania do bazki
                 }
+            }
+
+            var userModels = new List<UserModel>();
+            foreach (var user in userNames)
+            {
+                userModels.Add(UserModel.GetUserById(Int32.Parse(user)));
             }
             if (validationFlag)
             {
-                // TODO 
-                //update task to db
-                
+                try
+                {
+                    var task = TaskModel.GetTaskById(_taskId);
+                    TaskModel.AssignUsersToTask(task, userModels);
+                    task.TaskName = taskName;
+                    task.TaskDesc = taskDescription;
+                    task.TaskPriority = Int32.Parse(taskPriority);
+                    task.TaskEstimatedTime = Int32.Parse(taskEstimatedTime);
+                    if (TaskModel.UpdateTask(task))
+                    {
+                        MessageBox.Show(@"Zaktualizowano zmiany zadania");
+                    }
+                }
+                catch (Exception err)
+                {
+                    MessageBox.Show(err.Message);
+                }
+
                 this.Close();
             }
         }

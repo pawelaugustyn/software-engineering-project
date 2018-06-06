@@ -225,6 +225,22 @@ namespace ScrumIt.Forms
             CurrentSprint_Load(null, EventArgs.Empty);
         }
 
+        private void proj_FormClosed()
+        {
+            try
+            {
+                var proj = ProjectModel.GetProjectById(_projectId);
+                if (proj.ProjectId == 0)
+                {
+                    Close();
+                }
+            }
+            catch (Exception err)
+            {
+                MessageBox.Show(err.Message);
+            }
+        }
+
         private void addTask_FormClosed()
         {
             scrumBoardPanel.Controls.Clear();
@@ -329,44 +345,10 @@ namespace ScrumIt.Forms
 
         private void historyToolStripMenuItem_Click(int sprintId)
         {
-            //pobierz taski z historycznego sprintu
-
-            var taskList = new[]
-            {
-                new
-                {
-                    taskName = "Stary Task",
-                    taskDescription = "Task Description",
-                    taskPriority = 2,
-                    estimatedTime = 10,
-                    users = new[] {"Nowak1"},
-                    taskStage = 1,
-                    Color = Color.Aquamarine
-                },
-                new
-                {
-                    taskName = "Stary Task",
-                    taskDescription = "Task Description",
-                    taskPriority = 4,
-                    estimatedTime = 10,
-                    users = new[] {"Nowak1","Nowak2"},
-                    taskStage = 2,
-                    Color = Color.Aqua
-                },
-                new
-                {
-                    taskName = "Stary Task",
-                    taskDescription = "Task Description",
-                    taskPriority = 10,
-                    estimatedTime = 10,
-                    users = new[] {"Nowak1","Nowak2","Nowak3"},
-                    taskStage = 3,
-                    Color = Color.Bisque
-                }
-            };
+            var taskList = TaskModel.GetTasksBySprintId(sprintId);
             scrumBoardPanel.Controls.Clear();
 
-            for (var i = 0; i < taskList.Length; i++)
+            for (var i = 0; i < taskList.Count; i++)
             {
                 CreateHistoryTaskPanel(taskList[i], i);
             }
@@ -588,11 +570,11 @@ namespace ScrumIt.Forms
             scrumBoardPanel.Controls.Add(taskPanel);
         }
 
-        private void CreateHistoryTaskPanel(dynamic taskList, int index)
+        private void CreateHistoryTaskPanel(TaskModel taskList, int index)
         {
             var height = GetScrumBoardPanelHeight();
             var width = GetScrumBoardPanelWidth();
-            var stageTemp = (TaskModel.TaskStages)taskList.taskStage;
+            var stageTemp = taskList.TaskStage;
             var taskPanelName = "taskPanel" + index;
             var positionX = width / 40;
             switch (stageTemp)
@@ -623,13 +605,13 @@ namespace ScrumIt.Forms
                 Name = "taskNameTextBox",
                 Size = new Size(340, 43),
                 TabIndex = 5,
-                Text = taskList.taskName,
+                Text = taskList.TaskName,
                 Enabled = false
             };
 
             var priorityPanel = new Panel
             {
-                BackColor = getPriorityColor(taskList.taskPriority),
+                BackColor = getPriorityColor(taskList.TaskPriority),
                 Location = new Point(-1, -1),
                 Name = "priorityPanel",
                 Size = new Size(10, 79),
@@ -646,7 +628,7 @@ namespace ScrumIt.Forms
             };
             taskDescriptionButton.Click += delegate
             {
-                taskDescriptionButton_Click(taskList.taskDescription);
+                taskDescriptionButton_Click(taskList.TaskDesc);
             };
 
             var taskTimeLabel = new MetroLabel
@@ -658,11 +640,15 @@ namespace ScrumIt.Forms
                 Name = "taskTimeLabel",
                 Size = new Size(13, 15),
                 TabIndex = 3,
-                Text = (taskList.estimatedTime).ToString(),
+                Text = (taskList.TaskEstimatedTime).ToString(),
                 TextAlign = ContentAlignment.MiddleRight
             };
 
-            var userPhotos = taskList.users;
+            var userPhotos = new[]
+            {
+                new{user = 1},
+                new{user = 2}
+            };
             var pictureBoxes = new List<PictureBox>();
             var location = 15;
             foreach (var user in userPhotos)
@@ -683,10 +669,9 @@ namespace ScrumIt.Forms
                 location += 29;
             }
 
-            taskPanel.BackColor = taskList.Color;
-            taskNameTextBox.BackColor = taskList.Color;
+            taskPanel.BackColor = ColorTranslator.FromHtml(taskList.TaskColor);
 
-            if ((TaskModel.TaskStages)taskList.taskStage < TaskModel.TaskStages.Completed)
+            if (taskList.TaskStage < TaskModel.TaskStages.Completed)
             {
                 var notFinishedTask = new Label
                 {
@@ -747,8 +732,8 @@ namespace ScrumIt.Forms
         {
             if (e.CloseReason == CloseReason.UserClosing)
             {
-                UserModel.Logout();
-                Application.Exit();
+                var mainView = new MainView();
+                mainView.Show();
             }
         }
 
@@ -778,6 +763,7 @@ namespace ScrumIt.Forms
                 if (propertiesComboBox.SelectedIndex == 4)
                 {
                     var proj = new ManageProject(_projectId);
+                    proj.FormClosed += delegate { proj_FormClosed(); };
                     proj.Show();
                 }
                 if (propertiesComboBox.SelectedIndex == 5)

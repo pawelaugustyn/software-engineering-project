@@ -67,9 +67,6 @@ namespace ScrumIt.Models
             return TaskAccess.SetNewColour(task, colour);
         }
 
-        // TODO 
-        //Update task
-
         public static void UpdateTaskStage(int taskid, TaskStages newstage)
         {
             TaskAccess.UpdateTaskStage(taskid, newstage);
@@ -83,6 +80,16 @@ namespace ScrumIt.Models
         public static void RemoveTask(int taskid)
         {
             TaskAccess.RemoveTask(taskid);
+        }
+
+        public static void AssignUsersToTask(TaskModel taskToAssignTo, List<UserModel> usersToAssign)
+        {
+            TaskAccess.AssignUsersToTask(taskToAssignTo, usersToAssign);
+        }
+
+        public static bool UpdateTask(TaskModel task)
+        {
+            return TaskAccess.UpdateTask(task);
         }
     }
 }
