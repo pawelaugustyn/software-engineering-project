@@ -68,7 +68,7 @@ namespace ScrumIt.Forms
                         });
                         var projectId = ProjectModel.GetProjectByName(name).ProjectId;
                         var sprint = new SprintModel(0, projectId, DateTime.Now.ToString(), endSprintDate);
-                        SprintModel.CreateNewSprint(sprint, projectId);
+                        SprintModel.CreateNewSprint(sprint);
 
                         MessageBox.Show("Pomyślnie dodano nowy projekt");
                         this.Close();

@@ -69,7 +69,7 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
                 StartDateTime = new DateTime(2018, 5, 30)
             };
 
-            SprintAccess.CreateNewSprintForProject(_sprint, _project.ProjectId);
+            SprintAccess.CreateNewSprintForProject(_sprint);
             Setup.RegisterToDeleteAfterTestExecution(_sprint);
 
             _taskAddedToSprint = new TaskModel

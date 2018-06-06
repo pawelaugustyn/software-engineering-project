@@ -54,9 +54,9 @@ namespace ScrumIt.Models
             return SprintAccess.GetOldSprintsByProjectId(projectId);
         }
 
-        public static void CreateNewSprint(SprintModel sprint, int projectId)
+        public static void CreateNewSprint(SprintModel sprint)
         {
-            SprintAccess.CreateNewSprintForProject(sprint, projectId);
+            SprintAccess.CreateNewSprintForProject(sprint);
         }
     }
 }
