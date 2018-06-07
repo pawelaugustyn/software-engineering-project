@@ -180,11 +180,57 @@ Tasks:
     - set new color (restrictions, is successful, is it valid color)
 **consider if any can (or should) throw exception. Check it!**
 4. SprintAccessIntegrationTests 
+	```
+      AddEmptySprintToProjectShouldThrow [0:00.001] Success
+      AddSprintToProject [0:00.736] Success
+      AddSprintToProjectBeforeLastSprintEndDateShouldThrow [0:00.089] Success
+      AddSprintToProjectWhenUnauthorizedShouldThrow [0:00.001] Success
+      AddSprintWithWrongDatesToProjectShouldThrow [0:00.357] Success
+      CreatingSprintWithWrongDateFormatShouldThrow [0:00.002] Success
+      GetEndOfLastSprintByProjectIdShouldReturnCorrectDate [0:00.090] Success
+      GetMostRecentSprintByProjectIdShouldReturnCorrectLastFinishedSprint [0:00.290] Success
+      GetMostRecentSprintByProjectIdShouldReturnCorrectNextSprint [0:00.188] Success
+      GetMostRecentSprintByProjectIdShouldReturnCorrectRecentSprint [0:00.096] Success
+      GetOldSprintsByProjectIdShouldNotReturnCorrectSprints [0:00.096] Success
+      GetOldSprintsByProjectIdShouldReturnCorrectSprints [0:00.097] Success
+      GetSprintByIdShouldNotReturnCorrectSprint [0:00.097] Success
+      GetSprintByIdShouldReturnCorrectSprint [0:00.112] Success
+      GetSprintByProjectIdAndDateShouldNotReturnCorrectSprint [0:00.086] Success
+      GetSprintByProjectIdAndDateShouldReturnCorrectSprint [0:00.087] Success
+      GetSprintByProjectIdAndDateWithWrongDateShouldNotReturnCorrectSprint [0:00.110] Success
+	```
+	**TO DO:**
+    	- UpdateSprint and DeleteSprint
+	
     - all Get method with:
         - correct values
         - incorrect values (also null and empty), consider date (start should be earlier than stop, weird date)
     **consider if any can (or should) throw exception. Check it!**
 5. ProjectAccessIntegrationTests 
+	```
+      AddEmptyProjectShouldThrow [0:00.026] Success
+      AddNewUserToProjectThatAlreadyExistsShouldThrow [0:01.844] Success
+      AddNewUserToProjectWhenUnauthorizedShouldThrow [0:00.763] Success
+      AddNewUserToProjectWithUniqueUserame [0:00.982] Success
+      AddProjectThatAlreadyExistShouldThrow [0:00.194] Success
+      AddProjectWhenUnauthorizedShouldThrow [0:00.105] Success
+      AddProjectWithUniqueName [0:00.558] Success
+      AddProjectWithWrongColourShouldThrow [0:00.085] Success
+      DeleteEmptyOrInvalidProjectShouldDoNothing [0:00.218] Success
+      DeleteProjectWhenUnauthorizedShouldThrow [0:00.553] Success
+      DeleteProjectWithUniqueName [0:00.780] Success
+      GetProjectByIdShouldNotReturnCorrectProject [0:00.092] Success
+      GetProjectByIdShouldReturnCorrectProject [0:00.091] Success
+      GetProjectByNameShouldNotReturnCorrectProject [0:00.085] Success
+      GetProjectByNameShouldReturnCorrectProject [0:00.093] Success
+      GetProjectsByUserIdShouldNotReturnCorrectProjects [0:00.097] Success
+      GetProjectsByUserIdShouldReturnCorrectProjects [0:00.095] Success
+      UpdateProjectToEmptyProjectShouldThrow [0:00.470] Success
+      UpdateProjectWhenUnauthorizedShouldThrow [0:00.440] Success
+      UpdateProjectWithSameOrNewName [0:01.096] Success
+      UpdateProjectWithWrongColourShouldThrow [0:00.492] Success
+	```
+	
    - all Get method with correct and with incorrect values (also null and empty)
     - create with correct and with incorrect values (also null and empty)
         - check if project color is correct color,
