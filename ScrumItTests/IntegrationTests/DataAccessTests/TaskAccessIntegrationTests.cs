@@ -11,7 +11,6 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
     public class TaskAccessIntegrationTests
     {
         private UserModel _user;
-        private UserModel _guest;
         private ProjectModel _project;
         private TaskModel _task;
         private SprintModel _sprint;
@@ -35,8 +34,6 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
 
             UserAccess.Add(_user, Password);
             Setup.RegisterToDeleteAfterTestExecution(_user);
-
-            _guest = new UserModel();
 
             _project = new ProjectModel
             {
@@ -126,13 +123,28 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
         [Test]
         public void UpdateTaskStage()
         {
-            var isUpdatedSuccessful = TaskAccess.UpdateTaskStage(_task.TaskId, TaskModel.TaskStages.Doing);
+             var taskToUpdateStage = new TaskModel
+            {
+                TaskName = "testTask".WithUniqueName(),
+                TaskDesc = "testTaskDescription",
+                TaskType = "T",
+                TaskPriority = int.Parse("15"),
+                TaskEstimatedTime = int.Parse("10"),
+                TaskStage = TaskModel.TaskStages.ToDo,
+                TaskColor = "#ffffff",
+                BacklogProjectId = _project.ProjectId,
+            };
 
-            Assert.That(isUpdatedSuccessful, Is.True, $"Task not updated succesfully: {Messages.Display(_task)}");
+            TaskAccess.CreateNewTask(taskToUpdateStage);
+            Setup.RegisterToDeleteAfterTestExecution(taskToUpdateStage);
+            
+            var isUpdatedSuccessful = TaskAccess.UpdateTaskStage(taskToUpdateStage.TaskId, TaskModel.TaskStages.Doing);
 
-            var task = TaskAccess.GetTaskById(_task.TaskId);
+            Assert.That(isUpdatedSuccessful, Is.True, $"Task not updated succesfully: {Messages.Display(taskToUpdateStage)}");
 
-            Assertion.NotEquals(task, _task);
+            var task = TaskAccess.GetTaskById(taskToUpdateStage.TaskId);
+
+            Assertion.NotEquals(task, taskToUpdateStage);
         }
 
         [Test]
@@ -153,11 +165,57 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
         }
 
         [Test]
-        public void AssignUsersToTask()
+        public void AssignUsersToTaskWhenAssignNewUser()
         {
             var isAssignedSuccessful = TaskAccess.AssignUsersToTask(_taskAddedToSprint, new List<UserModel> { _developerToAssigneToTask });
-
             Assert.That(isAssignedSuccessful, Is.True, $"User not assigned to task succesfully: {Messages.Display(_taskAddedToSprint)} {Environment.NewLine}{_developerToAssigneToTask}");
+        }
+
+        [Test]
+        public void AssignUsersToTaskWhenAssignNewUserAndDeassignOldUser()
+        {
+            var developer2ToAssigneToTask = new UserModel
+            {
+                Username = "testDeveloper".WithUniqueName(),
+                Firstname = "test",
+                Lastname = "developer",
+                Role = UserRoles.Developer,
+                Email = "testDevelope@test.com"
+            };
+
+            UserAccess.Add(developer2ToAssigneToTask, Password);
+            Setup.RegisterToDeleteAfterTestExecution(developer2ToAssigneToTask);
+
+            var developer3ToAssigneToTask = new UserModel
+            {
+                Username = "testDeveloper".WithUniqueName(),
+                Firstname = "test",
+                Lastname = "developer",
+                Role = UserRoles.Developer,
+                Email = "testDevelope@test.com"
+            };
+
+            var taskAddedToSprint = new TaskModel
+            {
+                TaskName = "taskAddedToSprint".WithUniqueName(),
+                TaskDesc = "taskAddedToSprintDescription",
+                TaskType = "T",
+                TaskPriority = int.Parse("15"),
+                TaskEstimatedTime = int.Parse("10"),
+                TaskStage = TaskModel.TaskStages.ToDo,
+                TaskColor = "#ffffff",
+                BacklogProjectId = _project.ProjectId,
+                SprintId = _sprint.SprintId
+            };
+
+            TaskAccess.CreateNewTask(taskAddedToSprint);
+            Setup.RegisterToDeleteAfterTestExecution(taskAddedToSprint);
+
+            UserAccess.Add(developer3ToAssigneToTask, Password);
+            Setup.RegisterToDeleteAfterTestExecution(developer3ToAssigneToTask);
+
+            var isAssignedSuccessful = TaskAccess.AssignUsersToTask(taskAddedToSprint, new List<UserModel> { developer2ToAssigneToTask, developer3ToAssigneToTask });
+            Assert.That(isAssignedSuccessful, Is.True, $"User not assigned to task succesfully: {Messages.Display(taskAddedToSprint)} {Environment.NewLine}{_developerToAssigneToTask}");
         }
 
         [Test]
@@ -191,6 +249,88 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
 
             tasks.ListNotContains(taskInBacklog);
             tasks.ListContains(_task);
+        }
+
+        [Test]
+        public void SetNewColour()
+        {
+            var taskToEditColor = new TaskModel
+            {
+                TaskName = "testTask".WithUniqueName(),
+                TaskDesc = "testTaskDescription",
+                TaskType = "T",
+                TaskPriority = int.Parse("15"),
+                TaskEstimatedTime = int.Parse("10"),
+                TaskStage = TaskModel.TaskStages.ToDo,
+                TaskColor = "#ffffff",
+                BacklogProjectId = _project.ProjectId,
+            };
+
+            TaskAccess.CreateNewTask(taskToEditColor);
+            Setup.RegisterToDeleteAfterTestExecution(taskToEditColor);
+
+            const string colour = "#0000ff";
+            var isSetSuccessful = TaskAccess.SetNewColour(taskToEditColor, colour);
+            Assert.That(isSetSuccessful, Is.True, $"Task color should be changed to {colour}: {Messages.Display(taskToEditColor)}");
+
+            var taskAfterSet = TaskAccess.GetTaskById(taskToEditColor.TaskId);
+            Assertion.Equals(taskAfterSet, taskToEditColor);
+        }
+
+        [Test]
+        public void UpdateTask()
+        {
+            var taskToUpdate = new TaskModel
+            {
+                TaskName = "testTask".WithUniqueName(),
+                TaskDesc = "testTaskDescription",
+                TaskType = "T",
+                TaskPriority = int.Parse("15"),
+                TaskEstimatedTime = int.Parse("10"),
+                TaskStage = TaskModel.TaskStages.ToDo,
+                TaskColor = "#ffffff",
+                BacklogProjectId = _project.ProjectId,
+            };
+
+            TaskAccess.CreateNewTask(taskToUpdate);
+            Setup.RegisterToDeleteAfterTestExecution(taskToUpdate);
+
+            taskToUpdate.TaskName = "updatedTask".WithUniqueName();
+            taskToUpdate.TaskDesc = "updatedTaskDescription";
+            taskToUpdate.TaskPriority = int.Parse("30");
+            taskToUpdate.TaskEstimatedTime = int.Parse("20");
+
+            var isUpdatedSuccessful = TaskAccess.UpdateTask(taskToUpdate);
+
+            Assert.That(isUpdatedSuccessful, Is.True, $"Task not updated succesfully: {Messages.Display(taskToUpdate)}");
+
+            var task = TaskAccess.GetTaskById(taskToUpdate.TaskId);
+
+            Assertion.Equals(task, taskToUpdate);
+        }
+
+        [Test]
+        public void RemoveTask()
+        {
+            var taskToRemove = new TaskModel
+            {
+                TaskName = "testTask".WithUniqueName(),
+                TaskDesc = "testTaskDescription",
+                TaskType = "T",
+                TaskPriority = int.Parse("15"),
+                TaskEstimatedTime = int.Parse("10"),
+                TaskStage = TaskModel.TaskStages.ToDo,
+                TaskColor = "#ffffff",
+                BacklogProjectId = _project.ProjectId,
+            };
+
+            TaskAccess.CreateNewTask(taskToRemove);
+            TaskAccess.RemoveTask(taskToRemove.TaskId);
+
+            var task = TaskAccess.GetTaskById(taskToRemove.TaskId);
+
+            Assertion.NotEquals(task, taskToRemove);
+            Assertion.Equals(task, new TaskModel());
         }
     }
 }

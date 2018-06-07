@@ -291,6 +291,58 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
         }
 
         [Test]
+        public void UpdateUserDataAsScrumMasterShouldBePossible()
+        {
+            var userToUpdate = new UserModel
+            {
+                Username = "testDeveloper".WithUniqueName(),
+                Firstname = "test",
+                Lastname = "developer",
+                Role = UserRoles.Developer,
+                Email = "testDeveloper@test.com"
+            };
+
+            UserAccess.Add(userToUpdate, Password);
+            Setup.RegisterToDeleteAfterTestExecution(userToUpdate);
+
+            userToUpdate.Email = "developer@test.com";
+
+            var updatedSyccessful = UserAccess.UpdateUserData(userToUpdate);
+            Assert.That(updatedSyccessful, Is.True, $"Updating user should be successful {Messages.Display(updatedSyccessful)}.");
+
+            var user = UserAccess.GetUserById(userToUpdate.UserId);
+            Assertion.Equals(user, userToUpdate);
+        }
+
+        [Test]
+        public void UpdateUserDataAsGuestShouldThrow()
+        {
+            var userToUpdate = new UserModel
+            {
+                Username = "testDeveloper".WithUniqueName(),
+                Firstname = "test",
+                Lastname = "developer",
+                Role = UserRoles.Developer,
+                Email = "testDeveloper@test.com"
+            };
+
+            UserAccess.Add(userToUpdate, Password);
+            Setup.RegisterToDeleteAfterTestExecution(userToUpdate);
+
+            AppStateProvider.Instance.CurrentUser = _guest;
+
+            userToUpdate.Email = "developer@test.com";
+
+            var updatedSyccessful = false;
+            Assert.Throws<UnauthorizedAccessException>(delegate { updatedSyccessful = UserAccess.UpdateUserData(userToUpdate); },
+                "Exception should be thrown, because it should not be possible to update anyone as guest.");
+
+            Assert.That(updatedSyccessful, Is.False, $"Updating user should not be successful {Messages.Display(updatedSyccessful)}.");
+
+            AppStateProvider.Instance.CurrentUser = _user;
+        }
+
+        [Test]
         public void X_DeleteUserWhenUnauthorizedShouldThrow()
         {
             AppStateProvider.Instance.CurrentUser = _user;
