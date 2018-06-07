@@ -396,14 +396,15 @@ namespace ScrumIt.DataAccess
                 throw new UnauthorizedAccessException("Not permitted for that operation.");
             if (AppStateProvider.Instance.CurrentUser.Role == UserRoles.Developer && AppStateProvider.Instance.CurrentUser.UserId != updatedUser.UserId)
                 throw new UnauthorizedAccessException("Not permitted for that operation - you can't change other person's data.");
-            ValidateUsername(updatedUser);
+
+            ValidatePersonalData(updatedUser);
+
             using (new Connection())
             {
-                var cmd = new NpgsqlCommand("UPDATE users SET username = @username, first_name = @firstname, last_name = @lastname, role = @role, email = @email WHERE uid = @userid;")
+                var cmd = new NpgsqlCommand("UPDATE users SET first_name = @firstname, last_name = @lastname, role = @role, email = @email WHERE uid = @userid;")
                 {
                     Connection = Connection.Conn
                 };
-                cmd.Parameters.AddWithValue("username", updatedUser.Username);
                 cmd.Parameters.AddWithValue("firstname", updatedUser.Firstname);
                 cmd.Parameters.AddWithValue("lastname", updatedUser.Lastname);
                 cmd.Parameters.AddWithValue("role", (int)updatedUser.Role);
