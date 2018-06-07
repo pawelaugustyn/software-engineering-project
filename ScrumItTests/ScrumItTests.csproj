@@ -66,6 +66,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assertion.cs" />
+    <Compile Include="IntegrationTests\DataAccessTests\SprintAccessIntergrationTests.cs" />
     <Compile Include="IntegrationTests\DataAccessTests\TaskAccessIntegrationTests.cs" />
     <Compile Include="IntegrationTests\DataAccessTests\ProjectAccessIntegrationTests.cs" />
     <Compile Include="IntegrationTests\DataAccessTests\UserAccessIntegrationTests.cs" />
