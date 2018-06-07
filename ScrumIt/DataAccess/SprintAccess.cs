@@ -21,7 +21,13 @@ namespace ScrumIt.DataAccess
                 {
                     while (reader.Read())
                     {
-                        sprint = new SprintModel((int)reader[0], (int)reader[1], (string)reader[2], (string)reader[3]);
+                        sprint = new SprintModel
+                        {
+                            SprintId = (int)reader[0],
+                            ParentProjectId = (int)reader[1],
+                            StartDateTime = (DateTime)reader[2],
+                            EndDateTime = (DateTime)reader[3]
+                        };
                         break;
                     }
                 }
@@ -236,6 +242,9 @@ namespace ScrumIt.DataAccess
         {
             if (sprint.StartDateTime == null)
                 throw new ArgumentException("Sprint's start date is not initialized");
+
+            if (sprint.StartDateTime >= sprint.EndDateTime)
+                throw new ArgumentException("Sprint's start should happen before its end.");
 
             //sprawdzamy, czy data rozpoczecia nowego sprintu jest pozniejsza niz data zakonczenia ostatniego istniejacego juz sprintu
             DateTime? endOfLastSprint = GetEndOfLastSprintByProjectId(sprint.ParentProjectId);

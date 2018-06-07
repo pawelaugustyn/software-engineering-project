@@ -27,19 +27,19 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
                 Email = "testScrumMaster@test.com"
             };
 
+            AppStateProvider.Instance.CurrentUser = _user;
+            UserAccess.Add(_user, Password);
+            Setup.RegisterToDeleteAfterTestExecution(_user);
+
             _project = new ProjectModel
             {
                 ProjectName = "TestProject".WithUniqueName(),
                 ProjectColor = "#ff0000"
             };
 
-            AppStateProvider.Instance.CurrentUser = _user;
-
-            UserAccess.Add(_user, Password);
-            Setup.RegisterToDeleteAfterTestExecution(_user);
-
             ProjectAccess.CreateNewProject(_project);
             Setup.RegisterToDeleteAfterTestExecution(_project);
+
         }
 
         [Test]
@@ -51,11 +51,27 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
         }
 
         [Test]
-        public void GetProjectByNameShouldReturnCorrectProjects()
+        public void GetProjectByIdShouldNotReturnCorrectProject()
+        {
+            var project = ProjectAccess.GetProjectById(-1);
+
+            Assertion.Equals(project, new ProjectModel());
+        }
+
+        [Test]
+        public void GetProjectByNameShouldReturnCorrectProject()
         {
             var project = ProjectAccess.GetProjectByName(_project.ProjectName);
 
             Assertion.Equals(project, _project);
+        }
+
+        [Test]
+        public void GetProjectByNameShouldNotReturnCorrectProject()
+        {
+            var project = ProjectAccess.GetProjectByName("incorrectUserName");
+
+            Assertion.Equals(project, new ProjectModel());
         }
 
         [Test]
@@ -77,8 +93,6 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
         [Test]
         public void AddProjectWithUniqueName()
         {
-            AppStateProvider.Instance.CurrentUser = _user;
-
             var projectToAdd = new ProjectModel
             {
                 ProjectName = "addTestProject".WithUniqueName(),
@@ -92,27 +106,20 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
 
             Assertion.Equals(projectToAdd, projectAfterAdd, "Project with unique name not added correctly to DB.");
             Assert.That(isAddedSuccessful, Is.True, $"Adding project should be successful {Messages.Display(projectToAdd)}.");
+            Setup.RegisterToDeleteAfterTestExecution(projectToAdd);
         }
 
         [Test]
         public void AddProjectThatAlreadyExistShouldThrow()
         {
-            var projectToAdd = new ProjectModel
-            {
-                ProjectName = "addTestProject".WithUniqueName(),
-                ProjectColor = "#ff0000"
-            };
-            var projectWithTheSameName = ProjectAccess.GetProjectByName(projectToAdd.ProjectName);
-            Assert.That(projectWithTheSameName.IsDeepEqual(new ProjectModel()), Is.True, "Project should not exist.");
-
-            ProjectAccess.CreateNewProject(projectToAdd);
             var isAddedSuccessful = false;
-            Assert.Throws<ArgumentException>(delegate { isAddedSuccessful = ProjectAccess.CreateNewProject(projectToAdd); },
+
+            Assert.Throws<ArgumentException>(delegate { isAddedSuccessful = ProjectAccess.CreateNewProject(_project); },
                 "Exception should be thrown, because it should not be possible to add project with the same name that has already been added.");
 
-            var projectAfterAdd = ProjectAccess.GetProjectByName(projectToAdd.ProjectName);
-            Assertion.Equals(projectToAdd, projectAfterAdd, "Project with already existing name should not be added correctly to DB.");
-            Assert.That(isAddedSuccessful, Is.False, $"Adding project should not be successful {Messages.Display(projectToAdd)}.");
+            var projectAfterAdd = ProjectAccess.GetProjectByName(_project.ProjectName);
+            Assertion.Equals(_project, projectAfterAdd, "Project with already existing name should not be added correctly to DB.");
+            Assert.That(isAddedSuccessful, Is.False, $"Adding project should not be successful {Messages.Display(_project)}.");
         }
 
         [Test]
@@ -147,23 +154,23 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
         [Test]
         public void DeleteProjectWithUniqueName()
         {
-            var projectToAdd = new ProjectModel
+            var projectToAddAndDelete = new ProjectModel
             {
                 ProjectName = "addTestProject".WithUniqueName(),
                 ProjectColor = "#ff0000"
             };
-            var projectWithTheSameName = ProjectAccess.GetProjectByName(projectToAdd.ProjectName);
+            var projectWithTheSameName = ProjectAccess.GetProjectByName(projectToAddAndDelete.ProjectName);
             Assert.That(projectWithTheSameName.IsDeepEqual(new ProjectModel()), Is.True, "Project should not exist.");
 
-            ProjectAccess.CreateNewProject(projectToAdd);
-            var projectAfterAdd = ProjectAccess.GetProjectByName(projectToAdd.ProjectName);
+            ProjectAccess.CreateNewProject(projectToAddAndDelete);
+            var projectAfterAdd = ProjectAccess.GetProjectByName(projectToAddAndDelete.ProjectName);
 
-            Assertion.Equals(projectToAdd, projectAfterAdd, "Project with unique name not added correctly to DB. ");
+            Assertion.Equals(projectToAddAndDelete, projectAfterAdd, "Project with unique name not added correctly to DB. ");
 
             var deletedSuccessful = ProjectAccess.DeleteProject(projectAfterAdd);
             Assert.That(deletedSuccessful, Is.True, $"Deleting should be successful {Messages.Display(projectAfterAdd)}.");
 
-            var projectAfterDelete = ProjectAccess.GetProjectByName(projectToAdd.ProjectName);
+            var projectAfterDelete = ProjectAccess.GetProjectByName(projectToAddAndDelete.ProjectName);
             Assert.That(projectAfterDelete.IsDeepEqual(new ProjectModel()), Is.True, $"Project {Messages.Display(projectAfterDelete)} should be deleted.");
         }
 
@@ -186,8 +193,6 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
         [Test]
         public void DeleteProjectWhenUnauthorizedShouldThrow()
         {
-            AppStateProvider.Instance.CurrentUser = _user;
-
             var projectToAddAndDelete = new ProjectModel
             {
                 ProjectName = "addTestProject".WithUniqueName(),
@@ -210,13 +215,12 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
             Assert.That(deletedSuccessful, Is.True, $"Deleting project should not be successful {Messages.Display(projectToAddAndDelete)}.");
 
             AppStateProvider.Instance.CurrentUser = _user;
+            Setup.RegisterToDeleteAfterTestExecution(projectToAddAndDelete);
         }
 
         [Test]
         public void AddProjectWhenUnauthorizedShouldThrow()
         {
-            AppStateProvider.Instance.CurrentUser = _user;
-
             var projectToAdd = new ProjectModel
             {
                 ProjectName = "addTestProject".WithUniqueName(),
@@ -232,13 +236,13 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
                 "Exception should be thrown, because it should not be possible to add project if you are guest.");
 
             Assert.That(isAddedSuccessful, Is.False, $"Adding project should not be successful {Messages.Display(projectToAdd)}.");
+
+            AppStateProvider.Instance.CurrentUser = _user;
         }
 
         [Test]
         public void UpdateProjectWithSameOrNewName()
         {
-            AppStateProvider.Instance.CurrentUser = _user;
-
             var projectToAddandUpdate = new ProjectModel
             {
                 ProjectName = "addTestProject".WithUniqueName(),
@@ -263,13 +267,13 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
 
             Assertion.Equals(projectToAddandUpdate, updatedProject, "Project with new unique name not updated correctly in DB.");
             Assert.That(isUpdatedSuccessful, Is.True, $"Updating project should be successful {Messages.Display(projectToAddandUpdate)}.");
+
+            Setup.RegisterToDeleteAfterTestExecution(projectToAddandUpdate);
         }
 
         [Test]
         public void UpdateProjectToEmptyProjectShouldThrow()
         {
-            AppStateProvider.Instance.CurrentUser = _user;
-
             var projectToAddandUpdate = new ProjectModel
             {
                 ProjectName = "addTestProject".WithUniqueName(),
@@ -288,13 +292,13 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
                 "Exception should be thrown, because it should not be possible to update project to empty project.");
 
             Assert.That(isUpdatedSuccessful, Is.False, $"Updating project should not be successful {Messages.Display(projectToAddandUpdate)}.");
+
+            Setup.RegisterToDeleteAfterTestExecution(projectToAddandUpdate);
         }
 
         [Test]
         public void UpdateProjectWithWrongColourShouldThrow()
         {
-            AppStateProvider.Instance.CurrentUser = _user;
-
             var projectToAddandUpdate = new ProjectModel
             {
                 ProjectName = "addTestProject".WithUniqueName(),
@@ -313,13 +317,13 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
                 "Exception should be thrown, because it should not be possible to update project with wrong colour string.");
 
             Assert.That(isUpdatedSuccessful, Is.False, $"Updating project should not be successful {Messages.Display(projectToAddandUpdate)}.");
+
+            Setup.RegisterToDeleteAfterTestExecution(projectToAddandUpdate);
         }
 
         [Test]
         public void UpdateProjectWhenUnauthorizedShouldThrow()
         {
-            AppStateProvider.Instance.CurrentUser = _user;
-
             var projectToAddandUpdate = new ProjectModel
             {
                 ProjectName = "addTestProject".WithUniqueName(),
@@ -339,25 +343,14 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
                 "Exception should be thrown, because it should not be possible to update project if you are not scrum master.");
 
             Assert.That(isUpdatedSuccessful, Is.False, $"Updating project should not be successful {Messages.Display(projectToAddandUpdate)}.");
+
+            AppStateProvider.Instance.CurrentUser = _user;
+            Setup.RegisterToDeleteAfterTestExecution(projectToAddandUpdate);
         }
 
         [Test]
         public void AddNewUserToProjectWithUniqueUserame()
         {
-            AppStateProvider.Instance.CurrentUser = _user;
-
-            var projectToAdd = new ProjectModel
-            {
-                ProjectName = "addTestProject".WithUniqueName(),
-                ProjectColor = "#ff0000"
-            };
-
-            var projectWithTheSameName = ProjectAccess.GetProjectByName(projectToAdd.ProjectName);
-            Assert.That(projectWithTheSameName.IsDeepEqual(new ProjectModel()), Is.True, "Project should not exist.");
-
-            var isProjectAddedSuccessful = ProjectAccess.CreateNewProject(projectToAdd);
-            Assert.That(isProjectAddedSuccessful, Is.True, $"Adding project should be successful {Messages.Display(projectToAdd)}.");
-
             var userToAdd = new UserModel
             {
                 Username = "addUser".WithUniqueName(),
@@ -374,18 +367,18 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
             Assert.That(isUserAddedSuccessful, Is.True, $"Adding user should be successful {Messages.Display(userToAdd)}.");
 
             var isUserAddedToProjectSuccessful =
-                ProjectAccess.AddNewUserToProject(userToAdd.UserId, projectToAdd.ProjectId);
-            var users = UserAccess.GetUsersByProjectId(projectToAdd.ProjectId);
+                ProjectAccess.AddNewUserToProject(userToAdd.UserId, _project.ProjectId);
+            var users = UserAccess.GetUsersByProjectId(_project.ProjectId);
 
             users.ListContains(userToAdd);
-            Assert.That(isUserAddedToProjectSuccessful, Is.True, $"Adding new user to project should be successful {Messages.Display(projectToAdd)}.");
+            Assert.That(isUserAddedToProjectSuccessful, Is.True, $"Adding new user to project should be successful {Messages.Display(_project)}.");
+
+            Setup.RegisterToDeleteAfterTestExecution(userToAdd);
         }
 
         [Test]
         public void AddNewUserToProjectThatAlreadyExistsShouldThrow()
         {
-            AppStateProvider.Instance.CurrentUser = _user;
-
             var projectToAdd = new ProjectModel
             {
                 ProjectName = "addTestProject".WithUniqueName(),
@@ -420,25 +413,14 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
                 "Exception should be thrown, because it should not be possible to add user to project with the same username that has already been added.");
 
             Assert.That(isUserAddedToProjectSuccessful, Is.False, $"Adding new user to project should not be successful {Messages.Display(projectToAdd)}.");
+
+            Setup.RegisterToDeleteAfterTestExecution(userToAdd);
+            Setup.RegisterToDeleteAfterTestExecution(projectToAdd);
         }
 
         [Test]
         public void AddNewUserToProjectWhenUnauthorizedShouldThrow()
         {
-            AppStateProvider.Instance.CurrentUser = _user;
-
-            var projectToAdd = new ProjectModel
-            {
-                ProjectName = "addTestProject".WithUniqueName(),
-                ProjectColor = "#ff0000"
-            };
-
-            var projectWithTheSameName = ProjectAccess.GetProjectByName(projectToAdd.ProjectName);
-            Assert.That(projectWithTheSameName.IsDeepEqual(new ProjectModel()), Is.True, "Project should not exist.");
-
-            var isProjectAddedSuccessful = ProjectAccess.CreateNewProject(projectToAdd);
-            Assert.That(isProjectAddedSuccessful, Is.True, $"Adding project should be successful {Messages.Display(projectToAdd)}.");
-
             var userToAdd = new UserModel
             {
                 Username = "addUser".WithUniqueName(),
@@ -456,10 +438,12 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
             var isUserAddedToProjectSuccessful = false;
             UserModel.Logout();
 
-            Assert.Throws<UnauthorizedAccessException>(delegate { isUserAddedToProjectSuccessful = ProjectAccess.AddNewUserToProject(userToAdd.UserId, projectToAdd.ProjectId); },
+            Assert.Throws<UnauthorizedAccessException>(delegate { isUserAddedToProjectSuccessful = ProjectAccess.AddNewUserToProject(userToAdd.UserId, _project.ProjectId); },
                 "Exception should be thrown, because it should not be possible to add new user to project if you are not scrum master.");
 
-            Assert.That(isUserAddedToProjectSuccessful, Is.False, $"Adding new user to project should not be successful {Messages.Display(projectToAdd)}.");
+            Assert.That(isUserAddedToProjectSuccessful, Is.False, $"Adding new user to project should not be successful {Messages.Display(_project)}.");
+
+            AppStateProvider.Instance.CurrentUser = _user;
         }
     }
 }
