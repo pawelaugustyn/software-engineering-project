@@ -72,6 +72,11 @@ namespace ScrumIt.Models
         {
             return UserAccess.GetUsersByTaskId(projectid);
         }
+
+        public static void UpdateUserPassword(string password)
+        {
+            UserAccess.UpdateUserPassword(password);
+        }
     }
 
     public enum UserRoles

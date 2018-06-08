@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 using MetroFramework.Forms;
+using ScrumIt.Models;
 
 namespace ScrumIt.Forms
 {
@@ -12,22 +13,30 @@ namespace ScrumIt.Forms
             InitializeComponent();
         }
 
+        private UserModel _user;
         private readonly Color _panelColor = ColorTranslator.FromHtml("#4AC1C1");
 
         private void UserPanel_Load(object sender, System.EventArgs e)
         {
             changePasswordButton.BackColor = _panelColor;
             submitPasswordChangeButton.BackColor = _panelColor;
+            try
+            {
+                var state = AppStateProvider.Instance;
+                _user = state.CurrentUser;
 
-            var state = AppStateProvider.Instance;
-            var user = state.CurrentUser;
+                userEmailTextBox.Text = _user.Email;
+                userNameTextBox.Text = _user.Firstname;
+                userLastNameTextBox.Text = _user.Lastname;
+                userLoginTextBox.Text = _user.Username;
+                userRoleTextBox.Text = _user.Role.ToString();
+                userPhotoPictureBox.Image = _user.Avatar;
 
-            userEmailTextBox.Text = user.Email;
-            userNameTextBox.Text = user.Firstname;
-            userLastNameTextBox.Text = user.Lastname;
-            userLoginTextBox.Text = user.Username;
-            userRoleTextBox.Text = user.Role.ToString();
-            userPhotoPictureBox.Image = user.Avatar;
+            }
+            catch (Exception err)
+            {
+                MessageBox.Show(err.Message);
+            }
         }
 
         private void changePasswordButton_Click(object sender, System.EventArgs e)
@@ -38,15 +47,12 @@ namespace ScrumIt.Forms
 
         private void submitPasswordChangeButton_Click(object sender, System.EventArgs e)
         {
-            var oldPass = oldPasswordTextBox.Text;
-            //Sprawdz czy ok w bazce
-               //if czy dobre stare haslo          
             var newPass = newPasswordTextBox.Text;
             var newPassConf = confirmNewPasswordTextBox.Text;
-            if (newPass == newPassConf)
+            if (newPass == newPassConf && _user != null)
             {
                 MessageBox.Show(@"Pomyślnie zmieniono hasło");
-                // update hasla na bazie
+                UserModel.UpdateUserPassword(newPass);
             }
             else
             {
