@@ -1,4 +1,5 @@
-﻿using ScrumIt.DataAccess;
+﻿using System.Collections.Generic;
+using ScrumIt.DataAccess;
 
 
 namespace ScrumIt.Models
@@ -33,6 +34,11 @@ namespace ScrumIt.Models
         public static bool UpdateProject(ProjectModel projectToUpdate)
         {
             return ProjectAccess.UpdateProject(projectToUpdate);
+        }
+
+        public static void AssignUsersToProject(ProjectModel projectToAssignTo, List<UserModel> usersToAssign)
+        {
+            ProjectAccess.AssignUsersToProject(projectToAssignTo, usersToAssign);
         }
     }
 }

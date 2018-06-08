@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using Npgsql;
 using ScrumIt.Models;
@@ -227,6 +228,35 @@ namespace ScrumIt.DataAccess
                 catch (NpgsqlException)
                 {
                     throw new NpgsqlException("User is already assigned to this project");
+                }
+            }
+
+            return true;
+        }
+
+        public static bool AssignUsersToProject(ProjectModel projectToAssignTo, List<UserModel> usersToAssign)
+        {
+            using (new Connection())
+            {
+                var cmd = new NpgsqlCommand("DELETE FROM projects_has_users WHERE project_id = @project_id;")
+                {
+                    Connection = Connection.Conn
+                };
+                cmd.Parameters.AddWithValue("project_id", projectToAssignTo.ProjectId);
+                cmd.ExecuteNonQuery();
+
+                var usersToAdd = usersToAssign.Select(o => o.UserId).ToList().Distinct();
+
+                foreach (var userId in usersToAdd)
+                {
+                    cmd = new NpgsqlCommand("INSERT INTO projects_has_users (uid, project_id) VALUES (@uid, @project_id);")
+                    {
+                        Connection = Connection.Conn
+                    };
+
+                    cmd.Parameters.AddWithValue("uid", userId);
+                    cmd.Parameters.AddWithValue("task_id", projectToAssignTo.ProjectId);
+                    cmd.ExecuteNonQuery();
                 }
             }
 

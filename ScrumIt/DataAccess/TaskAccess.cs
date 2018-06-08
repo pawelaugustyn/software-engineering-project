@@ -222,8 +222,6 @@ namespace ScrumIt.DataAccess
         {
             using (new Connection())
             {
-                // TODO
-                // Delete only these who you want to get rid of
                 var cmd = new NpgsqlCommand("DELETE FROM tasks_assigned_users WHERE task_id = @task_id;")
                 {
                     Connection = Connection.Conn
