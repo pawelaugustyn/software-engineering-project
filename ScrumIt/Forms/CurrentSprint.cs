@@ -234,6 +234,8 @@ namespace ScrumIt.Forms
                 {
                     Close();
                 }
+                
+                scrumBoardPanel.BackColor = ColorTranslator.FromHtml(proj.ProjectColor);
             }
             catch (Exception err)
             {
@@ -242,6 +244,12 @@ namespace ScrumIt.Forms
         }
 
         private void addTask_FormClosed()
+        {
+            scrumBoardPanel.Controls.Clear();
+            CurrentSprint_Load(null, EventArgs.Empty);
+        }
+
+        private void manageProject_FormClosed()
         {
             scrumBoardPanel.Controls.Clear();
             CurrentSprint_Load(null, EventArgs.Empty);

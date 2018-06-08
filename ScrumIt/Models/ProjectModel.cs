@@ -29,5 +29,10 @@ namespace ScrumIt.Models
         {
             return ProjectAccess.DeleteProject(projectToDelete);
         }
+
+        public static bool UpdateProject(ProjectModel projectToUpdate)
+        {
+            return ProjectAccess.UpdateProject(projectToUpdate);
+        }
     }
 }

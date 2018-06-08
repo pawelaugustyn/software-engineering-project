@@ -111,10 +111,23 @@ namespace ScrumIt.Forms
             {
                 MessageBox.Show("Uzupełnij nazwę projektu");
             }
-            // TO DO 
-            // Update project
-            MessageBox.Show("Projekt został zaktualizowany");
-            Close();
+
+            try
+            {
+                var project = ProjectModel.GetProjectById(_projectId);
+                ProjectModel.UpdateProject(new ProjectModel
+                {
+                    ProjectId = project.ProjectId,
+                    ProjectName = changeNameTextBox.Text,
+                    ProjectColor = ToHexValue(changeColorButton.BackColor)
+                });
+                MessageBox.Show("Projekt został zaktualizowany");
+                Close();
+            }
+            catch (Exception err)
+            {
+                MessageBox.Show(err.Message);
+            }
         }
 
         private void button1_Click(object sender, System.EventArgs e)
@@ -143,6 +156,12 @@ namespace ScrumIt.Forms
             Hide();
             addSprint.Show();
         }
-        
+
+        private static string ToHexValue(Color color)
+        {
+            return "#" + color.R.ToString("X2") +
+                   color.G.ToString("X2") +
+                   color.B.ToString("X2");
+        }
     }
 }
