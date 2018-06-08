@@ -40,5 +40,10 @@ namespace ScrumIt.Models
         {
             ProjectAccess.AssignUsersToProject(projectToAssignTo, usersToAssign);
         }
+
+        public static void AddNewUserToProject(int userId, int projectId)
+        {
+            ProjectAccess.AddNewUserToProject(userId, projectId);
+        }
     }
 }

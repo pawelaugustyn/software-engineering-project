@@ -57,7 +57,12 @@ namespace ScrumIt.Models
         public static List<UserModel> GetUsersByProjectId(int projectid)
         {
             return UserAccess.GetUsersByProjectId(projectid);
-        } 
+        }
+
+        public static List<UserModel> GetUserByTaskId(int taskId)
+        {
+            return UserAccess.GetUsersByTaskId(taskId);
+        }
 
         public static bool Add(UserModel addedUser, string password)
         {
@@ -76,6 +81,11 @@ namespace ScrumIt.Models
         public static void UpdateUserPassword(string password)
         {
             UserAccess.UpdateUserPassword(password);
+        }
+
+        public static List<UserModel> GetAllUser()
+        {
+            return UserAccess.GetAllUsers();
         }
     }
 

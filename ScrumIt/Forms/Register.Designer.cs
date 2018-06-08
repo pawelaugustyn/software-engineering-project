@@ -38,7 +38,6 @@
             this.userLoginTextBox = new System.Windows.Forms.TextBox();
             this.userEmailLLabel = new System.Windows.Forms.Label();
             this.userEmailTextBox = new System.Windows.Forms.TextBox();
-            this.userRoleTextBox = new System.Windows.Forms.TextBox();
             this.changePasswordLayoutTablePanel = new System.Windows.Forms.TableLayoutPanel();
             this.newPasswordLabel = new System.Windows.Forms.Label();
             this.newPasswordTextBox = new System.Windows.Forms.TextBox();
@@ -46,6 +45,7 @@
             this.confirmNewPasswordTextBox = new System.Windows.Forms.TextBox();
             this.registeButton = new System.Windows.Forms.Button();
             this.userPhotoPictureBox = new System.Windows.Forms.PictureBox();
+            this.roleComboBox = new System.Windows.Forms.ComboBox();
             this.tableLayoutPanel1.SuspendLayout();
             this.changePasswordLayoutTablePanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.userPhotoPictureBox)).BeginInit();
@@ -65,7 +65,7 @@
             this.tableLayoutPanel1.Controls.Add(this.userLoginTextBox, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.userEmailLLabel, 0, 3);
             this.tableLayoutPanel1.Controls.Add(this.userEmailTextBox, 1, 3);
-            this.tableLayoutPanel1.Controls.Add(this.userRoleTextBox, 1, 4);
+            this.tableLayoutPanel1.Controls.Add(this.roleComboBox, 1, 4);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(23, 63);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 5;
@@ -190,18 +190,6 @@
             this.userEmailTextBox.Size = new System.Drawing.Size(134, 29);
             this.userEmailTextBox.TabIndex = 9;
             // 
-            // userRoleTextBox
-            // 
-            this.userRoleTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.userRoleTextBox.BackColor = System.Drawing.Color.White;
-            this.userRoleTextBox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.userRoleTextBox.Location = new System.Drawing.Point(143, 139);
-            this.userRoleTextBox.Name = "userRoleTextBox";
-            this.userRoleTextBox.Size = new System.Drawing.Size(134, 29);
-            this.userRoleTextBox.TabIndex = 5;
-            // 
             // changePasswordLayoutTablePanel
             // 
             this.changePasswordLayoutTablePanel.ColumnCount = 2;
@@ -297,6 +285,16 @@
             this.userPhotoPictureBox.TabStop = false;
             this.userPhotoPictureBox.Click += new System.EventHandler(this.userPhotoPictureBox_Click);
             // 
+            // roleComboBox
+            // 
+            this.roleComboBox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.roleComboBox.FormattingEnabled = true;
+            this.roleComboBox.Location = new System.Drawing.Point(143, 139);
+            this.roleComboBox.Name = "roleComboBox";
+            this.roleComboBox.Size = new System.Drawing.Size(134, 29);
+            this.roleComboBox.TabIndex = 10;
+            this.roleComboBox.SelectedIndexChanged += new System.EventHandler(this.roleComboBox_SelectedIndexChanged);
+            // 
             // Register
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -334,7 +332,6 @@
         private System.Windows.Forms.Label userRoleLabel;
         private System.Windows.Forms.Label userNameLabel;
         private System.Windows.Forms.Label userEmailLLabel;
-        private System.Windows.Forms.TextBox userRoleTextBox;
         private System.Windows.Forms.TableLayoutPanel changePasswordLayoutTablePanel;
         private System.Windows.Forms.Label confirmNewPasswordLabel;
         private System.Windows.Forms.Label newPasswordLabel;
@@ -342,5 +339,6 @@
         private System.Windows.Forms.TextBox confirmNewPasswordTextBox;
         private System.Windows.Forms.PictureBox userPhotoPictureBox;
         private System.Windows.Forms.Button registeButton;
+        private System.Windows.Forms.ComboBox roleComboBox;
     }
 }

@@ -39,6 +39,7 @@ namespace ScrumIt.Forms
             {
                 propertiesComboBox.Items.Add("Dane użytkownika");
                 propertiesComboBox.Items.Add("Stwórz konto");
+                propertiesComboBox.Items.Add("Usuń użytkowika");
                 propertiesComboBox.Items.Add("Wyloguj");
             }
             else if (_userRole == "Developer")
@@ -189,8 +190,12 @@ namespace ScrumIt.Forms
                     var reg = new Register();
                     reg.Show();
                 }
-
-                if (propertiesComboBox.SelectedIndex == 3)
+                if (propertiesComboBox.SelectedIndex == 2)
+                {
+                    var deleteUser = new DeleteUser();
+                    deleteUser.Show();
+                }
+                if (propertiesComboBox.SelectedIndex == 4)
                 {
                     MessageBox.Show("wylogowano");
                     UserModel.Logout();

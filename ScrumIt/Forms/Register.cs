@@ -9,15 +9,20 @@ namespace ScrumIt.Forms
     public partial class Register : MetroForm
     {
         private readonly Color _panelColor = ColorTranslator.FromHtml("#4AC1C1");
+        private UserModel _user;
 
         public Register()
         {
+            _user = new UserModel();
             InitializeComponent();
         }
 
         private void Register_Load(object sender, System.EventArgs e)
         {
             registeButton.BackColor = _panelColor;
+            roleComboBox.Items.Add("Wybierz rolę...");
+            roleComboBox.Items.Add("Scrum Master");
+            roleComboBox.Items.Add("Developer");
         }
 
         private void registeButton_Click(object sender, System.EventArgs e)
@@ -26,20 +31,30 @@ namespace ScrumIt.Forms
             {
                 if (ValidateInput())
                 {
-                    var newUser = new UserModel
+                    _user.Username = userLoginTextBox.Text;
+                    _user.Firstname = userNameTextBox.Text;
+                    _user.Lastname = userLastNameTextBox.Text;
+                    _user.Email = userEmailTextBox.Text;
+                    if (roleComboBox.SelectedIndex == 1)
                     {
-                        Username = userLoginTextBox.Text,
-                        Firstname = userNameTextBox.Text,
-                        Lastname = userLastNameTextBox.Text,
-                        Email = userEmailTextBox.Text,
-                        Role = UserRoles.Developer, //tu bedzie combobox
-                        //Image
+                        _user.Role = UserRoles.ScrumMaster;
+                    }
+                    if (roleComboBox.SelectedIndex == 2)
+                    {
+                        _user.Role = UserRoles.Developer;
+                    }
 
-                    };
-                    // UserModel.Add(newUser, newPasswordTextBox.Text);
+                    try
+                    {
+                        UserModel.Add(_user, newPasswordTextBox.Text);
 
-                    MessageBox.Show("Pomyślnie stworzono użytkownika");
-                    this.Close();
+                        MessageBox.Show("Pomyślnie stworzono użytkownika");
+                        this.Close();
+                    }
+                    catch (Exception err)
+                    {
+                        MessageBox.Show(err.Message);
+                    }
                 }
             }
             catch (Exception err)
@@ -92,6 +107,12 @@ namespace ScrumIt.Forms
                 return false;
             }
 
+            if (roleComboBox.SelectedIndex == 0)
+            {
+                MessageBox.Show("Wybierz rolę");
+                return false;
+            }
+
             return true;
         }
 
@@ -110,6 +131,10 @@ namespace ScrumIt.Forms
                 }
             }
         }
-        
+
+        private void roleComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            
+        }
     }
 }
