@@ -42,9 +42,9 @@
             this.userEmailLLabel = new System.Windows.Forms.Label();
             this.userRoleTextBox = new System.Windows.Forms.TextBox();
             this.changePasswordLayoutTablePanel = new System.Windows.Forms.TableLayoutPanel();
-            this.confirmNewPasswordLabel = new System.Windows.Forms.Label();
             this.newPasswordLabel = new System.Windows.Forms.Label();
             this.newPasswordTextBox = new System.Windows.Forms.TextBox();
+            this.confirmNewPasswordLabel = new System.Windows.Forms.Label();
             this.confirmNewPasswordTextBox = new System.Windows.Forms.TextBox();
             this.submitPasswordChangeButton = new System.Windows.Forms.Button();
             this.loadPictureDialog = new System.Windows.Forms.OpenFileDialog();
@@ -253,19 +253,6 @@
             this.changePasswordLayoutTablePanel.TabIndex = 5;
             this.changePasswordLayoutTablePanel.Visible = false;
             // 
-            // confirmNewPasswordLabel
-            // 
-            this.confirmNewPasswordLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.confirmNewPasswordLabel.AutoSize = true;
-            this.confirmNewPasswordLabel.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.confirmNewPasswordLabel.Location = new System.Drawing.Point(3, 35);
-            this.confirmNewPasswordLabel.Name = "confirmNewPasswordLabel";
-            this.confirmNewPasswordLabel.Size = new System.Drawing.Size(132, 35);
-            this.confirmNewPasswordLabel.TabIndex = 3;
-            this.confirmNewPasswordLabel.Text = "Powtórz nowe hasło";
-            // 
             // newPasswordLabel
             // 
             this.newPasswordLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -290,6 +277,19 @@
             this.newPasswordTextBox.Size = new System.Drawing.Size(133, 29);
             this.newPasswordTextBox.TabIndex = 11;
             this.newPasswordTextBox.UseSystemPasswordChar = true;
+            // 
+            // confirmNewPasswordLabel
+            // 
+            this.confirmNewPasswordLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.confirmNewPasswordLabel.AutoSize = true;
+            this.confirmNewPasswordLabel.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.confirmNewPasswordLabel.Location = new System.Drawing.Point(3, 35);
+            this.confirmNewPasswordLabel.Name = "confirmNewPasswordLabel";
+            this.confirmNewPasswordLabel.Size = new System.Drawing.Size(132, 35);
+            this.confirmNewPasswordLabel.TabIndex = 3;
+            this.confirmNewPasswordLabel.Text = "Powtórz nowe hasło";
             // 
             // confirmNewPasswordTextBox
             // 

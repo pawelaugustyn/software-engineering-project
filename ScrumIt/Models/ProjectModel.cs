@@ -34,5 +34,10 @@ namespace ScrumIt.Models
         {
             return ProjectAccess.UpdateProject(projectToUpdate);
         }
+
+        public static void AddNewUserToProject(int userId, int projectId)
+        {
+            ProjectAccess.AddNewUserToProject(userId, projectId);
+        }
     }
 }
