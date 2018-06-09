@@ -77,6 +77,7 @@
             // 
             this.projectNameTextBox.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.projectNameTextBox.Location = new System.Drawing.Point(185, 70);
+            this.projectNameTextBox.MaxLength = 22;
             this.projectNameTextBox.Name = "projectNameTextBox";
             this.projectNameTextBox.Size = new System.Drawing.Size(230, 33);
             this.projectNameTextBox.TabIndex = 10;
@@ -125,7 +126,7 @@
             this.Controls.Add(this.colorLabel);
             this.Controls.Add(this.projectNameLabel);
             this.Controls.Add(this.addProjectButton);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "AddProject";

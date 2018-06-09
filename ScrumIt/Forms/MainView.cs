@@ -76,7 +76,7 @@ namespace ScrumIt.Forms
             panel.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
             Button newProject = new Button();
             newProject.FlatStyle = FlatStyle.Flat;
-            newProject.Font =new Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            newProject.Font = new Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             newProject.Text = "Stwórz nowy projekt";
             newProject.Name = "newProjectButton";
             newProject.Size = new System.Drawing.Size(400, 40);
@@ -119,7 +119,7 @@ namespace ScrumIt.Forms
                 {
                     projectsList = ProjectAccess.GetAllProjects();
                 }
-                else if(_userRole == "Developer")
+                else if (_userRole == "Developer")
                 {
                     projectsList = ProjectAccess.GetProjectsByUserId(AppStateProvider.Instance.CurrentUser.UserId);
                 }
@@ -143,7 +143,7 @@ namespace ScrumIt.Forms
                     var b = new Button();
                     b.FlatStyle = FlatStyle.Flat;
                     b.Font = new Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point,
-                        ((byte) (238)));
+                        ((byte)(238)));
 
                     if (_userRole == "ScrumMaster")
                     {
@@ -157,7 +157,6 @@ namespace ScrumIt.Forms
                             else
                             {
                                 b.BackColor = ColorTranslator.FromHtml("#eeeeee");
-
                             }
                         }
 
@@ -184,7 +183,7 @@ namespace ScrumIt.Forms
             {
                 MessageBox.Show(err.Message);
             }
-                #endregion
+            #endregion
 
             Controls.Add(panel);
         }
