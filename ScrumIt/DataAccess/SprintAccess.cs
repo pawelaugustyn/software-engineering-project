@@ -272,8 +272,8 @@ namespace ScrumIt.DataAccess
                 cmd.Parameters.AddWithValue("param_end", datetimeEnd);
                 cmd.Parameters.AddWithValue("param_end2", datetimeEnd);
                 cmd.Parameters.AddWithValue("param_proj", sprint.ParentProjectId);
-                var res = cmd.ExecuteNonQuery();
-                if (res > 0)
+                var res = (int?)cmd.ExecuteScalar();
+                if (res != null && res > 0)
                     throw new ArgumentException("Czas trwania sprintu pokrywa sie z czasem innego istniejacego sprintu.");
             }
         }

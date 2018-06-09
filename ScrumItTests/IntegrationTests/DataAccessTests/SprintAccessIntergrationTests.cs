@@ -253,8 +253,7 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
 
             Assert.That(sprintToAdd, Is.Null, "Creating sprint should not be successful.");
         }
-
-        [Ignore("nie wiem czemu nie przechodzi")]
+        
         [Test]
         public void AddSprintToProjectWithDatesOverlapingAnotherSprintShouldThrow()
         {
