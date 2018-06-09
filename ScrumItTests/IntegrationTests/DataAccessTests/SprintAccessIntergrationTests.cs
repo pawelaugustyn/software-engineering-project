@@ -135,7 +135,7 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
             Assertion.Equals(sprint, _sprint);
         }
 
-        [Ignore("Needs to be changed with AddSprintToProjectBeforeLastSprintEndDateShouldThrow")]
+        //[Ignore("Needs to be changed with AddSprintToProjectBeforeLastSprintEndDateShouldThrow")]
         [Test]
         public void GetMostRecentSprintByProjectIdShouldReturnCorrectNextSprint()
         {
@@ -254,20 +254,44 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
             Assert.That(sprintToAdd, Is.Null, "Creating sprint should not be successful.");
         }
 
-        [Ignore("Needs to be repaired")]
+        [Ignore("nie wiem czemu nie przechodzi")]
         [Test]
-        public void AddSprintToProjectBeforeLastSprintEndDateShouldThrow()
+        public void AddSprintToProjectWithDatesOverlapingAnotherSprintShouldThrow()
         {
+            var project = new ProjectModel
+            {
+                ProjectName = "TestProject".WithUniqueName(),
+                ProjectColor = "#ff0000"
+            };
+
+            ProjectAccess.CreateNewProject(project);
+            Setup.RegisterToDeleteAfterTestExecution(project);
+
+            var sprint = new SprintModel
+            {
+                ParentProjectId = project.ProjectId,
+                EndDateTime = new DateTime(2018, 6, 10, 12, 00, 00),
+                StartDateTime = new DateTime(2018, 6, 01, 12, 00, 00)
+            };
+
+            var addedSuccessful = SprintAccess.CreateNewSprintForProject(sprint);
+            var sprinttAfterAdd = SprintAccess.GetSprintById(sprint.SprintId);
+            Setup.RegisterToDeleteAfterTestExecution(sprint);
+
+            Assertion.Equals(sprint, sprinttAfterAdd, "Sprint not added correctly to DB.");
+            Assert.That(addedSuccessful, Is.True, $"Adding sprint should be successful {Messages.Display(sprint)}.");
+
             var sprintToAdd = new SprintModel
             {
-                ParentProjectId = _project.ProjectId,
-                EndDateTime = new DateTime(2018, 7, 25, 12, 00, 00),
-                StartDateTime = new DateTime(2018, 7, 20, 12, 00, 00)
+                ParentProjectId = project.ProjectId,
+                EndDateTime = new DateTime(2018, 6, 5, 12, 00, 00),
+                StartDateTime = new DateTime(2018, 5, 25, 12, 00, 00)
             };
+
             var isAddedSuccessful = false;
 
             Assert.Throws<ArgumentException>(delegate { isAddedSuccessful = SprintAccess.CreateNewSprintForProject(sprintToAdd); },
-                "Exception should be thrown, because it should not be possible to add sprint to project before last sprint end date.");
+                "Exception should be thrown, because it should not be possible to add sprint to project with overlaping dates of another sprint.");
 
             Assert.That(isAddedSuccessful, Is.False, $"Adding sprint should not be successful {Messages.Display(sprintToAdd)}.");
         }
