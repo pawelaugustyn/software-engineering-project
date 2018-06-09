@@ -31,7 +31,7 @@
             this.components = new System.ComponentModel.Container();
             this.deleteUserButton = new System.Windows.Forms.Button();
             this.userListButton = new System.Windows.Forms.Button();
-            this.userListMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.userListMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.SuspendLayout();
             // 
             // deleteUserButton
@@ -64,11 +64,11 @@
             this.userListButton.UseVisualStyleBackColor = false;
             this.userListButton.Click += new System.EventHandler(this.userListButton_Click);
             // 
-            // userListMenuStrip
+            // userListMenuStrip1
             // 
-            this.userListMenuStrip.Name = "userListMenuStrip";
-            this.userListMenuStrip.ShowCheckMargin = true;
-            this.userListMenuStrip.Size = new System.Drawing.Size(83, 4);
+            this.userListMenuStrip1.Name = "userListMenuStrip";
+            this.userListMenuStrip1.ShowCheckMargin = true;
+            this.userListMenuStrip1.Size = new System.Drawing.Size(175, 26);
             // 
             // DeleteUser
             // 
@@ -87,6 +87,6 @@
         #endregion
         private System.Windows.Forms.Button deleteUserButton;
         private System.Windows.Forms.Button userListButton;
-        private System.Windows.Forms.ContextMenuStrip userListMenuStrip;
+        private System.Windows.Forms.ContextMenuStrip userListMenuStrip1;
     }
 }

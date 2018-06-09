@@ -20,36 +20,31 @@ namespace ScrumIt.Forms
         {
             userListButton.BackColor = _panelColor;
             deleteUserButton.BackColor = Color.DarkRed;
-            try
-            {
-                var users = UserModel.GetAllUser();
-                userListMenuStrip.Items.AddRange(createUsersListMenu(users));
-            }
-            catch (Exception err)
-            {
-                MessageBox.Show(err.Message);
-            }
+
+            userListMenuStrip1.Items.AddRange(createUsersListMenu());
+
         }
 
-        private ToolStripItem[] createUsersListMenu(List<UserModel> userList)
+        private ToolStripItem[] createUsersListMenu()
         {
             try
             {
-                var length = 25;
-                if (userList.Count < 25)
+
+                var users = UserModel.GetAllUser();
+                var length = users.Count;
+                if (users.Count < 25)
                 {
-                    length = userList.Count;
+                    length = users.Count;
                 }
                 var toolStripItems = new ToolStripItem[length];
                 for (var i = 0; i < length; i++)
                 {
-                    var toolStripMenuItemName = userList[i].UserId;
-                    var toolStripMenuItemText = userList[i].Firstname + " " + userList[i].Lastname + " ";
+                    var toolStripMenuItemName = users[i].UserId;
+                    var toolStripMenuItemText = users[i].Firstname + " " + users[i].Lastname + " ";
                     var toolStripMenuItem = new ToolStripMenuItem
                     {
                         Name = toolStripMenuItemName.ToString(),
                         Text = toolStripMenuItemText,
-                        Image = userList[i].Avatar,
                         CheckOnClick = true
                     };
 
@@ -71,7 +66,7 @@ namespace ScrumIt.Forms
             DialogResult dialogResult = MessageBox.Show(@"Jesteś pewny, że chcesz usunąć tych użytkowników? ", @"Usuń użytkowników", MessageBoxButtons.YesNo);
             if (dialogResult == DialogResult.Yes)
             {
-                var usersList = userListMenuStrip.Items;
+                var usersList = userListMenuStrip1.Items;
                 var userNames = new List<string>();
                 try
                 {
@@ -84,6 +79,8 @@ namespace ScrumIt.Forms
                             UserModel.Delete(userToDelete);
                         }
                     }
+
+                    Close();
                 }
                 catch (Exception err)
                 {
@@ -94,7 +91,7 @@ namespace ScrumIt.Forms
 
         private void userListButton_Click(object sender, EventArgs e)
         {
-            userListMenuStrip.Show(userListButton, new Point(0, userListButton.Height));
+            userListMenuStrip1.Show(userListButton, new Point(0, userListButton.Height));
         }
     }
 }

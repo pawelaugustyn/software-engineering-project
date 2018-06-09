@@ -54,7 +54,6 @@ namespace ScrumIt.Forms
                     {
                         Name = toolStripMenuItemName,
                         Text = toolStripMenuItemText,
-                        Image = Properties.Resources.cat2,
                         CheckOnClick = true
                     };
                     foreach (var user in userList)
