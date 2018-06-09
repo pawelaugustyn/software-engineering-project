@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
 using DeepEqual.Syntax;
 using NUnit.Framework;
 using ScrumIt;
@@ -145,6 +147,97 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
         }
 
         [Test]
+        public void GetUsersByTaskIdShouldReturnCorrectUsers()
+        {
+            var user = new UserModel
+            {
+                Username = "testScrumMaster".WithUniqueName(),
+                Firstname = "scrum",
+                Lastname = "master",
+                Role = UserRoles.ScrumMaster,
+                Email = "testScrumMaster@test.com"
+            };
+
+            UserAccess.Add(user, Password);
+            Setup.RegisterToDeleteAfterTestExecution(user);
+
+            var project = new ProjectModel
+            {
+                ProjectName = "TestProject".WithUniqueName(),
+                ProjectColor = "#ff0000"
+            };
+
+            ProjectAccess.CreateNewProject(project);
+            Setup.RegisterToDeleteAfterTestExecution(project);
+
+            var task = new TaskModel
+            {
+                TaskName = "testTask".WithUniqueName(),
+                TaskDesc = "testTaskDescription",
+                TaskType = "T",
+                TaskPriority = int.Parse("15"),
+                TaskEstimatedTime = int.Parse("10"),
+                TaskStage = TaskModel.TaskStages.ToDo,
+                TaskColor = "#ffffff",
+                BacklogProjectId = project.ProjectId,
+            };
+
+            TaskAccess.CreateNewTask(task);
+            Setup.RegisterToDeleteAfterTestExecution(task);
+
+            var isAssignedSuccessful = TaskAccess.AssignUsersToTask(task, new List<UserModel> { user });
+            Assert.That(isAssignedSuccessful, Is.True, $"User not assigned to task succesfully: {Messages.Display(task)} {Environment.NewLine}{user}");
+
+            var users = UserAccess.GetUsersByTaskId(task.TaskId);
+
+            users.ListContains(user);
+        }
+
+        [Test]
+        public void GetUsersByTaskIdShoulNotReturnCorrectUsers()
+        {
+            var user = new UserModel
+            {
+                Username = "testScrumMaster".WithUniqueName(),
+                Firstname = "scrum",
+                Lastname = "master",
+                Role = UserRoles.ScrumMaster,
+                Email = "testScrumMaster@test.com"
+            };
+
+            UserAccess.Add(user, Password);
+            Setup.RegisterToDeleteAfterTestExecution(user);
+
+            var project = new ProjectModel
+            {
+                ProjectName = "TestProject".WithUniqueName(),
+                ProjectColor = "#ff0000"
+            };
+
+            ProjectAccess.CreateNewProject(project);
+            Setup.RegisterToDeleteAfterTestExecution(project);
+
+            var task = new TaskModel
+            {
+                TaskName = "testTask".WithUniqueName(),
+                TaskDesc = "testTaskDescription",
+                TaskType = "T",
+                TaskPriority = int.Parse("15"),
+                TaskEstimatedTime = int.Parse("10"),
+                TaskStage = TaskModel.TaskStages.ToDo,
+                TaskColor = "#ffffff",
+                BacklogProjectId = project.ProjectId,
+            };
+
+            TaskAccess.CreateNewTask(task);
+            Setup.RegisterToDeleteAfterTestExecution(task);
+
+            var users = UserAccess.GetUsersByTaskId(task.TaskId);
+
+            users.ListNotContains(user);
+        }
+
+        [Test]
         public void GetAllUsersShouldReturnCorrectUsers()
         {
             var users = UserAccess.GetAllUsers();
@@ -163,6 +256,8 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
                 Role = UserRoles.Developer,
                 Email = "addUser@test.com"
             };
+            Setup.RegisterToDeleteAfterTestExecution(userToAdd);
+
             var userWithTheSameUsername = UserAccess.GetUserByUsername(userToAdd.Username);
             Assert.That(userWithTheSameUsername.IsDeepEqual(new UserModel()), Is.True, "User should not exist.");
 
@@ -343,6 +438,56 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
         }
 
         [Test]
+        public void SetUserPicture()
+        {
+            var user = new UserModel
+            {
+                Username = "setPicture".WithUniqueName(),
+                Firstname = "add",
+                Lastname = "User",
+                Role = UserRoles.Developer,
+                Email = "setPictureUser@test.com"
+            };
+            Setup.RegisterToDeleteAfterTestExecution(user);
+
+            UserAccess.Add(user, "setPicture");
+
+            var picture = new Bitmap(64, 64);
+            for (var x = 0; x < picture.Width; x++)
+            {
+                for (var y = 0; y < picture.Height; y++)
+                {
+                    picture.SetPixel(x, y, Color.Aqua);
+                }
+            }
+
+            var isPictureSetSuccessful = UserAccess.SetUserPicture(user.UserId, picture);
+            Assert.That(isPictureSetSuccessful, Is.True, $"Setting user picture should be successful {Messages.Display(user)}.");
+
+            var userWithPicture = UserAccess.GetUserById(user.UserId);
+            Assert.That(Objects.AreImagesTheSame(new Bitmap(userWithPicture.Avatar), picture), Is.True, $"User picture should be the same as updated one { Messages.Display(user)}.");
+        }
+
+        [Test]
+        public void GetUserPicture()
+        {
+            var user = new UserModel
+            {
+                Username = "getPicture".WithUniqueName(),
+                Firstname = "add",
+                Lastname = "User",
+                Role = UserRoles.Developer,
+                Email = "getPictureUser@test.com"
+            };
+            Setup.RegisterToDeleteAfterTestExecution(user);
+
+            UserAccess.Add(user, "getPicture");
+
+            var userPicture = UserAccess.GetUserPicture(user.UserId);
+            Assert.That(Objects.AreImagesTheSame((Bitmap)user.Avatar, (Bitmap)userPicture), Is.True, $"User picture should be equal to updated one { Messages.Display(user)}.");
+        }
+
+        [Test]
         public void X_DeleteUserWhenUnauthorizedShouldThrow()
         {
             AppStateProvider.Instance.CurrentUser = _user;
@@ -371,6 +516,34 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
 
             Assert.That(deletedSyccessful, Is.True, $"Deleting user should not be successful {Messages.Display(userToAddAndDelete)}.");
 
+            AppStateProvider.Instance.CurrentUser = _user;
+        }
+
+        [Test]
+        public void X_UpdateUserPasswordShouldBePossible()
+        {
+            var userToUpdate = new UserModel
+            {
+                Username = "updatePasswordDeveloper".WithUniqueName(),
+                Firstname = "test",
+                Lastname = "developer",
+                Role = UserRoles.Developer,
+                Email = "testDeveloper@test.com"
+            };
+
+            UserAccess.Add(userToUpdate, Password);
+            Setup.RegisterToDeleteAfterTestExecution(userToUpdate);
+
+            const string oldPassword = "oldOne";
+            const string newPassword = "newOne";
+
+            UserModel.Logout();
+            AppStateProvider.Instance.CurrentUser = userToUpdate;
+
+            var updatedSyccessful = UserAccess.UpdateUserPassword(newPassword);
+            Assert.That(updatedSyccessful, Is.True, $"Updating user password from {oldPassword} to {newPassword} should be successful {Messages.Display(userToUpdate)}.");
+
+            UserModel.Logout();
             AppStateProvider.Instance.CurrentUser = _user;
         }
     }
