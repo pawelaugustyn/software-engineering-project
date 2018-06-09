@@ -332,7 +332,7 @@ namespace ScrumIt.DataAccess
         public static bool Add(UserModel addedUser, string password)
         {
             if (AppStateProvider.Instance.CurrentUser.Role != UserRoles.ScrumMaster)
-                throw new UnauthorizedAccessException("Not permitted for that operation.");
+                throw new UnauthorizedAccessException("Brak uprawnien.");
             ValidateUser(addedUser, password);
 
             using (new Connection())
@@ -373,9 +373,9 @@ namespace ScrumIt.DataAccess
         {
             var currUser = AppStateProvider.Instance.CurrentUser;
             if (currUser.Role != UserRoles.ScrumMaster)
-                throw new UnauthorizedAccessException("Not permitted for that operation.");
+                throw new UnauthorizedAccessException("Brak uprawnien.");
             if (currUser.UserId == deletedUser.UserId)
-                throw new ArgumentException("Cannot delete yourself");
+                throw new ArgumentException("Nie mozesz usunac samego siebie.");
 
             using (new Connection())
             {
@@ -393,9 +393,9 @@ namespace ScrumIt.DataAccess
         public static bool UpdateUserData(UserModel updatedUser)
         {
             if (AppStateProvider.Instance.CurrentUser.Role == UserRoles.Guest)
-                throw new UnauthorizedAccessException("Not permitted for that operation.");
+                throw new UnauthorizedAccessException("Brak uprawnien.");
             if (AppStateProvider.Instance.CurrentUser.Role == UserRoles.Developer && AppStateProvider.Instance.CurrentUser.UserId != updatedUser.UserId)
-                throw new UnauthorizedAccessException("Not permitted for that operation - you can't change other person's data.");
+                throw new UnauthorizedAccessException("Brak uprawnien - nie mozesz edytowac czyichs danych.");
 
             ValidatePersonalData(updatedUser);
 
@@ -452,11 +452,13 @@ namespace ScrumIt.DataAccess
         private static void ValidateUsernameFormat(string username)
         {
             if (string.IsNullOrEmpty(username))
-                throw new ArgumentException("Username cannot be empty!");
+                throw new ArgumentException("Nazwa uzytkownika nie moze byc pusta!");
+            if (username.Length < 5)
+                throw new ArgumentException("Login musi zawierac conajmniej 5 znakow!");
             if (!new Regex(@"^[a-zA-Z0-9()-]*$").IsMatch(username))
-                throw new ArgumentException("Username must contain only alphanumeric characters!");
+                throw new ArgumentException("Nazwa uzytkownika moze zawierac tylko znaki alfanumeryczne!");
             if (!new Regex(@"^[a-zA-Z][a-zA-Z0-9()-]*$").IsMatch(username))
-                throw new ArgumentException("Username cannot begin with number!");
+                throw new ArgumentException("Nazwa uzytkownika musi zaczynac sie od litery!");
         }
 
         private static void ValidateUsernameAvailability(string username)
@@ -472,7 +474,7 @@ namespace ScrumIt.DataAccess
                 {
                     while (reader.Read())
                     {
-                        throw new ArgumentException("This username is already being used. Try different.");
+                        throw new ArgumentException("Ta nazwa uzytkownika jest zajeta, sprobuj innej.");
                     }
                 }
             }
@@ -481,22 +483,22 @@ namespace ScrumIt.DataAccess
         private static void ValidatePassword(string password)
         {
             if (password?.Length == 0)
-                throw new ArgumentException("Password cannot be empty!");
+                throw new ArgumentException("Haslo nie moze byc puste!");
             if (password?.Length < 5)
-                throw new ArgumentException("Password length must be at least 5.");
+                throw new ArgumentException("Haslo musi miec conajmniej 5 znakow.");
         }
 
         private static void ValidatePersonalData(UserModel addedUser)
         {
             if (addedUser.Firstname.Length == 0 || addedUser.Lastname.Length == 0)
-                throw new ArgumentException("First name and last name cannot be empty");
+                throw new ArgumentException("Imie i nazwisko nie moga byc puste");
             try
             {
                 var m = new MailAddress(addedUser.Email);
             }
             catch (FormatException)
             {
-                throw new ArgumentException("Wrong format of email address");
+                throw new ArgumentException("Nieprawidlowy adres email");
             }
         }
 
