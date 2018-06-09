@@ -234,6 +234,8 @@ namespace ScrumIt.Forms
                 {
                     Close();
                 }
+                
+                scrumBoardPanel.BackColor = ColorTranslator.FromHtml(proj.ProjectColor);
             }
             catch (Exception err)
             {
@@ -246,7 +248,7 @@ namespace ScrumIt.Forms
             scrumBoardPanel.Controls.Clear();
             CurrentSprint_Load(null, EventArgs.Empty);
         }
-
+        
         private void addTaskFromBacklog_FormClosed()
         {
             scrumBoardPanel.Controls.Clear();
@@ -260,6 +262,12 @@ namespace ScrumIt.Forms
             AddTaskFromBacklog addTask = new AddTaskFromBacklog(taskId, _sprintId);
             addTask.FormClosed += delegate { addTaskFromBacklog_FormClosed(); };
             addTask.Show();
+        }
+
+        private void toolStripMenuItem_Click(UserModel user)
+        {
+            var info = new UserInfo(user);
+            info.Show();
         }
 
         private void changeColorButton_Click(Panel taskPanel, MetroTextBox textBox, TaskModel task)
@@ -427,6 +435,7 @@ namespace ScrumIt.Forms
                     Text = toolStripMenuItemText,
                     Image = user.Avatar
                 };
+                toolStripMenuItem.Click += delegate { toolStripMenuItem_Click(user); };
                 toolStripItems[index++] = toolStripMenuItem;
             }
 

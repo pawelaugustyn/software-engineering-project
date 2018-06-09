@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ScrumIt.DataAccess;
 
 namespace ScrumIt.Models
@@ -62,6 +59,11 @@ namespace ScrumIt.Models
         public static void CreateNewSprint(SprintModel sprint)
         {
             SprintAccess.CreateNewSprintForProject(sprint);
+        }
+
+        public static DateTime? GetEndOfLastSprint(int projectId)
+        {
+            return SprintAccess.GetEndOfLastSprintByProjectId(projectId);
         }
     }
 }

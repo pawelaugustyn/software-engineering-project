@@ -41,7 +41,7 @@ namespace ScrumIt.Forms
                 priorityTextBox.BackColor = Color.White;
                 estimatedTimeTextBox.BackColor = Color.White;
 
-                var users = UserAccess.GetUsersByTaskId(_taskId);
+                var users = UserModel.GetUsersByTaskId(_taskId);
                 userListMenuStrip.Items.AddRange(createUsersListMenu(users));
             }
             catch (Exception err)
@@ -173,8 +173,7 @@ namespace ScrumIt.Forms
 
         private void priorityTextBox_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) &&
-                (e.KeyChar != '.'))
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
             {
                 e.Handled = true;
             }

@@ -85,6 +85,12 @@
     <Compile Include="Forms\AddSprint.Designer.cs">
       <DependentUpon>AddSprint.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\DeleteUser.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\DeleteUser.Designer.cs">
+      <DependentUpon>DeleteUser.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Login.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -133,6 +139,12 @@
     <Compile Include="Forms\Register.Designer.cs">
       <DependentUpon>Register.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\UserInfo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\UserInfo.Designer.cs">
+      <DependentUpon>UserInfo.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\UserPanel.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -150,6 +162,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\AddSprint.resx">
       <DependentUpon>AddSprint.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\DeleteUser.resx">
+      <DependentUpon>DeleteUser.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Login.resx">
       <DependentUpon>Login.cs</DependentUpon>
@@ -174,6 +189,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Register.resx">
       <DependentUpon>Register.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\UserInfo.resx">
+      <DependentUpon>UserInfo.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\UserPanel.resx">
       <DependentUpon>UserPanel.cs</DependentUpon>
