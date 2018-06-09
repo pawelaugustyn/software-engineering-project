@@ -221,6 +221,7 @@ namespace ScrumIt.Forms
         {
             scrumBoardPanel.Controls.Clear();
             CurrentSprint_Load(null, EventArgs.Empty);
+            progressBar.Refresh();
         }
 
         private void proj_FormClosed()
@@ -245,12 +246,14 @@ namespace ScrumIt.Forms
         {
             scrumBoardPanel.Controls.Clear();
             CurrentSprint_Load(null, EventArgs.Empty);
+            progressBar.Refresh();
         }
 
         private void addTaskFromBacklog_FormClosed()
         {
             scrumBoardPanel.Controls.Clear();
             CurrentSprint_Load(null, EventArgs.Empty);
+            progressBar.Refresh();
         }
 
 
