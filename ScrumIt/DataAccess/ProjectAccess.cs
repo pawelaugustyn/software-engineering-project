@@ -123,7 +123,7 @@ namespace ScrumIt.DataAccess
         public static bool CreateNewProject(ProjectModel addedProject)
         {
             if (AppStateProvider.Instance.CurrentUser.Role != UserRoles.ScrumMaster)
-                throw new UnauthorizedAccessException("Not permitted for that operation.");
+                throw new UnauthorizedAccessException("Brak uprawnien.");
             ValidateNewProject(addedProject);
 
             using (new Connection())
@@ -164,7 +164,7 @@ namespace ScrumIt.DataAccess
         public static bool DeleteProject(ProjectModel deletedProject)
         {
             if (AppStateProvider.Instance.CurrentUser.Role != UserRoles.ScrumMaster)
-                throw new UnauthorizedAccessException("Not permitted for that operation.");
+                throw new UnauthorizedAccessException("Brak uprawnien.");
 
             using (new Connection())
             {
@@ -182,7 +182,7 @@ namespace ScrumIt.DataAccess
         public static bool UpdateProject(ProjectModel updatedProject)
         {
             if (AppStateProvider.Instance.CurrentUser.Role != UserRoles.ScrumMaster)
-                throw new UnauthorizedAccessException("Not permitted for that operation.");
+                throw new UnauthorizedAccessException("Brak uprawnien.");
 
             ValidateUpdatedProject(updatedProject);
             
@@ -210,7 +210,7 @@ namespace ScrumIt.DataAccess
         public static bool AddNewUserToProject(int userId, int projectId)
         {
             if (AppStateProvider.Instance.CurrentUser.Role != UserRoles.ScrumMaster)
-                throw new UnauthorizedAccessException("Not permitted for that operation.");
+                throw new UnauthorizedAccessException("Brak uprawnien.");
 
             using (new Connection())
             {
@@ -227,7 +227,7 @@ namespace ScrumIt.DataAccess
                 }
                 catch (NpgsqlException)
                 {
-                    throw new NpgsqlException("User is already assigned to this project");
+                    throw new NpgsqlException("Uzytkownik juz jest przypisany do tego zadania");
                 }
             }
 
@@ -284,19 +284,19 @@ namespace ScrumIt.DataAccess
         private static void ValidateProjectNameIsAvailable(string name)
         {
             if (ProjectModel.GetProjectByName(name).ProjectName == name)
-                throw new ArgumentException("Project with that name already exists.");
+                throw new ArgumentException("Projekt z ta nazwa juz istnieje.");
         }
 
         private static void ValidateProjectNameContainsOnlyAllowableCharacters(string name)
         {
             if (!new Regex(@"^[a-zA-Z0-9()-. ]+$").IsMatch(name))
-                throw new ArgumentException("Project name contains not allowed characters.");
+                throw new ArgumentException("Nazwa projektu zawiera niedozwolone znaki.");
         }
 
         private static void ValidateProjectColour(string colour)
         {
             if (!new Regex(@"^#[a-fA-F0-9]{6}").IsMatch(colour))
-                throw new ArgumentException("Provided string is not an RGB colour.");
+                throw new ArgumentException("Zly format koloru (prawidlowy: #FFFFFF).");
         }
     }
 }
