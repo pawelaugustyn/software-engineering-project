@@ -118,16 +118,17 @@ namespace ScrumIt.Forms
                 });
 
                 var usersList = userListMenuStrip.Items;
-                var userNames = new List<string>();
+                var userListToAssign = new List<UserModel>();
                 foreach (ToolStripMenuItem user in usersList)
                 {
                     if (user.Checked)
                     {
                         var userName = user.Name;
-                        var userId = UserModel.GetUserByUsername(userName).UserId;
-                        ProjectModel.AddNewUserToProject(userId, _projectId);
+                        userListToAssign.Add(UserModel.GetUserByUsername(userName));
                     }
                 }
+
+                ProjectModel.AssignUsersToProject(project, userListToAssign);
 
                 MessageBox.Show("Projekt został zaktualizowany");
                 Close();
