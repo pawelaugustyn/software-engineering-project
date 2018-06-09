@@ -134,6 +134,11 @@ namespace ScrumIt.DataAccess
 
                     }
                 }
+
+                foreach (var task in tasks)
+                {
+                    task.UsersAssignedToTask = UserAccess.GetUsersByTaskId(task.TaskId);
+                }
             }
 
             return tasks;
