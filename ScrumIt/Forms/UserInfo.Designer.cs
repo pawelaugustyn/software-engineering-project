@@ -39,7 +39,7 @@
             this.userLoginTextBox = new System.Windows.Forms.TextBox();
             this.userEmailLLabel = new System.Windows.Forms.Label();
             this.userEmailTextBox = new System.Windows.Forms.TextBox();
-            this.roleComboBox = new System.Windows.Forms.ComboBox();
+            this.userRoleTextBox = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.userPhotoPictureBox)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
@@ -59,6 +59,7 @@
             this.tableLayoutPanel1.ColumnCount = 2;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.Controls.Add(this.userRoleTextBox, 1, 4);
             this.tableLayoutPanel1.Controls.Add(this.userLastNameTextBox, 1, 2);
             this.tableLayoutPanel1.Controls.Add(this.userNameTextBox, 1, 1);
             this.tableLayoutPanel1.Controls.Add(this.userRoleLabel, 0, 4);
@@ -68,7 +69,6 @@
             this.tableLayoutPanel1.Controls.Add(this.userLoginTextBox, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.userEmailLLabel, 0, 3);
             this.tableLayoutPanel1.Controls.Add(this.userEmailTextBox, 1, 3);
-            this.tableLayoutPanel1.Controls.Add(this.roleComboBox, 1, 4);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(23, 63);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 5;
@@ -89,6 +89,7 @@
             this.userLastNameTextBox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.userLastNameTextBox.Location = new System.Drawing.Point(143, 71);
             this.userLastNameTextBox.Name = "userLastNameTextBox";
+            this.userLastNameTextBox.ReadOnly = true;
             this.userLastNameTextBox.Size = new System.Drawing.Size(134, 29);
             this.userLastNameTextBox.TabIndex = 7;
             // 
@@ -101,6 +102,7 @@
             this.userNameTextBox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.userNameTextBox.Location = new System.Drawing.Point(143, 37);
             this.userNameTextBox.Name = "userNameTextBox";
+            this.userNameTextBox.ReadOnly = true;
             this.userNameTextBox.Size = new System.Drawing.Size(134, 29);
             this.userNameTextBox.TabIndex = 6;
             // 
@@ -165,6 +167,7 @@
             this.userLoginTextBox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.userLoginTextBox.Location = new System.Drawing.Point(143, 3);
             this.userLoginTextBox.Name = "userLoginTextBox";
+            this.userLoginTextBox.ReadOnly = true;
             this.userLoginTextBox.Size = new System.Drawing.Size(134, 29);
             this.userLoginTextBox.TabIndex = 8;
             // 
@@ -190,17 +193,22 @@
             this.userEmailTextBox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.userEmailTextBox.Location = new System.Drawing.Point(143, 105);
             this.userEmailTextBox.Name = "userEmailTextBox";
+            this.userEmailTextBox.ReadOnly = true;
             this.userEmailTextBox.Size = new System.Drawing.Size(134, 29);
             this.userEmailTextBox.TabIndex = 9;
             // 
-            // roleComboBox
+            // userRoleTextBox
             // 
-            this.roleComboBox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.roleComboBox.FormattingEnabled = true;
-            this.roleComboBox.Location = new System.Drawing.Point(143, 139);
-            this.roleComboBox.Name = "roleComboBox";
-            this.roleComboBox.Size = new System.Drawing.Size(134, 29);
-            this.roleComboBox.TabIndex = 10;
+            this.userRoleTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.userRoleTextBox.BackColor = System.Drawing.Color.White;
+            this.userRoleTextBox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.userRoleTextBox.Location = new System.Drawing.Point(143, 139);
+            this.userRoleTextBox.Name = "userRoleTextBox";
+            this.userRoleTextBox.ReadOnly = true;
+            this.userRoleTextBox.Size = new System.Drawing.Size(134, 29);
+            this.userRoleTextBox.TabIndex = 10;
             // 
             // UserInfo
             // 
@@ -232,6 +240,6 @@
         private System.Windows.Forms.TextBox userLoginTextBox;
         private System.Windows.Forms.Label userEmailLLabel;
         private System.Windows.Forms.TextBox userEmailTextBox;
-        private System.Windows.Forms.ComboBox roleComboBox;
+        private System.Windows.Forms.TextBox userRoleTextBox;
     }
 }

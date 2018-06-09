@@ -17,6 +17,10 @@ namespace ScrumIt.Forms
         {
             userLoginTextBox.Text = _user.Username;
             userNameTextBox.Text = _user.Firstname;
+            userLastNameTextBox.Text = _user.Lastname;
+            userEmailTextBox.Text = _user.Email;
+            userRoleTextBox.Text = _user.Role.ToString();
+            userPhotoPictureBox.Image = _user.Avatar;
         }
     }
 }
