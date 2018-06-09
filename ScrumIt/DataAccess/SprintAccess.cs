@@ -232,6 +232,54 @@ namespace ScrumIt.DataAccess
             return endDate;
         }
 
+        public static List<SprintModel> GetNotNotifiedEndingSprints(int days_till_end)
+        {
+            var sprints = new List<SprintModel>();
+            var end_time = DateTime.Now.AddDays(days_till_end);
+            var current_time = DateTime.Now;
+            using (new Connection())
+            {
+                var cmd = new NpgsqlCommand("select * from sprints where sprint_end < @enddate::timestamp and sprint_end > @currentdate::timestamp and emails_sent='false';")
+                {
+                    Connection = Connection.Conn
+                };
+                string end_datetime = end_time.ToString("yyyy-MM-dd hh:mm:ss");
+                string current_datetime = current_time.ToString("yyyy-MM-dd hh:mm:ss");
+                cmd.Parameters.AddWithValue("currentdate", current_datetime);
+                cmd.Parameters.AddWithValue("enddate", end_datetime);
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        sprints.Add(new SprintModel
+                        {
+                            SprintId = (int)reader[0],
+                            ParentProjectId = (int)reader[1],
+                            StartDateTime = (DateTime)reader[2],
+                            EndDateTime = (DateTime)reader[3]
+                        });
+                    }
+                }
+            }
+
+            return sprints;
+        }
+
+        public static bool ChangeEmailSentStatus(int sprintid)
+        {
+            using (new Connection())
+            {
+                var cmd = new NpgsqlCommand("update sprints set emails_sent='true' where sprint_id=@sprintid;")
+                {
+                    Connection = Connection.Conn
+                };
+                cmd.Parameters.AddWithValue("sprintid", sprintid);
+                var res = cmd.ExecuteNonQuery();
+
+                return res == 1;
+            }
+        }
+
         private static void ValidateNewSprint(SprintModel addedSprint)
         {
             ValidateStartDate(addedSprint);

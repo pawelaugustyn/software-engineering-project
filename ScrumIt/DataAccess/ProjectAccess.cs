@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Net.Mail;
+using System.Windows.Forms;
 using Npgsql;
 using ScrumIt.Models;
 
@@ -257,6 +259,44 @@ namespace ScrumIt.DataAccess
                     cmd.Parameters.AddWithValue("uid", userId);
                     cmd.Parameters.AddWithValue("project_id", projectToAssignTo.ProjectId);
                     cmd.ExecuteNonQuery();
+                }
+            }
+
+            return true;
+        }
+
+        public static bool NotifyUsersAboutEndOfSprint(int days_till_end)
+        {
+            List<SprintModel> ending_sprints = SprintModel.GetNotNotifiedEndingSprints(days_till_end);
+            List<UserModel> users_assigned_to_ending_sprints = new List<UserModel>();
+            foreach (var sprint in ending_sprints)
+            {
+                users_assigned_to_ending_sprints = UserModel.GetUsersByProjectId(sprint.ParentProjectId);
+                try
+                {
+                    foreach (var user in users_assigned_to_ending_sprints)
+                    {
+                        MailMessage mail = new MailMessage();
+                        SmtpClient SmtpServer = new SmtpClient("smtp.gmail.com");
+                        mail.From = new MailAddress("io.appka@gmail.com");
+                        mail.To.Add(user.Email);
+                        mail.Subject = "ScrumIt Sprint End Notification!";
+                        mail.Body =
+                            "Hello, " + user.Firstname +
+                            ", We want to kindly remind You, that one of the sprints You are participating in is going to end in " +
+                            days_till_end.ToString() + " days! Best Regards, ScrumIt Team.";
+                        SmtpServer.Port = 587;
+                        SmtpServer.Credentials = new System.Net.NetworkCredential("io.appka", "ioioio123");
+                        SmtpServer.EnableSsl = true;
+                        SmtpServer.Send(mail);
+
+                        SprintModel.ChangeEmailSentStatus(sprint.SprintId);
+                    }
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show("Failed to send some sprint end e-mail reminders.");
+                    return false;
                 }
             }
 

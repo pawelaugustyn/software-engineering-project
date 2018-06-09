@@ -65,5 +65,16 @@ namespace ScrumIt.Models
         {
             return SprintAccess.GetEndOfLastSprintByProjectId(projectId);
         }
+
+        public static List<SprintModel> GetNotNotifiedEndingSprints(int days_until_end)
+        {
+            return SprintAccess.GetNotNotifiedEndingSprints(days_until_end);
+        }
+
+        public static bool ChangeEmailSentStatus(int sprintid)
+        {
+            return SprintAccess.ChangeEmailSentStatus(sprintid);
+        }
+
     }
 }
