@@ -255,7 +255,7 @@ namespace ScrumIt.DataAccess
                     };
 
                     cmd.Parameters.AddWithValue("uid", userId);
-                    cmd.Parameters.AddWithValue("task_id", projectToAssignTo.ProjectId);
+                    cmd.Parameters.AddWithValue("project_id", projectToAssignTo.ProjectId);
                     cmd.ExecuteNonQuery();
                 }
             }
