@@ -114,16 +114,23 @@ namespace ScrumIt.Forms
             try
             {
                 List<ProjectModel> projectsList;
+                List<ProjectModel> myprojectsList = new List<ProjectModel>();
                 if (_userRole == "Guest")
                 {
                     projectsList = ProjectAccess.GetAllProjects();
                 }
-                else
+                else if(_userRole == "Developer")
                 {
                     projectsList = ProjectAccess.GetProjectsByUserId(AppStateProvider.Instance.CurrentUser.UserId);
                 }
+                else
+                {
+                    projectsList = ProjectAccess.GetAllProjects();
+                    myprojectsList = ProjectAccess.GetProjectsByUserId(AppStateProvider.Instance.CurrentUser.UserId);
+                }
 
                 var projects = new Dictionary<int, string>();
+
                 for (int i = 0; i < projectsList.Count; i++)
                     projects.Add(projectsList[i].ProjectId, projectsList[i].ProjectName);
 
@@ -137,7 +144,24 @@ namespace ScrumIt.Forms
                     b.FlatStyle = FlatStyle.Flat;
                     b.Font = new Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point,
                         ((byte) (238)));
-                    b.BackColor = _panelColor;
+
+                    if (_userRole == "ScrumMaster")
+                    {
+                        foreach (var proj in myprojectsList)
+                        {
+                            if (proj.ProjectId == dict.Key)
+                            {
+                                b.BackColor = _panelColor;
+                                break;
+                            }
+                            else
+                            {
+                                b.BackColor = ColorTranslator.FromHtml("#eeeeee");
+
+                            }
+                        }
+
+                    }
                     b.ForeColor = Color.White;
                     b.FlatAppearance.BorderColor = Color.White;
                     b.FlatAppearance.BorderSize = 0;

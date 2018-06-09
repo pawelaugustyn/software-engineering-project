@@ -202,18 +202,16 @@ namespace ScrumIt.Forms
                 newStage = TaskModel.TaskStages.Completed;
             }
 
-            if (task.TaskStage != newStage)
+            try
             {
-                try
-                {
-                    TaskModel.UpdateTaskStage(task.TaskId, newStage);
-                }
-                catch (Exception err)
-                {
-                    MessageBox.Show(err.Message);
-                }
-
+                TaskModel.UpdateTaskStage(task.TaskId, newStage);
             }
+            catch (Exception err)
+            {
+                MessageBox.Show(err.Message);
+            }
+
+
         }
 
         private void panel_DoubleClick(int taskId)
@@ -238,7 +236,10 @@ namespace ScrumIt.Forms
                 {
                     Close();
                 }
-                
+
+                var users = UserModel.GetUsersByProjectId(_projectId);
+                userListMenuStrip.Items.Clear();
+                userListMenuStrip.Items.AddRange(createUserListMenu(users));
                 scrumBoardPanel.BackColor = ColorTranslator.FromHtml(proj.ProjectColor);
             }
             catch (Exception err)
@@ -252,7 +253,7 @@ namespace ScrumIt.Forms
             scrumBoardPanel.Controls.Clear();
             CurrentSprint_Load(null, EventArgs.Empty);
         }
-        
+
         private void addTaskFromBacklog_FormClosed()
         {
             scrumBoardPanel.Controls.Clear();
