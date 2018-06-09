@@ -198,17 +198,15 @@ namespace ScrumIt.Forms
                 newStage = TaskModel.TaskStages.Completed;
             }
 
-            if (task.TaskStage != newStage)
-            {
-                try
-                {
-                    TaskModel.UpdateTaskStage(task.TaskId, newStage);
-                }
-                catch (Exception err)
-                {
-                    MessageBox.Show(err.Message);
-                }
 
+            try
+            {
+                TaskModel.UpdateTaskStage(task.TaskId, newStage);
+                progressBar.Refresh();
+            }
+            catch (Exception err)
+            {
+                MessageBox.Show(err.Message);
             }
         }
 
@@ -234,7 +232,7 @@ namespace ScrumIt.Forms
                 {
                     Close();
                 }
-                
+
                 scrumBoardPanel.BackColor = ColorTranslator.FromHtml(proj.ProjectColor);
             }
             catch (Exception err)
@@ -248,7 +246,7 @@ namespace ScrumIt.Forms
             scrumBoardPanel.Controls.Clear();
             CurrentSprint_Load(null, EventArgs.Empty);
         }
-        
+
         private void addTaskFromBacklog_FormClosed()
         {
             scrumBoardPanel.Controls.Clear();
@@ -834,6 +832,17 @@ namespace ScrumIt.Forms
 
         private void progressBar_Paint(object sender, PaintEventArgs e)
         {
+            var width = progressBar.ClientRectangle.Width;
+            var height = progressBar.ClientRectangle.Height;
+            Graphics g = e.Graphics;
+            ToolTip tooltip = new ToolTip
+            {
+                InitialDelay = 500,
+                ShowAlways = true
+            };
+            tooltip.SetToolTip(this.progressBar, "kolor czerwony - zadania nierozpoczęte" + Environment.NewLine 
+                                                + "kolor żółty - zadania w trakcie realizacji" + Environment.NewLine
+                                                + "kolor zielony - zadania ukończone");
             try
             {
                 var taskList = TaskModel.GetTasksBySprintId(_sprintId);
@@ -860,13 +869,10 @@ namespace ScrumIt.Forms
                     }
                 }
 
-                var width = progressBar.ClientRectangle.Width;
-                var height = progressBar.ClientRectangle.Height;
 
                 SolidBrush greenBrush = new SolidBrush(Color.GreenYellow);
                 SolidBrush yellowBrush = new SolidBrush(Color.Yellow);
                 SolidBrush redBrush = new SolidBrush(Color.Red);
-                Graphics g = e.Graphics;
                 g.FillRectangle(redBrush, new Rectangle(0, 0, width * todo / sum, height));
                 g.FillRectangle(yellowBrush,
                     new Rectangle(width * todo / sum, 0, width * doing / sum + width * todo / sum, height));
@@ -876,9 +882,13 @@ namespace ScrumIt.Forms
                 redBrush.Dispose();
                 g.Dispose();
             }
-            catch (Exception err)
+            catch (Exception)
             {
-                MessageBox.Show(err.Message);
+                // MessageBox.Show(err.Message)
+                SolidBrush brush = new SolidBrush(Color.Gray);
+                g.FillRectangle(brush, new Rectangle(0, 0, width, height));
+                brush.Dispose();
+                g.Dispose();
             }
         }
     }
