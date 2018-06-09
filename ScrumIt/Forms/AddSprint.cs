@@ -44,7 +44,7 @@ namespace ScrumIt.Forms
                     validationFlag = true;
                 }
                 else
-                if (endDateFormat.Month * 31 + endDateFormat.Day - startDateFormat.Month * 31 - startDateFormat.Day > 31)
+                if (endDateFormat.Month * 31 + endDateFormat.Day - startDateFormat.Month * 31 - startDateFormat.Day >= 31)
                 {
                     MessageBox.Show(@"Sprint nie może być dłuższy niż 31 dni");
                     validationFlag = true;
