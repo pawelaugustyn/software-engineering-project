@@ -46,6 +46,10 @@ namespace ScrumIt.Forms
         {
             try
             {
+                var project = ProjectModel.GetProjectById(_projectId);
+                projectNameTextBox.Text = project.ProjectName;
+                var sprint = SprintModel.GetCurrentSprintForProject(_projectId);
+                DateTextBox.Text = sprint.StartDateTime.ToShortDateString() + " / " + sprint.EndDateTime.ToShortDateString();
                 var taskList = TaskModel.GetTasksBySprintId(_sprintId);
 
 
@@ -355,6 +359,8 @@ namespace ScrumIt.Forms
         {
             var taskList = TaskModel.GetTasksBySprintId(sprintId);
             scrumBoardPanel.Controls.Clear();
+            var sprint = SprintModel.GetSprintById(sprintId);
+            DateTextBox.Text = sprint.StartDateTime.ToShortDateString() + " / " + sprint.EndDateTime.ToShortDateString();
 
             for (var i = 0; i < taskList.Count; i++)
             {

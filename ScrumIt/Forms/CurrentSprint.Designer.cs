@@ -47,6 +47,8 @@ namespace ScrumIt.Forms
             this.userListMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.propertiesComboBox = new MetroFramework.Controls.MetroComboBox();
             this.progressBar = new System.Windows.Forms.Panel();
+            this.projectNameTextBox = new System.Windows.Forms.TextBox();
+            this.DateTextBox = new System.Windows.Forms.TextBox();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -250,11 +252,39 @@ namespace ScrumIt.Forms
             this.progressBar.TabIndex = 12;
             this.progressBar.Paint += new System.Windows.Forms.PaintEventHandler(this.progressBar_Paint);
             // 
+            // projectNameTextBox
+            // 
+            this.projectNameTextBox.BackColor = System.Drawing.Color.White;
+            this.projectNameTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.projectNameTextBox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.projectNameTextBox.Location = new System.Drawing.Point(1078, 716);
+            this.projectNameTextBox.Name = "projectNameTextBox";
+            this.projectNameTextBox.ReadOnly = true;
+            this.projectNameTextBox.Size = new System.Drawing.Size(262, 22);
+            this.projectNameTextBox.TabIndex = 13;
+            this.projectNameTextBox.Text = "ProjectName";
+            this.projectNameTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
+            // DateTextBox
+            // 
+            this.DateTextBox.BackColor = System.Drawing.Color.White;
+            this.DateTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.DateTextBox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.DateTextBox.Location = new System.Drawing.Point(794, 716);
+            this.DateTextBox.Name = "DateTextBox";
+            this.DateTextBox.ReadOnly = true;
+            this.DateTextBox.Size = new System.Drawing.Size(278, 22);
+            this.DateTextBox.TabIndex = 14;
+            this.DateTextBox.Text = "ProjectDate";
+            this.DateTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
             // CurrentSprint
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1366, 768);
+            this.Controls.Add(this.DateTextBox);
+            this.Controls.Add(this.projectNameTextBox);
             this.Controls.Add(this.progressBar);
             this.Controls.Add(this.propertiesComboBox);
             this.Controls.Add(this.bottomPanel);
@@ -277,6 +307,7 @@ namespace ScrumIt.Forms
             this.Load += new System.EventHandler(this.CurrentSprint_Load);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -297,5 +328,7 @@ namespace ScrumIt.Forms
         private System.Windows.Forms.ContextMenuStrip userListMenuStrip;
         private MetroFramework.Controls.MetroComboBox propertiesComboBox;
         private System.Windows.Forms.Panel progressBar;
+        private System.Windows.Forms.TextBox projectNameTextBox;
+        private System.Windows.Forms.TextBox DateTextBox;
     }
 }
