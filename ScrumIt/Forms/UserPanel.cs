@@ -20,6 +20,10 @@ namespace ScrumIt.Forms
         {
             changePasswordButton.BackColor = _panelColor;
             submitPasswordChangeButton.BackColor = _panelColor;
+            changeUserDataButton.BackColor = _panelColor;
+            roleComboBox.Items.Add("Wybierz rolę...");
+            roleComboBox.Items.Add("Scrum Master");
+            roleComboBox.Items.Add("Developer");
             try
             {
                 var state = AppStateProvider.Instance;
@@ -29,7 +33,13 @@ namespace ScrumIt.Forms
                 userNameTextBox.Text = _user.Firstname;
                 userLastNameTextBox.Text = _user.Lastname;
                 userLoginTextBox.Text = _user.Username;
-                userRoleTextBox.Text = _user.Role.ToString();
+                if (_user.Role == UserRoles.ScrumMaster)
+                {
+                    roleComboBox.SelectedIndex = 1;
+                }else if (_user.Role == UserRoles.Developer)
+                {
+                    roleComboBox.SelectedIndex = 2;
+                }
                 userPhotoPictureBox.Image = _user.Avatar;
 
             }
@@ -72,6 +82,66 @@ namespace ScrumIt.Forms
                     userPhotoPictureBox.Image = user.Avatar;
                 }
                 catch (ArgumentException err)
+                {
+                    MessageBox.Show(err.Message);
+                }
+            }
+        }
+        private bool ValidateInput()
+        {
+            var firstName = userNameTextBox.Text;
+            if (firstName == "")
+            {
+                MessageBox.Show("Uzupełnij imię");
+                return false;
+            }
+
+            var lastName = userLastNameTextBox.Text;
+            if (lastName == "")
+            {
+                MessageBox.Show("Uzupełnij nazwisko");
+                return false;
+            }
+
+            var email = userEmailTextBox.Text;
+            if (email == "")
+            {
+                MessageBox.Show("Uzupełnij email");
+                return false;
+            }
+
+            if (roleComboBox.SelectedIndex == 0)
+            {
+                MessageBox.Show("Wybierz rolę");
+                return false;
+            }
+
+            return true;
+        }
+
+        private void changeUserDataButton_Click(object sender, EventArgs e)
+        {
+            if (ValidateInput())
+            {
+                _user.Username = userLoginTextBox.Text;
+                _user.Firstname = userNameTextBox.Text;
+                _user.Lastname = userLastNameTextBox.Text;
+                _user.Email = userEmailTextBox.Text;
+                if (roleComboBox.SelectedIndex == 1)
+                {
+                    _user.Role = UserRoles.ScrumMaster;
+                }
+                if (roleComboBox.SelectedIndex == 2)
+                {
+                    _user.Role = UserRoles.Developer;
+                }
+
+                try
+                {
+                    UserModel.UpdateUserData(_user);
+                    MessageBox.Show(@"Pomyślnie zaktualizowane dane");
+                }
+                catch (Exception err)
                 {
                     MessageBox.Show(err.Message);
                 }

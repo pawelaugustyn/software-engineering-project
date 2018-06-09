@@ -83,6 +83,11 @@ namespace ScrumIt.Models
             UserAccess.UpdateUserPassword(password);
         }
 
+        public static void UpdateUserData(UserModel user)
+        {
+            UserAccess.UpdateUserData(user);
+        }
+
         public static List<UserModel> GetAllUser()
         {
             return UserAccess.GetAllUsers();

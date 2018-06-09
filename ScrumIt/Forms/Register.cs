@@ -118,8 +118,6 @@ namespace ScrumIt.Forms
 
         private void userPhotoPictureBox_Click(object sender, System.EventArgs e)
         {
-            // TO DO
-            //If it's need try catch block? 
             using (OpenFileDialog dlg = new OpenFileDialog())
             {
                 dlg.Title = "Wybierz obraz";
