@@ -67,6 +67,7 @@ namespace ScrumIt.Forms
                     {
                         propertiesComboBox.Items.Add("Dane użytkownika");
                         propertiesComboBox.Items.Add("Stwórz konto");
+                        propertiesComboBox.Items.Add("Usuń użytkownika");
                         propertiesComboBox.Items.Add("Zarządzaj projektem");
                         propertiesComboBox.Items.Add("Wyloguj");
                     }
@@ -763,14 +764,12 @@ namespace ScrumIt.Forms
                     Hide();
                     mainView.Show();
                 }
-                //opcja dane uzytkownika
                 if (propertiesComboBox.SelectedIndex == 2)
                 {
                     UserPanel userPanel = new UserPanel();
                     userPanel.Show();
                 }
-
-                //opcja wyloguj
+                
                 if (propertiesComboBox.SelectedIndex == 3)
                 {
                     var reg = new Register();
@@ -778,11 +777,16 @@ namespace ScrumIt.Forms
                 }
                 if (propertiesComboBox.SelectedIndex == 4)
                 {
+                    var del = new DeleteUser();
+                    del.Show();
+                }
+                if (propertiesComboBox.SelectedIndex == 5)
+                {
                     var proj = new ManageProject(_projectId);
                     proj.FormClosed += delegate { proj_FormClosed(); };
                     proj.Show();
                 }
-                if (propertiesComboBox.SelectedIndex == 5)
+                if (propertiesComboBox.SelectedIndex == 6)
                 {
                     MessageBox.Show("wylogowano");
                     UserModel.Logout();

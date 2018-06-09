@@ -213,7 +213,7 @@ namespace ScrumIt.Forms
                     var reg = new Register();
                     reg.Show();
                 }
-                if (propertiesComboBox.SelectedIndex == 2)
+                if (propertiesComboBox.SelectedIndex == 3)
                 {
                     var deleteUser = new DeleteUser();
                     deleteUser.Show();
