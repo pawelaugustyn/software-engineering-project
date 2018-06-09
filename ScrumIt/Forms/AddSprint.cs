@@ -51,7 +51,7 @@ namespace ScrumIt.Forms
                 }
                 else
                 {
-                    var endOfLastSprint = SprintModel.GetEndOfLastSprint(_projectId) ?? DateTime.Now.AddDays(-1);
+                    var endOfLastSprint = SprintModel.GetEndOfLastSprint(_projectId) ?? DateTime.Parse("1900-01-01");
                     if (startDateFormat <= endOfLastSprint)
                     {
                         MessageBox.Show(@"Data sprintu koliduje z innym sprintem");
