@@ -29,12 +29,7 @@ namespace ScrumIt.Forms
 
                 changeColorButton.BackColor = ColorTranslator.FromHtml(project.ProjectColor);
 
-                // TO DO
-                // Pobierz userow przypisanych do zadania
-                var users = new List<UserModel>
-                {
-                    UserModel.GetUserById(1)
-                };
+                var users = UserModel.GetUsersByProjectId(_projectId);
 
                 userListMenuStrip.Items.AddRange(createUsersListMenu(users));
             }
@@ -48,7 +43,7 @@ namespace ScrumIt.Forms
         {
             try
             {
-                var allUsers = UserModel.GetUsersByProjectId(_projectId);
+                var allUsers = UserModel.GetAllUser();
 
                 var toolStripItems = new ToolStripItem[allUsers.Count];
                 for (var i = 0; i < allUsers.Count; i++)
@@ -111,10 +106,37 @@ namespace ScrumIt.Forms
             {
                 MessageBox.Show("Uzupełnij nazwę projektu");
             }
-            // TO DO 
-            // Update project
-            MessageBox.Show("Projekt został zaktualizowany");
-            Close();
+
+            try
+            {
+                var project = ProjectModel.GetProjectById(_projectId);
+                ProjectModel.UpdateProject(new ProjectModel
+                {
+                    ProjectId = project.ProjectId,
+                    ProjectName = changeNameTextBox.Text,
+                    ProjectColor = ToHexValue(changeColorButton.BackColor)
+                });
+
+                var usersList = userListMenuStrip.Items;
+                var userListToAssign = new List<UserModel>();
+                foreach (ToolStripMenuItem user in usersList)
+                {
+                    if (user.Checked)
+                    {
+                        var userName = user.Name;
+                        userListToAssign.Add(UserModel.GetUserByUsername(userName));
+                    }
+                }
+
+                ProjectModel.AssignUsersToProject(project, userListToAssign);
+
+                MessageBox.Show("Projekt został zaktualizowany");
+                Close();
+            }
+            catch (Exception err)
+            {
+                MessageBox.Show(err.Message);
+            }
         }
 
         private void button1_Click(object sender, System.EventArgs e)
@@ -143,6 +165,12 @@ namespace ScrumIt.Forms
             Hide();
             addSprint.Show();
         }
-        
+
+        private static string ToHexValue(Color color)
+        {
+            return "#" + color.R.ToString("X2") +
+                   color.G.ToString("X2") +
+                   color.B.ToString("X2");
+        }
     }
 }

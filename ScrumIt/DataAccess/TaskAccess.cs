@@ -99,7 +99,7 @@ namespace ScrumIt.DataAccess
                 var howManyAffected = cmd.ExecuteNonQuery();
                 if (howManyAffected == 1)
                     return true;
-                throw new Exception("Task not found");
+                throw new Exception("Brak takiego zadania");
             }
         }
 
@@ -222,8 +222,6 @@ namespace ScrumIt.DataAccess
         {
             using (new Connection())
             {
-                // TODO
-                // Delete only these who you want to get rid of
                 var cmd = new NpgsqlCommand("DELETE FROM tasks_assigned_users WHERE task_id = @task_id;")
                 {
                     Connection = Connection.Conn
@@ -325,7 +323,7 @@ namespace ScrumIt.DataAccess
         public static bool UpdateTask(TaskModel task)
         {
             if (AppStateProvider.Instance.CurrentUser.Role == UserRoles.Guest)
-                throw new UnauthorizedAccessException("Not permitted for that operation.");
+                throw new UnauthorizedAccessException("Brak uprawnien.");
             ValidateUpdatedTask(task);
             using (new Connection())
             {

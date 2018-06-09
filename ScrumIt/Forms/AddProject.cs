@@ -50,9 +50,9 @@ namespace ScrumIt.Forms
                         validationFlag = true;
                     }
                     else
-                    if (endDateFormat.Month * 31 + endDateFormat.Day - startDateFormat.Month * 31 - startDateFormat.Day > 20)
+                    if (endDateFormat.Month * 31 + endDateFormat.Day - startDateFormat.Month * 31 - startDateFormat.Day > 31)
                     {
-                        MessageBox.Show(@"Sprint musi być krótszy niż 21 dni");
+                        MessageBox.Show(@"Sprint musi być krótszy niż 30 dni");
                         validationFlag = true;
                     }
                 }

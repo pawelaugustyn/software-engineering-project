@@ -1,6 +1,6 @@
 ﻿namespace ScrumIt.Forms
 {
-    partial class Register
+    partial class UserInfo
     {
         /// <summary>
         /// Required designer variable.
@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.userPhotoPictureBox = new System.Windows.Forms.PictureBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.userLastNameTextBox = new System.Windows.Forms.TextBox();
             this.userNameTextBox = new System.Windows.Forms.TextBox();
@@ -38,24 +39,27 @@
             this.userLoginTextBox = new System.Windows.Forms.TextBox();
             this.userEmailLLabel = new System.Windows.Forms.Label();
             this.userEmailTextBox = new System.Windows.Forms.TextBox();
-            this.roleComboBox = new System.Windows.Forms.ComboBox();
-            this.changePasswordLayoutTablePanel = new System.Windows.Forms.TableLayoutPanel();
-            this.newPasswordLabel = new System.Windows.Forms.Label();
-            this.newPasswordTextBox = new System.Windows.Forms.TextBox();
-            this.confirmNewPasswordLabel = new System.Windows.Forms.Label();
-            this.confirmNewPasswordTextBox = new System.Windows.Forms.TextBox();
-            this.registeButton = new System.Windows.Forms.Button();
-            this.userPhotoPictureBox = new System.Windows.Forms.PictureBox();
-            this.tableLayoutPanel1.SuspendLayout();
-            this.changePasswordLayoutTablePanel.SuspendLayout();
+            this.userRoleTextBox = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.userPhotoPictureBox)).BeginInit();
+            this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
+            // 
+            // userPhotoPictureBox
+            // 
+            this.userPhotoPictureBox.Image = global::ScrumIt.Properties.Resources.sample;
+            this.userPhotoPictureBox.Location = new System.Drawing.Point(330, 63);
+            this.userPhotoPictureBox.Name = "userPhotoPictureBox";
+            this.userPhotoPictureBox.Size = new System.Drawing.Size(170, 170);
+            this.userPhotoPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.userPhotoPictureBox.TabIndex = 9;
+            this.userPhotoPictureBox.TabStop = false;
             // 
             // tableLayoutPanel1
             // 
             this.tableLayoutPanel1.ColumnCount = 2;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.Controls.Add(this.userRoleTextBox, 1, 4);
             this.tableLayoutPanel1.Controls.Add(this.userLastNameTextBox, 1, 2);
             this.tableLayoutPanel1.Controls.Add(this.userNameTextBox, 1, 1);
             this.tableLayoutPanel1.Controls.Add(this.userRoleLabel, 0, 4);
@@ -65,7 +69,6 @@
             this.tableLayoutPanel1.Controls.Add(this.userLoginTextBox, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.userEmailLLabel, 0, 3);
             this.tableLayoutPanel1.Controls.Add(this.userEmailTextBox, 1, 3);
-            this.tableLayoutPanel1.Controls.Add(this.roleComboBox, 1, 4);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(23, 63);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 5;
@@ -75,7 +78,7 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(280, 170);
-            this.tableLayoutPanel1.TabIndex = 5;
+            this.tableLayoutPanel1.TabIndex = 8;
             // 
             // userLastNameTextBox
             // 
@@ -86,6 +89,7 @@
             this.userLastNameTextBox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.userLastNameTextBox.Location = new System.Drawing.Point(143, 71);
             this.userLastNameTextBox.Name = "userLastNameTextBox";
+            this.userLastNameTextBox.ReadOnly = true;
             this.userLastNameTextBox.Size = new System.Drawing.Size(134, 29);
             this.userLastNameTextBox.TabIndex = 7;
             // 
@@ -98,6 +102,7 @@
             this.userNameTextBox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.userNameTextBox.Location = new System.Drawing.Point(143, 37);
             this.userNameTextBox.Name = "userNameTextBox";
+            this.userNameTextBox.ReadOnly = true;
             this.userNameTextBox.Size = new System.Drawing.Size(134, 29);
             this.userNameTextBox.TabIndex = 6;
             // 
@@ -162,6 +167,7 @@
             this.userLoginTextBox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.userLoginTextBox.Location = new System.Drawing.Point(143, 3);
             this.userLoginTextBox.Name = "userLoginTextBox";
+            this.userLoginTextBox.ReadOnly = true;
             this.userLoginTextBox.Size = new System.Drawing.Size(134, 29);
             this.userLoginTextBox.TabIndex = 8;
             // 
@@ -187,158 +193,53 @@
             this.userEmailTextBox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.userEmailTextBox.Location = new System.Drawing.Point(143, 105);
             this.userEmailTextBox.Name = "userEmailTextBox";
+            this.userEmailTextBox.ReadOnly = true;
             this.userEmailTextBox.Size = new System.Drawing.Size(134, 29);
             this.userEmailTextBox.TabIndex = 9;
             // 
-            // roleComboBox
+            // userRoleTextBox
             // 
-            this.roleComboBox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.roleComboBox.FormattingEnabled = true;
-            this.roleComboBox.Location = new System.Drawing.Point(143, 139);
-            this.roleComboBox.Name = "roleComboBox";
-            this.roleComboBox.Size = new System.Drawing.Size(134, 29);
-            this.roleComboBox.TabIndex = 10;
-            this.roleComboBox.SelectedIndexChanged += new System.EventHandler(this.roleComboBox_SelectedIndexChanged);
-            // 
-            // changePasswordLayoutTablePanel
-            // 
-            this.changePasswordLayoutTablePanel.ColumnCount = 2;
-            this.changePasswordLayoutTablePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.changePasswordLayoutTablePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.changePasswordLayoutTablePanel.Controls.Add(this.newPasswordLabel, 0, 0);
-            this.changePasswordLayoutTablePanel.Controls.Add(this.newPasswordTextBox, 1, 0);
-            this.changePasswordLayoutTablePanel.Controls.Add(this.confirmNewPasswordLabel, 0, 1);
-            this.changePasswordLayoutTablePanel.Controls.Add(this.confirmNewPasswordTextBox, 1, 1);
-            this.changePasswordLayoutTablePanel.Location = new System.Drawing.Point(23, 239);
-            this.changePasswordLayoutTablePanel.Name = "changePasswordLayoutTablePanel";
-            this.changePasswordLayoutTablePanel.RowCount = 2;
-            this.changePasswordLayoutTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.changePasswordLayoutTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.changePasswordLayoutTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.changePasswordLayoutTablePanel.Size = new System.Drawing.Size(280, 70);
-            this.changePasswordLayoutTablePanel.TabIndex = 6;
-            // 
-            // newPasswordLabel
-            // 
-            this.newPasswordLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.userRoleTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.newPasswordLabel.AutoSize = true;
-            this.newPasswordLabel.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.newPasswordLabel.Location = new System.Drawing.Point(3, 0);
-            this.newPasswordLabel.Name = "newPasswordLabel";
-            this.newPasswordLabel.Size = new System.Drawing.Size(134, 35);
-            this.newPasswordLabel.TabIndex = 2;
-            this.newPasswordLabel.Text = "Hasło";
+            this.userRoleTextBox.BackColor = System.Drawing.Color.White;
+            this.userRoleTextBox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.userRoleTextBox.Location = new System.Drawing.Point(143, 139);
+            this.userRoleTextBox.Name = "userRoleTextBox";
+            this.userRoleTextBox.ReadOnly = true;
+            this.userRoleTextBox.Size = new System.Drawing.Size(134, 29);
+            this.userRoleTextBox.TabIndex = 10;
             // 
-            // newPasswordTextBox
-            // 
-            this.newPasswordTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.newPasswordTextBox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.newPasswordTextBox.Location = new System.Drawing.Point(143, 3);
-            this.newPasswordTextBox.Name = "newPasswordTextBox";
-            this.newPasswordTextBox.Size = new System.Drawing.Size(134, 29);
-            this.newPasswordTextBox.TabIndex = 11;
-            this.newPasswordTextBox.UseSystemPasswordChar = true;
-            // 
-            // confirmNewPasswordLabel
-            // 
-            this.confirmNewPasswordLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.confirmNewPasswordLabel.AutoSize = true;
-            this.confirmNewPasswordLabel.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.confirmNewPasswordLabel.Location = new System.Drawing.Point(3, 35);
-            this.confirmNewPasswordLabel.Name = "confirmNewPasswordLabel";
-            this.confirmNewPasswordLabel.Size = new System.Drawing.Size(134, 35);
-            this.confirmNewPasswordLabel.TabIndex = 3;
-            this.confirmNewPasswordLabel.Text = "Powtórz hasło";
-            // 
-            // confirmNewPasswordTextBox
-            // 
-            this.confirmNewPasswordTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.confirmNewPasswordTextBox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.confirmNewPasswordTextBox.Location = new System.Drawing.Point(143, 38);
-            this.confirmNewPasswordTextBox.Name = "confirmNewPasswordTextBox";
-            this.confirmNewPasswordTextBox.Size = new System.Drawing.Size(134, 29);
-            this.confirmNewPasswordTextBox.TabIndex = 12;
-            this.confirmNewPasswordTextBox.UseSystemPasswordChar = true;
-            // 
-            // registeButton
-            // 
-            this.registeButton.BackColor = System.Drawing.Color.Silver;
-            this.registeButton.FlatAppearance.BorderColor = System.Drawing.Color.White;
-            this.registeButton.FlatAppearance.BorderSize = 0;
-            this.registeButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.registeButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.registeButton.ForeColor = System.Drawing.Color.White;
-            this.registeButton.Location = new System.Drawing.Point(330, 269);
-            this.registeButton.Name = "registeButton";
-            this.registeButton.Size = new System.Drawing.Size(170, 40);
-            this.registeButton.TabIndex = 8;
-            this.registeButton.Text = "Stwórz konto";
-            this.registeButton.UseVisualStyleBackColor = false;
-            this.registeButton.Click += new System.EventHandler(this.registeButton_Click);
-            // 
-            // userPhotoPictureBox
-            // 
-            this.userPhotoPictureBox.Image = global::ScrumIt.Properties.Resources.sample;
-            this.userPhotoPictureBox.Location = new System.Drawing.Point(330, 63);
-            this.userPhotoPictureBox.Name = "userPhotoPictureBox";
-            this.userPhotoPictureBox.Size = new System.Drawing.Size(170, 170);
-            this.userPhotoPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.userPhotoPictureBox.TabIndex = 7;
-            this.userPhotoPictureBox.TabStop = false;
-            this.userPhotoPictureBox.Click += new System.EventHandler(this.userPhotoPictureBox_Click);
-            // 
-            // Register
+            // UserInfo
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(539, 344);
-            this.Controls.Add(this.registeButton);
+            this.ClientSize = new System.Drawing.Size(519, 256);
             this.Controls.Add(this.userPhotoPictureBox);
-            this.Controls.Add(this.changePasswordLayoutTablePanel);
             this.Controls.Add(this.tableLayoutPanel1);
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
-            this.Name = "Register";
-            this.Resizable = false;
-            this.Text = "ScrumIt!";
-            this.TopMost = true;
-            this.Load += new System.EventHandler(this.Register_Load);
+            this.Name = "UserInfo";
+            this.Text = "UserInfo";
+            this.Load += new System.EventHandler(this.UserInfo_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.userPhotoPictureBox)).EndInit();
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
-            this.changePasswordLayoutTablePanel.ResumeLayout(false);
-            this.changePasswordLayoutTablePanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.userPhotoPictureBox)).EndInit();
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
+        private System.Windows.Forms.PictureBox userPhotoPictureBox;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private System.Windows.Forms.TextBox userEmailTextBox;
-        private System.Windows.Forms.TextBox userLoginTextBox;
         private System.Windows.Forms.TextBox userLastNameTextBox;
         private System.Windows.Forms.TextBox userNameTextBox;
+        private System.Windows.Forms.Label userRoleLabel;
         private System.Windows.Forms.Label userLastNameLabel;
         private System.Windows.Forms.Label usrNameLabel;
-        private System.Windows.Forms.Label userRoleLabel;
         private System.Windows.Forms.Label userNameLabel;
+        private System.Windows.Forms.TextBox userLoginTextBox;
         private System.Windows.Forms.Label userEmailLLabel;
-        private System.Windows.Forms.TableLayoutPanel changePasswordLayoutTablePanel;
-        private System.Windows.Forms.Label confirmNewPasswordLabel;
-        private System.Windows.Forms.Label newPasswordLabel;
-        private System.Windows.Forms.TextBox newPasswordTextBox;
-        private System.Windows.Forms.TextBox confirmNewPasswordTextBox;
-        private System.Windows.Forms.PictureBox userPhotoPictureBox;
-        private System.Windows.Forms.Button registeButton;
-        private System.Windows.Forms.ComboBox roleComboBox;
+        private System.Windows.Forms.TextBox userEmailTextBox;
+        private System.Windows.Forms.TextBox userRoleTextBox;
     }
 }
