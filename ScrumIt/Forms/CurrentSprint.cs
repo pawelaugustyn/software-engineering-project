@@ -527,19 +527,18 @@ namespace ScrumIt.Forms
                 Text = (task.TaskEstimatedTime).ToString(),
                 TextAlign = ContentAlignment.MiddleRight
             };
+            
+            var users = UserModel.GetUserByTaskId(task.TaskId);
 
-            var userPhotos = new[] { "Nowak1", "Nowak2", "Nowak3", "Nowak4" };
-            //TODO
-            //Load pictures for users
             var pictureBoxes = new List<PictureBox>();
             var location = 15;
-            foreach (var user in userPhotos)
+
+            foreach (var user in users)
             {
-                var pictureBoxName = user.ToString() + "PhotoBox";
+                var pictureBoxName = user.Username + "PhotoBox";
                 var pictureBox = new PictureBox
                 {
-                    //get picture by user id
-                    Image = Properties.Resources.cat2,
+                    Image = user.Avatar,
                     Location = new Point(location, 49),
                     Name = pictureBoxName,
                     Size = new Size(23, 25),
