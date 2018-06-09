@@ -135,7 +135,6 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
             Assertion.Equals(sprint, _sprint);
         }
 
-        //[Ignore("Needs to be changed with AddSprintToProjectBeforeLastSprintEndDateShouldThrow")]
         [Test]
         public void GetMostRecentSprintByProjectIdShouldReturnCorrectNextSprint()
         {
@@ -255,7 +254,14 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
         }
         
         [Test]
-        public void AddSprintToProjectWithDatesOverlapingAnotherSprintShouldThrow()
+        [TestCase(0, 0)]
+        [TestCase(0, 1)]
+        [TestCase(-1, 0)]
+        [TestCase(-1, -1)]
+        [TestCase(1, 1)]
+        [TestCase(-1, 1)]
+        [TestCase(1, -1)]
+        public void AddSprintToProjectWithDatesOverlapingAnotherSprintShouldThrow(int numberOfDaysToAddToStart, int numberOfDaysToAddToEnd)
         {
             var project = new ProjectModel
             {
@@ -273,26 +279,26 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
                 StartDateTime = new DateTime(2018, 6, 01, 12, 00, 00)
             };
 
-            var addedSuccessful = SprintAccess.CreateNewSprintForProject(sprint);
+            var isAddedSuccessful = SprintAccess.CreateNewSprintForProject(sprint);
             var sprinttAfterAdd = SprintAccess.GetSprintById(sprint.SprintId);
             Setup.RegisterToDeleteAfterTestExecution(sprint);
 
             Assertion.Equals(sprint, sprinttAfterAdd, "Sprint not added correctly to DB.");
-            Assert.That(addedSuccessful, Is.True, $"Adding sprint should be successful {Messages.Display(sprint)}.");
+            Assert.That(isAddedSuccessful, Is.True, $"Adding sprint should be successful {Messages.Display(sprint)}.");
 
-            var sprintToAdd = new SprintModel
+            var overlapingSprintToAdd = new SprintModel
             {
                 ParentProjectId = project.ProjectId,
-                EndDateTime = new DateTime(2018, 6, 5, 12, 00, 00),
-                StartDateTime = new DateTime(2018, 5, 25, 12, 00, 00)
+                EndDateTime = new DateTime(2018, 6, 10, 12, 00, 00).AddDays(numberOfDaysToAddToStart),
+                StartDateTime = new DateTime(2018, 6, 01, 12, 00, 00).AddDays(numberOfDaysToAddToEnd)
             };
 
-            var isAddedSuccessful = false;
+            isAddedSuccessful = false;
 
-            Assert.Throws<ArgumentException>(delegate { isAddedSuccessful = SprintAccess.CreateNewSprintForProject(sprintToAdd); },
+            Assert.Throws<ArgumentException>(delegate { isAddedSuccessful = SprintAccess.CreateNewSprintForProject(overlapingSprintToAdd); },
                 "Exception should be thrown, because it should not be possible to add sprint to project with overlaping dates of another sprint.");
 
-            Assert.That(isAddedSuccessful, Is.False, $"Adding sprint should not be successful {Messages.Display(sprintToAdd)}.");
+            Assert.That(isAddedSuccessful, Is.False, $"Adding sprint should not be successful {Messages.Display(overlapingSprintToAdd)}.");
         }
 
         [Test]
