@@ -46,6 +46,11 @@ namespace ScrumIt.Forms
         {
             try
             {
+                this.Activate();
+                backlogMenuStrip.Items.Clear();
+                userListMenuStrip.Items.Clear();
+                propertiesComboBox.Items.Clear();
+
                 var taskList = TaskModel.GetTasksBySprintId(_sprintId);
 
 
@@ -198,17 +203,15 @@ namespace ScrumIt.Forms
                 newStage = TaskModel.TaskStages.Completed;
             }
 
-            if (task.TaskStage != newStage)
-            {
-                try
-                {
-                    TaskModel.UpdateTaskStage(task.TaskId, newStage);
-                }
-                catch (Exception err)
-                {
-                    MessageBox.Show(err.Message);
-                }
 
+            try
+            {
+                TaskModel.UpdateTaskStage(task.TaskId, newStage);
+                progressBar.Refresh();
+            }
+            catch (Exception err)
+            {
+                MessageBox.Show(err.Message);
             }
         }
 
@@ -222,7 +225,9 @@ namespace ScrumIt.Forms
         private void editTask_FormClosed()
         {
             scrumBoardPanel.Controls.Clear();
+            createMenuflag = true;
             CurrentSprint_Load(null, EventArgs.Empty);
+            progressBar.Refresh();
         }
 
         private void proj_FormClosed()
@@ -234,8 +239,11 @@ namespace ScrumIt.Forms
                 {
                     Close();
                 }
-                
+
                 scrumBoardPanel.BackColor = ColorTranslator.FromHtml(proj.ProjectColor);
+                scrumBoardPanel.Controls.Clear();
+                createMenuflag = true;
+                CurrentSprint_Load(null, EventArgs.Empty);
             }
             catch (Exception err)
             {
@@ -246,13 +254,17 @@ namespace ScrumIt.Forms
         private void addTask_FormClosed()
         {
             scrumBoardPanel.Controls.Clear();
+            createMenuflag = true;
             CurrentSprint_Load(null, EventArgs.Empty);
+            progressBar.Refresh();
         }
-        
+
         private void addTaskFromBacklog_FormClosed()
         {
             scrumBoardPanel.Controls.Clear();
+            createMenuflag = true;
             CurrentSprint_Load(null, EventArgs.Empty);
+            progressBar.Refresh();
         }
 
 
@@ -528,18 +540,15 @@ namespace ScrumIt.Forms
                 TextAlign = ContentAlignment.MiddleRight
             };
 
-            var userPhotos = new[] { "Nowak1", "Nowak2", "Nowak3", "Nowak4" };
-            //TODO
-            //Load pictures for users
             var pictureBoxes = new List<PictureBox>();
             var location = 15;
-            foreach (var user in userPhotos)
+
+            foreach (var user in task.UsersAssignedToTask)
             {
-                var pictureBoxName = user.ToString() + "PhotoBox";
+                var pictureBoxName = user.Username + "PhotoBox";
                 var pictureBox = new PictureBox
                 {
-                    //get picture by user id
-                    Image = Properties.Resources.cat2,
+                    Image = user.Avatar,
                     Location = new Point(location, 49),
                     Name = pictureBoxName,
                     Size = new Size(23, 25),
@@ -660,13 +669,12 @@ namespace ScrumIt.Forms
             };
             var pictureBoxes = new List<PictureBox>();
             var location = 15;
-            foreach (var user in userPhotos)
+            foreach (var user in taskList.UsersAssignedToTask)
             {
-                var pictureBoxName = user.ToString() + "PhotoBox";
+                var pictureBoxName = user.Username + "PhotoBox";
                 var pictureBox = new PictureBox
                 {
-                    //get picture by user id
-                    Image = Properties.Resources.cat2,
+                    Image = user.Avatar,
                     Location = new Point(location, 49),
                     Name = pictureBoxName,
                     Size = new Size(23, 25),
@@ -834,6 +842,17 @@ namespace ScrumIt.Forms
 
         private void progressBar_Paint(object sender, PaintEventArgs e)
         {
+            var width = progressBar.ClientRectangle.Width;
+            var height = progressBar.ClientRectangle.Height;
+            Graphics g = e.Graphics;
+            ToolTip tooltip = new ToolTip
+            {
+                InitialDelay = 500,
+                ShowAlways = true
+            };
+            tooltip.SetToolTip(this.progressBar, "kolor czerwony - zadania nierozpoczęte" + Environment.NewLine 
+                                                + "kolor żółty - zadania w trakcie realizacji" + Environment.NewLine
+                                                + "kolor zielony - zadania ukończone");
             try
             {
                 var taskList = TaskModel.GetTasksBySprintId(_sprintId);
@@ -860,13 +879,10 @@ namespace ScrumIt.Forms
                     }
                 }
 
-                var width = progressBar.ClientRectangle.Width;
-                var height = progressBar.ClientRectangle.Height;
 
                 SolidBrush greenBrush = new SolidBrush(Color.GreenYellow);
                 SolidBrush yellowBrush = new SolidBrush(Color.Yellow);
                 SolidBrush redBrush = new SolidBrush(Color.Red);
-                Graphics g = e.Graphics;
                 g.FillRectangle(redBrush, new Rectangle(0, 0, width * todo / sum, height));
                 g.FillRectangle(yellowBrush,
                     new Rectangle(width * todo / sum, 0, width * doing / sum + width * todo / sum, height));
@@ -876,9 +892,13 @@ namespace ScrumIt.Forms
                 redBrush.Dispose();
                 g.Dispose();
             }
-            catch (Exception err)
+            catch (Exception)
             {
-                MessageBox.Show(err.Message);
+                // MessageBox.Show(err.Message)
+                SolidBrush brush = new SolidBrush(Color.Gray);
+                g.FillRectangle(brush, new Rectangle(0, 0, width, height));
+                brush.Dispose();
+                g.Dispose();
             }
         }
     }
