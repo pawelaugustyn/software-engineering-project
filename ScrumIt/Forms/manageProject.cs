@@ -130,6 +130,7 @@ namespace ScrumIt.Forms
                 ProjectModel.AssignUsersToProject(project, userListToAssign);
 
                 MessageBox.Show("Projekt został zaktualizowany");
+                CurrentSprint.refresh = true;
                 Close();
             }
             catch (Exception err)

@@ -65,6 +65,7 @@ namespace ScrumIt.Forms
                 try
                 {
                     TaskModel.AssignFromBacklogToSprint(_taskId, _sprintId);
+                    CurrentSprint.refresh = true;
                 }
                 catch (ArgumentException error)
                 {

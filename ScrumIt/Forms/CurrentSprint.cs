@@ -16,6 +16,8 @@ namespace ScrumIt.Forms
         private int _sprintId;
         private bool createMenuflag = true;
         private string _userRole;
+        //flaga do sprawdzania czy mamy odświeżać currentSprint
+        public static bool refresh = false;
 
         public CurrentSprint()
         {
@@ -235,19 +237,28 @@ namespace ScrumIt.Forms
         private void panel_DoubleClick(int taskId)
         {
             EditTask editTask = new EditTask(taskId, _projectId);
-            editTask.FormClosed += delegate { editTask_FormClosed(); };
+            editTask.FormClosing += new FormClosingEventHandler(editTask_FormClosing);
+            //editTask.FormClosed += delegate { editTask_FormClosed(); };
             editTask.Show();
         }
 
-        private void editTask_FormClosed()
+        private void editTask_FormClosing(object sender, FormClosingEventArgs e)
         {
-            scrumBoardPanel.Controls.Clear();
-            createMenuflag = true;
-            CurrentSprint_Load(null, EventArgs.Empty);
-            progressBar.Refresh();
+            if (refresh)
+            {
+                scrumBoardPanel.Controls.Clear();
+                createMenuflag = true;
+                CurrentSprint_Load(null, EventArgs.Empty);
+                progressBar.Refresh();
+                refresh = false;
+            }
+            else
+            {
+                this.Activate();
+            }
         }
 
-        private void proj_FormClosed()
+        private void proj_FormClosing(object sender, FormClosingEventArgs e)
         {
             try
             {
@@ -257,12 +268,21 @@ namespace ScrumIt.Forms
                     Close();
                 }
                 var users = UserModel.GetUsersByProjectId(_projectId);
-                userListMenuStrip.Items.Clear();
-                userListMenuStrip.Items.AddRange(createUserListMenu(users));
-                scrumBoardPanel.BackColor = ColorTranslator.FromHtml(proj.ProjectColor);
-                scrumBoardPanel.Controls.Clear();
-                createMenuflag = true;
-                CurrentSprint_Load(null, EventArgs.Empty);
+
+                if (refresh)
+                {
+                    userListMenuStrip.Items.Clear();
+                    userListMenuStrip.Items.AddRange(createUserListMenu(users));
+                    scrumBoardPanel.BackColor = ColorTranslator.FromHtml(proj.ProjectColor);
+                    scrumBoardPanel.Controls.Clear();
+                    createMenuflag = true;
+                    CurrentSprint_Load(null, EventArgs.Empty);
+                    refresh = false;
+                }
+                else
+                {
+                    this.Activate();
+                }
             }
             catch (Exception err)
             {
@@ -270,20 +290,36 @@ namespace ScrumIt.Forms
             }
         }
 
-        private void addTask_FormClosed()
+        private void addTask_FormClosing(object sender, FormClosingEventArgs e)
         {
-            scrumBoardPanel.Controls.Clear();
-            createMenuflag = true;
-            CurrentSprint_Load(null, EventArgs.Empty);
-            progressBar.Refresh();
+            if (refresh)
+            {
+                scrumBoardPanel.Controls.Clear();
+                createMenuflag = true;
+                CurrentSprint_Load(null, EventArgs.Empty);
+                progressBar.Refresh();
+                refresh = false;
+            }
+            else
+            {
+                this.Activate();
+            }
         }
 
-        private void addTaskFromBacklog_FormClosed()
+        private void addTaskFromBacklog_FormClosing(object sender, FormClosingEventArgs e)
         {
-            scrumBoardPanel.Controls.Clear();
-            createMenuflag = true;
-            CurrentSprint_Load(null, EventArgs.Empty);
-            progressBar.Refresh();
+            if (refresh)
+            {
+                scrumBoardPanel.Controls.Clear();
+                createMenuflag = true;
+                CurrentSprint_Load(null, EventArgs.Empty);
+                progressBar.Refresh();
+                refresh = false;
+            }
+            else
+            {
+                this.Activate();
+            }
         }
 
 
@@ -291,7 +327,8 @@ namespace ScrumIt.Forms
         {
 
             AddTaskFromBacklog addTask = new AddTaskFromBacklog(taskId, _sprintId);
-            addTask.FormClosed += delegate { addTaskFromBacklog_FormClosed(); };
+            addTask.FormClosing += new FormClosingEventHandler(addTaskFromBacklog_FormClosing);
+            //addTask.FormClosed += delegate { addTaskFromBacklog_FormClosed(); };
             addTask.Show();
         }
 
@@ -377,7 +414,8 @@ namespace ScrumIt.Forms
             if (_userRole != "Guest")
             {
                 AddTask addTask = new AddTask(_projectId, _sprintId);
-                addTask.FormClosed += delegate { addTask_FormClosed(); };
+                addTask.FormClosing += new FormClosingEventHandler(addTask_FormClosing);
+                //addTask.FormClosed += delegate { addTask_FormClosed(); };
                 addTask.Show();
             }
         }
@@ -934,7 +972,9 @@ namespace ScrumIt.Forms
                 if (propertiesComboBox.SelectedIndex == 5)
                 {
                     var proj = new ManageProject(_projectId);
-                    proj.FormClosed += delegate { proj_FormClosed(); };
+                    proj.FormClosing += new FormClosingEventHandler(proj_FormClosing);
+
+                    //proj.FormClosed += delegate { proj_FormClosed(); };
                     proj.Show();
                 }
                 if (propertiesComboBox.SelectedIndex == 6)
