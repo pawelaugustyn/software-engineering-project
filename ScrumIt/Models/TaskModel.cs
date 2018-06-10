@@ -15,6 +15,7 @@ namespace ScrumIt.Models
         public TaskStages TaskStage { get; set; }
         public string TaskColor { get; set; }
         public int BacklogProjectId { get; set; }
+        public List<UserModel> UsersAssignedToTask { get; set; }
 
         public enum TaskStages
         {

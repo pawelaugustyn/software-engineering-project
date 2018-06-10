@@ -145,10 +145,10 @@ namespace ScrumIt.DataAccess
         public static bool CreateNewSprintForProject(SprintModel addedSprint)
         {
             if (AppStateProvider.Instance.CurrentUser.Role != UserRoles.ScrumMaster)
-                throw new UnauthorizedAccessException("Not permitted for that operation.");
-            ValidateNewSprint(addedSprint);
+                throw new UnauthorizedAccessException("Brak uprawnien.");
             using (new Connection())
             {
+                ValidateNewSprint(addedSprint);
                 var cmd = new NpgsqlCommand("INSERT INTO sprints VALUES (DEFAULT, @projectid, @start::timestamp, @end::timestamp);")
                 {
                     Connection = Connection.Conn
@@ -236,33 +236,46 @@ namespace ScrumIt.DataAccess
         {
             ValidateStartDate(addedSprint);
             ValidateEndDate(addedSprint.EndDateTime);
+            ValidateSprintDuration(addedSprint);
         }
 
         private static void ValidateStartDate(SprintModel sprint)
         {
             if (sprint.StartDateTime == null)
-                throw new ArgumentException("Sprint's start date is not initialized");
+                throw new ArgumentException("Brak daty rozpoczecia sprintu");
 
             if (sprint.StartDateTime >= sprint.EndDateTime)
-                throw new ArgumentException("Sprint's start should happen before its end.");
-
-            //sprawdzamy, czy data rozpoczecia nowego sprintu jest pozniejsza niz data zakonczenia ostatniego istniejacego juz sprintu
-            DateTime? endOfLastSprint = GetEndOfLastSprintByProjectId(sprint.ParentProjectId);
-            if (endOfLastSprint != null)
-            {
-                if (endOfLastSprint >= sprint.StartDateTime)
-                    throw new ArgumentException("Sprint starts before existing sprint is finished.");
-            }
-            
+                throw new ArgumentException("Rozpoczecie sprintu musi nastapic przed jego zakonczeniem");
         }
 
         private static void ValidateEndDate(DateTime endDate)
         {
             if (endDate == null)
-                throw new ArgumentException("Sprint's end date is not initialized");
+                throw new ArgumentException("Brak daty zakonczenia sprintu");
             // TODO
             // czy tu potrzebna jest inna walidacja?
             // ograniczenie na dlugosc sprintu (3-31 dni) jest zrobione na frontendzie
+        }
+
+        private static void ValidateSprintDuration(SprintModel sprint)
+        {
+            using (new Connection())
+            {
+                var cmd = new NpgsqlCommand("select sprint_id from sprints where ((sprint_start < @param_start::timestamp and sprint_end > @param_start2::timestamp) or (sprint_start < @param_end::timestamp and sprint_end > @param_end2::timestamp)) and project_id = @param_proj;")
+                {
+                    Connection = Connection.Conn
+                };
+                string datetimeStart = sprint.StartDateTime.ToString("yyyy-MM-dd hh:mm:ss");
+                cmd.Parameters.AddWithValue("param_start", datetimeStart);
+                cmd.Parameters.AddWithValue("param_start2", datetimeStart);
+                string datetimeEnd = sprint.EndDateTime.ToString("yyyy-MM-dd hh:mm:ss");
+                cmd.Parameters.AddWithValue("param_end", datetimeEnd);
+                cmd.Parameters.AddWithValue("param_end2", datetimeEnd);
+                cmd.Parameters.AddWithValue("param_proj", sprint.ParentProjectId);
+                var res = cmd.ExecuteNonQuery();
+                if (res > 0)
+                    throw new ArgumentException("Czas trwania sprintu pokrywa sie z czasem innego istniejacego sprintu.");
+            }
         }
     }
 }
