@@ -48,8 +48,14 @@ namespace ScrumIt.Forms
             {
                 var project = ProjectModel.GetProjectById(_projectId);
                 projectNameTextBox.Text = project.ProjectName;
-                var sprint = SprintModel.GetCurrentSprintForProject(_projectId);
+                var sprint = SprintModel.GetMostRecentSprintForProject(_projectId);
                 DateTextBox.Text = sprint.StartDateTime.ToShortDateString() + " / " + sprint.EndDateTime.ToShortDateString();
+                
+                this.Activate();
+                backlogMenuStrip.Items.Clear();
+                userListMenuStrip.Items.Clear();
+                propertiesComboBox.Items.Clear();
+                
                 var taskList = TaskModel.GetTasksBySprintId(_sprintId);
 
 
@@ -206,7 +212,9 @@ namespace ScrumIt.Forms
             try
             {
                 TaskModel.UpdateTaskStage(task.TaskId, newStage);
+                progressBar.Refresh();
             }
+
             catch (Exception err)
             {
                 MessageBox.Show(err.Message);
@@ -225,7 +233,9 @@ namespace ScrumIt.Forms
         private void editTask_FormClosed()
         {
             scrumBoardPanel.Controls.Clear();
+            createMenuflag = true;
             CurrentSprint_Load(null, EventArgs.Empty);
+            progressBar.Refresh();
         }
 
         private void proj_FormClosed()
@@ -237,11 +247,13 @@ namespace ScrumIt.Forms
                 {
                     Close();
                 }
-
                 var users = UserModel.GetUsersByProjectId(_projectId);
                 userListMenuStrip.Items.Clear();
                 userListMenuStrip.Items.AddRange(createUserListMenu(users));
                 scrumBoardPanel.BackColor = ColorTranslator.FromHtml(proj.ProjectColor);
+                scrumBoardPanel.Controls.Clear();
+                createMenuflag = true;
+                CurrentSprint_Load(null, EventArgs.Empty);
             }
             catch (Exception err)
             {
@@ -252,13 +264,17 @@ namespace ScrumIt.Forms
         private void addTask_FormClosed()
         {
             scrumBoardPanel.Controls.Clear();
+            createMenuflag = true;
             CurrentSprint_Load(null, EventArgs.Empty);
+            progressBar.Refresh();
         }
 
         private void addTaskFromBacklog_FormClosed()
         {
             scrumBoardPanel.Controls.Clear();
+            createMenuflag = true;
             CurrentSprint_Load(null, EventArgs.Empty);
+            progressBar.Refresh();
         }
 
 
@@ -841,6 +857,17 @@ namespace ScrumIt.Forms
 
         private void progressBar_Paint(object sender, PaintEventArgs e)
         {
+            var width = progressBar.ClientRectangle.Width;
+            var height = progressBar.ClientRectangle.Height;
+            Graphics g = e.Graphics;
+            ToolTip tooltip = new ToolTip
+            {
+                InitialDelay = 500,
+                ShowAlways = true
+            };
+            tooltip.SetToolTip(this.progressBar, "kolor czerwony - zadania nierozpoczęte" + Environment.NewLine 
+                                                + "kolor żółty - zadania w trakcie realizacji" + Environment.NewLine
+                                                + "kolor zielony - zadania ukończone");
             try
             {
                 var taskList = TaskModel.GetTasksBySprintId(_sprintId);
@@ -867,13 +894,10 @@ namespace ScrumIt.Forms
                     }
                 }
 
-                var width = progressBar.ClientRectangle.Width;
-                var height = progressBar.ClientRectangle.Height;
 
                 SolidBrush greenBrush = new SolidBrush(Color.GreenYellow);
                 SolidBrush yellowBrush = new SolidBrush(Color.Yellow);
                 SolidBrush redBrush = new SolidBrush(Color.Red);
-                Graphics g = e.Graphics;
                 g.FillRectangle(redBrush, new Rectangle(0, 0, width * todo / sum, height));
                 g.FillRectangle(yellowBrush,
                     new Rectangle(width * todo / sum, 0, width * doing / sum + width * todo / sum, height));
@@ -883,9 +907,13 @@ namespace ScrumIt.Forms
                 redBrush.Dispose();
                 g.Dispose();
             }
-            catch (Exception err)
+            catch (Exception)
             {
-                MessageBox.Show(err.Message);
+                // MessageBox.Show(err.Message)
+                SolidBrush brush = new SolidBrush(Color.Gray);
+                g.FillRectangle(brush, new Rectangle(0, 0, width, height));
+                brush.Dispose();
+                g.Dispose();
             }
         }
     }
