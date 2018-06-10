@@ -269,9 +269,11 @@ namespace ScrumIt.DataAccess
         {
             List<SprintModel> ending_sprints = SprintModel.GetNotNotifiedEndingSprints(days_till_end);
             List<UserModel> users_assigned_to_ending_sprints = new List<UserModel>();
+            var parent_project = new ProjectModel();
             foreach (var sprint in ending_sprints)
             {
                 users_assigned_to_ending_sprints = UserModel.GetUsersByProjectId(sprint.ParentProjectId);
+                parent_project = ProjectModel.GetProjectById(sprint.SprintId);
                 try
                 {
                     foreach (var user in users_assigned_to_ending_sprints)
@@ -280,11 +282,11 @@ namespace ScrumIt.DataAccess
                         SmtpClient SmtpServer = new SmtpClient("smtp.gmail.com");
                         mail.From = new MailAddress("io.appka@gmail.com");
                         mail.To.Add(user.Email);
-                        mail.Subject = "ScrumIt Sprint End Notification!";
+                        mail.Subject = "ScrumIt Powiadomienie o końcu sprintu!";
                         mail.Body =
-                            "Hello, " + user.Firstname +
-                            ", We want to kindly remind You, that one of the sprints You are participating in is going to end in " +
-                            days_till_end.ToString() + " days! Best Regards, ScrumIt Team.";
+                            "Dzień dobry, " + user.Firstname +
+                            ", chcielibyśmy Ci przypomnieć, że sprint, którego jesteś uczestnikiem w projekcie " + parent_project.ProjectName + " dobiega końca " + 
+                            sprint.EndDateTime.ToString() + ". Pozdrawiamy, Zespół ScrumIt.";
                         SmtpServer.Port = 587;
                         SmtpServer.Credentials = new System.Net.NetworkCredential("io.appka", "ioioio123");
                         SmtpServer.EnableSsl = true;
