@@ -50,14 +50,22 @@ namespace ScrumIt.Forms
         {
             var newPass = newPasswordTextBox.Text;
             var newPassConf = confirmNewPasswordTextBox.Text;
-            if (newPass == newPassConf && _user != null)
+            if (newPass.Length < 5)
             {
-                MessageBox.Show(@"Pomyślnie zmieniono hasło");
-                UserModel.UpdateUserPassword(newPass);
+                MessageBox.Show("Hasło powinno mieć minimum 5 znaków");
             }
             else
             {
-                MessageBox.Show(@"Wprowadzone nowe hasła nie są identyczne");
+
+                if (newPass == newPassConf && _user != null)
+                {
+                    MessageBox.Show(@"Pomyślnie zmieniono hasło");
+                    UserModel.UpdateUserPassword(newPass);
+                }
+                else
+                {
+                    MessageBox.Show(@"Wprowadzone nowe hasła nie są identyczne");
+                }
             }
         }
 
