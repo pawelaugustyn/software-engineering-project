@@ -88,6 +88,11 @@ namespace ScrumIt.Models
             TaskAccess.AssignUsersToTask(taskToAssignTo, usersToAssign);
         }
 
+        public static void AssignUsersToTask(TaskModel taskToAssignTo, IEnumerable<int> usersIdsToAssign)
+        {
+            TaskAccess.AssignUsersToTask(taskToAssignTo, usersIdsToAssign);
+        }
+
         public static bool UpdateTask(TaskModel task)
         {
             return TaskAccess.UpdateTask(task);

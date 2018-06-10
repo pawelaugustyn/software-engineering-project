@@ -46,13 +46,17 @@ namespace ScrumIt.Forms
         {
             try
             {
+                var project = ProjectModel.GetProjectById(_projectId);
+                projectNameTextBox.Text = project.ProjectName;
+                var sprint = SprintModel.GetMostRecentSprintForProject(_projectId);
+                DateTextBox.Text = sprint.StartDateTime.ToShortDateString() + " / " + sprint.EndDateTime.ToShortDateString();
+                
                 this.Activate();
                 backlogMenuStrip.Items.Clear();
                 userListMenuStrip.Items.Clear();
                 propertiesComboBox.Items.Clear();
-
+                
                 var taskList = TaskModel.GetTasksBySprintId(_sprintId);
-
 
                 var index = 0;
                 foreach (var task in taskList)
@@ -68,6 +72,7 @@ namespace ScrumIt.Forms
                     {
                         propertiesComboBox.Items.Add("Dane użytkownika");
                         propertiesComboBox.Items.Add("Stwórz konto");
+                        propertiesComboBox.Items.Add("Usuń użytkownika");
                         propertiesComboBox.Items.Add("Zarządzaj projektem");
                         propertiesComboBox.Items.Add("Wyloguj");
                     }
@@ -203,16 +208,18 @@ namespace ScrumIt.Forms
                 newStage = TaskModel.TaskStages.Completed;
             }
 
-
             try
             {
                 TaskModel.UpdateTaskStage(task.TaskId, newStage);
                 progressBar.Refresh();
             }
+
             catch (Exception err)
             {
                 MessageBox.Show(err.Message);
             }
+
+
         }
 
         private void panel_DoubleClick(int taskId)
@@ -239,7 +246,9 @@ namespace ScrumIt.Forms
                 {
                     Close();
                 }
-
+                var users = UserModel.GetUsersByProjectId(_projectId);
+                userListMenuStrip.Items.Clear();
+                userListMenuStrip.Items.AddRange(createUserListMenu(users));
                 scrumBoardPanel.BackColor = ColorTranslator.FromHtml(proj.ProjectColor);
                 scrumBoardPanel.Controls.Clear();
                 createMenuflag = true;
@@ -367,6 +376,8 @@ namespace ScrumIt.Forms
         {
             var taskList = TaskModel.GetTasksBySprintId(sprintId);
             scrumBoardPanel.Controls.Clear();
+            var sprint = SprintModel.GetSprintById(sprintId);
+            DateTextBox.Text = sprint.StartDateTime.ToShortDateString() + " / " + sprint.EndDateTime.ToShortDateString();
 
             for (var i = 0; i < taskList.Count; i++)
             {
@@ -764,14 +775,12 @@ namespace ScrumIt.Forms
                     Hide();
                     mainView.Show();
                 }
-                //opcja dane uzytkownika
                 if (propertiesComboBox.SelectedIndex == 2)
                 {
                     UserPanel userPanel = new UserPanel();
                     userPanel.Show();
                 }
-
-                //opcja wyloguj
+                
                 if (propertiesComboBox.SelectedIndex == 3)
                 {
                     var reg = new Register();
@@ -779,11 +788,16 @@ namespace ScrumIt.Forms
                 }
                 if (propertiesComboBox.SelectedIndex == 4)
                 {
+                    var del = new DeleteUser();
+                    del.Show();
+                }
+                if (propertiesComboBox.SelectedIndex == 5)
+                {
                     var proj = new ManageProject(_projectId);
                     proj.FormClosed += delegate { proj_FormClosed(); };
                     proj.Show();
                 }
-                if (propertiesComboBox.SelectedIndex == 5)
+                if (propertiesComboBox.SelectedIndex == 6)
                 {
                     MessageBox.Show("wylogowano");
                     UserModel.Logout();
@@ -792,6 +806,7 @@ namespace ScrumIt.Forms
                     l.Show();
                 }
             }
+            
             else if (_userRole == "Developer")
             {
                 if (propertiesComboBox.SelectedIndex == 1)
