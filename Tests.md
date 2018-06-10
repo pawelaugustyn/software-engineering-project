@@ -182,25 +182,32 @@ Tasks:
 4. SprintAccessIntegrationTests 
 	```
       AddEmptySprintToProjectShouldThrow [0:00.001] Success
-      AddSprintToProject [0:00.736] Success
-      AddSprintToProjectBeforeLastSprintEndDateShouldThrow [0:00.089] Success
+      AddSprintToProject [0:00.280] Success
       AddSprintToProjectWhenUnauthorizedShouldThrow [0:00.001] Success
-      AddSprintWithWrongDatesToProjectShouldThrow [0:00.357] Success
+      AddSprintToProjectWithDatesOverlapingAnotherSprintShouldThrow (7 tests) [0:02.144] Success
+      	AddSprintToProjectWithDatesOverlapingAnotherSprintShouldThrow(-1,-1) [0:00.301] Success
+      	AddSprintToProjectWithDatesOverlapingAnotherSprintShouldThrow(-1,0) [0:00.301] Success
+      	AddSprintToProjectWithDatesOverlapingAnotherSprintShouldThrow(-1,1) [0:00.301] Success
+      	AddSprintToProjectWithDatesOverlapingAnotherSprintShouldThrow(0,0) [0:00.311] Success
+      	AddSprintToProjectWithDatesOverlapingAnotherSprintShouldThrow(0,1) [0:00.302] Success
+      	AddSprintToProjectWithDatesOverlapingAnotherSprintShouldThrow(1,-1) [0:00.300] Success
+      	AddSprintToProjectWithDatesOverlapingAnotherSprintShouldThrow(1,1) [0:00.301] Success
+      AddSprintWithWrongDatesToProjectShouldThrow [0:00.135] Success
       CreatingSprintWithWrongDateFormatShouldThrow [0:00.002] Success
-      GetEndOfLastSprintByProjectIdShouldReturnCorrectDate [0:00.090] Success
-      GetMostRecentSprintByProjectIdShouldReturnCorrectLastFinishedSprint [0:00.290] Success
-      GetMostRecentSprintByProjectIdShouldReturnCorrectNextSprint [0:00.188] Success
-      GetMostRecentSprintByProjectIdShouldReturnCorrectRecentSprint [0:00.096] Success
-      GetOldSprintsByProjectIdShouldNotReturnCorrectSprints [0:00.096] Success
-      GetOldSprintsByProjectIdShouldReturnCorrectSprints [0:00.097] Success
-      GetSprintByIdShouldNotReturnCorrectSprint [0:00.097] Success
-      GetSprintByIdShouldReturnCorrectSprint [0:00.112] Success
-      GetSprintByProjectIdAndDateShouldNotReturnCorrectSprint [0:00.086] Success
-      GetSprintByProjectIdAndDateShouldReturnCorrectSprint [0:00.087] Success
-      GetSprintByProjectIdAndDateWithWrongDateShouldNotReturnCorrectSprint [0:00.110] Success
+      GetEndOfLastSprintByProjectIdShouldReturnCorrectDate [0:00.041] Success
+      GetMostRecentSprintByProjectIdShouldReturnCorrectLastFinishedSprint [0:00.102] Success
+      GetMostRecentSprintByProjectIdShouldReturnCorrectNextSprint [0:00.067] Success
+      GetMostRecentSprintByProjectIdShouldReturnCorrectRecentSprint [0:00.034] Success
+      GetOldSprintsByProjectIdShouldNotReturnCorrectSprints [0:00.039] Success
+      GetOldSprintsByProjectIdShouldReturnCorrectSprints [0:00.033] Success
+      GetSprintByIdShouldNotReturnCorrectSprint [0:00.033] Success
+      GetSprintByIdShouldReturnCorrectSprint [0:00.033] Success
+      GetSprintByProjectIdAndDateShouldNotReturnCorrectSprint [0:00.033] Success
+      GetSprintByProjectIdAndDateShouldReturnCorrectSprint [0:00.033] Success
+      GetSprintByProjectIdAndDateWithWrongDateShouldNotReturnCorrectSprint [0:00.033] Success
 	```
 	**TO DO:**
-    	- UpdateSprint and DeleteSprint
+    	- progress bar and email notification
 	
     - all Get method with:
         - correct values
