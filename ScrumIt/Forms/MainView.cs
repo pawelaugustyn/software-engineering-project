@@ -156,10 +156,19 @@ namespace ScrumIt.Forms
                             }
                             else
                             {
-                                b.BackColor = ColorTranslator.FromHtml("#eeeeee");
+                                b.BackColor = ColorTranslator.FromHtml("#cccccc");
                             }
                         }
+                    }
 
+                    if (_userRole == "Developer")
+                    {
+                        b.BackColor = _panelColor;
+                    }
+
+                    if (_userRole == "Guest")
+                    {
+                        b.BackColor = ColorTranslator.FromHtml("#cccccc");
                     }
                     b.ForeColor = Color.White;
                     b.FlatAppearance.BorderColor = Color.White;
