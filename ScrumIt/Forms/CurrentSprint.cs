@@ -46,6 +46,10 @@ namespace ScrumIt.Forms
         {
             try
             {
+                backlogMenuStrip.Items.Clear();
+                userListMenuStrip.Items.Clear();
+                propertiesComboBox.Items.Clear();
+
                 var taskList = TaskModel.GetTasksBySprintId(_sprintId);
 
 
@@ -220,6 +224,7 @@ namespace ScrumIt.Forms
         private void editTask_FormClosed()
         {
             scrumBoardPanel.Controls.Clear();
+            createMenuflag = true;
             CurrentSprint_Load(null, EventArgs.Empty);
             progressBar.Refresh();
         }
@@ -235,6 +240,9 @@ namespace ScrumIt.Forms
                 }
 
                 scrumBoardPanel.BackColor = ColorTranslator.FromHtml(proj.ProjectColor);
+                scrumBoardPanel.Controls.Clear();
+                createMenuflag = true;
+                CurrentSprint_Load(null, EventArgs.Empty);
             }
             catch (Exception err)
             {
@@ -245,6 +253,7 @@ namespace ScrumIt.Forms
         private void addTask_FormClosed()
         {
             scrumBoardPanel.Controls.Clear();
+            createMenuflag = true;
             CurrentSprint_Load(null, EventArgs.Empty);
             progressBar.Refresh();
         }
@@ -252,6 +261,7 @@ namespace ScrumIt.Forms
         private void addTaskFromBacklog_FormClosed()
         {
             scrumBoardPanel.Controls.Clear();
+            createMenuflag = true;
             CurrentSprint_Load(null, EventArgs.Empty);
             progressBar.Refresh();
         }
