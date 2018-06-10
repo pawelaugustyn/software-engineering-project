@@ -906,6 +906,10 @@ namespace ScrumIt.Forms
                 yellowBrush.Dispose();
                 redBrush.Dispose();
                 g.Dispose();
+                toDoTextBox.Text = todo.ToString();
+                doingTextBox.Text = doing.ToString();
+                doneTextBox.Text = done.ToString();
+                maxTextBox.Text = sum.ToString();
             }
             catch (Exception)
             {
@@ -915,6 +919,46 @@ namespace ScrumIt.Forms
                 brush.Dispose();
                 g.Dispose();
             }
+        }
+
+        private void toDoTextBox_MouseEnter(object sender, EventArgs e)
+        {
+            ToolTip tooltip = new ToolTip
+            {
+                InitialDelay = 500,
+                ShowAlways = true
+            };
+            tooltip.SetToolTip(toDoTextBox, "To do - suma punktów zadań do zrobienia");
+        }
+
+        private void doingTextBox_MouseEnter(object sender, EventArgs e)
+        {
+            ToolTip tooltip = new ToolTip
+            {
+                InitialDelay = 500,
+                ShowAlways = true
+            };
+            tooltip.SetToolTip(doingTextBox, "In progress - suma punktów zadań rozpoczętych");
+        }
+
+        private void doneTextBox_MouseEnter(object sender, EventArgs e)
+        {
+            ToolTip tooltip = new ToolTip
+            {
+                InitialDelay = 500,
+                ShowAlways = true
+            };
+            tooltip.SetToolTip(doneTextBox, "Done - suma punktów zadań zakończonych");
+        }
+
+        private void maxTextBox_MouseEnter(object sender, EventArgs e)
+        {
+            ToolTip tooltip = new ToolTip
+            {
+                InitialDelay = 500,
+                ShowAlways = true
+            };
+            tooltip.SetToolTip(maxTextBox, "Suma punktów wszystkich zadań w tym sprincie");
         }
     }
 }
