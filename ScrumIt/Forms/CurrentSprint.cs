@@ -806,6 +806,7 @@ namespace ScrumIt.Forms
                     l.Show();
                 }
             }
+            
             else if (_userRole == "Developer")
             {
                 if (propertiesComboBox.SelectedIndex == 1)
