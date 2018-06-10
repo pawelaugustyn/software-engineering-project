@@ -58,7 +58,6 @@ namespace ScrumIt.Forms
                 
                 var taskList = TaskModel.GetTasksBySprintId(_sprintId);
 
-
                 var index = 0;
                 foreach (var task in taskList)
                 {
