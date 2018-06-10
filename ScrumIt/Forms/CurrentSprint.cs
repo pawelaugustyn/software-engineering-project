@@ -222,8 +222,9 @@ namespace ScrumIt.Forms
 
             try
             {
-                TaskModel.UpdateTaskStage(task.TaskId, newStage);
-                progressBar.Refresh();
+                bool checkIfRecordAffected = TaskModel.UpdateTaskStage(task.TaskId, newStage);
+                if(checkIfRecordAffected)
+                    progressBar.Refresh();
             }
 
             catch (Exception err)
