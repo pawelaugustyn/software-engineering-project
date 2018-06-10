@@ -162,7 +162,7 @@ namespace ScrumIt.Forms
         {
             try
             {
-                _sprintId = SprintModel.GetCurrentSprintForProject(_projectId).SprintId;
+                _sprintId = SprintModel.GetMostRecentSprintForProject(_projectId).SprintId;
                 var taskList = TaskModel.GetTasksBySprintId(_sprintId);
                 scrumBoardPanel.Controls.Clear();
 
