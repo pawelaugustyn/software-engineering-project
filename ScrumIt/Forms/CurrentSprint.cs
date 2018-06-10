@@ -46,8 +46,17 @@ namespace ScrumIt.Forms
         {
             try
             {
+                var project = ProjectModel.GetProjectById(_projectId);
+                projectNameTextBox.Text = project.ProjectName;
+                var sprint = SprintModel.GetMostRecentSprintForProject(_projectId);
+                DateTextBox.Text = sprint.StartDateTime.ToShortDateString() + " / " + sprint.EndDateTime.ToShortDateString();
+                
+                this.Activate();
+                backlogMenuStrip.Items.Clear();
+                userListMenuStrip.Items.Clear();
+                propertiesComboBox.Items.Clear();
+                
                 var taskList = TaskModel.GetTasksBySprintId(_sprintId);
-
 
                 var index = 0;
                 foreach (var task in taskList)
@@ -63,6 +72,7 @@ namespace ScrumIt.Forms
                     {
                         propertiesComboBox.Items.Add("Dane użytkownika");
                         propertiesComboBox.Items.Add("Stwórz konto");
+                        propertiesComboBox.Items.Add("Usuń użytkownika");
                         propertiesComboBox.Items.Add("Zarządzaj projektem");
                         propertiesComboBox.Items.Add("Wyloguj");
                     }
@@ -198,18 +208,18 @@ namespace ScrumIt.Forms
                 newStage = TaskModel.TaskStages.Completed;
             }
 
-            if (task.TaskStage != newStage)
+            try
             {
-                try
-                {
-                    TaskModel.UpdateTaskStage(task.TaskId, newStage);
-                }
-                catch (Exception err)
-                {
-                    MessageBox.Show(err.Message);
-                }
-
+                TaskModel.UpdateTaskStage(task.TaskId, newStage);
+                progressBar.Refresh();
             }
+
+            catch (Exception err)
+            {
+                MessageBox.Show(err.Message);
+            }
+
+
         }
 
         private void panel_DoubleClick(int taskId)
@@ -222,7 +232,9 @@ namespace ScrumIt.Forms
         private void editTask_FormClosed()
         {
             scrumBoardPanel.Controls.Clear();
+            createMenuflag = true;
             CurrentSprint_Load(null, EventArgs.Empty);
+            progressBar.Refresh();
         }
 
         private void proj_FormClosed()
@@ -234,8 +246,13 @@ namespace ScrumIt.Forms
                 {
                     Close();
                 }
-                
+                var users = UserModel.GetUsersByProjectId(_projectId);
+                userListMenuStrip.Items.Clear();
+                userListMenuStrip.Items.AddRange(createUserListMenu(users));
                 scrumBoardPanel.BackColor = ColorTranslator.FromHtml(proj.ProjectColor);
+                scrumBoardPanel.Controls.Clear();
+                createMenuflag = true;
+                CurrentSprint_Load(null, EventArgs.Empty);
             }
             catch (Exception err)
             {
@@ -246,13 +263,17 @@ namespace ScrumIt.Forms
         private void addTask_FormClosed()
         {
             scrumBoardPanel.Controls.Clear();
+            createMenuflag = true;
             CurrentSprint_Load(null, EventArgs.Empty);
+            progressBar.Refresh();
         }
-        
+
         private void addTaskFromBacklog_FormClosed()
         {
             scrumBoardPanel.Controls.Clear();
+            createMenuflag = true;
             CurrentSprint_Load(null, EventArgs.Empty);
+            progressBar.Refresh();
         }
 
 
@@ -355,6 +376,8 @@ namespace ScrumIt.Forms
         {
             var taskList = TaskModel.GetTasksBySprintId(sprintId);
             scrumBoardPanel.Controls.Clear();
+            var sprint = SprintModel.GetSprintById(sprintId);
+            DateTextBox.Text = sprint.StartDateTime.ToShortDateString() + " / " + sprint.EndDateTime.ToShortDateString();
 
             for (var i = 0; i < taskList.Count; i++)
             {
@@ -528,18 +551,15 @@ namespace ScrumIt.Forms
                 TextAlign = ContentAlignment.MiddleRight
             };
 
-            var userPhotos = new[] { "Nowak1", "Nowak2", "Nowak3", "Nowak4" };
-            //TODO
-            //Load pictures for users
             var pictureBoxes = new List<PictureBox>();
             var location = 15;
-            foreach (var user in userPhotos)
+
+            foreach (var user in task.UsersAssignedToTask)
             {
-                var pictureBoxName = user.ToString() + "PhotoBox";
+                var pictureBoxName = user.Username + "PhotoBox";
                 var pictureBox = new PictureBox
                 {
-                    //get picture by user id
-                    Image = Properties.Resources.cat2,
+                    Image = user.Avatar,
                     Location = new Point(location, 49),
                     Name = pictureBoxName,
                     Size = new Size(23, 25),
@@ -660,13 +680,12 @@ namespace ScrumIt.Forms
             };
             var pictureBoxes = new List<PictureBox>();
             var location = 15;
-            foreach (var user in userPhotos)
+            foreach (var user in taskList.UsersAssignedToTask)
             {
-                var pictureBoxName = user.ToString() + "PhotoBox";
+                var pictureBoxName = user.Username + "PhotoBox";
                 var pictureBox = new PictureBox
                 {
-                    //get picture by user id
-                    Image = Properties.Resources.cat2,
+                    Image = user.Avatar,
                     Location = new Point(location, 49),
                     Name = pictureBoxName,
                     Size = new Size(23, 25),
@@ -756,14 +775,12 @@ namespace ScrumIt.Forms
                     Hide();
                     mainView.Show();
                 }
-                //opcja dane uzytkownika
                 if (propertiesComboBox.SelectedIndex == 2)
                 {
                     UserPanel userPanel = new UserPanel();
                     userPanel.Show();
                 }
-
-                //opcja wyloguj
+                
                 if (propertiesComboBox.SelectedIndex == 3)
                 {
                     var reg = new Register();
@@ -771,11 +788,16 @@ namespace ScrumIt.Forms
                 }
                 if (propertiesComboBox.SelectedIndex == 4)
                 {
+                    var del = new DeleteUser();
+                    del.Show();
+                }
+                if (propertiesComboBox.SelectedIndex == 5)
+                {
                     var proj = new ManageProject(_projectId);
                     proj.FormClosed += delegate { proj_FormClosed(); };
                     proj.Show();
                 }
-                if (propertiesComboBox.SelectedIndex == 5)
+                if (propertiesComboBox.SelectedIndex == 6)
                 {
                     MessageBox.Show("wylogowano");
                     UserModel.Logout();
@@ -784,6 +806,7 @@ namespace ScrumIt.Forms
                     l.Show();
                 }
             }
+            
             else if (_userRole == "Developer")
             {
                 if (propertiesComboBox.SelectedIndex == 1)
@@ -834,6 +857,17 @@ namespace ScrumIt.Forms
 
         private void progressBar_Paint(object sender, PaintEventArgs e)
         {
+            var width = progressBar.ClientRectangle.Width;
+            var height = progressBar.ClientRectangle.Height;
+            Graphics g = e.Graphics;
+            ToolTip tooltip = new ToolTip
+            {
+                InitialDelay = 500,
+                ShowAlways = true
+            };
+            tooltip.SetToolTip(this.progressBar, "kolor czerwony - zadania nierozpoczęte" + Environment.NewLine 
+                                                + "kolor żółty - zadania w trakcie realizacji" + Environment.NewLine
+                                                + "kolor zielony - zadania ukończone");
             try
             {
                 var taskList = TaskModel.GetTasksBySprintId(_sprintId);
@@ -860,13 +894,10 @@ namespace ScrumIt.Forms
                     }
                 }
 
-                var width = progressBar.ClientRectangle.Width;
-                var height = progressBar.ClientRectangle.Height;
 
                 SolidBrush greenBrush = new SolidBrush(Color.GreenYellow);
                 SolidBrush yellowBrush = new SolidBrush(Color.Yellow);
                 SolidBrush redBrush = new SolidBrush(Color.Red);
-                Graphics g = e.Graphics;
                 g.FillRectangle(redBrush, new Rectangle(0, 0, width * todo / sum, height));
                 g.FillRectangle(yellowBrush,
                     new Rectangle(width * todo / sum, 0, width * doing / sum + width * todo / sum, height));
@@ -876,9 +907,13 @@ namespace ScrumIt.Forms
                 redBrush.Dispose();
                 g.Dispose();
             }
-            catch (Exception err)
+            catch (Exception)
             {
-                MessageBox.Show(err.Message);
+                // MessageBox.Show(err.Message)
+                SolidBrush brush = new SolidBrush(Color.Gray);
+                g.FillRectangle(brush, new Rectangle(0, 0, width, height));
+                brush.Dispose();
+                g.Dispose();
             }
         }
     }

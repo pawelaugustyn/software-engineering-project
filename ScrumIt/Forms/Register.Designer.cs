@@ -44,7 +44,7 @@
             this.newPasswordTextBox = new System.Windows.Forms.TextBox();
             this.confirmNewPasswordLabel = new System.Windows.Forms.Label();
             this.confirmNewPasswordTextBox = new System.Windows.Forms.TextBox();
-            this.registeButton = new System.Windows.Forms.Button();
+            this.registerButton = new System.Windows.Forms.Button();
             this.userPhotoPictureBox = new System.Windows.Forms.PictureBox();
             this.tableLayoutPanel1.SuspendLayout();
             this.changePasswordLayoutTablePanel.SuspendLayout();
@@ -198,7 +198,6 @@
             this.roleComboBox.Name = "roleComboBox";
             this.roleComboBox.Size = new System.Drawing.Size(134, 29);
             this.roleComboBox.TabIndex = 10;
-            this.roleComboBox.SelectedIndexChanged += new System.EventHandler(this.roleComboBox_SelectedIndexChanged);
             // 
             // changePasswordLayoutTablePanel
             // 
@@ -268,21 +267,21 @@
             this.confirmNewPasswordTextBox.TabIndex = 12;
             this.confirmNewPasswordTextBox.UseSystemPasswordChar = true;
             // 
-            // registeButton
+            // registerButton
             // 
-            this.registeButton.BackColor = System.Drawing.Color.Silver;
-            this.registeButton.FlatAppearance.BorderColor = System.Drawing.Color.White;
-            this.registeButton.FlatAppearance.BorderSize = 0;
-            this.registeButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.registeButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.registeButton.ForeColor = System.Drawing.Color.White;
-            this.registeButton.Location = new System.Drawing.Point(330, 269);
-            this.registeButton.Name = "registeButton";
-            this.registeButton.Size = new System.Drawing.Size(170, 40);
-            this.registeButton.TabIndex = 8;
-            this.registeButton.Text = "Stwórz konto";
-            this.registeButton.UseVisualStyleBackColor = false;
-            this.registeButton.Click += new System.EventHandler(this.registeButton_Click);
+            this.registerButton.BackColor = System.Drawing.Color.Silver;
+            this.registerButton.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.registerButton.FlatAppearance.BorderSize = 0;
+            this.registerButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.registerButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.registerButton.ForeColor = System.Drawing.Color.White;
+            this.registerButton.Location = new System.Drawing.Point(330, 269);
+            this.registerButton.Name = "registerButton";
+            this.registerButton.Size = new System.Drawing.Size(170, 40);
+            this.registerButton.TabIndex = 8;
+            this.registerButton.Text = "Stwórz konto";
+            this.registerButton.UseVisualStyleBackColor = false;
+            this.registerButton.Click += new System.EventHandler(this.registeButton_Click);
             // 
             // userPhotoPictureBox
             // 
@@ -300,7 +299,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(539, 344);
-            this.Controls.Add(this.registeButton);
+            this.Controls.Add(this.registerButton);
             this.Controls.Add(this.userPhotoPictureBox);
             this.Controls.Add(this.changePasswordLayoutTablePanel);
             this.Controls.Add(this.tableLayoutPanel1);
@@ -338,7 +337,7 @@
         private System.Windows.Forms.TextBox newPasswordTextBox;
         private System.Windows.Forms.TextBox confirmNewPasswordTextBox;
         private System.Windows.Forms.PictureBox userPhotoPictureBox;
-        private System.Windows.Forms.Button registeButton;
+        private System.Windows.Forms.Button registerButton;
         private System.Windows.Forms.ComboBox roleComboBox;
     }
 }

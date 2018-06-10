@@ -168,6 +168,7 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
 
             var isAddedSuccessful = UserAccess.Add(userToAdd, "addUser");
             var userAfterAdd = UserAccess.GetUserByUsername(userToAdd.Username);
+            Setup.RegisterToDeleteAfterTestExecution(userToAdd);
 
             Assertion.Equals(userToAdd, userAfterAdd, "User with unique username not added correctly to DB.");
             Assert.That(isAddedSuccessful, Is.True, $"Adding user should be successful {Messages.Display(userToAdd)}.");
@@ -188,6 +189,7 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
             Assert.That(userWithTheSameUsername.IsDeepEqual(new UserModel()), Is.True, "User should not exist.");
 
             UserAccess.Add(userToAdd, "addUser");
+            Setup.RegisterToDeleteAfterTestExecution(userToAdd);
 
             var isAddedSuccessful = false;
             Assert.Throws<ArgumentException>(delegate { isAddedSuccessful = UserAccess.Add(userToAdd, "addUser"); },
@@ -257,8 +259,8 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
 
             Assertion.Equals(userToAddAndDelete, userAfterAdd, "User with unique username not added correctly to DB. ");
 
-            var deletedSyccessful = UserAccess.Delete(userAfterAdd);
-            Assert.That(deletedSyccessful, Is.True, $"Deleting should be successful {Messages.Display(userAfterAdd)}.");
+            var deletedSuccessful = UserAccess.Delete(userAfterAdd);
+            Assert.That(deletedSuccessful, Is.True, $"Deleting should be successful {Messages.Display(userAfterAdd)}.");
 
             var userAfterDelete = UserAccess.GetUserByUsername(userToAddAndDelete.Username);
             Assert.That(userAfterDelete.IsDeepEqual(new UserModel()), Is.True, $"User {Messages.Display(userAfterDelete)} should be deleted.");
@@ -268,26 +270,26 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
         public void DeleteEmptyOrInvalidUserShouldDoNothing()
         {
             var userToDelete = new UserModel();
-            var deletedSyccessful = UserAccess.Delete(userToDelete);
-            Assert.That(deletedSyccessful, Is.False, $"Deleting user should not be successful {Messages.Display(userToDelete)}.");
+            var deletedSuccessful = UserAccess.Delete(userToDelete);
+            Assert.That(deletedSuccessful, Is.False, $"Deleting user should not be successful {Messages.Display(userToDelete)}.");
 
             userToDelete = new UserModel
             {
                 Username = "delete",
             };
 
-            deletedSyccessful = UserAccess.Delete(userToDelete);
-            Assert.That(deletedSyccessful, Is.False, $"Deleting user should not be successful {Messages.Display(userToDelete)}.");
+            deletedSuccessful = UserAccess.Delete(userToDelete);
+            Assert.That(deletedSuccessful, Is.False, $"Deleting user should not be successful {Messages.Display(userToDelete)}.");
         }
 
         [Test]
         public void DeleteYourselfShouldThrow()
         {
-            var deletedSyccessful = false;
-            Assert.Throws<ArgumentException>(delegate { deletedSyccessful = UserAccess.Delete(_user); },
+            var deletedSuccessful = false;
+            Assert.Throws<ArgumentException>(delegate { deletedSuccessful = UserAccess.Delete(_user); },
                 "Exception should be thrown, because it should not be possible to delete yourself.");
 
-            Assert.That(deletedSyccessful, Is.False, $"Deleting user should not be successful {Messages.Display(_user)}.");
+            Assert.That(deletedSuccessful, Is.False, $"Deleting user should not be successful {Messages.Display(_user)}.");
         }
 
         [Test]
@@ -307,8 +309,8 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
 
             userToUpdate.Email = "developer@test.com";
 
-            var updatedSyccessful = UserAccess.UpdateUserData(userToUpdate);
-            Assert.That(updatedSyccessful, Is.True, $"Updating user should be successful {Messages.Display(updatedSyccessful)}.");
+            var updatedSuccessful = UserAccess.UpdateUserData(userToUpdate);
+            Assert.That(updatedSuccessful, Is.True, $"Updating user should be successful {Messages.Display(updatedSuccessful)}.");
 
             var user = UserAccess.GetUserById(userToUpdate.UserId);
             Assertion.Equals(user, userToUpdate);
@@ -333,11 +335,11 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
 
             userToUpdate.Email = "developer@test.com";
 
-            var updatedSyccessful = false;
-            Assert.Throws<UnauthorizedAccessException>(delegate { updatedSyccessful = UserAccess.UpdateUserData(userToUpdate); },
+            var updatedSuccessful = false;
+            Assert.Throws<UnauthorizedAccessException>(delegate { updatedSuccessful = UserAccess.UpdateUserData(userToUpdate); },
                 "Exception should be thrown, because it should not be possible to update anyone as guest.");
 
-            Assert.That(updatedSyccessful, Is.False, $"Updating user should not be successful {Messages.Display(updatedSyccessful)}.");
+            Assert.That(updatedSuccessful, Is.False, $"Updating user should not be successful {Messages.Display(updatedSuccessful)}.");
 
             AppStateProvider.Instance.CurrentUser = _user;
         }
@@ -360,16 +362,17 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
 
             UserAccess.Add(userToAddAndDelete, "deleteUser");
             var userAfterAdd = UserAccess.GetUserByUsername(userToAddAndDelete.Username);
+            Setup.RegisterToDeleteAfterTestExecution(userToAddAndDelete);
 
             Assertion.Equals(userToAddAndDelete, userAfterAdd, "User with unique username not added correctly to DB. ");
 
-            var deletedSyccessful = true;
+            var deletedSuccessful = true;
             UserModel.Logout();
 
-            Assert.Throws<UnauthorizedAccessException>(delegate { deletedSyccessful = UserAccess.Delete(userToAddAndDelete); },
+            Assert.Throws<UnauthorizedAccessException>(delegate { deletedSuccessful = UserAccess.Delete(userToAddAndDelete); },
                 "Exception should be thrown, because it should not be possible to delete user if you are not scrum master.");
 
-            Assert.That(deletedSyccessful, Is.True, $"Deleting user should not be successful {Messages.Display(userToAddAndDelete)}.");
+            Assert.That(deletedSuccessful, Is.True, $"Deleting user should not be successful {Messages.Display(userToAddAndDelete)}.");
 
             AppStateProvider.Instance.CurrentUser = _user;
         }

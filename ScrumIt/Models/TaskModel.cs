@@ -15,6 +15,7 @@ namespace ScrumIt.Models
         public TaskStages TaskStage { get; set; }
         public string TaskColor { get; set; }
         public int BacklogProjectId { get; set; }
+        public List<UserModel> UsersAssignedToTask { get; set; }
 
         public enum TaskStages
         {
@@ -85,6 +86,11 @@ namespace ScrumIt.Models
         public static void AssignUsersToTask(TaskModel taskToAssignTo, List<UserModel> usersToAssign)
         {
             TaskAccess.AssignUsersToTask(taskToAssignTo, usersToAssign);
+        }
+
+        public static void AssignUsersToTask(TaskModel taskToAssignTo, IEnumerable<int> usersIdsToAssign)
+        {
+            TaskAccess.AssignUsersToTask(taskToAssignTo, usersIdsToAssign);
         }
 
         public static bool UpdateTask(TaskModel task)
