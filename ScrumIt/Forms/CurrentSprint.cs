@@ -403,6 +403,9 @@ namespace ScrumIt.Forms
                     Name = toolStripMenuItemName,
                     Text = sprintName
                 };
+                if (history[i].EndDateTime < DateTime.Now)
+                    toolStripMenuItem.BackColor = Color.Gray;
+
                 toolStripMenuItem.Click += delegate
                 {
                     historyToolStripMenuItem_Click(sprintId);
