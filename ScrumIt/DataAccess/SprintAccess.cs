@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Npgsql;
 using ScrumIt.Models;
 
@@ -167,7 +168,7 @@ namespace ScrumIt.DataAccess
                     }
                 }
             }
-            return sprintsList;
+            return sprintsList.OrderByDescending(c => c.StartDateTime).ToList();
         }
 
         public static List<SprintModel> GetNotActiveSprintsByProjectId(int projectId)
