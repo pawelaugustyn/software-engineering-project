@@ -832,7 +832,6 @@ namespace ScrumIt.Forms
                 if (propertiesComboBox.SelectedIndex == 5)
                 {
                     var proj = new ManageProject(_projectId);
-                    ////////////////////////////////// TO DO
                     proj.FormClosing += new FormClosingEventHandler(proj_FormClosing);
 
                     //proj.FormClosed += delegate { proj_FormClosed(); };
