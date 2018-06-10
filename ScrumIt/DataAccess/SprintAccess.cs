@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Npgsql;
 using ScrumIt.Models;
 
@@ -142,6 +143,54 @@ namespace ScrumIt.DataAccess
             }
         }
 
+        public static List<SprintModel> GetAllSprintsByProjectId(int projectId)
+        {
+            var sprintsList = new List<SprintModel>();
+            using (new Connection())
+            {
+                var cmd = new NpgsqlCommand("select * from sprints where project_id = @projectid;")
+                {
+                    Connection = Connection.Conn
+                };
+                cmd.Parameters.AddWithValue("projectid", projectId);
+
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        sprintsList.Add(new SprintModel
+                        {
+                            SprintId = (int)reader[0],
+                            ParentProjectId = (int)reader[1],
+                            StartDateTime = (DateTime)reader[2],
+                            EndDateTime = (DateTime)reader[3]
+                        });
+                    }
+                }
+            }
+            return sprintsList.OrderByDescending(c => c.StartDateTime).ToList();
+        }
+
+        public static List<SprintModel> GetNotActiveSprintsByProjectId(int projectId)
+        {
+            //pobieramy wszystkie sprinty
+            var sprints = new List<SprintModel>();
+            sprints = GetAllSprintsByProjectId(projectId);
+            //pobieramy obecnie wyswietlany sprint
+            var currentSprint = GetMostRecentSprintByProjectId(projectId, DateTime.Now);
+            //usuwamy z listy obecnie wyswietlany sprint
+            foreach (var sprint in sprints)
+            {
+                if (sprint.SprintId == currentSprint.SprintId)
+                {
+                    sprints.Remove(sprint);
+                    break;
+                }
+            }
+
+            return sprints;
+        }
+
         public static bool CreateNewSprintForProject(SprintModel addedSprint)
         {
             if (AppStateProvider.Instance.CurrentUser.Role != UserRoles.ScrumMaster)
@@ -252,7 +301,7 @@ namespace ScrumIt.DataAccess
         {
             if (endDate == null)
                 throw new ArgumentException("Brak daty zakonczenia sprintu");
-            // TODO
+            // TO DO
             // czy tu potrzebna jest inna walidacja?
             // ograniczenie na dlugosc sprintu (3-31 dni) jest zrobione na frontendzie
         }
