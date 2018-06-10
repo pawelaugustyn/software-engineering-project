@@ -28,8 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.deleteUserButton = new System.Windows.Forms.Button();
             this.userListButton = new System.Windows.Forms.Button();
+            this.userListMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.SuspendLayout();
             // 
             // deleteUserButton
@@ -45,6 +47,7 @@
             this.deleteUserButton.TabIndex = 11;
             this.deleteUserButton.Text = "Usuń";
             this.deleteUserButton.UseVisualStyleBackColor = false;
+            this.deleteUserButton.Click += new System.EventHandler(this.deleteUserButton_Click);
             // 
             // userListButton
             // 
@@ -59,16 +62,24 @@
             this.userListButton.TabIndex = 12;
             this.userListButton.Text = "Wybierz użytkownika";
             this.userListButton.UseVisualStyleBackColor = false;
+            this.userListButton.Click += new System.EventHandler(this.userListButton_Click);
+            // 
+            // userListMenuStrip1
+            // 
+            this.userListMenuStrip1.Name = "userListMenuStrip";
+            this.userListMenuStrip1.ShowCheckMargin = true;
+            this.userListMenuStrip1.Size = new System.Drawing.Size(175, 26);
             // 
             // DeleteUser
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(308, 300);
+            this.ClientSize = new System.Drawing.Size(308, 164);
             this.Controls.Add(this.userListButton);
             this.Controls.Add(this.deleteUserButton);
             this.Name = "DeleteUser";
-            this.Text = "Usuń";
+            this.Text = "ScrumIt!";
+            this.Load += new System.EventHandler(this.DeleteUser_Load);
             this.ResumeLayout(false);
 
         }
@@ -76,5 +87,6 @@
         #endregion
         private System.Windows.Forms.Button deleteUserButton;
         private System.Windows.Forms.Button userListButton;
+        private System.Windows.Forms.ContextMenuStrip userListMenuStrip1;
     }
 }

@@ -35,7 +35,7 @@
             this.projectNameTextBox = new System.Windows.Forms.TextBox();
             this.changeColorButton = new System.Windows.Forms.Button();
             this.endSprintDateLabel = new System.Windows.Forms.Label();
-            this.endSprintTextBox = new System.Windows.Forms.TextBox();
+            this.endSprintDatePicker = new System.Windows.Forms.DateTimePicker();
             this.SuspendLayout();
             // 
             // addProjectButton
@@ -77,6 +77,7 @@
             // 
             this.projectNameTextBox.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.projectNameTextBox.Location = new System.Drawing.Point(185, 70);
+            this.projectNameTextBox.MaxLength = 22;
             this.projectNameTextBox.Name = "projectNameTextBox";
             this.projectNameTextBox.Size = new System.Drawing.Size(230, 33);
             this.projectNameTextBox.TabIndex = 10;
@@ -104,28 +105,27 @@
             this.endSprintDateLabel.TabIndex = 19;
             this.endSprintDateLabel.Text = "Koniec I sprintu";
             // 
-            // endSprintTextBox
+            // endSprintDatePicker
             // 
-            this.endSprintTextBox.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.endSprintTextBox.Location = new System.Drawing.Point(185, 143);
-            this.endSprintTextBox.Name = "endSprintTextBox";
-            this.endSprintTextBox.Size = new System.Drawing.Size(230, 33);
-            this.endSprintTextBox.TabIndex = 20;
-            this.endSprintTextBox.Text = "rrrr-mm-dd";
+            this.endSprintDatePicker.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.endSprintDatePicker.Location = new System.Drawing.Point(185, 143);
+            this.endSprintDatePicker.Name = "endSprintDatePicker";
+            this.endSprintDatePicker.Size = new System.Drawing.Size(230, 29);
+            this.endSprintDatePicker.TabIndex = 20;
             // 
             // AddProject
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(449, 234);
-            this.Controls.Add(this.endSprintTextBox);
+            this.Controls.Add(this.endSprintDatePicker);
             this.Controls.Add(this.endSprintDateLabel);
             this.Controls.Add(this.changeColorButton);
             this.Controls.Add(this.projectNameTextBox);
             this.Controls.Add(this.colorLabel);
             this.Controls.Add(this.projectNameLabel);
             this.Controls.Add(this.addProjectButton);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "AddProject";
@@ -146,6 +146,6 @@
         private System.Windows.Forms.TextBox projectNameTextBox;
         private System.Windows.Forms.Button changeColorButton;
         private System.Windows.Forms.Label endSprintDateLabel;
-        private System.Windows.Forms.TextBox endSprintTextBox;
+        private System.Windows.Forms.DateTimePicker endSprintDatePicker;
     }
 }

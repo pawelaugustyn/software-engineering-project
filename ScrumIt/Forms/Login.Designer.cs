@@ -114,6 +114,7 @@
             this.Controls.Add(this.loginTextBox);
             this.Controls.Add(this.guestButton);
             this.Controls.Add(this.loginButton);
+            this.KeyPreview = true;
             this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
@@ -123,6 +124,7 @@
             this.Text = "ScrumIt!";
             this.TopMost = true;
             this.Load += new System.EventHandler(this.Login_Load);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Login_KeyDown);
             this.ResumeLayout(false);
             this.PerformLayout();
 

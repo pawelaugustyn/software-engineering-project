@@ -138,10 +138,18 @@ namespace ScrumIt.Forms
             }
 
             var userModels = new List<UserModel>();
-            foreach (var user in userNames)
+            try
             {
-                userModels.Add(UserModel.GetUserById(Int32.Parse(user)));
+                foreach (var user in userNames)
+                {
+                    userModels.Add(UserModel.GetUserById(Int32.Parse(user)));
+                }
             }
+            catch (Exception err)
+            {
+                MessageBox.Show(err.Message);
+            }
+
             if (validationFlag)
             {
                 try
