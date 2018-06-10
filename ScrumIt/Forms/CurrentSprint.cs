@@ -54,11 +54,11 @@ namespace ScrumIt.Forms
                 propertiesComboBox.Items.Clear();
 
                 var taskList = TaskModel.GetTasksBySprintId(_sprintId);
-                var endDate = SprintModel.GetSprintById(_sprintId).EndDateTime;
+                var startDate = SprintModel.GetSprintById(_sprintId).StartDateTime;
                 
                 for (var i = 0; i < taskList.Count; i++)
                 {
-                    if (endDate < DateTime.Now)
+                    if (startDate < DateTime.Now)
                     {
                         CreateTaskPanel(taskList[i], i);
                     }
