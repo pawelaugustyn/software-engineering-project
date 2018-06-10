@@ -310,19 +310,40 @@ namespace ScrumIt.DataAccess
         {
             using (new Connection())
             {
-                var cmd = new NpgsqlCommand("select sprint_id from sprints where ((sprint_start < @param_start::timestamp and sprint_end > @param_start2::timestamp) or (sprint_start < @param_end::timestamp and sprint_end > @param_end2::timestamp)) and project_id = @param_proj;")
+                var cmd = new NpgsqlCommand(@"SELECT
+                    sprint_id
+                        FROM sprints
+                    WHERE(
+                    sprint_start <= @param_start
+                    AND
+                    sprint_end >= @param_start
+                    OR
+                    sprint_start <= @param_end
+                    AND
+                    sprint_end >= @param_end
+                    OR
+                    sprint_start > @param_start
+                    AND
+                    sprint_start < @param_end
+                    AND
+                    sprint_end <= @param_end
+                    OR
+                    sprint_start < @param_start
+                    AND
+                    sprint_end > @param_start
+                    AND
+                    sprint_end < @param_end
+                    )
+                    AND
+                        project_id = @param_proj;")
                 {
                     Connection = Connection.Conn
                 };
-                string datetimeStart = sprint.StartDateTime.ToString("yyyy-MM-dd hh:mm:ss");
-                cmd.Parameters.AddWithValue("param_start", datetimeStart);
-                cmd.Parameters.AddWithValue("param_start2", datetimeStart);
-                string datetimeEnd = sprint.EndDateTime.ToString("yyyy-MM-dd hh:mm:ss");
-                cmd.Parameters.AddWithValue("param_end", datetimeEnd);
-                cmd.Parameters.AddWithValue("param_end2", datetimeEnd);
+                cmd.Parameters.AddWithValue("param_start", sprint.StartDateTime);
+                cmd.Parameters.AddWithValue("param_end", sprint.EndDateTime);
                 cmd.Parameters.AddWithValue("param_proj", sprint.ParentProjectId);
-                var res = cmd.ExecuteNonQuery();
-                if (res > 0)
+                var res = (int?)cmd.ExecuteScalar();
+                if (res != null && res > 0)
                     throw new ArgumentException("Czas trwania sprintu pokrywa sie z czasem innego istniejacego sprintu.");
             }
         }

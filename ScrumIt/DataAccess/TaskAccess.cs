@@ -225,20 +225,20 @@ namespace ScrumIt.DataAccess
 
         public static bool AssignUsersToTask(TaskModel taskToAssignTo, List<UserModel> usersToAssign)
         {
+            var usersToAdd = usersToAssign.Select(o => o.UserId).ToList().Distinct();
+
+            return AssignUsersToTask(taskToAssignTo, usersToAdd);
+        }
+
+        public static bool AssignUsersToTask(TaskModel taskToAssignTo, IEnumerable<int> usersIdsToAssign)
+        {
             using (new Connection())
             {
-                var cmd = new NpgsqlCommand("DELETE FROM tasks_assigned_users WHERE task_id = @task_id;")
-                {
-                    Connection = Connection.Conn
-                };
-                cmd.Parameters.AddWithValue("task_id", taskToAssignTo.TaskId);
-                cmd.ExecuteNonQuery();
+                DeassignUsersFromTask(taskToAssignTo.TaskId);
 
-                var usersToAdd = usersToAssign.Select(o => o.UserId).ToList().Distinct();
-
-                foreach (var userId in usersToAdd)
+                foreach (var userId in usersIdsToAssign)
                 {
-                    cmd = new NpgsqlCommand("INSERT INTO tasks_assigned_users VALUES (@task_id, @uid, 0);")
+                    var cmd = new NpgsqlCommand("INSERT INTO tasks_assigned_users VALUES (@task_id, @uid, 0);")
                     {
                         Connection = Connection.Conn
                     };

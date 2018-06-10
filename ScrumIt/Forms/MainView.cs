@@ -76,7 +76,7 @@ namespace ScrumIt.Forms
             panel.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
             Button newProject = new Button();
             newProject.FlatStyle = FlatStyle.Flat;
-            newProject.Font =new Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            newProject.Font = new Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             newProject.Text = "Stwórz nowy projekt";
             newProject.Name = "newProjectButton";
             newProject.Size = new System.Drawing.Size(400, 40);
@@ -114,16 +114,23 @@ namespace ScrumIt.Forms
             try
             {
                 List<ProjectModel> projectsList;
+                List<ProjectModel> myprojectsList = new List<ProjectModel>();
                 if (_userRole == "Guest")
                 {
                     projectsList = ProjectAccess.GetAllProjects();
                 }
-                else
+                else if (_userRole == "Developer")
                 {
                     projectsList = ProjectAccess.GetProjectsByUserId(AppStateProvider.Instance.CurrentUser.UserId);
                 }
+                else
+                {
+                    projectsList = ProjectAccess.GetAllProjects();
+                    myprojectsList = ProjectAccess.GetProjectsByUserId(AppStateProvider.Instance.CurrentUser.UserId);
+                }
 
                 var projects = new Dictionary<int, string>();
+
                 for (int i = 0; i < projectsList.Count; i++)
                     projects.Add(projectsList[i].ProjectId, projectsList[i].ProjectName);
 
@@ -136,8 +143,33 @@ namespace ScrumIt.Forms
                     var b = new Button();
                     b.FlatStyle = FlatStyle.Flat;
                     b.Font = new Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point,
-                        ((byte) (238)));
-                    b.BackColor = _panelColor;
+                        ((byte)(238)));
+
+                    if (_userRole == "ScrumMaster")
+                    {
+                        foreach (var proj in myprojectsList)
+                        {
+                            if (proj.ProjectId == dict.Key)
+                            {
+                                b.BackColor = _panelColor;
+                                break;
+                            }
+                            else
+                            {
+                                b.BackColor = ColorTranslator.FromHtml("#cccccc");
+                            }
+                        }
+                    }
+
+                    if (_userRole == "Developer")
+                    {
+                        b.BackColor = _panelColor;
+                    }
+
+                    if (_userRole == "Guest")
+                    {
+                        b.BackColor = ColorTranslator.FromHtml("#cccccc");
+                    }
                     b.ForeColor = Color.White;
                     b.FlatAppearance.BorderColor = Color.White;
                     b.FlatAppearance.BorderSize = 0;
@@ -160,7 +192,7 @@ namespace ScrumIt.Forms
             {
                 MessageBox.Show(err.Message);
             }
-                #endregion
+            #endregion
 
             Controls.Add(panel);
         }
@@ -190,7 +222,7 @@ namespace ScrumIt.Forms
                     var reg = new Register();
                     reg.Show();
                 }
-                if (propertiesComboBox.SelectedIndex == 2)
+                if (propertiesComboBox.SelectedIndex == 3)
                 {
                     var deleteUser = new DeleteUser();
                     deleteUser.Show();
