@@ -47,6 +47,7 @@ namespace ScrumIt.Forms
             try
             {
                 this.Activate();
+                historyMenuStrip.Items.Clear();
                 backlogMenuStrip.Items.Clear();
                 userListMenuStrip.Items.Clear();
                 propertiesComboBox.Items.Clear();
@@ -89,7 +90,7 @@ namespace ScrumIt.Forms
                         scrumBoardPanel.BackColor = projectColor;
 
 
-                        var historicalSprints = SprintModel.GetHistoricalSprintModels(_projectId);
+                        var historicalSprints = SprintModel.GetNotActiveSprintModels(_projectId);
                         var backlogTasks = TaskModel.GetProjectBacklogTasks(_projectId);
 
                         var users = UserModel.GetUsersByProjectId(_projectId);
