@@ -5,7 +5,7 @@ namespace ScrumIt.DataAccess
 {
     internal class Connection : IDisposable
     {
-        public static NpgsqlConnection Conn { get; } = new NpgsqlConnection("Server=horton.elephantsql.com;Username=jrjasstd;Password=tpE7WlP6Il9sJPpfTCxW0JRDNR5oegYH;Database=jrjasstd");
+        public static NpgsqlConnection Conn { get; } = new NpgsqlConnection("Server=mdm73ng82os.ckymfrn8filu.eu-central-1.rds.amazonaws.com;Username=master;Password=HL3&bF|H?7MQ!k~|PpJ,MD|p^EEm.vv!;Database=master");
         private static int _connCounter;
         private static bool _opened;
         public Connection()
