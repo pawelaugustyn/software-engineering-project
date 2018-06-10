@@ -46,6 +46,7 @@ namespace ScrumIt.Forms
         {
             try
             {
+                this.Activate();
                 backlogMenuStrip.Items.Clear();
                 userListMenuStrip.Items.Clear();
                 propertiesComboBox.Items.Clear();
