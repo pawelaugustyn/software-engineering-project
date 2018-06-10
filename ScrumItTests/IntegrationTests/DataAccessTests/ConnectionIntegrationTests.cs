@@ -13,22 +13,13 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
             bool isConnectionAvailable = false;
             using (new Connection())
             {
-                var cmd = new NpgsqlCommand("select * from users")
+                var cmd = new NpgsqlCommand("select * from projects")
                 {
                     Connection = Connection.Conn
                 };
-                using (var reader = cmd.ExecuteReader())
-                {
-                    var user = 0;
-                    while (reader.Read())
-                    {
-                        user++;
-                        if (user <= 0) continue;
-                        isConnectionAvailable = true;
-                        break;
-                    }
-                }
             }
+
+            isConnectionAvailable = true;
             Assert.That(isConnectionAvailable, Is.True, "Connection to DB is not available");
         }
     }
