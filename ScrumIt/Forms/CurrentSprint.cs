@@ -1051,29 +1051,12 @@ namespace ScrumIt.Forms
                                                 + "kolor zielony - zadania ukończone");
             try
             {
-                var taskList = TaskModel.GetTasksBySprintId(_sprintId);
-                var sum = 0;
-                var done = 0;
-                var todo = 0;
-                var doing = 0;
-                foreach (var task in taskList)
-                {
-                    sum += task.TaskPriority;
-                    if (task.TaskStage == TaskModel.TaskStages.ToDo)
-                    {
-                        todo += task.TaskPriority;
-                    }
-
-                    if (task.TaskStage == TaskModel.TaskStages.Doing)
-                    {
-                        doing += task.TaskPriority;
-                    }
-
-                    if (task.TaskStage == TaskModel.TaskStages.Completed)
-                    {
-                        done += task.TaskPriority;
-                    }
-                }
+                var sprintData = SprintModel.GetSprintCompletionData(_sprintId);
+                int sum, done, todo, doing;
+                if (!sprintData.TryGetValue("total", out sum) || !sprintData.TryGetValue("inprogress", out doing)
+                                                              || !sprintData.TryGetValue("todo", out todo) ||
+                                                              !sprintData.TryGetValue("done", out done))
+                    throw new Exception();
 
 
                 SolidBrush greenBrush = new SolidBrush(Color.GreenYellow);
