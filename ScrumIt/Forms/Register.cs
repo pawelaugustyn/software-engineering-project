@@ -47,7 +47,7 @@ namespace ScrumIt.Forms
                     try
                     {
                         UserModel.Add(_user, newPasswordTextBox.Text);
-
+                        _user.Avatar = userPhotoPictureBox.Image;
                         MessageBox.Show("Pomyślnie stworzono użytkownika");
                         this.Close();
                     }
@@ -122,8 +122,7 @@ namespace ScrumIt.Forms
             {
                 try
                 {
-                    _user.Avatar = AppStateProvider.LoadImage(loadPictureDialog.FileName);
-                    userPhotoPictureBox.Image = _user.Avatar;
+                    userPhotoPictureBox.Image = AppStateProvider.LoadImage(loadPictureDialog.FileName);
 
                 }
                 catch (Exception err)
