@@ -429,9 +429,11 @@ namespace ScrumIt.Forms
             scrumBoardPanel.Controls.Clear();
             var sprint = SprintModel.GetSprintById(sprintId);
             DateTextBox.Text = sprint.StartDateTime.ToShortDateString() + " / " + sprint.EndDateTime.ToShortDateString();
-            progressBar.Refresh();
 
             _sprintId = sprintId;
+            progressBar.Refresh();
+
+            
             for (var i = 0; i < taskList.Count; i++)
             {
                 if (endDate < DateTime.Now)
