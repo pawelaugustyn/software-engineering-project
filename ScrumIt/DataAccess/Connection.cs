@@ -9,6 +9,7 @@ namespace ScrumIt.DataAccess
         public NpgsqlConnection ConnExcl { get; } = new NpgsqlConnection("Server=mdm73ng82os.ckymfrn8filu.eu-central-1.rds.amazonaws.com;Username=master;Password=HL3&bF|H?7MQ!k~|PpJ,MD|p^EEm.vv!;Database=master");
         private static int _connCounter;
         private static bool _opened;
+        /// if set to true then use non-static member ConnExcl, if false use static Conn
         private bool _exclusive = false;
 
         public Connection(bool exclusive=false)
@@ -34,8 +35,15 @@ namespace ScrumIt.DataAccess
             }
             else
             {
-                ConnExcl.Open();
-                _exclusive = true;
+                try
+                {
+                    ConnExcl.Open();
+                    _exclusive = true;
+                }
+                catch (PostgresException)
+                {
+                    // ignore
+                }
             }
 
         }

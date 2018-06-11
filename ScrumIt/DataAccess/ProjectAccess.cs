@@ -273,7 +273,7 @@ namespace ScrumIt.DataAccess
             foreach (var sprint in ending_sprints)
             {
                 users_assigned_to_ending_sprints = UserAccess.GetUsersByProjectId(sprint.ParentProjectId, true);
-                parent_project = GetProjectById(sprint.SprintId, true);
+                parent_project = GetProjectById(sprint.ParentProjectId, true);
                 
                 foreach (var user in users_assigned_to_ending_sprints)
                 {
