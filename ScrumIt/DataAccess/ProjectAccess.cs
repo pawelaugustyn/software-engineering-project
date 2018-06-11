@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Net.Mail;
-using System.Windows.Forms;
 using Npgsql;
 using ScrumIt.Models;
+using SmtpFailedRecipientException = System.Net.Mail.SmtpFailedRecipientException;
 
 namespace ScrumIt.DataAccess
 {
@@ -66,10 +66,10 @@ namespace ScrumIt.DataAccess
             return projects;
         }
 
-        public static ProjectModel GetProjectById(int projectid)
+        public static ProjectModel GetProjectById(int projectid, bool exclusive = false)
         {
             var project = new ProjectModel();
-            using (new Connection())
+            using (new Connection(exclusive))
             {
                 var cmd = new NpgsqlCommand("select * from projects where project_id = @projectid;")
                 {
@@ -267,16 +267,17 @@ namespace ScrumIt.DataAccess
 
         public static bool NotifyUsersAboutEndOfSprint(int days_till_end)
         {
-            List<SprintModel> ending_sprints = SprintModel.GetNotNotifiedEndingSprints(days_till_end);
+            List<SprintModel> ending_sprints = SprintAccess.GetNotNotifiedEndingSprints(days_till_end, true);
             List<UserModel> users_assigned_to_ending_sprints = new List<UserModel>();
             var parent_project = new ProjectModel();
             foreach (var sprint in ending_sprints)
             {
-                users_assigned_to_ending_sprints = UserModel.GetUsersByProjectId(sprint.ParentProjectId);
-                parent_project = ProjectModel.GetProjectById(sprint.SprintId);
-                try
+                users_assigned_to_ending_sprints = UserAccess.GetUsersByProjectId(sprint.ParentProjectId, true);
+                parent_project = GetProjectById(sprint.SprintId, true);
+                
+                foreach (var user in users_assigned_to_ending_sprints)
                 {
-                    foreach (var user in users_assigned_to_ending_sprints)
+                    try
                     {
                         MailMessage mail = new MailMessage();
                         SmtpClient SmtpServer = new SmtpClient("smtp.gmail.com");
@@ -285,21 +286,21 @@ namespace ScrumIt.DataAccess
                         mail.Subject = "ScrumIt Powiadomienie o końcu sprintu!";
                         mail.Body =
                             "Dzień dobry, " + user.Firstname +
-                            ", chcielibyśmy Ci przypomnieć, że sprint, którego jesteś uczestnikiem w projekcie " + parent_project.ProjectName + " dobiega końca " + 
-                            sprint.EndDateTime.ToString() + ". Pozdrawiamy, Zespół ScrumIt.";
+                            ",\n\nchcielibyśmy Ci przypomnieć, że sprint, którego jesteś uczestnikiem w projekcie " +
+                            parent_project.ProjectName + " dobiega końca " +
+                            sprint.EndDateTime.ToString("yyyy/MM/dd") + ". \n\nPozdrawiamy, \nZespół ScrumIt.";
                         SmtpServer.Port = 587;
                         SmtpServer.Credentials = new System.Net.NetworkCredential("io.appka", "ioioio123");
                         SmtpServer.EnableSsl = true;
                         SmtpServer.Send(mail);
-
-                        SprintModel.ChangeEmailSentStatus(sprint.SprintId);
                     }
+                    catch (Exception)
+                    {
+                        // ignore
+                    }
+
                 }
-                catch (Exception e)
-                {
-                    MessageBox.Show("Failed to send some sprint end e-mail reminders.");
-                    return false;
-                }
+                SprintAccess.ChangeEmailSentStatus(sprint.SprintId, true);
             }
 
             return true;

@@ -172,10 +172,10 @@ namespace ScrumIt.DataAccess
             return users;
         }
 
-        public static List<UserModel> GetUsersByProjectId(int projectid)
+        public static List<UserModel> GetUsersByProjectId(int projectid, bool exclusive = false)
         {
             var users = new List<UserModel>();
-            using (new Connection())
+            using (new Connection(exclusive))
             {
                 var cmd = new NpgsqlCommand("select b.* from projects_has_users a join users b using(uid) where a.project_id = @projectid order by b.uid;")
                 {

@@ -50,5 +50,10 @@ namespace ScrumIt.Models
         {
             return ProjectAccess.NotifyUsersAboutEndOfSprint(days_till_end);
         }
+
+        public static void NotifyUsersAboutEndOfSprint()
+        {
+            NotifyUsersAboutEndOfSprint(3);
+        }
     }
 }

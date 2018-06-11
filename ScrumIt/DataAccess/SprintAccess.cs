@@ -232,12 +232,12 @@ namespace ScrumIt.DataAccess
             return endDate;
         }
 
-        public static List<SprintModel> GetNotNotifiedEndingSprints(int days_till_end)
+        public static List<SprintModel> GetNotNotifiedEndingSprints(int days_till_end, bool exclusive = false)
         {
             var sprints = new List<SprintModel>();
             var end_time = DateTime.Now.AddDays(days_till_end);
             var current_time = DateTime.Now;
-            using (new Connection())
+            using (new Connection(exclusive))
             {
                 var cmd = new NpgsqlCommand("select * from sprints where sprint_end < @enddate::timestamp and sprint_end > @currentdate::timestamp and emails_sent='false';")
                 {
@@ -265,9 +265,9 @@ namespace ScrumIt.DataAccess
             return sprints;
         }
 
-        public static bool ChangeEmailSentStatus(int sprintid)
+        public static bool ChangeEmailSentStatus(int sprintid, bool exclusive = false)
         {
-            using (new Connection())
+            using (new Connection(exclusive))
             {
                 var cmd = new NpgsqlCommand("update sprints set emails_sent='true' where sprint_id=@sprintid;")
                 {
