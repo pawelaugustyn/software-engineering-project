@@ -69,11 +69,11 @@ namespace ScrumIt.DataAccess
         public static ProjectModel GetProjectById(int projectid, bool exclusive = false)
         {
             var project = new ProjectModel();
-            using (new Connection(exclusive))
+            using (var c = new Connection(exclusive))
             {
                 var cmd = new NpgsqlCommand("select * from projects where project_id = @projectid;")
                 {
-                    Connection = Connection.Conn
+                    Connection = exclusive ? c.ConnExcl : Connection.Conn
                 };
                 cmd.Parameters.AddWithValue("projectid", projectid);
                 using (var reader = cmd.ExecuteReader())

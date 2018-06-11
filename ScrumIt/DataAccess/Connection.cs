@@ -6,6 +6,7 @@ namespace ScrumIt.DataAccess
     internal class Connection : IDisposable
     {
         public static NpgsqlConnection Conn { get; } = new NpgsqlConnection("Server=mdm73ng82os.ckymfrn8filu.eu-central-1.rds.amazonaws.com;Username=master;Password=HL3&bF|H?7MQ!k~|PpJ,MD|p^EEm.vv!;Database=master");
+        public NpgsqlConnection ConnExcl { get; } = new NpgsqlConnection("Server=mdm73ng82os.ckymfrn8filu.eu-central-1.rds.amazonaws.com;Username=master;Password=HL3&bF|H?7MQ!k~|PpJ,MD|p^EEm.vv!;Database=master");
         private static int _connCounter;
         private static bool _opened;
         private bool _exclusive = false;
@@ -33,7 +34,7 @@ namespace ScrumIt.DataAccess
             }
             else
             {
-                Conn.Open();
+                ConnExcl.Open();
                 _exclusive = true;
             }
 
@@ -53,7 +54,7 @@ namespace ScrumIt.DataAccess
             }
             else
             {
-                Conn.Close();
+                ConnExcl.Close();
             }
         }
     }
