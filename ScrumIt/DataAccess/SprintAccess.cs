@@ -281,6 +281,32 @@ namespace ScrumIt.DataAccess
             return endDate;
         }
 
+        public static Dictionary<string, int> GetSprintCompletionData(int sprintId)
+        {
+            var dict = new Dictionary<string, int>();
+            using (new Connection())
+            {
+                var cmd = new NpgsqlCommand("select todo, inprogress, done, total from sprint_completion_new where sprint_id = @sprint_id")
+                {
+                    Connection = Connection.Conn
+                };
+                cmd.Parameters.AddWithValue("sprint_id", sprintId);
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        dict.Add("todo", Convert.ToInt32((long) reader[0]));
+                        dict.Add("inprogress", Convert.ToInt32((long) reader[1]));
+                        dict.Add("done", Convert.ToInt32((long) reader[2]));
+                        dict.Add("total", Convert.ToInt32((long) reader[3]));
+                        break;
+                    }
+                }
+            }
+
+            return dict;
+        }
+
         private static void ValidateNewSprint(SprintModel addedSprint)
         {
             ValidateStartDate(addedSprint);
