@@ -153,6 +153,7 @@ namespace ScrumIt.Forms
                     if (TaskModel.UpdateTask(task))
                     {
                         MessageBox.Show(@"Zaktualizowano zmiany zadania");
+                        CurrentSprint.refresh = true;
                     }
                 }
                 catch (Exception err)
@@ -205,6 +206,7 @@ namespace ScrumIt.Forms
                     if (dialogResult == DialogResult.Yes)
                     {
                         TaskModel.RemoveTask(_taskId);
+                        CurrentSprint.refresh = true;
                         Close();
                     }
                 }

@@ -98,6 +98,9 @@ namespace ScrumIt.Forms
                         BacklogProjectId = projectId
                     };
                     TaskModel.CreateNewTask(task, new List<UserModel>());
+                    CurrentSprint.refresh = true;
+                    // TO DO
+                    // rozroznic kiedy zadanie idzie do backlogu a kiedy do currentSprint
                     Close();
                 }
                 catch (Exception err)
