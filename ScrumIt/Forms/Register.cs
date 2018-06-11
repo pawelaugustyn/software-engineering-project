@@ -118,17 +118,22 @@ namespace ScrumIt.Forms
 
         private void userPhotoPictureBox_Click(object sender, System.EventArgs e)
         {
-            using (OpenFileDialog dlg = new OpenFileDialog())
+            if (loadPictureDialog.ShowDialog() == DialogResult.OK)
             {
-                dlg.Title = "Wybierz obraz";
-                dlg.Filter = "png files (*.png)|*.png";
-
-                if (dlg.ShowDialog() == DialogResult.OK)
+                try
                 {
-                    userPhotoPictureBox.Image = new Bitmap(dlg.FileName);
+                    _user.Avatar = AppStateProvider.LoadImage(loadPictureDialog.FileName);
+                    userPhotoPictureBox.Image = _user.Avatar;
+
+                }
+                catch (Exception err)
+                {
+                    MessageBox.Show(err.Message);
+
                 }
             }
+
         }
-        
+
     }
 }

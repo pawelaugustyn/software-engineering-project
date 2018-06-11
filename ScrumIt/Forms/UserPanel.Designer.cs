@@ -33,12 +33,13 @@
             this.userLastNameLabel = new System.Windows.Forms.Label();
             this.changePasswordButton = new System.Windows.Forms.Button();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.userEmailTextBox = new System.Windows.Forms.TextBox();
-            this.userLoginTextBox = new System.Windows.Forms.TextBox();
+            this.RoleTextBox = new System.Windows.Forms.TextBox();
             this.userLastNameTextBox = new System.Windows.Forms.TextBox();
             this.userNameTextBox = new System.Windows.Forms.TextBox();
+            this.userLoginTextBox = new System.Windows.Forms.TextBox();
             this.userNameLabel = new System.Windows.Forms.Label();
             this.userEmailLLabel = new System.Windows.Forms.Label();
+            this.userEmailTextBox = new System.Windows.Forms.TextBox();
             this.changePasswordLayoutTablePanel = new System.Windows.Forms.TableLayoutPanel();
             this.newPasswordLabel = new System.Windows.Forms.Label();
             this.newPasswordTextBox = new System.Windows.Forms.TextBox();
@@ -48,7 +49,6 @@
             this.loadPictureDialog = new System.Windows.Forms.OpenFileDialog();
             this.changeUserDataButton = new System.Windows.Forms.Button();
             this.userPhotoPictureBox = new System.Windows.Forms.PictureBox();
-            this.RoleTextBox = new System.Windows.Forms.TextBox();
             this.tableLayoutPanel1.SuspendLayout();
             this.changePasswordLayoutTablePanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.userPhotoPictureBox)).BeginInit();
@@ -134,31 +134,19 @@
             this.tableLayoutPanel1.Size = new System.Drawing.Size(350, 170);
             this.tableLayoutPanel1.TabIndex = 4;
             // 
-            // userEmailTextBox
+            // RoleTextBox
             // 
-            this.userEmailTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.RoleTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.userEmailTextBox.BackColor = System.Drawing.Color.White;
-            this.userEmailTextBox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.userEmailTextBox.Location = new System.Drawing.Point(115, 105);
-            this.userEmailTextBox.Name = "userEmailTextBox";
-            this.userEmailTextBox.Size = new System.Drawing.Size(232, 29);
-            this.userEmailTextBox.TabIndex = 9;
-            // 
-            // userLoginTextBox
-            // 
-            this.userLoginTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.userLoginTextBox.BackColor = System.Drawing.Color.White;
-            this.userLoginTextBox.Enabled = false;
-            this.userLoginTextBox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.userLoginTextBox.Location = new System.Drawing.Point(115, 3);
-            this.userLoginTextBox.Name = "userLoginTextBox";
-            this.userLoginTextBox.ReadOnly = true;
-            this.userLoginTextBox.Size = new System.Drawing.Size(232, 29);
-            this.userLoginTextBox.TabIndex = 8;
+            this.RoleTextBox.BackColor = System.Drawing.Color.White;
+            this.RoleTextBox.Enabled = false;
+            this.RoleTextBox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.RoleTextBox.Location = new System.Drawing.Point(115, 139);
+            this.RoleTextBox.Name = "RoleTextBox";
+            this.RoleTextBox.ReadOnly = true;
+            this.RoleTextBox.Size = new System.Drawing.Size(232, 29);
+            this.RoleTextBox.TabIndex = 10;
             // 
             // userLastNameTextBox
             // 
@@ -183,6 +171,20 @@
             this.userNameTextBox.Name = "userNameTextBox";
             this.userNameTextBox.Size = new System.Drawing.Size(232, 29);
             this.userNameTextBox.TabIndex = 6;
+            // 
+            // userLoginTextBox
+            // 
+            this.userLoginTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.userLoginTextBox.BackColor = System.Drawing.Color.White;
+            this.userLoginTextBox.Enabled = false;
+            this.userLoginTextBox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.userLoginTextBox.Location = new System.Drawing.Point(115, 3);
+            this.userLoginTextBox.Name = "userLoginTextBox";
+            this.userLoginTextBox.ReadOnly = true;
+            this.userLoginTextBox.Size = new System.Drawing.Size(232, 29);
+            this.userLoginTextBox.TabIndex = 8;
             // 
             // userNameLabel
             // 
@@ -209,6 +211,18 @@
             this.userEmailLLabel.Size = new System.Drawing.Size(106, 34);
             this.userEmailLLabel.TabIndex = 4;
             this.userEmailLLabel.Text = "Email";
+            // 
+            // userEmailTextBox
+            // 
+            this.userEmailTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.userEmailTextBox.BackColor = System.Drawing.Color.White;
+            this.userEmailTextBox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.userEmailTextBox.Location = new System.Drawing.Point(115, 105);
+            this.userEmailTextBox.Name = "userEmailTextBox";
+            this.userEmailTextBox.Size = new System.Drawing.Size(232, 29);
+            this.userEmailTextBox.TabIndex = 9;
             // 
             // changePasswordLayoutTablePanel
             // 
@@ -323,20 +337,6 @@
             this.userPhotoPictureBox.TabIndex = 0;
             this.userPhotoPictureBox.TabStop = false;
             this.userPhotoPictureBox.Click += new System.EventHandler(this.userPhotoPictureBox_Click);
-            // 
-            // RoleTextBox
-            // 
-            this.RoleTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.RoleTextBox.BackColor = System.Drawing.Color.White;
-            this.RoleTextBox.Enabled = false;
-            this.RoleTextBox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.RoleTextBox.Location = new System.Drawing.Point(115, 139);
-            this.RoleTextBox.Name = "RoleTextBox";
-            this.RoleTextBox.ReadOnly = true;
-            this.RoleTextBox.Size = new System.Drawing.Size(232, 29);
-            this.RoleTextBox.TabIndex = 10;
             // 
             // UserPanel
             // 
