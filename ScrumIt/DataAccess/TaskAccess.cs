@@ -88,7 +88,7 @@ namespace ScrumIt.DataAccess
             using (new Connection())
             {
 
-                var cmd = new NpgsqlCommand("update tasks SET task_stage=@newstage where task_id = @taskid;")
+                var cmd = new NpgsqlCommand("update tasks SET task_stage=@newstage where task_id = @taskid and task_stage <> @newstage ;")
                 {
                     Connection = Connection.Conn
                 };
@@ -99,7 +99,7 @@ namespace ScrumIt.DataAccess
                 var howManyAffected = cmd.ExecuteNonQuery();
                 if (howManyAffected == 1)
                     return true;
-                throw new Exception("Brak takiego zadania");
+                else return false;
             }
         }
 
