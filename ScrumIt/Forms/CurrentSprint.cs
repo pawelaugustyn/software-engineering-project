@@ -164,7 +164,8 @@ namespace ScrumIt.Forms
         {
             try
             {
-                _sprintId = SprintModel.GetMostRecentSprintForProject(_projectId).SprintId;
+                var sprint = SprintModel.GetMostRecentSprintForProject(_projectId);
+                _sprintId = sprint.SprintId;
                 var taskList = TaskModel.GetTasksBySprintId(_sprintId);
                 scrumBoardPanel.Controls.Clear();
 
@@ -173,7 +174,8 @@ namespace ScrumIt.Forms
                 {
                     CreateTaskPanel(task, index++);
                 }
-
+                progressBar.Refresh();
+                DateTextBox.Text = sprint.StartDateTime.ToShortDateString() + " / " + sprint.EndDateTime.ToShortDateString();
             }
             catch (Exception err)
             {
@@ -427,6 +429,7 @@ namespace ScrumIt.Forms
             scrumBoardPanel.Controls.Clear();
             var sprint = SprintModel.GetSprintById(sprintId);
             DateTextBox.Text = sprint.StartDateTime.ToShortDateString() + " / " + sprint.EndDateTime.ToShortDateString();
+            progressBar.Refresh();
 
             _sprintId = sprintId;
             for (var i = 0; i < taskList.Count; i++)
