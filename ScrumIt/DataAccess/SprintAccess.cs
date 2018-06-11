@@ -327,9 +327,6 @@ namespace ScrumIt.DataAccess
         {
             if (endDate == null)
                 throw new ArgumentException("Brak daty zakonczenia sprintu");
-            // TO DO
-            // czy tu potrzebna jest inna walidacja?
-            // ograniczenie na dlugosc sprintu (3-31 dni) jest zrobione na frontendzie
         }
 
         private static void ValidateSprintDuration(SprintModel sprint)
