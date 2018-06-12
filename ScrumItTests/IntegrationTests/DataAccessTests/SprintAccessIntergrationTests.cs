@@ -37,7 +37,7 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
             _project = new ProjectModel
             {
                 ProjectName = "TestProject".WithUniqueName(),
-                ProjectColor = "#ff0000"
+                ProjectColor = "#0f820f"
             };
 
             ProjectAccess.CreateNewProject(_project);
@@ -198,7 +198,7 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
             var project = new ProjectModel
             {
                 ProjectName = "TestProject".WithUniqueName(),
-                ProjectColor = "#ff0000"
+                ProjectColor = "#299ac2"
             };
 
             ProjectAccess.CreateNewProject(project);
@@ -237,7 +237,7 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
             var project = new ProjectModel
             {
                 ProjectName = "TestProject".WithUniqueName(),
-                ProjectColor = "#ff0000"
+                ProjectColor = "#8827f3"
             };
 
             ProjectAccess.CreateNewProject(project);
@@ -287,11 +287,10 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
             var project = new ProjectModel
             {
                 ProjectName = "TestProject".WithUniqueName(),
-                ProjectColor = "#ff0000"
+                ProjectColor = "#9ff8c7"
             };
 
             ProjectAccess.CreateNewProject(project);
-            Setup.RegisterToDeleteAfterTestExecution(project);
 
             var sprint = new SprintModel
             {
@@ -320,6 +319,7 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
                 "Exception should be thrown, because it should not be possible to add sprint to project with overlaping dates of another sprint.");
 
             Assert.That(isAddedSuccessful, Is.False, $"Adding sprint should not be successful {Messages.Display(overlapingSprintToAdd)}.");
+            ProjectAccess.DeleteProject(project);
         }
 
         [Test]
@@ -349,7 +349,7 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
             var project = new ProjectModel
             {
                 ProjectName = "TestProject".WithUniqueName(),
-                ProjectColor = "#ff0000"
+                ProjectColor = "#27fdd7"
             };
 
             ProjectAccess.CreateNewProject(project);
