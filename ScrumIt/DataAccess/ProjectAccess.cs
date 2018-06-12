@@ -238,6 +238,9 @@ namespace ScrumIt.DataAccess
 
         public static bool AssignUsersToProject(ProjectModel projectToAssignTo, List<UserModel> usersToAssign)
         {
+            if (AppStateProvider.Instance.CurrentUser.Role != UserRoles.ScrumMaster)
+                throw new UnauthorizedAccessException("Brak uprawnien.");
+
             using (new Connection())
             {
                 var cmd = new NpgsqlCommand("DELETE FROM projects_has_users WHERE project_id = @project_id;")
