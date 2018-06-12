@@ -231,9 +231,8 @@ namespace ScrumIt.Forms
                 {
                     MessageBox.Show("wylogowano");
                     UserModel.Logout();
-                    this.Hide();
-                    var l = new Login();
-                    l.Show();
+
+                    Application.Restart();
                 }
             }
             else if (_userRole == "Developer")
@@ -249,9 +248,8 @@ namespace ScrumIt.Forms
                 {
                     MessageBox.Show("wylogowano");
                     UserModel.Logout();
-                    this.Hide();
-                    var l = new Login();
-                    l.Show();
+
+                    Application.Restart();
                 }
             }
             else

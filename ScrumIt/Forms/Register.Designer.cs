@@ -46,6 +46,7 @@
             this.confirmNewPasswordTextBox = new System.Windows.Forms.TextBox();
             this.registerButton = new System.Windows.Forms.Button();
             this.userPhotoPictureBox = new System.Windows.Forms.PictureBox();
+            this.loadPictureDialog = new System.Windows.Forms.OpenFileDialog();
             this.tableLayoutPanel1.SuspendLayout();
             this.changePasswordLayoutTablePanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.userPhotoPictureBox)).BeginInit();
@@ -87,7 +88,7 @@
             this.userLastNameTextBox.Location = new System.Drawing.Point(143, 71);
             this.userLastNameTextBox.Name = "userLastNameTextBox";
             this.userLastNameTextBox.Size = new System.Drawing.Size(134, 29);
-            this.userLastNameTextBox.TabIndex = 7;
+            this.userLastNameTextBox.TabIndex = 3;
             // 
             // userNameTextBox
             // 
@@ -99,7 +100,7 @@
             this.userNameTextBox.Location = new System.Drawing.Point(143, 37);
             this.userNameTextBox.Name = "userNameTextBox";
             this.userNameTextBox.Size = new System.Drawing.Size(134, 29);
-            this.userNameTextBox.TabIndex = 6;
+            this.userNameTextBox.TabIndex = 2;
             // 
             // userRoleLabel
             // 
@@ -163,7 +164,7 @@
             this.userLoginTextBox.Location = new System.Drawing.Point(143, 3);
             this.userLoginTextBox.Name = "userLoginTextBox";
             this.userLoginTextBox.Size = new System.Drawing.Size(134, 29);
-            this.userLoginTextBox.TabIndex = 8;
+            this.userLoginTextBox.TabIndex = 1;
             // 
             // userEmailLLabel
             // 
@@ -188,7 +189,7 @@
             this.userEmailTextBox.Location = new System.Drawing.Point(143, 105);
             this.userEmailTextBox.Name = "userEmailTextBox";
             this.userEmailTextBox.Size = new System.Drawing.Size(134, 29);
-            this.userEmailTextBox.TabIndex = 9;
+            this.userEmailTextBox.TabIndex = 4;
             // 
             // roleComboBox
             // 
@@ -197,7 +198,7 @@
             this.roleComboBox.Location = new System.Drawing.Point(143, 139);
             this.roleComboBox.Name = "roleComboBox";
             this.roleComboBox.Size = new System.Drawing.Size(134, 29);
-            this.roleComboBox.TabIndex = 10;
+            this.roleComboBox.TabIndex = 5;
             // 
             // changePasswordLayoutTablePanel
             // 
@@ -239,7 +240,7 @@
             this.newPasswordTextBox.Location = new System.Drawing.Point(143, 3);
             this.newPasswordTextBox.Name = "newPasswordTextBox";
             this.newPasswordTextBox.Size = new System.Drawing.Size(134, 29);
-            this.newPasswordTextBox.TabIndex = 11;
+            this.newPasswordTextBox.TabIndex = 6;
             this.newPasswordTextBox.UseSystemPasswordChar = true;
             // 
             // confirmNewPasswordLabel
@@ -264,7 +265,7 @@
             this.confirmNewPasswordTextBox.Location = new System.Drawing.Point(143, 38);
             this.confirmNewPasswordTextBox.Name = "confirmNewPasswordTextBox";
             this.confirmNewPasswordTextBox.Size = new System.Drawing.Size(134, 29);
-            this.confirmNewPasswordTextBox.TabIndex = 12;
+            this.confirmNewPasswordTextBox.TabIndex = 7;
             this.confirmNewPasswordTextBox.UseSystemPasswordChar = true;
             // 
             // registerButton
@@ -293,6 +294,10 @@
             this.userPhotoPictureBox.TabIndex = 7;
             this.userPhotoPictureBox.TabStop = false;
             this.userPhotoPictureBox.Click += new System.EventHandler(this.userPhotoPictureBox_Click);
+            // 
+            // loadPictureDialog
+            // 
+            this.loadPictureDialog.FileName = "loadPictureDialog";
             // 
             // Register
             // 
@@ -339,5 +344,6 @@
         private System.Windows.Forms.PictureBox userPhotoPictureBox;
         private System.Windows.Forms.Button registerButton;
         private System.Windows.Forms.ComboBox roleComboBox;
+        private System.Windows.Forms.OpenFileDialog loadPictureDialog;
     }
 }

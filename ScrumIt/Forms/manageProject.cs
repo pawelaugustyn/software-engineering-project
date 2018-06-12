@@ -162,7 +162,6 @@ namespace ScrumIt.Forms
         private void addSprintButton_Click(object sender, System.EventArgs e)
         {
             var addSprint = new AddSprint(_projectId);
-            Hide();
             addSprint.Show();
         }
 
