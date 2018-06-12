@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using ScrumIt;
 using ScrumIt.DataAccess;
@@ -85,6 +86,26 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
             var sprint = SprintAccess.GetSprintById(_sprint.SprintId);
 
             Assertion.Equals(sprint, _sprint);
+        }
+
+        [Test]
+        public void GetAllSprintsByProjectIdShouldReturnCorrectSprints()
+        {
+            var sprints = SprintAccess.GetAllSprintsByProjectId(_project.ProjectId);
+
+            sprints.ListContains(_sprint);
+            sprints.ListContains(_oldSprint);
+            sprints.ListContains(_futureSprint);
+        }
+
+        [Test]
+        public void GetNotActiveSprintsByProjectIdShouldReturnCorrectSprints()
+        {
+            var sprints = SprintAccess.GetNotActiveSprintsByProjectId(_project.ProjectId);
+
+            sprints.ListNotContains(_sprint);
+            sprints.ListContains(_oldSprint);
+            sprints.ListContains(_futureSprint);
         }
 
         [Test]
@@ -191,10 +212,10 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
             };
 
             var isAddedSuccessful = SprintAccess.CreateNewSprintForProject(sprintToAdd);
-            var sprinttAfterAdd = SprintAccess.GetSprintById(sprintToAdd.SprintId);
+            var sprintAfterAdd = SprintAccess.GetSprintById(sprintToAdd.SprintId);
             Setup.RegisterToDeleteAfterTestExecution(sprintToAdd);
 
-            Assertion.Equals(sprintToAdd, sprinttAfterAdd, "Sprint not added correctly to DB.");
+            Assertion.Equals(sprintToAdd, sprintAfterAdd, "Sprint not added correctly to DB.");
             Assert.That(isAddedSuccessful, Is.True, $"Adding sprint should be successful {Messages.Display(sprintToAdd)}.");
         }
 
@@ -280,10 +301,10 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
             };
 
             var isAddedSuccessful = SprintAccess.CreateNewSprintForProject(sprint);
-            var sprinttAfterAdd = SprintAccess.GetSprintById(sprint.SprintId);
+            var sprintAfterAdd = SprintAccess.GetSprintById(sprint.SprintId);
             Setup.RegisterToDeleteAfterTestExecution(sprint);
 
-            Assertion.Equals(sprint, sprinttAfterAdd, "Sprint not added correctly to DB.");
+            Assertion.Equals(sprint, sprintAfterAdd, "Sprint not added correctly to DB.");
             Assert.That(isAddedSuccessful, Is.True, $"Adding sprint should be successful {Messages.Display(sprint)}.");
 
             var overlapingSprintToAdd = new SprintModel
@@ -322,6 +343,30 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
             AppStateProvider.Instance.CurrentUser = _user;
         }
 
+        [Test]
+        public void GetNotNotifiedEndingSprintsShouldReturnCorrectSprints()
+        {
+            var project = new ProjectModel
+            {
+                ProjectName = "TestProject".WithUniqueName(),
+                ProjectColor = "#ff0000"
+            };
 
+            ProjectAccess.CreateNewProject(project);
+            Setup.RegisterToDeleteAfterTestExecution(project);
+
+            var sprintToAdd = new SprintModel
+            {
+                ParentProjectId = project.ProjectId,
+                EndDateTime = DateTime.Parse( DateTime.Now.AddDays(1).ToString("yyyy-MM-dd hh:mm:ss") ),
+                StartDateTime = DateTime.Parse( DateTime.Now.AddDays(-5).ToString("yyyy-MM-dd hh:mm:ss") )
+            };
+
+            SprintAccess.CreateNewSprintForProject(sprintToAdd);
+
+            var sprints = SprintAccess.GetNotNotifiedEndingSprints(3, true);
+
+            sprints.ListContains(sprintToAdd);
+        }
     }
 }
