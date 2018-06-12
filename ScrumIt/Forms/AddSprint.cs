@@ -46,16 +46,6 @@ namespace ScrumIt.Forms
                 MessageBox.Show(@"Sprint nie może być dłuższy niż 31 dni");
                 validationFlag = true;
             }
-            else
-            {
-                var endOfLastSprint = SprintModel.GetEndOfLastSprint(_projectId) ?? DateTime.Parse("1900-01-01");
-                if (startDate <= endOfLastSprint)
-                {
-                    MessageBox.Show(@"Data sprintu koliduje z innym sprintem");
-                    validationFlag = true;
-                }
-            }
-
 
             if (!validationFlag)
             {
