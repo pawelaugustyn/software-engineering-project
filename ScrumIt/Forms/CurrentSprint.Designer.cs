@@ -158,7 +158,7 @@ namespace ScrumIt.Forms
             this.historyButton.Name = "historyButton";
             this.historyButton.Size = new System.Drawing.Size(256, 36);
             this.historyButton.TabIndex = 10;
-            this.historyButton.Text = "Historia Sprintów";
+            this.historyButton.Text = "Inne Sprinty";
             this.historyButton.UseVisualStyleBackColor = true;
             this.historyButton.Click += new System.EventHandler(this.historyButton_Click);
             // 
