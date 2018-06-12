@@ -385,14 +385,14 @@ namespace ScrumIt.DataAccess
 
         private static void ValidateTaskPriority(int taskPriority)
         {
-            if (taskPriority < 1 || taskPriority > 100)
-                throw new ArgumentException("Priorytet zadania musi zawierać się pomiędzy 1 a 100.");
+            if (taskPriority < 0 || taskPriority > 100)
+                throw new ArgumentException("Priorytet zadania musi zawierać się pomiędzy 0 a 100.");
         }
 
         private static void ValidateTaskEstimatedTime(int estimatedTime)
         {
-            if (estimatedTime < 1 || estimatedTime > 100)
-                throw new ArgumentException("Szacowany czas musi zawierać się pomiędzy 1 a 100.");
+            if (estimatedTime < 0 || estimatedTime > 100)
+                throw new ArgumentException("Szacowany czas musi zawierać się pomiędzy 0 a 100.");
         }
 
         private static void ValidateTaskColor(string colour)

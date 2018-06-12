@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Net.Mail;
 using Npgsql;
 using ScrumIt.Models;
+using SmtpFailedRecipientException = System.Net.Mail.SmtpFailedRecipientException;
 
 namespace ScrumIt.DataAccess
 {
@@ -64,14 +66,14 @@ namespace ScrumIt.DataAccess
             return projects;
         }
 
-        public static ProjectModel GetProjectById(int projectid)
+        public static ProjectModel GetProjectById(int projectid, bool exclusive = false)
         {
             var project = new ProjectModel();
-            using (new Connection())
+            using (var c = new Connection(exclusive))
             {
                 var cmd = new NpgsqlCommand("select * from projects where project_id = @projectid;")
                 {
-                    Connection = Connection.Conn
+                    Connection = exclusive ? c.ConnExcl : Connection.Conn
                 };
                 cmd.Parameters.AddWithValue("projectid", projectid);
                 using (var reader = cmd.ExecuteReader())
@@ -235,6 +237,9 @@ namespace ScrumIt.DataAccess
 
         public static bool AssignUsersToProject(ProjectModel projectToAssignTo, List<UserModel> usersToAssign)
         {
+            if (AppStateProvider.Instance.CurrentUser.Role != UserRoles.ScrumMaster)
+                throw new UnauthorizedAccessException("Brak uprawnien.");
+
             using (new Connection())
             {
                 var cmd = new NpgsqlCommand("DELETE FROM projects_has_users WHERE project_id = @project_id;")
@@ -262,6 +267,7 @@ namespace ScrumIt.DataAccess
             return true;
         }
 
+
         public static List<string> GetAllProjectColours()
         {
             var colours = new List<string>();
@@ -280,6 +286,47 @@ namespace ScrumIt.DataAccess
                 }
             }
             return colours;
+
+        public static bool NotifyUsersAboutEndOfSprint(int days_till_end)
+        {
+            List<SprintModel> ending_sprints = SprintAccess.GetNotNotifiedEndingSprints(days_till_end, true);
+            List<UserModel> users_assigned_to_ending_sprints = new List<UserModel>();
+            var parent_project = new ProjectModel();
+            foreach (var sprint in ending_sprints)
+            {
+                users_assigned_to_ending_sprints = UserAccess.GetUsersByProjectId(sprint.ParentProjectId, true);
+                parent_project = GetProjectById(sprint.ParentProjectId, true);
+                
+                foreach (var user in users_assigned_to_ending_sprints)
+                {
+                    try
+                    {
+                        MailMessage mail = new MailMessage();
+                        SmtpClient SmtpServer = new SmtpClient("smtp.gmail.com");
+                        mail.From = new MailAddress("io.appka@gmail.com");
+                        mail.To.Add(user.Email);
+                        mail.Subject = "ScrumIt Powiadomienie o końcu sprintu!";
+                        mail.Body =
+                            "Dzień dobry, " + user.Firstname +
+                            ",\n\nchcielibyśmy Ci przypomnieć, że sprint, którego jesteś uczestnikiem w projekcie " +
+                            parent_project.ProjectName + " dobiega końca " +
+                            sprint.EndDateTime.ToString("yyyy/MM/dd") + ". \n\nPozdrawiamy, \nZespół ScrumIt.";
+                        SmtpServer.Port = 587;
+                        SmtpServer.Credentials = new System.Net.NetworkCredential("io.appka", "ioioio123");
+                        SmtpServer.EnableSsl = true;
+                        SmtpServer.Send(mail);
+                    }
+                    catch (Exception)
+                    {
+                        // ignore
+                    }
+
+                }
+                SprintAccess.ChangeEmailSentStatus(sprint.SprintId, true);
+            }
+
+            return true;
+
         }
 
         private static void ValidateNewProject(ProjectModel proj)

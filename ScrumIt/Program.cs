@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Threading;
 using System.Windows.Forms;
 using ScrumIt.Forms;
+using ScrumIt.Models;
 
 namespace ScrumIt
 {
@@ -12,6 +14,8 @@ namespace ScrumIt
         [STAThread]
         private static void Main()
         {
+            Thread mailingThread = new Thread(ProjectModel.NotifyUsersAboutEndOfSprint);
+            mailingThread.Start();
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Login());

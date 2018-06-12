@@ -6,34 +6,63 @@ namespace ScrumIt.DataAccess
     internal class Connection : IDisposable
     {
         public static NpgsqlConnection Conn { get; } = new NpgsqlConnection("Server=mdm73ng82os.ckymfrn8filu.eu-central-1.rds.amazonaws.com;Username=master;Password=HL3&bF|H?7MQ!k~|PpJ,MD|p^EEm.vv!;Database=master");
+        public NpgsqlConnection ConnExcl { get; } = new NpgsqlConnection("Server=mdm73ng82os.ckymfrn8filu.eu-central-1.rds.amazonaws.com;Username=master;Password=HL3&bF|H?7MQ!k~|PpJ,MD|p^EEm.vv!;Database=master");
         private static int _connCounter;
         private static bool _opened;
-        public Connection()
+        /// if set to true then use non-static member ConnExcl, if false use static Conn
+        private bool _exclusive = false;
+
+        public Connection(bool exclusive=false)
         {
-            if (!_opened && _connCounter <= 0)
+            if (!exclusive)
+            {
+
+                if (!_opened && _connCounter <= 0)
+                {
+                    try
+                    {
+                        Conn.Open();
+                        _opened = true;
+                    }
+                    catch (PostgresException error)
+                    {
+                        if (error.SqlState == "53300")
+                            throw new ArgumentException("Nie mozna polaczyc z baza danych.");
+                    }
+                }
+
+                _connCounter++;
+            }
+            else
             {
                 try
                 {
-                    Conn.Open();
-                    _opened = true;
+                    ConnExcl.Open();
+                    _exclusive = true;
                 }
-                catch (PostgresException error)
+                catch (PostgresException)
                 {
-                    if (error.SqlState == "53300")
-                        throw new ArgumentException("Nie mozna polaczyc z baza danych.");
+                    // ignore
                 }
             }
-            _connCounter++;
+
         }
 
         public void Dispose()
         {
-            _connCounter--;
-            if (_connCounter <= 0)
+            if (!_exclusive)
             {
-                Conn.Close();
-                _opened = false;
-                _connCounter = 0;
+                _connCounter--;
+                if (_connCounter <= 0)
+                {
+                    Conn.Close();
+                    _opened = false;
+                    _connCounter = 0;
+                }
+            }
+            else
+            {
+                ConnExcl.Close();
             }
         }
     }
