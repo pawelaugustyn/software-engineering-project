@@ -185,7 +185,6 @@ namespace ScrumIt.DataAccess
                 throw new UnauthorizedAccessException("Brak uprawnien.");
 
             ValidateUpdatedProject(updatedProject);
-            
             //sprawdzamy czy zmienila sie nazwa projektu, jesli tak, to spradzamy czy nowa nazwa nie jest taka sama jak nazwa innego isteniejacego juz projektu
             ProjectModel project = GetProjectById(updatedProject.ProjectId);
             if (project.ProjectName != updatedProject.ProjectName)
@@ -263,16 +262,38 @@ namespace ScrumIt.DataAccess
             return true;
         }
 
+        public static List<string> GetAllProjectColours()
+        {
+            var colours = new List<string>();
+            using (new Connection())
+            {
+                var cmd = new NpgsqlCommand("select project_color from projects;")
+                {
+                    Connection = Connection.Conn
+                };
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        colours.Add((string)reader[0]);
+                    }
+                }
+            }
+            return colours;
+        }
+
         private static void ValidateNewProject(ProjectModel proj)
         {
             ValidateProjectNameOnCreation(proj.ProjectName);
             ValidateProjectColour(proj.ProjectColor);
+            ValidateProjectColourUniqueness(proj.ProjectColor);
         }
 
         private static void ValidateUpdatedProject(ProjectModel proj)
         {
             ValidateProjectNameContainsOnlyAllowableCharacters(proj.ProjectName);
             ValidateProjectColour(proj.ProjectColor);
+            ValidateProjectColourUniqueness(proj.ProjectColor);
         }
 
         private static void ValidateProjectNameOnCreation(string name)
@@ -297,6 +318,14 @@ namespace ScrumIt.DataAccess
         {
             if (!new Regex(@"^#[a-fA-F0-9]{6}").IsMatch(colour))
                 throw new ArgumentException("Zly format koloru (prawidlowy: #FFFFFF).");
+        }
+
+        private static void ValidateProjectColourUniqueness(string colour)
+        {
+            var projectColours = GetAllProjectColours();
+            foreach (var projectColour in projectColours)
+                if (projectColour == colour)
+                    throw new ArgumentException("Wybrany kolor jest już przypisany do innego projektu");
         }
     }
 }
