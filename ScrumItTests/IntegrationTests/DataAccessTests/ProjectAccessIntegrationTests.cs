@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using DeepEqual.Syntax;
 using NUnit.Framework;
 using ScrumIt;
@@ -13,6 +14,7 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
     {
         private UserModel _user;
         private ProjectModel _project;
+        private SprintModel _sprint;
         private const string Password = "testScrumMaster";
 
         [OneTimeSetUp]
@@ -40,6 +42,23 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
             ProjectAccess.CreateNewProject(_project);
             Setup.RegisterToDeleteAfterTestExecution(_project);
 
+            _sprint = new SprintModel
+            {
+                ParentProjectId = _project.ProjectId,
+                EndDateTime = DateTime.Parse( DateTime.Now.AddDays(2).ToString("yyyy-MM-dd hh:mm:ss") ),
+                StartDateTime = DateTime.Parse( DateTime.Now.AddDays(-5).ToString("yyyy-MM-dd hh:mm:ss") )
+            };
+
+            SprintAccess.CreateNewSprintForProject(_sprint);
+            Setup.RegisterToDeleteAfterTestExecution(_sprint);
+        }
+
+        [Test]
+        public void GetAllProjectsShouldReturnCorrectProjects()
+        {
+            var projects = ProjectAccess.GetAllProjects();
+
+            projects.ListContains(_project);
         }
 
         [Test]
@@ -349,7 +368,7 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
         }
 
         [Test]
-        public void AddNewUserToProjectWithUniqueUserame()
+        public void AddNewUserToProjectWithUniqueUsername()
         {
             var userToAdd = new UserModel
             {
@@ -444,6 +463,114 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
             Assert.That(isUserAddedToProjectSuccessful, Is.False, $"Adding new user to project should not be successful {Messages.Display(_project)}.");
 
             AppStateProvider.Instance.CurrentUser = _user;
+            Setup.RegisterToDeleteAfterTestExecution(userToAdd);
+        }
+
+        [Test]
+        public void AssignUsersToProject()
+        {
+            var projectToAdd = new ProjectModel
+            {
+                ProjectName = "addTestProject".WithUniqueName(),
+                ProjectColor = "#ff0000"
+            };
+            ProjectAccess.CreateNewProject(projectToAdd);
+
+            var userToAdd0 = new UserModel
+            {
+                Username = "addUser".WithUniqueName(),
+                Firstname = "add",
+                Lastname = "User",
+                Role = UserRoles.Developer,
+                Email = "addUser@test.com"
+            };
+            UserAccess.Add(userToAdd0, "addUser");
+            ProjectAccess.AddNewUserToProject(userToAdd0.UserId, projectToAdd.ProjectId);
+
+            var userToAdd1 = new UserModel
+            {
+                Username = "addUser".WithUniqueName(),
+                Firstname = "add",
+                Lastname = "User",
+                Role = UserRoles.Developer,
+                Email = "addUser@test.com"
+            };
+            UserAccess.Add(userToAdd1, "addUser");
+
+            var userToAdd2 = new UserModel
+            {
+                Username = "addUser".WithUniqueName(),
+                Firstname = "add",
+                Lastname = "User",
+                Role = UserRoles.Developer,
+                Email = "addUser@test.com"
+            };
+            UserAccess.Add(userToAdd2, "addUser");
+
+            var usersToAdd = new List<UserModel>
+            {
+                userToAdd1,
+                userToAdd2
+            };
+
+            var areUsersAddedToProjectSuccessful =
+                ProjectAccess.AssignUsersToProject(projectToAdd, usersToAdd);
+            var users = UserAccess.GetUsersByProjectId(projectToAdd.ProjectId);
+
+            users.ListNotContains(userToAdd0);
+            users.ListContains(userToAdd1);
+            users.ListContains(userToAdd2);
+
+            Assert.That(areUsersAddedToProjectSuccessful, Is.True, $"Adding new users to project should be successful {Messages.Display(projectToAdd)}.");
+
+            Setup.RegisterToDeleteAfterTestExecution(userToAdd0);
+            Setup.RegisterToDeleteAfterTestExecution(userToAdd1);
+            Setup.RegisterToDeleteAfterTestExecution(userToAdd2);
+            Setup.RegisterToDeleteAfterTestExecution(projectToAdd);
+        }
+
+        [Test]
+        public void AssignUsersToProjectWhenUnauthorizedShouldThrow()
+        {
+            var userToAdd = new UserModel
+            {
+                Username = "addUser".WithUniqueName(),
+                Firstname = "add",
+                Lastname = "User",
+                Role = UserRoles.Developer,
+                Email = "addUser@test.com"
+            };
+            var userWithTheSameUsername = UserAccess.GetUserByUsername(userToAdd.Username);
+            Assert.That(userWithTheSameUsername.IsDeepEqual(new UserModel()), Is.True, "User should not exist.");
+
+            var isUserAddedSuccessful = UserAccess.Add(userToAdd, "addUser");
+            Assert.That(isUserAddedSuccessful, Is.True, $"Adding user should be successful {Messages.Display(userToAdd)}.");
+
+            var usersToAdd = new List<UserModel>
+            {
+                userToAdd
+            };
+
+            var areUsersAddedToProjectSuccessful = false;
+            UserModel.Logout();
+
+            Assert.Throws<UnauthorizedAccessException>(delegate { areUsersAddedToProjectSuccessful = ProjectAccess.AssignUsersToProject(_project, usersToAdd); },
+                "Exception should be thrown, because it should not be possible to add new users to project if you are not scrum master.");
+
+            Assert.That(areUsersAddedToProjectSuccessful, Is.False, $"Adding new users to project should not be successful {Messages.Display(_project)}.");
+
+            AppStateProvider.Instance.CurrentUser = _user;
+            Setup.RegisterToDeleteAfterTestExecution(userToAdd);
+        }
+
+        [Test]
+        public void NotifyUsersAboutEndOfSprint()
+        {
+            var isNotifySuccesful = ProjectAccess.NotifyUsersAboutEndOfSprint(3);
+            var notNotifiedSprints = SprintAccess.GetNotNotifiedEndingSprints(3, true);
+
+            notNotifiedSprints.ListNotContains(_sprint);
+            Assert.That(isNotifySuccesful, Is.True, $"Notifying sprint should be succeful {Messages.Display(_sprint)}.");
         }
     }
 }

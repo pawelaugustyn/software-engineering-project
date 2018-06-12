@@ -68,9 +68,9 @@ namespace ScrumIt.Models
             return TaskAccess.SetNewColour(task, colour);
         }
 
-        public static void UpdateTaskStage(int taskid, TaskStages newstage)
+        public static bool UpdateTaskStage(int taskid, TaskStages newstage)
         {
-            TaskAccess.UpdateTaskStage(taskid, newstage);
+            return TaskAccess.UpdateTaskStage(taskid, newstage);
         }
 
         public static void AssignFromBacklogToSprint(int taskid, int sprintId)
@@ -86,6 +86,11 @@ namespace ScrumIt.Models
         public static void AssignUsersToTask(TaskModel taskToAssignTo, List<UserModel> usersToAssign)
         {
             TaskAccess.AssignUsersToTask(taskToAssignTo, usersToAssign);
+        }
+
+        public static void AssignUsersToTask(TaskModel taskToAssignTo, IEnumerable<int> usersIdsToAssign)
+        {
+            TaskAccess.AssignUsersToTask(taskToAssignTo, usersIdsToAssign);
         }
 
         public static bool UpdateTask(TaskModel task)

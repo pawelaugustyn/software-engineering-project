@@ -25,14 +25,19 @@ namespace ScrumItTests.IntegrationTests
         [OneTimeTearDown]
         public static void GlobalTeardown()
         {
-            if (!_taskModelList.Any())
+            AppStateProvider.Instance.CurrentUser = new UserModel
+            {
+                Role = UserRoles.ScrumMaster,
+            };
+
+            if (_taskModelList.Any())
             {
                 foreach (var task in _taskModelList)
                 {
                     TaskModel.RemoveTask(task.TaskId);
                 }
             }
-            if (!_sprintModelList.Any())
+            if (_sprintModelList.Any())
             {
                 foreach (var sprint in _sprintModelList)
                 {
@@ -40,14 +45,14 @@ namespace ScrumItTests.IntegrationTests
                     //SprintModel.Delete(sprint);
                 }
             }
-            if (!_projectList.Any())
+            if (_projectList.Any())
             {
                 foreach (var project in _projectList)
                 {
                     ProjectModel.DeleteProject(project);
                 }
             }
-            if (!_userList.Any())
+            if (_userList.Any())
             {
                 foreach (var user in _userList)
                 {

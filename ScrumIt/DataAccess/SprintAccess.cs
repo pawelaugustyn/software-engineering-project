@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Npgsql;
 using ScrumIt.Models;
 
@@ -142,6 +143,54 @@ namespace ScrumIt.DataAccess
             }
         }
 
+        public static List<SprintModel> GetAllSprintsByProjectId(int projectId)
+        {
+            var sprintsList = new List<SprintModel>();
+            using (new Connection())
+            {
+                var cmd = new NpgsqlCommand("select * from sprints where project_id = @projectid;")
+                {
+                    Connection = Connection.Conn
+                };
+                cmd.Parameters.AddWithValue("projectid", projectId);
+
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        sprintsList.Add(new SprintModel
+                        {
+                            SprintId = (int)reader[0],
+                            ParentProjectId = (int)reader[1],
+                            StartDateTime = (DateTime)reader[2],
+                            EndDateTime = (DateTime)reader[3]
+                        });
+                    }
+                }
+            }
+            return sprintsList.OrderByDescending(c => c.StartDateTime).ToList();
+        }
+
+        public static List<SprintModel> GetNotActiveSprintsByProjectId(int projectId)
+        {
+            //pobieramy wszystkie sprinty
+            var sprints = new List<SprintModel>();
+            sprints = GetAllSprintsByProjectId(projectId);
+            //pobieramy obecnie wyswietlany sprint
+            var currentSprint = GetMostRecentSprintByProjectId(projectId, DateTime.Now);
+            //usuwamy z listy obecnie wyswietlany sprint
+            foreach (var sprint in sprints)
+            {
+                if (sprint.SprintId == currentSprint.SprintId)
+                {
+                    sprints.Remove(sprint);
+                    break;
+                }
+            }
+
+            return sprints;
+        }
+
         public static bool CreateNewSprintForProject(SprintModel addedSprint)
         {
             if (AppStateProvider.Instance.CurrentUser.Role != UserRoles.ScrumMaster)
@@ -232,6 +281,80 @@ namespace ScrumIt.DataAccess
             return endDate;
         }
 
+        public static Dictionary<string, int> GetSprintCompletionData(int sprintId)
+        {
+            var dict = new Dictionary<string, int>();
+            using (new Connection())
+            {
+                var cmd = new NpgsqlCommand("select todo, inprogress, done, total from sprint_completion_new where sprint_id = @sprint_id")
+                {
+                    Connection = Connection.Conn
+                };
+                cmd.Parameters.AddWithValue("sprint_id", sprintId);
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        dict.Add("todo", Convert.ToInt32((long) reader[0]));
+                        dict.Add("inprogress", Convert.ToInt32((long) reader[1]));
+                        dict.Add("done", Convert.ToInt32((long) reader[2]));
+                        dict.Add("total", Convert.ToInt32((long) reader[3]));
+                        break;
+                    }
+                }
+            }
+            return dict;
+        }
+              
+              
+        public static List<SprintModel> GetNotNotifiedEndingSprints(int days_till_end, bool exclusive = false)
+        {
+            var sprints = new List<SprintModel>();
+            var end_time = DateTime.Now.AddDays(days_till_end);
+            var current_time = DateTime.Now;
+            using (var c = new Connection(exclusive))
+            {
+                var cmd = new NpgsqlCommand("select * from sprints where sprint_end < @enddate::timestamp and sprint_end > @currentdate::timestamp and emails_sent='false';")
+                {
+                    Connection = exclusive ? c.ConnExcl : Connection.Conn
+                };
+                string end_datetime = end_time.ToString("yyyy-MM-dd hh:mm:ss");
+                string current_datetime = current_time.ToString("yyyy-MM-dd hh:mm:ss");
+                cmd.Parameters.AddWithValue("currentdate", current_datetime);
+                cmd.Parameters.AddWithValue("enddate", end_datetime);
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        sprints.Add(new SprintModel
+                        {
+                            SprintId = (int)reader[0],
+                            ParentProjectId = (int)reader[1],
+                            StartDateTime = (DateTime)reader[2],
+                            EndDateTime = (DateTime)reader[3]
+                        });
+                    }
+                }
+            }
+
+            return sprints;
+        }
+
+        public static bool ChangeEmailSentStatus(int sprintid, bool exclusive = false)
+        {
+            using (var c = new Connection(exclusive))
+            {
+                var cmd = new NpgsqlCommand("update sprints set emails_sent='true' where sprint_id=@sprintid;")
+                {
+                    Connection = exclusive ? c.ConnExcl : Connection.Conn
+                };
+                cmd.Parameters.AddWithValue("sprintid", sprintid);
+                var res = cmd.ExecuteNonQuery();
+
+                return res == 1;
+            }
+        }
+
         private static void ValidateNewSprint(SprintModel addedSprint)
         {
             ValidateStartDate(addedSprint);
@@ -252,28 +375,46 @@ namespace ScrumIt.DataAccess
         {
             if (endDate == null)
                 throw new ArgumentException("Brak daty zakonczenia sprintu");
-            // TODO
-            // czy tu potrzebna jest inna walidacja?
-            // ograniczenie na dlugosc sprintu (3-31 dni) jest zrobione na frontendzie
         }
 
         private static void ValidateSprintDuration(SprintModel sprint)
         {
             using (new Connection())
             {
-                var cmd = new NpgsqlCommand("select sprint_id from sprints where ((sprint_start < @param_start::timestamp and sprint_end > @param_start2::timestamp) or (sprint_start < @param_end::timestamp and sprint_end > @param_end2::timestamp)) and project_id = @param_proj;")
+                var cmd = new NpgsqlCommand(@"SELECT
+                    sprint_id
+                        FROM sprints
+                    WHERE(
+                    sprint_start <= @param_start
+                    AND
+                    sprint_end >= @param_start
+                    OR
+                    sprint_start <= @param_end
+                    AND
+                    sprint_end >= @param_end
+                    OR
+                    sprint_start > @param_start
+                    AND
+                    sprint_start < @param_end
+                    AND
+                    sprint_end <= @param_end
+                    OR
+                    sprint_start < @param_start
+                    AND
+                    sprint_end > @param_start
+                    AND
+                    sprint_end < @param_end
+                    )
+                    AND
+                        project_id = @param_proj;")
                 {
                     Connection = Connection.Conn
                 };
-                string datetimeStart = sprint.StartDateTime.ToString("yyyy-MM-dd hh:mm:ss");
-                cmd.Parameters.AddWithValue("param_start", datetimeStart);
-                cmd.Parameters.AddWithValue("param_start2", datetimeStart);
-                string datetimeEnd = sprint.EndDateTime.ToString("yyyy-MM-dd hh:mm:ss");
-                cmd.Parameters.AddWithValue("param_end", datetimeEnd);
-                cmd.Parameters.AddWithValue("param_end2", datetimeEnd);
+                cmd.Parameters.AddWithValue("param_start", sprint.StartDateTime);
+                cmd.Parameters.AddWithValue("param_end", sprint.EndDateTime);
                 cmd.Parameters.AddWithValue("param_proj", sprint.ParentProjectId);
-                var res = cmd.ExecuteNonQuery();
-                if (res > 0)
+                var res = (int?)cmd.ExecuteScalar();
+                if (res != null && res > 0)
                     throw new ArgumentException("Czas trwania sprintu pokrywa sie z czasem innego istniejacego sprintu.");
             }
         }

@@ -59,8 +59,15 @@ namespace ScrumIt.Forms
 
                 if (newPass == newPassConf && _user != null)
                 {
-                    MessageBox.Show(@"Pomyślnie zmieniono hasło");
-                    UserModel.UpdateUserPassword(newPass);
+                    try
+                    {
+                        MessageBox.Show(@"Pomyślnie zmieniono hasło");
+                        UserModel.UpdateUserPassword(newPass);
+                    }
+                    catch (Exception err)
+                    {
+                        MessageBox.Show(err.Message);
+                    }
                 }
                 else
                 {

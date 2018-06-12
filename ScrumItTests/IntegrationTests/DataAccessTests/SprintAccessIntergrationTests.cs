@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using ScrumIt;
 using ScrumIt.DataAccess;
@@ -88,6 +89,26 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
         }
 
         [Test]
+        public void GetAllSprintsByProjectIdShouldReturnCorrectSprints()
+        {
+            var sprints = SprintAccess.GetAllSprintsByProjectId(_project.ProjectId);
+
+            sprints.ListContains(_sprint);
+            sprints.ListContains(_oldSprint);
+            sprints.ListContains(_futureSprint);
+        }
+
+        [Test]
+        public void GetNotActiveSprintsByProjectIdShouldReturnCorrectSprints()
+        {
+            var sprints = SprintAccess.GetNotActiveSprintsByProjectId(_project.ProjectId);
+
+            sprints.ListNotContains(_sprint);
+            sprints.ListContains(_oldSprint);
+            sprints.ListContains(_futureSprint);
+        }
+
+        [Test]
         public void GetSprintByIdShouldNotReturnCorrectSprint()
         {
             var sprint = SprintAccess.GetSprintById(-1);
@@ -135,7 +156,6 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
             Assertion.Equals(sprint, _sprint);
         }
 
-        [Ignore("Needs to be changed with AddSprintToProjectBeforeLastSprintEndDateShouldThrow")]
         [Test]
         public void GetMostRecentSprintByProjectIdShouldReturnCorrectNextSprint()
         {
@@ -192,10 +212,10 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
             };
 
             var isAddedSuccessful = SprintAccess.CreateNewSprintForProject(sprintToAdd);
-            var sprinttAfterAdd = SprintAccess.GetSprintById(sprintToAdd.SprintId);
+            var sprintAfterAdd = SprintAccess.GetSprintById(sprintToAdd.SprintId);
             Setup.RegisterToDeleteAfterTestExecution(sprintToAdd);
 
-            Assertion.Equals(sprintToAdd, sprinttAfterAdd, "Sprint not added correctly to DB.");
+            Assertion.Equals(sprintToAdd, sprintAfterAdd, "Sprint not added correctly to DB.");
             Assert.That(isAddedSuccessful, Is.True, $"Adding sprint should be successful {Messages.Display(sprintToAdd)}.");
         }
 
@@ -253,23 +273,53 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
 
             Assert.That(sprintToAdd, Is.Null, "Creating sprint should not be successful.");
         }
-
-        [Ignore("Needs to be repaired")]
+        
         [Test]
-        public void AddSprintToProjectBeforeLastSprintEndDateShouldThrow()
+        [TestCase(0, 0)]
+        [TestCase(0, 1)]
+        [TestCase(-1, 0)]
+        [TestCase(-1, -1)]
+        [TestCase(1, 1)]
+        [TestCase(-1, 1)]
+        [TestCase(1, -1)]
+        public void AddSprintToProjectWithDatesOverlapingAnotherSprintShouldThrow(int numberOfDaysToAddToStart, int numberOfDaysToAddToEnd)
         {
-            var sprintToAdd = new SprintModel
+            var project = new ProjectModel
             {
-                ParentProjectId = _project.ProjectId,
-                EndDateTime = new DateTime(2018, 7, 25, 12, 00, 00),
-                StartDateTime = new DateTime(2018, 7, 20, 12, 00, 00)
+                ProjectName = "TestProject".WithUniqueName(),
+                ProjectColor = "#ff0000"
             };
-            var isAddedSuccessful = false;
 
-            Assert.Throws<ArgumentException>(delegate { isAddedSuccessful = SprintAccess.CreateNewSprintForProject(sprintToAdd); },
-                "Exception should be thrown, because it should not be possible to add sprint to project before last sprint end date.");
+            ProjectAccess.CreateNewProject(project);
+            Setup.RegisterToDeleteAfterTestExecution(project);
 
-            Assert.That(isAddedSuccessful, Is.False, $"Adding sprint should not be successful {Messages.Display(sprintToAdd)}.");
+            var sprint = new SprintModel
+            {
+                ParentProjectId = project.ProjectId,
+                EndDateTime = new DateTime(2018, 6, 10, 12, 00, 00),
+                StartDateTime = new DateTime(2018, 6, 01, 12, 00, 00)
+            };
+
+            var isAddedSuccessful = SprintAccess.CreateNewSprintForProject(sprint);
+            var sprintAfterAdd = SprintAccess.GetSprintById(sprint.SprintId);
+            Setup.RegisterToDeleteAfterTestExecution(sprint);
+
+            Assertion.Equals(sprint, sprintAfterAdd, "Sprint not added correctly to DB.");
+            Assert.That(isAddedSuccessful, Is.True, $"Adding sprint should be successful {Messages.Display(sprint)}.");
+
+            var overlapingSprintToAdd = new SprintModel
+            {
+                ParentProjectId = project.ProjectId,
+                EndDateTime = new DateTime(2018, 6, 10, 12, 00, 00).AddDays(numberOfDaysToAddToStart),
+                StartDateTime = new DateTime(2018, 6, 01, 12, 00, 00).AddDays(numberOfDaysToAddToEnd)
+            };
+
+            isAddedSuccessful = false;
+
+            Assert.Throws<ArgumentException>(delegate { isAddedSuccessful = SprintAccess.CreateNewSprintForProject(overlapingSprintToAdd); },
+                "Exception should be thrown, because it should not be possible to add sprint to project with overlaping dates of another sprint.");
+
+            Assert.That(isAddedSuccessful, Is.False, $"Adding sprint should not be successful {Messages.Display(overlapingSprintToAdd)}.");
         }
 
         [Test]
@@ -293,6 +343,31 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
             AppStateProvider.Instance.CurrentUser = _user;
         }
 
+        [Test]
+        public void GetNotNotifiedEndingSprintsShouldReturnCorrectSprints()
+        {
+            var project = new ProjectModel
+            {
+                ProjectName = "TestProject".WithUniqueName(),
+                ProjectColor = "#ff0000"
+            };
 
+            ProjectAccess.CreateNewProject(project);
+            Setup.RegisterToDeleteAfterTestExecution(project);
+
+            var sprintToAdd = new SprintModel
+            {
+                ParentProjectId = project.ProjectId,
+                EndDateTime = DateTime.Parse( DateTime.Now.AddDays(1).ToString("yyyy-MM-dd hh:mm:ss") ),
+                StartDateTime = DateTime.Parse( DateTime.Now.AddDays(-5).ToString("yyyy-MM-dd hh:mm:ss") )
+            };
+
+            SprintAccess.CreateNewSprintForProject(sprintToAdd);
+            Setup.RegisterToDeleteAfterTestExecution(sprintToAdd);
+
+            var sprints = SprintAccess.GetNotNotifiedEndingSprints(3, true);
+
+            sprints.ListContains(sprintToAdd);
+        }
     }
 }
