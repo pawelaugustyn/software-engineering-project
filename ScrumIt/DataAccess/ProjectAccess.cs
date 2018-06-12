@@ -267,26 +267,6 @@ namespace ScrumIt.DataAccess
             return true;
         }
 
-
-        public static List<string> GetAllProjectColours()
-        {
-            var colours = new List<string>();
-            using (new Connection())
-            {
-                var cmd = new NpgsqlCommand("select project_color from projects;")
-                {
-                    Connection = Connection.Conn
-                };
-                using (var reader = cmd.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        colours.Add((string)reader[0]);
-                    }
-                }
-            }
-            return colours;
-
         public static bool NotifyUsersAboutEndOfSprint(int days_till_end)
         {
             List<SprintModel> ending_sprints = SprintAccess.GetNotNotifiedEndingSprints(days_till_end, true);
@@ -339,8 +319,9 @@ namespace ScrumIt.DataAccess
         private static void ValidateUpdatedProject(ProjectModel proj)
         {
             ValidateProjectNameContainsOnlyAllowableCharacters(proj.ProjectName);
+            ValidateProjectNameIsAvailable(proj.ProjectName, proj.ProjectId);
             ValidateProjectColour(proj.ProjectColor);
-            ValidateProjectColourUniqueness(proj.ProjectColor);
+            ValidateProjectColourUniqueness(proj.ProjectColor, proj.ProjectId);
         }
 
         private static void ValidateProjectNameOnCreation(string name)
@@ -349,10 +330,12 @@ namespace ScrumIt.DataAccess
             ValidateProjectNameIsAvailable(name);
         }
 
-        private static void ValidateProjectNameIsAvailable(string name)
+        private static void ValidateProjectNameIsAvailable(string name, int projectId = 0)
         {
-            if (ProjectModel.GetProjectByName(name).ProjectName == name)
-                throw new ArgumentException("Projekt z ta nazwa juz istnieje.");
+            var check = ProjectModel.GetProjectByName(name);
+            if (check.ProjectName == name)
+                if (projectId != 0 && check.ProjectId != projectId)
+                    throw new ArgumentException("Projekt z ta nazwa juz istnieje.");
         }
 
         private static void ValidateProjectNameContainsOnlyAllowableCharacters(string name)
@@ -367,12 +350,21 @@ namespace ScrumIt.DataAccess
                 throw new ArgumentException("Zly format koloru (prawidlowy: #FFFFFF).");
         }
 
-        private static void ValidateProjectColourUniqueness(string colour)
+        private static void ValidateProjectColourUniqueness(string colour, int projectId = 0)
         {
-            var projectColours = GetAllProjectColours();
-            foreach (var projectColour in projectColours)
-                if (projectColour == colour)
+            using (new Connection())
+            {
+                var cmd = new NpgsqlCommand("SELECT project_id FROM projects WHERE project_id <> @project_id AND project_color = @project_color;")
+                {
+                    Connection = Connection.Conn
+                };
+                cmd.Parameters.AddWithValue("project_id", projectId);
+                cmd.Parameters.AddWithValue("project_color", colour);
+
+                var res = (int?)cmd.ExecuteScalar();
+                if (res != null && res > 0)
                     throw new ArgumentException("Wybrany kolor jest już przypisany do innego projektu");
+            }
         }
     }
 }
