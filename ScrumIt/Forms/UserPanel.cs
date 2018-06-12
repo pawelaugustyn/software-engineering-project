@@ -21,9 +21,6 @@ namespace ScrumIt.Forms
             changePasswordButton.BackColor = _panelColor;
             submitPasswordChangeButton.BackColor = _panelColor;
             changeUserDataButton.BackColor = _panelColor;
-            roleComboBox.Items.Add("Wybierz rolę...");
-            roleComboBox.Items.Add("Scrum Master");
-            roleComboBox.Items.Add("Developer");
             try
             {
                 var state = AppStateProvider.Instance;
@@ -33,13 +30,7 @@ namespace ScrumIt.Forms
                 userNameTextBox.Text = _user.Firstname;
                 userLastNameTextBox.Text = _user.Lastname;
                 userLoginTextBox.Text = _user.Username;
-                if (_user.Role == UserRoles.ScrumMaster)
-                {
-                    roleComboBox.SelectedIndex = 1;
-                }else if (_user.Role == UserRoles.Developer)
-                {
-                    roleComboBox.SelectedIndex = 2;
-                }
+                RoleTextBox.Text = _user.Role.ToString();
                 userPhotoPictureBox.Image = _user.Avatar;
 
             }
@@ -61,8 +52,15 @@ namespace ScrumIt.Forms
             var newPassConf = confirmNewPasswordTextBox.Text;
             if (newPass == newPassConf && _user != null)
             {
-                MessageBox.Show(@"Pomyślnie zmieniono hasło");
-                UserModel.UpdateUserPassword(newPass);
+                try
+                {
+                    UserModel.UpdateUserPassword(newPass);
+                    MessageBox.Show(@"Pomyślnie zmieniono hasło");
+                }
+                catch (ArgumentException err)
+                {
+                    MessageBox.Show(err.Message);
+                }
             }
             else
             {
@@ -109,13 +107,6 @@ namespace ScrumIt.Forms
                 MessageBox.Show("Uzupełnij email");
                 return false;
             }
-
-            if (roleComboBox.SelectedIndex == 0)
-            {
-                MessageBox.Show("Wybierz rolę");
-                return false;
-            }
-
             return true;
         }
 
@@ -127,15 +118,7 @@ namespace ScrumIt.Forms
                 _user.Firstname = userNameTextBox.Text;
                 _user.Lastname = userLastNameTextBox.Text;
                 _user.Email = userEmailTextBox.Text;
-                if (roleComboBox.SelectedIndex == 1)
-                {
-                    _user.Role = UserRoles.ScrumMaster;
-                }
-                if (roleComboBox.SelectedIndex == 2)
-                {
-                    _user.Role = UserRoles.Developer;
-                }
-
+               
                 try
                 {
                     UserModel.UpdateUserData(_user);

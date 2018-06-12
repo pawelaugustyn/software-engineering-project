@@ -19,7 +19,7 @@ namespace ScrumIt.Forms
 
         private void Register_Load(object sender, System.EventArgs e)
         {
-            registeButton.BackColor = _panelColor;
+            registerButton.BackColor = _panelColor;
             roleComboBox.Items.Add("Wybierz rolę...");
             roleComboBox.Items.Add("Scrum Master");
             roleComboBox.Items.Add("Developer");
@@ -129,10 +129,6 @@ namespace ScrumIt.Forms
                 }
             }
         }
-
-        private void roleComboBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            
-        }
+        
     }
 }

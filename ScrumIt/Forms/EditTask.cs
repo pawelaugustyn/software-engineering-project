@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 using MetroFramework.Forms;
 using ScrumIt.DataAccess;
@@ -127,27 +128,24 @@ namespace ScrumIt.Forms
             }
 
             var usersList = userListMenuStrip.Items;
-            var userNames = new List<string>();
+            var usersIds = new List<string>();
             foreach (ToolStripMenuItem user in usersList)
             {
                 if (user.Checked)
                 {
-                    var userName = user.Name;
-                    userNames.Add(userName);
+                    var userId = user.Name;
+                    usersIds.Add(userId);
                 }
             }
 
-            var userModels = new List<UserModel>();
-            foreach (var user in userNames)
-            {
-                userModels.Add(UserModel.GetUserById(Int32.Parse(user)));
-            }
+            var usersIdsParsed = usersIds.Select(int.Parse).ToList();
+
             if (validationFlag)
             {
                 try
                 {
                     var task = TaskModel.GetTaskById(_taskId);
-                    TaskModel.AssignUsersToTask(task, userModels);
+                    TaskModel.AssignUsersToTask(task, usersIdsParsed);
                     task.TaskName = taskName;
                     task.TaskDesc = taskDescription;
                     task.TaskPriority = Int32.Parse(taskPriority);
@@ -155,6 +153,7 @@ namespace ScrumIt.Forms
                     if (TaskModel.UpdateTask(task))
                     {
                         MessageBox.Show(@"Zaktualizowano zmiany zadania");
+                        CurrentSprint.refresh = true;
                     }
                 }
                 catch (Exception err)
@@ -207,6 +206,7 @@ namespace ScrumIt.Forms
                     if (dialogResult == DialogResult.Yes)
                     {
                         TaskModel.RemoveTask(_taskId);
+                        CurrentSprint.refresh = true;
                         Close();
                     }
                 }

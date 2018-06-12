@@ -30,9 +30,9 @@
         {
             this.startDateLabel = new System.Windows.Forms.Label();
             this.endDateLabel = new System.Windows.Forms.Label();
-            this.startSprintDateTextBox = new System.Windows.Forms.TextBox();
-            this.endSprintDateTextBox = new System.Windows.Forms.TextBox();
             this.addSprintButton = new System.Windows.Forms.Button();
+            this.startSprintDatePicker = new System.Windows.Forms.DateTimePicker();
+            this.endSprintDatePicker = new System.Windows.Forms.DateTimePicker();
             this.SuspendLayout();
             // 
             // startDateLabel
@@ -63,30 +63,6 @@
             this.endDateLabel.Text = "Data zakończenia sprintu";
             this.endDateLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // startSprintDateTextBox
-            // 
-            this.startSprintDateTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.startSprintDateTextBox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.startSprintDateTextBox.Location = new System.Drawing.Point(209, 57);
-            this.startSprintDateTextBox.Name = "startSprintDateTextBox";
-            this.startSprintDateTextBox.Size = new System.Drawing.Size(122, 29);
-            this.startSprintDateTextBox.TabIndex = 3;
-            this.startSprintDateTextBox.Text = "rrrr-mm-dd";
-            // 
-            // endSprintDateTextBox
-            // 
-            this.endSprintDateTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.endSprintDateTextBox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.endSprintDateTextBox.Location = new System.Drawing.Point(209, 92);
-            this.endSprintDateTextBox.Name = "endSprintDateTextBox";
-            this.endSprintDateTextBox.Size = new System.Drawing.Size(122, 29);
-            this.endSprintDateTextBox.TabIndex = 4;
-            this.endSprintDateTextBox.Text = "rrrr-mm-dd";
-            // 
             // addSprintButton
             // 
             this.addSprintButton.BackColor = System.Drawing.Color.Silver;
@@ -102,14 +78,30 @@
             this.addSprintButton.UseVisualStyleBackColor = false;
             this.addSprintButton.Click += new System.EventHandler(this.addSprintButton_Click);
             // 
+            // startSprintDatePicker
+            // 
+            this.startSprintDatePicker.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.startSprintDatePicker.Location = new System.Drawing.Point(209, 60);
+            this.startSprintDatePicker.Name = "startSprintDatePicker";
+            this.startSprintDatePicker.Size = new System.Drawing.Size(122, 22);
+            this.startSprintDatePicker.TabIndex = 6;
+            // 
+            // endSprintDatePicker
+            // 
+            this.endSprintDatePicker.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.endSprintDatePicker.Location = new System.Drawing.Point(209, 91);
+            this.endSprintDatePicker.Name = "endSprintDatePicker";
+            this.endSprintDatePicker.Size = new System.Drawing.Size(122, 22);
+            this.endSprintDatePicker.TabIndex = 7;
+            // 
             // AddSprint
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(356, 179);
+            this.Controls.Add(this.endSprintDatePicker);
+            this.Controls.Add(this.startSprintDatePicker);
             this.Controls.Add(this.addSprintButton);
-            this.Controls.Add(this.endSprintDateTextBox);
-            this.Controls.Add(this.startSprintDateTextBox);
             this.Controls.Add(this.endDateLabel);
             this.Controls.Add(this.startDateLabel);
             this.Name = "AddSprint";
@@ -124,8 +116,8 @@
 
         private System.Windows.Forms.Label startDateLabel;
         private System.Windows.Forms.Label endDateLabel;
-        private System.Windows.Forms.TextBox startSprintDateTextBox;
-        private System.Windows.Forms.TextBox endSprintDateTextBox;
         private System.Windows.Forms.Button addSprintButton;
+        private System.Windows.Forms.DateTimePicker startSprintDatePicker;
+        private System.Windows.Forms.DateTimePicker endSprintDatePicker;
     }
 }

@@ -123,7 +123,7 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
         [Test]
         public void UpdateTaskStage()
         {
-             var taskToUpdateStage = new TaskModel
+            var taskToUpdateStage = new TaskModel
             {
                 TaskName = "testTask".WithUniqueName(),
                 TaskDesc = "testTaskDescription",
@@ -215,6 +215,53 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
             Setup.RegisterToDeleteAfterTestExecution(developer3ToAssigneToTask);
 
             var isAssignedSuccessful = TaskAccess.AssignUsersToTask(taskAddedToSprint, new List<UserModel> { developer2ToAssigneToTask, developer3ToAssigneToTask });
+            Assert.That(isAssignedSuccessful, Is.True, $"User not assigned to task succesfully: {Messages.Display(taskAddedToSprint)} {Environment.NewLine}{_developerToAssigneToTask}");
+        }
+
+        [Test]
+        public void AssignUsersToTaskWhenUserIdsGivenWhenAssignNewUserAndDeassignOldUser()
+        {
+            var developer2ToAssigneToTask = new UserModel
+            {
+                Username = "testDeveloper".WithUniqueName(),
+                Firstname = "test",
+                Lastname = "developer",
+                Role = UserRoles.Developer,
+                Email = "testDevelope@test.com"
+            };
+
+            UserAccess.Add(developer2ToAssigneToTask, Password);
+            Setup.RegisterToDeleteAfterTestExecution(developer2ToAssigneToTask);
+
+            var developer3ToAssigneToTask = new UserModel
+            {
+                Username = "testDeveloper".WithUniqueName(),
+                Firstname = "test",
+                Lastname = "developer",
+                Role = UserRoles.Developer,
+                Email = "testDevelope@test.com"
+            };
+
+            var taskAddedToSprint = new TaskModel
+            {
+                TaskName = "taskAddedToSprint".WithUniqueName(),
+                TaskDesc = "taskAddedToSprintDescription",
+                TaskType = "T",
+                TaskPriority = int.Parse("15"),
+                TaskEstimatedTime = int.Parse("10"),
+                TaskStage = TaskModel.TaskStages.ToDo,
+                TaskColor = "#ffffff",
+                BacklogProjectId = _project.ProjectId,
+                SprintId = _sprint.SprintId
+            };
+
+            TaskAccess.CreateNewTask(taskAddedToSprint);
+            Setup.RegisterToDeleteAfterTestExecution(taskAddedToSprint);
+
+            UserAccess.Add(developer3ToAssigneToTask, Password);
+            Setup.RegisterToDeleteAfterTestExecution(developer3ToAssigneToTask);
+
+            var isAssignedSuccessful = TaskAccess.AssignUsersToTask(taskAddedToSprint, new List<int> { developer2ToAssigneToTask.UserId, developer3ToAssigneToTask.UserId });
             Assert.That(isAssignedSuccessful, Is.True, $"User not assigned to task succesfully: {Messages.Display(taskAddedToSprint)} {Environment.NewLine}{_developerToAssigneToTask}");
         }
 

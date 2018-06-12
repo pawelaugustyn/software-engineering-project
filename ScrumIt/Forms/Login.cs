@@ -78,11 +78,12 @@ namespace ScrumIt.Forms
 
         }
 
-        private void registerButton_Click(object sender, EventArgs e)
+        private void Login_KeyDown(object sender, KeyEventArgs e)
         {
-            Register reg = new Register();
-            Hide();
-            reg.Show();
+            if (e.KeyCode == Keys.Enter)
+            {
+                loginButton_Click(sender, e);
+            }
         }
     }
 }

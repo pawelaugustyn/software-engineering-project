@@ -172,14 +172,14 @@ namespace ScrumIt.DataAccess
             return users;
         }
 
-        public static List<UserModel> GetUsersByProjectId(int projectid)
+        public static List<UserModel> GetUsersByProjectId(int projectid, bool exclusive = false)
         {
             var users = new List<UserModel>();
-            using (new Connection())
+            using (var c = new Connection(exclusive))
             {
                 var cmd = new NpgsqlCommand("select b.* from projects_has_users a join users b using(uid) where a.project_id = @projectid order by b.uid;")
                 {
-                    Connection = Connection.Conn
+                    Connection = exclusive ? c.ConnExcl : Connection.Conn
                 };
                 cmd.Parameters.AddWithValue("projectid", projectid);
                 using (var reader = cmd.ExecuteReader())
@@ -420,6 +420,7 @@ namespace ScrumIt.DataAccess
 
         public static bool UpdateUserPassword(string password)
         {
+            ValidatePassword(password);
             var userId = AppStateProvider.Instance.CurrentUser.UserId;
             using (new Connection())
             {
