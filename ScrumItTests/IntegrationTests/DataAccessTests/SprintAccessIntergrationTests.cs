@@ -363,6 +363,7 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
             };
 
             SprintAccess.CreateNewSprintForProject(sprintToAdd);
+            Setup.RegisterToDeleteAfterTestExecution(sprintToAdd);
 
             var sprints = SprintAccess.GetNotNotifiedEndingSprints(3, true);
 
