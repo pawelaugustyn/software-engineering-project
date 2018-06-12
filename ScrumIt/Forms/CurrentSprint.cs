@@ -801,9 +801,9 @@ namespace ScrumIt.Forms
                 {
                     MessageBox.Show("wylogowano");
                     UserModel.Logout();
-                    this.Hide();
-                    var l = new Login();
-                    l.Show();
+
+                    Application.Restart();
+                    
                 }
             }
             
@@ -826,9 +826,9 @@ namespace ScrumIt.Forms
                 {
                     MessageBox.Show("wylogowano");
                     UserModel.Logout();
-                    this.Hide();
-                    var l = new Login();
-                    l.Show();
+
+
+                    Application.Restart();
                 }
             }
             else
@@ -841,9 +841,8 @@ namespace ScrumIt.Forms
                 }
                 if (propertiesComboBox.SelectedIndex == 2)
                 {
-                    this.Hide();
-                    var l = new Login();
-                    l.Show();
+
+                    Application.Restart();
                 }
             }
         }
