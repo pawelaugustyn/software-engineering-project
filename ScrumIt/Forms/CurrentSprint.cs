@@ -1086,6 +1086,11 @@ namespace ScrumIt.Forms
                 g.FillRectangle(brush, new Rectangle(0, 0, width, height));
                 brush.Dispose();
                 g.Dispose();
+
+                toDoTextBox.Text = "0";
+                doingTextBox.Text = "0";
+                doneTextBox.Text = "0";
+                maxTextBox.Text = "0";
             }
         }
 
