@@ -465,69 +465,7 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
             AppStateProvider.Instance.CurrentUser = _user;
             Setup.RegisterToDeleteAfterTestExecution(userToAdd);
         }
-        /*
-                [Test]
-        public void AssignUsersToProject()
-        {
-            var projectToAdd = new ProjectModel
-            {
-                ProjectName = "addTestProject".WithUniqueName(),
-                ProjectColor = "#ff0000"
-            };
 
-            var userToAdd0 = new UserModel
-            {
-                Username = "addUser".WithUniqueName(),
-                Firstname = "add",
-                Lastname = "User",
-                Role = UserRoles.Developer,
-                Email = "addUser@test.com"
-            };
-            UserAccess.Add(userToAdd0, "addUser");
-            //ProjectAccess.AddNewUserToProject(userToAdd0.UserId, projectToAdd.ProjectId);
-
-            var userToAdd1 = new UserModel
-            {
-                Username = "addUser".WithUniqueName(),
-                Firstname = "add",
-                Lastname = "User",
-                Role = UserRoles.Developer,
-                Email = "addUser@test.com"
-            };
-            UserAccess.Add(userToAdd1, "addUser");
-
-            var userToAdd2 = new UserModel
-            {
-                Username = "addUser".WithUniqueName(),
-                Firstname = "add",
-                Lastname = "User",
-                Role = UserRoles.Developer,
-                Email = "addUser@test.com"
-            };
-            UserAccess.Add(userToAdd2, "addUser");
-
-            var usersToAdd = new List<UserModel>
-            {
-                userToAdd1,
-                userToAdd2
-            };
-
-            var areUsersAddedToProjectSuccessful =
-                ProjectAccess.AssignUsersToProject(projectToAdd, usersToAdd);
-            var users = UserAccess.GetUsersByProjectId(projectToAdd.ProjectId);
-
-            users.ListNotContains(userToAdd0);
-            users.ListContains(userToAdd1);
-            users.ListContains(userToAdd2);
-
-            Assert.That(areUsersAddedToProjectSuccessful, Is.True, $"Adding new users to project should be successful {Messages.Display(projectToAdd)}.");
-
-            Setup.RegisterToDeleteAfterTestExecution(userToAdd0);
-            Setup.RegisterToDeleteAfterTestExecution(userToAdd1);
-            Setup.RegisterToDeleteAfterTestExecution(userToAdd2);
-            Setup.RegisterToDeleteAfterTestExecution(projectToAdd);
-        }
-         */
         [Test]
         public void AssignUsersToProject()
         {
