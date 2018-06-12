@@ -420,6 +420,7 @@ namespace ScrumIt.DataAccess
 
         public static bool UpdateUserPassword(string password)
         {
+            ValidatePassword(password);
             var userId = AppStateProvider.Instance.CurrentUser.UserId;
             using (new Connection())
             {

@@ -71,14 +71,10 @@ namespace ScrumIt.Forms
             }
 
             var sprintId = 0;
-            var projectId = 0;
+            var projectId = _projectId;
             if (currentSprintRadio.Checked)
             {
                 sprintId = _sprintId;
-            }
-            else
-            {
-                projectId = _projectId;
             }
 
             if (validationFlag)
@@ -99,8 +95,6 @@ namespace ScrumIt.Forms
                     };
                     TaskModel.CreateNewTask(task, new List<UserModel>());
                     CurrentSprint.refresh = true;
-                    // TO DO
-                    // rozroznic kiedy zadanie idzie do backlogu a kiedy do currentSprint
                     Close();
                 }
                 catch (Exception err)

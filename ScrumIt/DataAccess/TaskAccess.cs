@@ -84,11 +84,12 @@ namespace ScrumIt.DataAccess
         //zaktualizuj w bazie dane zadanie nadajac mu nowy stage (przeciagniecia miedzy kolumnami w sprincie)
         public static bool UpdateTaskStage(int taskid, TaskModel.TaskStages newstage)
         {
-            //dzieki using nie musimy martwic sie o rzucanie wyjatkow i nie zamkniecie polaczenia - using to ogarnie za nas
+            if (AppStateProvider.Instance.CurrentUser.Role == UserRoles.Guest)
+                throw new ArgumentException("Brak uprawnien.");
             using (new Connection())
             {
 
-                var cmd = new NpgsqlCommand("update tasks SET task_stage=@newstage where task_id = @taskid;")
+                var cmd = new NpgsqlCommand("update tasks SET task_stage=@newstage where task_id = @taskid and task_stage <> @newstage ;")
                 {
                     Connection = Connection.Conn
                 };
@@ -99,7 +100,7 @@ namespace ScrumIt.DataAccess
                 var howManyAffected = cmd.ExecuteNonQuery();
                 if (howManyAffected == 1)
                     return true;
-                throw new Exception("Brak takiego zadania");
+                else return false;
             }
         }
 
@@ -182,8 +183,8 @@ namespace ScrumIt.DataAccess
 
         public static bool CreateNewTask(TaskModel addedTask, List<UserModel> usersAssignedToTask = null)
         {
-            // TODO
-            // Check permissions for creating new task in that project
+            if (AppStateProvider.Instance.CurrentUser.Role == UserRoles.Guest)
+                throw new ArgumentException("Brak uprawnien.");
             ValidateNewTask(addedTask);
             using (new Connection())
             {
@@ -225,6 +226,8 @@ namespace ScrumIt.DataAccess
 
         public static bool AssignUsersToTask(TaskModel taskToAssignTo, List<UserModel> usersToAssign)
         {
+            if (AppStateProvider.Instance.CurrentUser.Role == UserRoles.Guest)
+                throw new ArgumentException("Brak uprawnien.");
             var usersToAdd = usersToAssign.Select(o => o.UserId).ToList().Distinct();
 
             return AssignUsersToTask(taskToAssignTo, usersToAdd);
@@ -232,6 +235,8 @@ namespace ScrumIt.DataAccess
 
         public static bool AssignUsersToTask(TaskModel taskToAssignTo, IEnumerable<int> usersIdsToAssign)
         {
+            if (AppStateProvider.Instance.CurrentUser.Role == UserRoles.Guest)
+                throw new ArgumentException("Brak uprawnien.");
             using (new Connection())
             {
                 DeassignUsersFromTask(taskToAssignTo.TaskId);
@@ -254,6 +259,8 @@ namespace ScrumIt.DataAccess
 
         public static bool AssignFromBacklogToSprint(int taskid, int sprintId)
         {
+            if (AppStateProvider.Instance.CurrentUser.Role == UserRoles.Guest)
+                throw new ArgumentException("Brak uprawnien.");
             using (new Connection())
             {
                 var cmd = new NpgsqlCommand("UPDATE tasks SET sprint_id = @sprint_id WHERE task_id = @task_id;")
@@ -278,6 +285,8 @@ namespace ScrumIt.DataAccess
 
         private static void DeassignUsersFromTask(int taskid)
         {
+            if (AppStateProvider.Instance.CurrentUser.Role == UserRoles.Guest)
+                throw new ArgumentException("Brak uprawnien.");
             using (new Connection())
             {
                 var cmd = new NpgsqlCommand("DELETE FROM tasks_assigned_users WHERE task_id = @task_id;")
@@ -292,6 +301,8 @@ namespace ScrumIt.DataAccess
 
         public static void RemoveTask(int taskid)
         {
+            if (AppStateProvider.Instance.CurrentUser.Role == UserRoles.Guest)
+                throw new ArgumentException("Brak uprawnien.");
             using (new Connection())
             {
                 DeassignUsersFromTask(taskid);
@@ -308,6 +319,8 @@ namespace ScrumIt.DataAccess
 
         public static bool SetNewColour(TaskModel task, string colour)
         {
+            if (AppStateProvider.Instance.CurrentUser.Role == UserRoles.Guest)
+                throw new ArgumentException("Brak uprawnien.");
             ValidateTaskColor(colour);
             using (new Connection())
             {
@@ -354,7 +367,7 @@ namespace ScrumIt.DataAccess
             ValidateTaskPriority(addedTask.TaskPriority);
             ValidateTaskEstimatedTime(addedTask.TaskEstimatedTime);
             ValidateTaskColor(addedTask.TaskColor);
-            ValidateTaskAssignment(addedTask.BacklogProjectId, addedTask.SprintId);
+            ValidateTaskAssignment(addedTask.BacklogProjectId);
         }
 
         private static void ValidateUpdatedTask(TaskModel updatedTask)
@@ -388,10 +401,10 @@ namespace ScrumIt.DataAccess
                 throw new ArgumentException("Nie podano prawidłowego oznaczenia RGB koloru.");
         }
 
-        private static void ValidateTaskAssignment(int backlogProjectId, int sprintId)
+        private static void ValidateTaskAssignment(int backlogProjectId)
         {
-            if (backlogProjectId == 0 && sprintId == 0)
-                throw new ArgumentException("Zadanie musi być przypisane do sprintu lub backlogu!");
+            if (backlogProjectId == 0)
+                throw new ArgumentException("Zadanie musi być przypisane bezposrednio do projektu!");
         }
     }
 }

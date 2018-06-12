@@ -281,53 +281,79 @@ namespace ScrumIt.DataAccess
             return endDate;
         }
 
-        public static List<SprintModel> GetNotNotifiedEndingSprints(int days_till_end, bool exclusive = false)
+        public static Dictionary<string, int> GetSprintCompletionData(int sprintId)
         {
-            var sprints = new List<SprintModel>();
-            var end_time = DateTime.Now.AddDays(days_till_end);
-            var current_time = DateTime.Now;
-            using (var c = new Connection(exclusive))
+            var dict = new Dictionary<string, int>();
+            using (new Connection())
             {
-                var cmd = new NpgsqlCommand("select * from sprints where sprint_end < @enddate::timestamp and sprint_end > @currentdate::timestamp and emails_sent='false';")
+                var cmd = new NpgsqlCommand("select todo, inprogress, done, total from sprint_completion_new where sprint_id = @sprint_id")
                 {
-                    Connection = exclusive ? c.ConnExcl : Connection.Conn
+                    Connection = Connection.Conn
                 };
-                string end_datetime = end_time.ToString("yyyy-MM-dd hh:mm:ss");
-                string current_datetime = current_time.ToString("yyyy-MM-dd hh:mm:ss");
-                cmd.Parameters.AddWithValue("currentdate", current_datetime);
-                cmd.Parameters.AddWithValue("enddate", end_datetime);
+                cmd.Parameters.AddWithValue("sprint_id", sprintId);
                 using (var reader = cmd.ExecuteReader())
                 {
                     while (reader.Read())
                     {
-                        sprints.Add(new SprintModel
-                        {
-                            SprintId = (int)reader[0],
-                            ParentProjectId = (int)reader[1],
-                            StartDateTime = (DateTime)reader[2],
-                            EndDateTime = (DateTime)reader[3]
-                        });
+                        dict.Add("todo", Convert.ToInt32((long) reader[0]));
+                        dict.Add("inprogress", Convert.ToInt32((long) reader[1]));
+                        dict.Add("done", Convert.ToInt32((long) reader[2]));
+                        dict.Add("total", Convert.ToInt32((long) reader[3]));
+                        break;
                     }
                 }
             }
-
-            return sprints;
+            return dict;
         }
-
-        public static bool ChangeEmailSentStatus(int sprintid, bool exclusive = false)
-        {
-            using (var c = new Connection(exclusive))
-            {
-                var cmd = new NpgsqlCommand("update sprints set emails_sent='true' where sprint_id=@sprintid;")
-                {
-                    Connection = exclusive ? c.ConnExcl : Connection.Conn
-                };
-                cmd.Parameters.AddWithValue("sprintid", sprintid);
-                var res = cmd.ExecuteNonQuery();
-
-                return res == 1;
-            }
-        }
+              
+              
++        public static List<SprintModel> GetNotNotifiedEndingSprints(int days_till_end, bool exclusive = false)
++        {
++            var sprints = new List<SprintModel>();
++            var end_time = DateTime.Now.AddDays(days_till_end);
++            var current_time = DateTime.Now;
++            using (var c = new Connection(exclusive))
++            {
++                var cmd = new NpgsqlCommand("select * from sprints where sprint_end < @enddate::timestamp and sprint_end > @currentdate::timestamp and emails_sent='false';")
++                {
++                    Connection = exclusive ? c.ConnExcl : Connection.Conn
++                };
++                string end_datetime = end_time.ToString("yyyy-MM-dd hh:mm:ss");
++                string current_datetime = current_time.ToString("yyyy-MM-dd hh:mm:ss");
++                cmd.Parameters.AddWithValue("currentdate", current_datetime);
++                cmd.Parameters.AddWithValue("enddate", end_datetime);
++                using (var reader = cmd.ExecuteReader())
++                {
++                    while (reader.Read())
++                    {
++                        sprints.Add(new SprintModel
++                        {
++                            SprintId = (int)reader[0],
++                            ParentProjectId = (int)reader[1],
++                            StartDateTime = (DateTime)reader[2],
++                            EndDateTime = (DateTime)reader[3]
++                        });
++                    }
++                }
++            }
++
++            return sprints;
++        }
++
++        public static bool ChangeEmailSentStatus(int sprintid, bool exclusive = false)
++        {
++            using (var c = new Connection(exclusive))
++            {
++                var cmd = new NpgsqlCommand("update sprints set emails_sent='true' where sprint_id=@sprintid;")
++                {
++                    Connection = exclusive ? c.ConnExcl : Connection.Conn
++                };
++                cmd.Parameters.AddWithValue("sprintid", sprintid);
++                var res = cmd.ExecuteNonQuery();
++
++                return res == 1;
++            }
++        }
 
         private static void ValidateNewSprint(SprintModel addedSprint)
         {
@@ -349,9 +375,6 @@ namespace ScrumIt.DataAccess
         {
             if (endDate == null)
                 throw new ArgumentException("Brak daty zakonczenia sprintu");
-            // TO DO
-            // czy tu potrzebna jest inna walidacja?
-            // ograniczenie na dlugosc sprintu (3-31 dni) jest zrobione na frontendzie
         }
 
         private static void ValidateSprintDuration(SprintModel sprint)

@@ -164,7 +164,8 @@ namespace ScrumIt.Forms
         {
             try
             {
-                _sprintId = SprintModel.GetMostRecentSprintForProject(_projectId).SprintId;
+                var sprint = SprintModel.GetMostRecentSprintForProject(_projectId);
+                _sprintId = sprint.SprintId;
                 var taskList = TaskModel.GetTasksBySprintId(_sprintId);
                 scrumBoardPanel.Controls.Clear();
 
@@ -173,7 +174,8 @@ namespace ScrumIt.Forms
                 {
                     CreateTaskPanel(task, index++);
                 }
-
+                progressBar.Refresh();
+                DateTextBox.Text = sprint.StartDateTime.ToShortDateString() + " / " + sprint.EndDateTime.ToShortDateString();
             }
             catch (Exception err)
             {
@@ -222,8 +224,9 @@ namespace ScrumIt.Forms
 
             try
             {
-                TaskModel.UpdateTaskStage(task.TaskId, newStage);
-                progressBar.Refresh();
+                bool checkIfRecordAffected = TaskModel.UpdateTaskStage(task.TaskId, newStage);
+                if(checkIfRecordAffected)
+                    progressBar.Refresh();
             }
 
             catch (Exception err)
@@ -428,6 +431,9 @@ namespace ScrumIt.Forms
             DateTextBox.Text = sprint.StartDateTime.ToShortDateString() + " / " + sprint.EndDateTime.ToShortDateString();
 
             _sprintId = sprintId;
+            progressBar.Refresh();
+
+            
             for (var i = 0; i < taskList.Count; i++)
             {
                 if (endDate < DateTime.Now)
@@ -1050,29 +1056,12 @@ namespace ScrumIt.Forms
                                                 + "kolor zielony - zadania ukończone");
             try
             {
-                var taskList = TaskModel.GetTasksBySprintId(_sprintId);
-                var sum = 0;
-                var done = 0;
-                var todo = 0;
-                var doing = 0;
-                foreach (var task in taskList)
-                {
-                    sum += task.TaskPriority;
-                    if (task.TaskStage == TaskModel.TaskStages.ToDo)
-                    {
-                        todo += task.TaskPriority;
-                    }
-
-                    if (task.TaskStage == TaskModel.TaskStages.Doing)
-                    {
-                        doing += task.TaskPriority;
-                    }
-
-                    if (task.TaskStage == TaskModel.TaskStages.Completed)
-                    {
-                        done += task.TaskPriority;
-                    }
-                }
+                var sprintData = SprintModel.GetSprintCompletionData(_sprintId);
+                int sum, done, todo, doing;
+                if (!sprintData.TryGetValue("total", out sum) || !sprintData.TryGetValue("inprogress", out doing)
+                                                              || !sprintData.TryGetValue("todo", out todo) ||
+                                                              !sprintData.TryGetValue("done", out done))
+                    throw new Exception();
 
 
                 SolidBrush greenBrush = new SolidBrush(Color.GreenYellow);

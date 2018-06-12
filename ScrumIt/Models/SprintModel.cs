@@ -67,5 +67,9 @@ namespace ScrumIt.Models
             return SprintAccess.GetEndOfLastSprintByProjectId(projectId);
         }
 
+        public static Dictionary<string, int> GetSprintCompletionData(int sprintId)
+        {
+            return SprintAccess.GetSprintCompletionData(sprintId);
+        }
     }
 }
