@@ -25,11 +25,8 @@ namespace ScrumIt.Forms
 
         private void addSprintButton_Click(object sender, System.EventArgs e)
         {
-            var initialStartDate = startSprintDatePicker.Value;
-            var initialEndDate = endSprintDatePicker.Value;
-            var startDate = initialStartDate.Date;
-            var endDate = initialEndDate.Date.AddDays(1).AddSeconds(-1);
-
+            var startDate = startSprintDatePicker.Value;
+            var endDate = endSprintDatePicker.Value;
             var validationFlag = false;
 
             if (endDate <= startDate)

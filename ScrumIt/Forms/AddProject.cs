@@ -25,11 +25,8 @@ namespace ScrumIt.Forms
         {
             var name = projectNameTextBox.Text;
             var color = changeColorButton.BackColor;
-            var initialStartDate = DateTime.Now;
-            var initialEndDate = endSprintDatePicker.Value;
-            var startDateFormat = initialStartDate.Date;
-            var endSprintDate = initialEndDate.Date.AddDays(1).AddSeconds(-1);
-
+            var endSprintDate = endSprintDatePicker.Value;
+            DateTime startDateFormat = DateTime.Now;
             var validationFlag = false;
             if (name != "")
             {
