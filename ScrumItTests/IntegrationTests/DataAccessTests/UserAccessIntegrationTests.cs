@@ -39,7 +39,7 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
             _project = new ProjectModel
             {
                 ProjectName = "TestProject".WithUniqueName(),
-                ProjectColor = "#ff0000"
+                ProjectColor = "#88f72c"
             };
 
             ProjectAccess.CreateNewProject(_project);
@@ -164,7 +164,7 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
             var project = new ProjectModel
             {
                 ProjectName = "TestProject".WithUniqueName(),
-                ProjectColor = "#ff0000"
+                ProjectColor = "#827f62"
             };
 
             ProjectAccess.CreateNewProject(project);
@@ -211,7 +211,7 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
             var project = new ProjectModel
             {
                 ProjectName = "TestProject".WithUniqueName(),
-                ProjectColor = "#ff0000"
+                ProjectColor = "#ff8293"
             };
 
             ProjectAccess.CreateNewProject(project);
