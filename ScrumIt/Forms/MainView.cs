@@ -57,19 +57,19 @@ namespace ScrumIt.Forms
         private void Draw_Projects_Table()
         {
             TableLayoutPanel panel = new TableLayoutPanel();
-            panel.Location = new Point(50, 150);
+            panel.Location = new Point(25, 150);
             panel.Name = "ProjectsTable";
             panel.Size = new System.Drawing.Size(450, 400);
             panel.AutoScroll = true;
             panel.MaximumSize = new Size(450, 400);
 
             // ilosc kolumn i wierszy na poczatku - reszta dodana dynamicznie
-            panel.ColumnCount = 1;
+            panel.ColumnCount = 2;
             panel.RowCount = 0;
 
             //kolumny
-            panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-
+            panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 88F));
+            panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 12F));
             // wiersze - dynamicznie
             #region newProjectButton
             panel.RowCount = panel.RowCount + 1;
@@ -134,12 +134,12 @@ namespace ScrumIt.Forms
                 for (int i = 0; i < projectsList.Count; i++)
                     projects.Add(projectsList[i].ProjectId, projectsList[i].ProjectName);
 
-                foreach (KeyValuePair<int, string> dict in projects)
+                foreach (var project in projectsList)
                 {
                     panel.RowCount = panel.RowCount + 1;
                     panel.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
                     //panel.Controls.Add(new Label() { Text = projectsNames[i],/* TextAlign = ContentAlignment.MiddleCenter*/ }, 0, panel.RowCount - 1);
-
+                  
                     var b = new Button();
                     b.FlatStyle = FlatStyle.Flat;
                     b.Font = new Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point,
@@ -149,7 +149,7 @@ namespace ScrumIt.Forms
                     {
                         foreach (var proj in myprojectsList)
                         {
-                            if (proj.ProjectId == dict.Key)
+                            if (proj.ProjectId == project.ProjectId)
                             {
                                 b.BackColor = _panelColor;
                                 break;
@@ -175,16 +175,23 @@ namespace ScrumIt.Forms
                     b.FlatAppearance.BorderSize = 0;
                     b.Click += delegate
                     {
-                        var sprint = new CurrentSprint(dict.Key);
+                        var sprint = new CurrentSprint(project.ProjectId);
                         sprint.Show();
                         this.Hide();
                         //MessageBox.Show("Buttonclick");
                     };
-                    b.Text = dict.Value;
-                    b.Name = dict.Value + "Button";
+                    b.Text = project.ProjectName;
+                    b.Name = project.ProjectName + "Button";
                     b.Size = new System.Drawing.Size(400, 40);
                     panel.Controls.Add(b, 0, panel.RowCount - 1);
 
+                    var projectColor = new Button
+                    {
+                        Size = new Size(41,41),
+                        Enabled = false,
+                        BackColor = ColorTranslator.FromHtml(project.ProjectColor)
+                    };
+                    panel.Controls.Add(projectColor, 1, panel.RowCount - 1);
                 }
 
             }
