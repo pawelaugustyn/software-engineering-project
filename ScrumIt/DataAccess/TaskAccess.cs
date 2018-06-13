@@ -307,7 +307,7 @@ namespace ScrumIt.DataAccess
             {
                 foreach (var user in users)
                 {
-                    var cmd = new NpgsqlCommand("DELETE FROM tasks_assigned_users WHERE task_id IN (SELECT projectTasks.* FROM (SELECT task_id FROM tasks WHERE project_id=@projectId) projectTasks JOIN tasks_assigned_users AS tasksUsers USING (task_id) WHERE uid=@userId) AND uid=@userId;")
+                    var cmd = new NpgsqlCommand("delete from tasks_assigned_users where uid = @userId and task_id in (select t.task_id from tasks t join sprints s using (sprint_id) where s.project_id = @projectId);")
                     {
                         Connection = Connection.Conn
                     };
