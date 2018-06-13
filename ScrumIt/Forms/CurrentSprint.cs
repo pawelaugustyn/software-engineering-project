@@ -433,16 +433,32 @@ namespace ScrumIt.Forms
             _sprintId = sprintId;
             progressBar.Refresh();
 
-            
-            for (var i = 0; i < taskList.Count; i++)
+            // TO DO sprawdzić czy jest ok
+            if (taskList.Count == 0)
             {
                 if (endDate < DateTime.Now)
                 {
-                    CreateHistoryTaskPanel(taskList[i], i);
+                    backlogButton.Enabled = false;
+                    addTaskButton.Enabled = false;
                 }
                 else
                 {
-                    CreateFutureTaskPanel(taskList[i], i);
+                    backlogButton.Enabled = true;
+                    addTaskButton.Enabled = true;
+                }
+            }
+            else
+            {
+                for (var i = 0; i < taskList.Count; i++)
+                {
+                    if (endDate < DateTime.Now)
+                    {
+                        CreateHistoryTaskPanel(taskList[i], i);
+                    }
+                    else
+                    {
+                        CreateFutureTaskPanel(taskList[i], i);
+                    }
                 }
             }
         }
