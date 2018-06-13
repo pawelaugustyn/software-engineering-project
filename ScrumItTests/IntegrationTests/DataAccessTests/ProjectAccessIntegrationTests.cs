@@ -45,8 +45,8 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
             _sprint = new SprintModel
             {
                 ParentProjectId = _project.ProjectId,
-                EndDateTime = DateTime.Parse( DateTime.Now.AddDays(2).ToString("yyyy-MM-dd hh:mm:ss") ),
-                StartDateTime = DateTime.Parse( DateTime.Now.AddDays(-5).ToString("yyyy-MM-dd hh:mm:ss") )
+                EndDateTime = DateTime.Parse(DateTime.Now.AddDays(2).ToString("yyyy-MM-dd hh:mm:ss")),
+                StartDateTime = DateTime.Parse(DateTime.Now.AddDays(-5).ToString("yyyy-MM-dd hh:mm:ss"))
             };
 
             SprintAccess.CreateNewSprintForProject(_sprint);
@@ -168,6 +168,38 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
                 "Exception should be thrown, because it should not be possible to add project with wrong colour string.");
 
             Assert.That(isAddedSuccessful, Is.False, $"Adding project should not be successful {Messages.Display(projectToAdd)}.");
+        }
+
+        [Test]
+        public void AddProjectWitwNotUniqueColourShouldThrow()
+        {
+            var projectToAdd = new ProjectModel
+            {
+                ProjectName = "addTestProject".WithUniqueName(),
+                ProjectColor = "#044d36"
+            };
+            var projectWithTheSameName = ProjectAccess.GetProjectByName(projectToAdd.ProjectName);
+            Assert.That(projectWithTheSameName.IsDeepEqual(new ProjectModel()), Is.True, "Project should not exist.");
+
+            var isAddedSuccessful = ProjectAccess.CreateNewProject(projectToAdd);
+            var projectAfterAdd = ProjectAccess.GetProjectByName(projectToAdd.ProjectName);
+
+            Assertion.Equals(projectToAdd, projectAfterAdd, "Project with unique name not added correctly to DB.");
+            Assert.That(isAddedSuccessful, Is.True, $"Adding project should be successful {Messages.Display(projectToAdd)}.");
+            Setup.RegisterToDeleteAfterTestExecution(projectToAdd);
+
+            var projectToAdd2 = new ProjectModel
+            {
+                ProjectName = "addTestProject".WithUniqueName(),
+                ProjectColor = "#044d36"
+            };
+
+            isAddedSuccessful = false;
+
+            Assert.Throws<ArgumentException>(delegate { isAddedSuccessful = ProjectAccess.CreateNewProject(projectToAdd2); },
+                "Exception should be thrown, because it should not be possible to add project with wrong colour string.");
+
+            Assert.That(isAddedSuccessful, Is.False, $"Adding project should not be successful {Messages.Display(projectToAdd2)}.");
         }
 
         [Test]

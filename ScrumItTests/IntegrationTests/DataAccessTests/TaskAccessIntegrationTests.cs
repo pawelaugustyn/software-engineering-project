@@ -137,10 +137,11 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
 
             TaskAccess.CreateNewTask(taskToUpdateStage);
             Setup.RegisterToDeleteAfterTestExecution(taskToUpdateStage);
-            
+
             var isUpdatedSuccessful = TaskAccess.UpdateTaskStage(taskToUpdateStage.TaskId, TaskModel.TaskStages.Doing);
 
-            Assert.That(isUpdatedSuccessful, Is.True, $"Task not updated succesfully: {Messages.Display(taskToUpdateStage)}");
+            Assert.That(isUpdatedSuccessful, Is.True,
+                $"Task not updated succesfully: {Messages.Display(taskToUpdateStage)}");
 
             var task = TaskAccess.GetTaskById(taskToUpdateStage.TaskId);
 
@@ -167,8 +168,10 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
         [Test]
         public void AssignUsersToTaskWhenAssignNewUser()
         {
-            var isAssignedSuccessful = TaskAccess.AssignUsersToTask(_taskAddedToSprint, new List<UserModel> { _developerToAssigneToTask });
-            Assert.That(isAssignedSuccessful, Is.True, $"User not assigned to task succesfully: {Messages.Display(_taskAddedToSprint)} {Environment.NewLine}{_developerToAssigneToTask}");
+            var isAssignedSuccessful =
+                TaskAccess.AssignUsersToTask(_taskAddedToSprint, new List<UserModel> { _developerToAssigneToTask });
+            Assert.That(isAssignedSuccessful, Is.True,
+                $"User not assigned to task succesfully: {Messages.Display(_taskAddedToSprint)} {Environment.NewLine}{_developerToAssigneToTask}");
         }
 
         [Test]
@@ -214,8 +217,10 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
             UserAccess.Add(developer3ToAssigneToTask, Password);
             Setup.RegisterToDeleteAfterTestExecution(developer3ToAssigneToTask);
 
-            var isAssignedSuccessful = TaskAccess.AssignUsersToTask(taskAddedToSprint, new List<UserModel> { developer2ToAssigneToTask, developer3ToAssigneToTask });
-            Assert.That(isAssignedSuccessful, Is.True, $"User not assigned to task succesfully: {Messages.Display(taskAddedToSprint)} {Environment.NewLine}{_developerToAssigneToTask}");
+            var isAssignedSuccessful = TaskAccess.AssignUsersToTask(taskAddedToSprint,
+                new List<UserModel> { developer2ToAssigneToTask, developer3ToAssigneToTask });
+            Assert.That(isAssignedSuccessful, Is.True,
+                $"User not assigned to task succesfully: {Messages.Display(taskAddedToSprint)} {Environment.NewLine}{_developerToAssigneToTask}");
         }
 
         [Test]
@@ -261,8 +266,10 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
             UserAccess.Add(developer3ToAssigneToTask, Password);
             Setup.RegisterToDeleteAfterTestExecution(developer3ToAssigneToTask);
 
-            var isAssignedSuccessful = TaskAccess.AssignUsersToTask(taskAddedToSprint, new List<int> { developer2ToAssigneToTask.UserId, developer3ToAssigneToTask.UserId });
-            Assert.That(isAssignedSuccessful, Is.True, $"User not assigned to task succesfully: {Messages.Display(taskAddedToSprint)} {Environment.NewLine}{_developerToAssigneToTask}");
+            var isAssignedSuccessful = TaskAccess.AssignUsersToTask(taskAddedToSprint,
+                new List<int> { developer2ToAssigneToTask.UserId, developer3ToAssigneToTask.UserId });
+            Assert.That(isAssignedSuccessful, Is.True,
+                $"User not assigned to task succesfully: {Messages.Display(taskAddedToSprint)} {Environment.NewLine}{_developerToAssigneToTask}");
         }
 
         [Test]
@@ -290,7 +297,8 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
 
             var isAssignedSuccessful = TaskAccess.AssignFromBacklogToSprint(taskInBacklog.TaskId, _sprint.SprintId);
 
-            Assert.That(isAssignedSuccessful, Is.True, $"Task not assigned from backlog to sprint succesfully: {Messages.Display(taskInBacklog)}");
+            Assert.That(isAssignedSuccessful, Is.True,
+                $"Task not assigned from backlog to sprint succesfully: {Messages.Display(taskInBacklog)}");
 
             tasks = TaskAccess.GetProjectBacklogTasks(_project.ProjectId);
 
@@ -318,7 +326,8 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
 
             const string colour = "#0000ff";
             var isSetSuccessful = TaskAccess.SetNewColour(taskToEditColor, colour);
-            Assert.That(isSetSuccessful, Is.True, $"Task color should be changed to {colour}: {Messages.Display(taskToEditColor)}");
+            Assert.That(isSetSuccessful, Is.True,
+                $"Task color should be changed to {colour}: {Messages.Display(taskToEditColor)}");
 
             var taskAfterSet = TaskAccess.GetTaskById(taskToEditColor.TaskId);
             Assertion.Equals(taskAfterSet, taskToEditColor);
@@ -349,7 +358,8 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
 
             var isUpdatedSuccessful = TaskAccess.UpdateTask(taskToUpdate);
 
-            Assert.That(isUpdatedSuccessful, Is.True, $"Task not updated succesfully: {Messages.Display(taskToUpdate)}");
+            Assert.That(isUpdatedSuccessful, Is.True,
+                $"Task not updated succesfully: {Messages.Display(taskToUpdate)}");
 
             var task = TaskAccess.GetTaskById(taskToUpdate.TaskId);
 
@@ -378,6 +388,357 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
 
             Assertion.NotEquals(task, taskToRemove);
             Assertion.Equals(task, new TaskModel());
+        }
+
+        [Test]
+        public void X_UpdateTaskStageAsGuestShouldThrow()
+        {
+            AppStateProvider.Instance.CurrentUser = _user;
+
+            var addedTask = new TaskModel
+            {
+                TaskName = "testTask".WithUniqueName(),
+                TaskDesc = "testTaskDescription",
+                TaskType = "T",
+                TaskPriority = int.Parse("15"),
+                TaskEstimatedTime = int.Parse("10"),
+                TaskStage = TaskModel.TaskStages.ToDo,
+                TaskColor = "#ffffff",
+                BacklogProjectId = _project.ProjectId,
+            };
+
+            TaskAccess.CreateNewTask(addedTask);
+            Setup.RegisterToDeleteAfterTestExecution(addedTask);
+
+            AppStateProvider.Instance.CurrentUser = new UserModel();
+
+            //Update task stage
+            var operationSuccessful = true;
+
+            Assert.Throws<ArgumentException>(
+                delegate
+                {
+                    operationSuccessful = TaskAccess.UpdateTaskStage(addedTask.TaskId, TaskModel.TaskStages.Completed);
+                },
+                "Exception should be thrown, because it should not be possible to update task stage as guest.");
+            Assert.That(operationSuccessful, Is.True,
+                $"Updating task stage as guest not be successful {Messages.Display(addedTask)}.");
+
+            var task = TaskAccess.GetTaskById(addedTask.TaskId);
+            Assertion.Equals(task, addedTask);
+
+            AppStateProvider.Instance.CurrentUser = _user;
+        }
+
+        [Test]
+        public void X_CreateNewTaskAsGuestShouldThrow()
+        {
+            AppStateProvider.Instance.CurrentUser = _user;
+
+            var addedTask = new TaskModel
+            {
+                TaskName = "testTask".WithUniqueName(),
+                TaskDesc = "testTaskDescription",
+                TaskType = "T",
+                TaskPriority = int.Parse("15"),
+                TaskEstimatedTime = int.Parse("10"),
+                TaskStage = TaskModel.TaskStages.ToDo,
+                TaskColor = "#ffffff",
+                BacklogProjectId = _project.ProjectId,
+            };
+
+            TaskAccess.CreateNewTask(addedTask);
+            Setup.RegisterToDeleteAfterTestExecution(addedTask);
+
+            AppStateProvider.Instance.CurrentUser = new UserModel();
+
+            //Create new task
+            var operationSuccessful = true;
+            var taskToAdd = new TaskModel
+            {
+                TaskName = "testTask".WithUniqueName(),
+                TaskDesc = "testTaskDescription",
+                TaskType = "T",
+                TaskPriority = int.Parse("15"),
+                TaskEstimatedTime = int.Parse("10"),
+                TaskStage = TaskModel.TaskStages.ToDo,
+                TaskColor = "#ffffff",
+                BacklogProjectId = _project.ProjectId,
+            };
+
+            Assert.Throws<ArgumentException>(
+                delegate { operationSuccessful = TaskAccess.CreateNewTask(taskToAdd); },
+                "Exception should be thrown, because it should not be possible to create task as guest.");
+            Assert.That(operationSuccessful, Is.True,
+                $"Creating task as guest not be successful {Messages.Display(addedTask)}.");
+
+            var task = TaskAccess.GetTaskById(addedTask.TaskId);
+            Assertion.Equals(task, addedTask);
+
+            AppStateProvider.Instance.CurrentUser = _user;
+        }
+
+        [Test]
+        public void X_AssignUsersToTaskAsGuestShouldThrow()
+        {
+            AppStateProvider.Instance.CurrentUser = _user;
+
+            var addedTask = new TaskModel
+            {
+                TaskName = "testTask".WithUniqueName(),
+                TaskDesc = "testTaskDescription",
+                TaskType = "T",
+                TaskPriority = int.Parse("15"),
+                TaskEstimatedTime = int.Parse("10"),
+                TaskStage = TaskModel.TaskStages.ToDo,
+                TaskColor = "#ffffff",
+                BacklogProjectId = _project.ProjectId,
+            };
+
+            TaskAccess.CreateNewTask(addedTask);
+            Setup.RegisterToDeleteAfterTestExecution(addedTask);
+
+            AppStateProvider.Instance.CurrentUser = new UserModel();
+
+            var operationSuccessful = true;
+
+            var user = new UserModel
+            {
+                Username = "testDeveloper".WithUniqueName(),
+                Firstname = "test",
+                Lastname = "developer",
+                Role = UserRoles.Developer,
+                Email = "testDeveloper@test.com"
+            };
+
+            Assert.Throws<ArgumentException>(
+                delegate
+                {
+                    operationSuccessful =
+                        TaskAccess.AssignUsersToTask(addedTask, new List<UserModel> { user });
+                },
+                "Exception should be thrown, because it should not be possible to assign user to task as guest.");
+            Assert.That(operationSuccessful, Is.True,
+                $"Assigning user to task as guest not be successful {Messages.Display(addedTask)}.");
+
+            var task = TaskAccess.GetTaskById(addedTask.TaskId);
+            Assertion.Equals(task, addedTask);
+
+            AppStateProvider.Instance.CurrentUser = _user;
+        }
+
+        [Test]
+        public void X_AssignUsersToTaskByIdAsGuestShouldThrow()
+        {
+            AppStateProvider.Instance.CurrentUser = _user;
+
+            var addedTask = new TaskModel
+            {
+                TaskName = "testTask".WithUniqueName(),
+                TaskDesc = "testTaskDescription",
+                TaskType = "T",
+                TaskPriority = int.Parse("15"),
+                TaskEstimatedTime = int.Parse("10"),
+                TaskStage = TaskModel.TaskStages.ToDo,
+                TaskColor = "#ffffff",
+                BacklogProjectId = _project.ProjectId,
+            };
+
+            TaskAccess.CreateNewTask(addedTask);
+            Setup.RegisterToDeleteAfterTestExecution(addedTask);
+
+            AppStateProvider.Instance.CurrentUser = new UserModel();
+
+            var operationSuccessful = true;
+
+            var user = new UserModel
+            {
+                Username = "testDeveloper".WithUniqueName(),
+                Firstname = "test",
+                Lastname = "developer",
+                Role = UserRoles.Developer,
+                Email = "testDeveloper@test.com"
+            };
+
+            Assert.Throws<ArgumentException>(
+                delegate
+                {
+                    operationSuccessful =
+                        TaskAccess.AssignUsersToTask(addedTask, new List<int>(user.UserId));
+                },
+                "Exception should be thrown, because it should not be possible to assign user to task as guest.");
+            Assert.That(operationSuccessful, Is.True,
+                $"Assigning user to task as guest not be successful {Messages.Display(addedTask)}.");
+
+            var task = TaskAccess.GetTaskById(addedTask.TaskId);
+            Assertion.Equals(task, addedTask);
+
+            AppStateProvider.Instance.CurrentUser = _user;
+        }
+
+        [Test]
+        public void X_AssignFromBacklogToSprintAsGuestShouldThrow()
+        {
+            AppStateProvider.Instance.CurrentUser = _user;
+
+            var addedTask = new TaskModel
+            {
+                TaskName = "testTask".WithUniqueName(),
+                TaskDesc = "testTaskDescription",
+                TaskType = "T",
+                TaskPriority = int.Parse("15"),
+                TaskEstimatedTime = int.Parse("10"),
+                TaskStage = TaskModel.TaskStages.ToDo,
+                TaskColor = "#ffffff",
+                BacklogProjectId = _project.ProjectId,
+            };
+
+            TaskAccess.CreateNewTask(addedTask);
+            Setup.RegisterToDeleteAfterTestExecution(addedTask);
+
+            AppStateProvider.Instance.CurrentUser = new UserModel();
+
+            var operationSuccessful = true;
+
+            Assert.Throws<ArgumentException>(
+                delegate
+                {
+                    operationSuccessful = TaskAccess.AssignFromBacklogToSprint(addedTask.TaskId, _sprint.SprintId);
+                },
+                "Exception should be thrown, because it should not be possible to assign task from backlog to sprint as guest.");
+            Assert.That(operationSuccessful, Is.True,
+                $"Assigning task from backlog to sprint as guest not be successful {Messages.Display(addedTask)}.");
+
+            var task = TaskAccess.GetTaskById(addedTask.TaskId);
+            Assertion.Equals(task, addedTask);
+
+            AppStateProvider.Instance.CurrentUser = _user;
+        }
+
+        [Test]
+        public void X_RemoveTasktAsGuestShouldThrow()
+        {
+            AppStateProvider.Instance.CurrentUser = _user;
+
+            var addedTask = new TaskModel
+            {
+                TaskName = "testTask".WithUniqueName(),
+                TaskDesc = "testTaskDescription",
+                TaskType = "T",
+                TaskPriority = int.Parse("15"),
+                TaskEstimatedTime = int.Parse("10"),
+                TaskStage = TaskModel.TaskStages.ToDo,
+                TaskColor = "#ffffff",
+                BacklogProjectId = _project.ProjectId,
+            };
+
+            TaskAccess.CreateNewTask(addedTask);
+            Setup.RegisterToDeleteAfterTestExecution(addedTask);
+
+            AppStateProvider.Instance.CurrentUser = new UserModel();
+
+            Assert.Throws<ArgumentException>(
+                delegate
+                {
+                    TaskAccess.RemoveTask(addedTask.TaskId);
+                },
+                "Exception should be thrown, because it should not be possible to assign task from backlog to sprint as guest.");
+
+            var task = TaskAccess.GetTaskById(addedTask.TaskId);
+            Assertion.Equals(task, addedTask);
+
+            AppStateProvider.Instance.CurrentUser = _user;
+        }
+
+        [Test]
+        public void X_SetNewColourAsGuestShouldThrow()
+        {
+            AppStateProvider.Instance.CurrentUser = _user;
+
+            var addedTask = new TaskModel
+            {
+                TaskName = "testTask".WithUniqueName(),
+                TaskDesc = "testTaskDescription",
+                TaskType = "T",
+                TaskPriority = int.Parse("15"),
+                TaskEstimatedTime = int.Parse("10"),
+                TaskStage = TaskModel.TaskStages.ToDo,
+                TaskColor = "#ffffff",
+                BacklogProjectId = _project.ProjectId,
+            };
+
+            TaskAccess.CreateNewTask(addedTask);
+            Setup.RegisterToDeleteAfterTestExecution(addedTask);
+
+            AppStateProvider.Instance.CurrentUser = new UserModel();
+
+            var operationSuccessful = true;
+
+            Assert.Throws<ArgumentException>(
+                delegate
+                {
+                    operationSuccessful = TaskAccess.SetNewColour(addedTask, "#076e4e");
+                },
+                "Exception should be thrown, because it should not be possible to set new task color as guest.");
+            Assert.That(operationSuccessful, Is.True,
+                $"Setting new task color as guest not be successful {Messages.Display(addedTask)}.");
+
+            var task = TaskAccess.GetTaskById(addedTask.TaskId);
+            Assertion.Equals(task, addedTask);
+
+            AppStateProvider.Instance.CurrentUser = _user;
+        }
+
+        [Test]
+        public void X_UpdateTaskAsGuestShouldThrow()
+        {
+            AppStateProvider.Instance.CurrentUser = _user;
+
+            var addedTask = new TaskModel
+            {
+                TaskName = "testTask".WithUniqueName(),
+                TaskDesc = "testTaskDescription",
+                TaskType = "T",
+                TaskPriority = int.Parse("15"),
+                TaskEstimatedTime = int.Parse("10"),
+                TaskStage = TaskModel.TaskStages.ToDo,
+                TaskColor = "#ffffff",
+                BacklogProjectId = _project.ProjectId,
+            };
+
+            TaskAccess.CreateNewTask(addedTask);
+            Setup.RegisterToDeleteAfterTestExecution(addedTask);
+
+            AppStateProvider.Instance.CurrentUser = new UserModel();
+
+            var operationSuccessful = true;
+            var updatedTask = new TaskModel
+            {
+                BacklogProjectId = addedTask.BacklogProjectId,
+                SprintId = addedTask.SprintId,
+                TaskColor = addedTask.TaskColor,
+                TaskDesc = addedTask.TaskDesc,
+                TaskEstimatedTime = addedTask.TaskEstimatedTime,
+                TaskId = addedTask.TaskId,
+                TaskName = "updatedTask".WithUniqueName(),
+                TaskPriority = addedTask.TaskPriority,
+                TaskStage = addedTask.TaskStage,
+                TaskType = addedTask.TaskType
+            };
+
+            Assert.Throws<UnauthorizedAccessException>(
+                delegate
+                {
+                    operationSuccessful = TaskAccess.UpdateTask(updatedTask);
+                },
+                "Exception should be thrown, because it should not be possible to update task color as guest.");
+            Assert.That(operationSuccessful, Is.True,
+                $"Updating task as guest not be successful {Messages.Display(addedTask)}.");
+
+            var task = TaskAccess.GetTaskById(addedTask.TaskId);
+            Assertion.Equals(task, addedTask);
+
+            AppStateProvider.Instance.CurrentUser = _user;
         }
     }
 }
