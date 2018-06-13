@@ -53,25 +53,45 @@ namespace ScrumIt.Forms
                 projectNameTextBox.Text = project.ProjectName;
                 var sprint = SprintModel.GetMostRecentSprintForProject(_projectId);
                 DateTextBox.Text = sprint.StartDateTime.ToShortDateString() + " / " + sprint.EndDateTime.ToShortDateString();
-                
+
                 this.Activate();
                 historyMenuStrip.Items.Clear();
                 backlogMenuStrip.Items.Clear();
                 userListMenuStrip.Items.Clear();
                 propertiesComboBox.Items.Clear();
-                
+
                 var taskList = TaskModel.GetTasksBySprintId(_sprintId);
                 var startDate = SprintModel.GetSprintById(_sprintId).StartDateTime;
-                
-                for (var i = 0; i < taskList.Count; i++)
+                var endDate = SprintModel.GetSprintById(_sprintId).EndDateTime;
+                if (taskList.Count == 0)
                 {
-                    if (startDate < DateTime.Now)
+                    if (endDate < DateTime.Now)
                     {
-                        CreateTaskPanel(taskList[i], i);
+                        backlogButton.Enabled = false;
+                        addTaskButton.Enabled = false;
                     }
                     else
                     {
-                        CreateFutureTaskPanel(taskList[i], i);
+                        backlogButton.Enabled = true;
+                        addTaskButton.Enabled = true;
+                    }
+                }
+                else
+                {
+                    for (var i = 0; i < taskList.Count; i++)
+                    {
+                        if (startDate < DateTime.Now)
+                        {
+                            CreateTaskPanel(taskList[i], i);
+                        }
+                        else if (endDate < DateTime.Now)
+                        {
+                            CreateHistoryTaskPanel(taskList[i], i);
+                        }
+                        else
+                        {
+                            CreateFutureTaskPanel(taskList[i], i);
+                        }
                     }
                 }
 
@@ -168,11 +188,28 @@ namespace ScrumIt.Forms
                 _sprintId = sprint.SprintId;
                 var taskList = TaskModel.GetTasksBySprintId(_sprintId);
                 scrumBoardPanel.Controls.Clear();
+                var endDate = sprint.EndDateTime;
 
                 var index = 0;
-                foreach (var task in taskList)
+                if (taskList.Count == 0)
                 {
-                    CreateTaskPanel(task, index++);
+                    if (endDate < DateTime.Now)
+                    {
+                        backlogButton.Enabled = false;
+                        addTaskButton.Enabled = false;
+                    }
+                    else
+                    {
+                        backlogButton.Enabled = true;
+                        addTaskButton.Enabled = true;
+                    }
+                }
+                else
+                {
+                    foreach (var task in taskList)
+                    {
+                        CreateTaskPanel(task, index++);
+                    }
                 }
                 progressBar.Refresh();
                 DateTextBox.Text = sprint.StartDateTime.ToShortDateString() + " / " + sprint.EndDateTime.ToShortDateString();
@@ -432,17 +469,32 @@ namespace ScrumIt.Forms
 
             _sprintId = sprintId;
             progressBar.Refresh();
-
             
-            for (var i = 0; i < taskList.Count; i++)
+            if (taskList.Count == 0)
             {
                 if (endDate < DateTime.Now)
                 {
-                    CreateHistoryTaskPanel(taskList[i], i);
+                    backlogButton.Enabled = false;
+                    addTaskButton.Enabled = false;
                 }
                 else
                 {
-                    CreateFutureTaskPanel(taskList[i], i);
+                    backlogButton.Enabled = true;
+                    addTaskButton.Enabled = true;
+                }
+            }
+            else
+            {
+                for (var i = 0; i < taskList.Count; i++)
+                {
+                    if (endDate < DateTime.Now)
+                    {
+                        CreateHistoryTaskPanel(taskList[i], i);
+                    }
+                    else
+                    {
+                        CreateFutureTaskPanel(taskList[i], i);
+                    }
                 }
             }
         }
@@ -896,7 +948,7 @@ namespace ScrumIt.Forms
             }
 
             taskPanel.BackColor = ColorTranslator.FromHtml(taskList.TaskColor);
-            
+
 
             taskPanel.Controls.Add(priorityPanel);
             foreach (var pictureBox in pictureBoxes)
@@ -964,7 +1016,7 @@ namespace ScrumIt.Forms
                     UserPanel userPanel = new UserPanel();
                     userPanel.Show();
                 }
-                
+
                 if (propertiesComboBox.SelectedIndex == 3)
                 {
                     var reg = new Register();
@@ -989,10 +1041,10 @@ namespace ScrumIt.Forms
                     UserModel.Logout();
 
                     Application.Restart();
-                    
+
                 }
             }
-            
+
             else if (_userRole == "Developer")
             {
                 if (propertiesComboBox.SelectedIndex == 1)
@@ -1050,7 +1102,7 @@ namespace ScrumIt.Forms
                 InitialDelay = 500,
                 ShowAlways = true
             };
-            tooltip.SetToolTip(this.progressBar, "kolor czerwony - zadania nierozpoczęte" + Environment.NewLine 
+            tooltip.SetToolTip(this.progressBar, "kolor czerwony - zadania nierozpoczęte" + Environment.NewLine
                                                 + "kolor żółty - zadania w trakcie realizacji" + Environment.NewLine
                                                 + "kolor zielony - zadania ukończone");
             try

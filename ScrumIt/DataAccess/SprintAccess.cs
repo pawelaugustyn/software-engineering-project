@@ -198,15 +198,15 @@ namespace ScrumIt.DataAccess
             using (new Connection())
             {
                 ValidateNewSprint(addedSprint);
-                var cmd = new NpgsqlCommand("INSERT INTO sprints VALUES (DEFAULT, @projectid, @start::timestamp, @end::timestamp);")
+                var cmd = new NpgsqlCommand("INSERT INTO sprints VALUES (DEFAULT, @projectid, @start, @end);")
                 {
                     Connection = Connection.Conn
                 };
+                addedSprint.StartDateTime = new DateTime(addedSprint.StartDateTime.Year, addedSprint.StartDateTime.Month, addedSprint.StartDateTime.Day, 0, 0, 0);
+                addedSprint.EndDateTime = new DateTime(addedSprint.EndDateTime.Year, addedSprint.EndDateTime.Month, addedSprint.EndDateTime.Day, 23, 59, 59);
                 cmd.Parameters.AddWithValue("projectid", addedSprint.ParentProjectId);
-                string startDate = addedSprint.StartDateTime.ToString("yyyy-MM-dd hh:mm:ss");
-                string endDate = addedSprint.EndDateTime.ToString("yyyy-MM-dd hh:mm:ss");
-                cmd.Parameters.AddWithValue("start", startDate);
-                cmd.Parameters.AddWithValue("end", endDate);
+                cmd.Parameters.AddWithValue("start", addedSprint.StartDateTime);
+                cmd.Parameters.AddWithValue("end", addedSprint.EndDateTime);
                 var result = cmd.ExecuteNonQuery();
 
                 if (result != 1)
