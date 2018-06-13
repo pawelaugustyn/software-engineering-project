@@ -174,7 +174,6 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
             {
                 TaskName = "testTask".WithUniqueName(),
                 TaskDesc = "testTaskDescription",
-                TaskType = "T",
                 TaskPriority = int.Parse("15"),
                 TaskEstimatedTime = int.Parse("10"),
                 TaskStage = TaskModel.TaskStages.ToDo,
@@ -221,7 +220,6 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
             {
                 TaskName = "testTask".WithUniqueName(),
                 TaskDesc = "testTaskDescription",
-                TaskType = "T",
                 TaskPriority = int.Parse("15"),
                 TaskEstimatedTime = int.Parse("10"),
                 TaskStage = TaskModel.TaskStages.ToDo,

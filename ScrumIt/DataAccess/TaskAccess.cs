@@ -14,7 +14,7 @@ namespace ScrumIt.DataAccess
             var tasks = new List<TaskModel>();
             using (new Connection())
             {
-                var cmd = new NpgsqlCommand("select tsk.* from tasks tsk join projects pr using(project_id) where pr.project_id = @projectid order by pr.project_id;")
+                var cmd = new NpgsqlCommand("select tsk.task_id, tsk.sprint_id, tsk.task_name, tsk.task_desc, tsk.task_priority, tsk.task_estimated_time, tsk.task_stage, tsk.task_color, tsk.project_id from tasks tsk join projects pr using(project_id) where pr.project_id = @projectid order by pr.project_id;")
                 {
                     Connection = Connection.Conn
                 };
@@ -28,14 +28,13 @@ namespace ScrumIt.DataAccess
                         {
                             TaskId = (int)reader[0],
                             SprintId = reader[1] == DBNull.Value ? 0 : (int)reader[1],
-                            TaskType = (string)reader[2],
-                            TaskName = (string)reader[3],
-                            TaskDesc = reader[4] != DBNull.Value ? (string)reader[4] : "",
-                            TaskPriority = (int)reader[5],
-                            TaskEstimatedTime = (int)reader[6],
-                            TaskStage = (TaskModel.TaskStages)reader[7],
-                            TaskColor = reader[8] != DBNull.Value ? (string)reader[8] : "#ffffff",
-                            BacklogProjectId = reader[9] == DBNull.Value ? 0 : (int)reader[9]
+                            TaskName = (string)reader[2],
+                            TaskDesc = reader[3] != DBNull.Value ? (string)reader[3] : "",
+                            TaskPriority = (int)reader[4],
+                            TaskEstimatedTime = (int)reader[5],
+                            TaskStage = (TaskModel.TaskStages)reader[6],
+                            TaskColor = reader[7] != DBNull.Value ? (string)reader[7] : "#ffffff",
+                            BacklogProjectId = reader[8] == DBNull.Value ? 0 : (int)reader[8]
                         });
 
                     }
@@ -51,7 +50,7 @@ namespace ScrumIt.DataAccess
             using (new Connection())
             {
                 var cmd = new NpgsqlCommand(
-                    "select * from tasks where task_id = @taskid;")
+                    "select task_id, sprint_id, task_name, task_desc, task_priority, task_estimated_time, task_stage, task_color, project_id from tasks where task_id = @taskid;")
                 {
                     Connection = Connection.Conn
                 };
@@ -65,14 +64,13 @@ namespace ScrumIt.DataAccess
                         {
                             TaskId = (int)reader[0],
                             SprintId = reader[1] == DBNull.Value ? 0 : (int)reader[1],
-                            TaskType = (string)reader[2],
-                            TaskName = (string)reader[3],
-                            TaskDesc = reader[4] != DBNull.Value ? (string)reader[4] : "",
-                            TaskPriority = (int)reader[5],
-                            TaskEstimatedTime = (int)reader[6],
-                            TaskStage = (TaskModel.TaskStages)reader[7],
-                            TaskColor = reader[8] != DBNull.Value ? (string)reader[8] : "#ffffff",
-                            BacklogProjectId = reader[9] == DBNull.Value ? 0 : (int)reader[9]
+                            TaskName = (string)reader[2],
+                            TaskDesc = reader[3] != DBNull.Value ? (string)reader[3] : "",
+                            TaskPriority = (int)reader[4],
+                            TaskEstimatedTime = (int)reader[5],
+                            TaskStage = (TaskModel.TaskStages)reader[6],
+                            TaskColor = reader[7] != DBNull.Value ? (string)reader[7] : "#ffffff",
+                            BacklogProjectId = reader[8] == DBNull.Value ? 0 : (int)reader[8]
                         };
                         break;
                     }
@@ -109,7 +107,7 @@ namespace ScrumIt.DataAccess
             var tasks = new List<TaskModel>();
             using (new Connection())
             {
-                var cmd = new NpgsqlCommand("select tsk.* from tasks tsk where tsk.sprint_id = @sprintid order by tsk.task_id;")
+                var cmd = new NpgsqlCommand("select tsk.task_id, tsk.sprint_id, tsk.task_name, tsk.task_desc, tsk.task_priority, tsk.task_estimated_time, tsk.task_stage, tsk.task_color, tsk.project_id from tasks tsk where tsk.sprint_id = @sprintid order by tsk.task_id;")
                 {
                     Connection = Connection.Conn
                 };
@@ -123,14 +121,13 @@ namespace ScrumIt.DataAccess
                         {
                             TaskId = (int)reader[0],
                             SprintId = reader[1] == DBNull.Value ? 0 : (int)reader[1],
-                            TaskType = (string)reader[2],
-                            TaskName = (string)reader[3],
-                            TaskDesc = reader[4] != DBNull.Value ? (string)reader[4] : "",
-                            TaskPriority = (int)reader[5],
-                            TaskEstimatedTime = (int)reader[6],
-                            TaskStage = (TaskModel.TaskStages)reader[7],
-                            TaskColor = reader[8] != DBNull.Value ? (string)reader[8] : "#ffffff",
-                            BacklogProjectId = reader[9] == DBNull.Value ? 0 : (int)reader[9]
+                            TaskName = (string)reader[2],
+                            TaskDesc = reader[3] != DBNull.Value ? (string)reader[3] : "",
+                            TaskPriority = (int)reader[4],
+                            TaskEstimatedTime = (int)reader[5],
+                            TaskStage = (TaskModel.TaskStages)reader[6],
+                            TaskColor = reader[7] != DBNull.Value ? (string)reader[7] : "#ffffff",
+                            BacklogProjectId = reader[8] == DBNull.Value ? 0 : (int)reader[8]
                         });
 
                     }
@@ -150,7 +147,7 @@ namespace ScrumIt.DataAccess
             var tasks = new List<TaskModel>();
             using (new Connection())
             {
-                var cmd = new NpgsqlCommand("select tsk.* from tasks tsk where tsk.project_id = @projectid and tsk.sprint_id is null order by tsk.task_id;")
+                var cmd = new NpgsqlCommand("select tsk.task_id, tsk.sprint_id, tsk.task_name, tsk.task_desc, tsk.task_priority, tsk.task_estimated_time, tsk.task_stage, tsk.task_color, tsk.project_id from tasks tsk where tsk.project_id = @projectid and tsk.sprint_id is null order by tsk.task_id;")
                 {
                     Connection = Connection.Conn
                 };
@@ -164,14 +161,13 @@ namespace ScrumIt.DataAccess
                         {
                             TaskId = (int)reader[0],
                             SprintId = reader[1] == DBNull.Value ? 0 : (int)reader[1],
-                            TaskType = (string)reader[2],
-                            TaskName = (string)reader[3],
-                            TaskDesc = reader[4] != DBNull.Value ? (string)reader[4] : "",
-                            TaskPriority = (int)reader[5],
-                            TaskEstimatedTime = (int)reader[6],
-                            TaskStage = (TaskModel.TaskStages)reader[7],
-                            TaskColor = reader[8] != DBNull.Value ? (string)reader[8] : "#ffffff",
-                            BacklogProjectId = reader[9] == DBNull.Value ? 0 : (int)reader[9]
+                            TaskName = (string)reader[2],
+                            TaskDesc = reader[3] != DBNull.Value ? (string)reader[3] : "",
+                            TaskPriority = (int)reader[4],
+                            TaskEstimatedTime = (int)reader[5],
+                            TaskStage = (TaskModel.TaskStages)reader[6],
+                            TaskColor = reader[7] != DBNull.Value ? (string)reader[7] : "#ffffff",
+                            BacklogProjectId = reader[8] == DBNull.Value ? 0 : (int)reader[8]
                         });
 
                     }
@@ -188,15 +184,14 @@ namespace ScrumIt.DataAccess
             ValidateNewTask(addedTask);
             using (new Connection())
             {
-                var cmd = new NpgsqlCommand("INSERT INTO tasks (task_id, sprint_id, task_name, task_desc, task_type, task_priority, task_estimated_time, task_stage, task_color, project_id)" +
-                                            "VALUES (DEFAULT, @sprint_id, @task_name, @task_desc,@task_type, @task_priority, @task_estimated_time, @task_stage, @task_color, @project_id);")
+                var cmd = new NpgsqlCommand("INSERT INTO tasks (task_id, sprint_id, task_name, task_desc, task_priority, task_estimated_time, task_stage, task_color, project_id)" +
+                                            "VALUES (DEFAULT, @sprint_id, @task_name, @task_desc, @task_priority, @task_estimated_time, @task_stage, @task_color, @project_id);")
                 {
                     Connection = Connection.Conn
                 };
                 cmd.Parameters.AddWithValue("sprint_id", addedTask.SprintId != 0 ? (IConvertible)addedTask.SprintId : DBNull.Value);
                 cmd.Parameters.AddWithValue("task_name", addedTask.TaskName);
                 cmd.Parameters.AddWithValue("task_desc", addedTask.TaskDesc);
-                cmd.Parameters.AddWithValue("task_type", addedTask.TaskType);
                 cmd.Parameters.AddWithValue("task_priority", addedTask.TaskPriority);
                 cmd.Parameters.AddWithValue("task_estimated_time", addedTask.TaskEstimatedTime);
                 cmd.Parameters.AddWithValue("task_stage", (int)addedTask.TaskStage);

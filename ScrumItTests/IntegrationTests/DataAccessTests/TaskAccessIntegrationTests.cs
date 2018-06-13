@@ -48,7 +48,6 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
             {
                 TaskName = "testTask".WithUniqueName(),
                 TaskDesc = "testTaskDescription",
-                TaskType = "T",
                 TaskPriority = int.Parse("15"),
                 TaskEstimatedTime = int.Parse("10"),
                 TaskStage = TaskModel.TaskStages.ToDo,
@@ -73,7 +72,6 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
             {
                 TaskName = "taskAddedToSprint".WithUniqueName(),
                 TaskDesc = "taskAddedToSprintDescription",
-                TaskType = "T",
                 TaskPriority = int.Parse("15"),
                 TaskEstimatedTime = int.Parse("10"),
                 TaskStage = TaskModel.TaskStages.ToDo,
@@ -127,7 +125,6 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
             {
                 TaskName = "testTask".WithUniqueName(),
                 TaskDesc = "testTaskDescription",
-                TaskType = "T",
                 TaskPriority = int.Parse("15"),
                 TaskEstimatedTime = int.Parse("10"),
                 TaskStage = TaskModel.TaskStages.ToDo,
@@ -202,7 +199,6 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
             {
                 TaskName = "taskAddedToSprint".WithUniqueName(),
                 TaskDesc = "taskAddedToSprintDescription",
-                TaskType = "T",
                 TaskPriority = int.Parse("15"),
                 TaskEstimatedTime = int.Parse("10"),
                 TaskStage = TaskModel.TaskStages.ToDo,
@@ -251,7 +247,6 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
             {
                 TaskName = "taskAddedToSprint".WithUniqueName(),
                 TaskDesc = "taskAddedToSprintDescription",
-                TaskType = "T",
                 TaskPriority = int.Parse("15"),
                 TaskEstimatedTime = int.Parse("10"),
                 TaskStage = TaskModel.TaskStages.ToDo,
@@ -279,7 +274,6 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
             {
                 TaskName = "testTask".WithUniqueName(),
                 TaskDesc = "testTaskDescription",
-                TaskType = "T",
                 TaskPriority = int.Parse("15"),
                 TaskEstimatedTime = int.Parse("10"),
                 TaskStage = TaskModel.TaskStages.ToDo,
@@ -313,7 +307,6 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
             {
                 TaskName = "testTask".WithUniqueName(),
                 TaskDesc = "testTaskDescription",
-                TaskType = "T",
                 TaskPriority = int.Parse("15"),
                 TaskEstimatedTime = int.Parse("10"),
                 TaskStage = TaskModel.TaskStages.ToDo,
@@ -340,7 +333,6 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
             {
                 TaskName = "testTask".WithUniqueName(),
                 TaskDesc = "testTaskDescription",
-                TaskType = "T",
                 TaskPriority = int.Parse("15"),
                 TaskEstimatedTime = int.Parse("10"),
                 TaskStage = TaskModel.TaskStages.ToDo,
@@ -373,7 +365,6 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
             {
                 TaskName = "testTask".WithUniqueName(),
                 TaskDesc = "testTaskDescription",
-                TaskType = "T",
                 TaskPriority = int.Parse("15"),
                 TaskEstimatedTime = int.Parse("10"),
                 TaskStage = TaskModel.TaskStages.ToDo,
@@ -399,7 +390,6 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
             {
                 TaskName = "testTask".WithUniqueName(),
                 TaskDesc = "testTaskDescription",
-                TaskType = "T",
                 TaskPriority = int.Parse("15"),
                 TaskEstimatedTime = int.Parse("10"),
                 TaskStage = TaskModel.TaskStages.ToDo,
@@ -439,7 +429,6 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
             {
                 TaskName = "testTask".WithUniqueName(),
                 TaskDesc = "testTaskDescription",
-                TaskType = "T",
                 TaskPriority = int.Parse("15"),
                 TaskEstimatedTime = int.Parse("10"),
                 TaskStage = TaskModel.TaskStages.ToDo,
@@ -458,7 +447,6 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
             {
                 TaskName = "testTask".WithUniqueName(),
                 TaskDesc = "testTaskDescription",
-                TaskType = "T",
                 TaskPriority = int.Parse("15"),
                 TaskEstimatedTime = int.Parse("10"),
                 TaskStage = TaskModel.TaskStages.ToDo,
@@ -487,7 +475,6 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
             {
                 TaskName = "testTask".WithUniqueName(),
                 TaskDesc = "testTaskDescription",
-                TaskType = "T",
                 TaskPriority = int.Parse("15"),
                 TaskEstimatedTime = int.Parse("10"),
                 TaskStage = TaskModel.TaskStages.ToDo,
@@ -536,7 +523,6 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
             {
                 TaskName = "testTask".WithUniqueName(),
                 TaskDesc = "testTaskDescription",
-                TaskType = "T",
                 TaskPriority = int.Parse("15"),
                 TaskEstimatedTime = int.Parse("10"),
                 TaskStage = TaskModel.TaskStages.ToDo,
@@ -585,7 +571,6 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
             {
                 TaskName = "testTask".WithUniqueName(),
                 TaskDesc = "testTaskDescription",
-                TaskType = "T",
                 TaskPriority = int.Parse("15"),
                 TaskEstimatedTime = int.Parse("10"),
                 TaskStage = TaskModel.TaskStages.ToDo,
@@ -624,7 +609,6 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
             {
                 TaskName = "testTask".WithUniqueName(),
                 TaskDesc = "testTaskDescription",
-                TaskType = "T",
                 TaskPriority = int.Parse("15"),
                 TaskEstimatedTime = int.Parse("10"),
                 TaskStage = TaskModel.TaskStages.ToDo,
@@ -659,7 +643,6 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
             {
                 TaskName = "testTask".WithUniqueName(),
                 TaskDesc = "testTaskDescription",
-                TaskType = "T",
                 TaskPriority = int.Parse("15"),
                 TaskEstimatedTime = int.Parse("10"),
                 TaskStage = TaskModel.TaskStages.ToDo,
@@ -698,7 +681,6 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
             {
                 TaskName = "testTask".WithUniqueName(),
                 TaskDesc = "testTaskDescription",
-                TaskType = "T",
                 TaskPriority = int.Parse("15"),
                 TaskEstimatedTime = int.Parse("10"),
                 TaskStage = TaskModel.TaskStages.ToDo,
@@ -722,8 +704,7 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
                 TaskId = addedTask.TaskId,
                 TaskName = "updatedTask".WithUniqueName(),
                 TaskPriority = addedTask.TaskPriority,
-                TaskStage = addedTask.TaskStage,
-                TaskType = addedTask.TaskType
+                TaskStage = addedTask.TaskStage
             };
 
             Assert.Throws<UnauthorizedAccessException>(
