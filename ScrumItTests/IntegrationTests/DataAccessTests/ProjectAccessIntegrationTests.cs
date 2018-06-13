@@ -36,7 +36,7 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
             _project = new ProjectModel
             {
                 ProjectName = "TestProject".WithUniqueName(),
-                ProjectColor = "#ff0000"
+                ProjectColor = "#123456"
             };
 
             ProjectAccess.CreateNewProject(_project);
@@ -115,7 +115,7 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
             var projectToAdd = new ProjectModel
             {
                 ProjectName = "addTestProject".WithUniqueName(),
-                ProjectColor = "#ff0000"
+                ProjectColor = "#123457"
             };
             var projectWithTheSameName = ProjectAccess.GetProjectByName(projectToAdd.ProjectName);
             Assert.That(projectWithTheSameName.IsDeepEqual(new ProjectModel()), Is.True, "Project should not exist.");
@@ -176,7 +176,7 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
             var projectToAddAndDelete = new ProjectModel
             {
                 ProjectName = "addTestProject".WithUniqueName(),
-                ProjectColor = "#ff0000"
+                ProjectColor = "#774563"
             };
             var projectWithTheSameName = ProjectAccess.GetProjectByName(projectToAddAndDelete.ProjectName);
             Assert.That(projectWithTheSameName.IsDeepEqual(new ProjectModel()), Is.True, "Project should not exist.");
@@ -215,7 +215,7 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
             var projectToAddAndDelete = new ProjectModel
             {
                 ProjectName = "addTestProject".WithUniqueName(),
-                ProjectColor = "#ff0000"
+                ProjectColor = "#868236"
             };
             var projectWithTheSameName = ProjectAccess.GetProjectByName(projectToAddAndDelete.ProjectName);
             Assert.That(projectWithTheSameName.IsDeepEqual(new ProjectModel()), Is.True, "Project should not exist.");
@@ -243,7 +243,7 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
             var projectToAdd = new ProjectModel
             {
                 ProjectName = "addTestProject".WithUniqueName(),
-                ProjectColor = "#ff0000"
+                ProjectColor = "#928723"
             };
             var projectWithTheSameName = ProjectAccess.GetProjectByName(projectToAdd.ProjectName);
             Assert.That(projectWithTheSameName.IsDeepEqual(new ProjectModel()), Is.True, "Project should not exist.");
@@ -265,7 +265,7 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
             var projectToAddandUpdate = new ProjectModel
             {
                 ProjectName = "addTestProject".WithUniqueName(),
-                ProjectColor = "#ff0000"
+                ProjectColor = "#92f73d"
             };
             var projectWithTheSameName = ProjectAccess.GetProjectByName(projectToAddandUpdate.ProjectName);
             Assert.That(projectWithTheSameName.IsDeepEqual(new ProjectModel()), Is.True, "Project should not exist.");
@@ -273,7 +273,7 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
             var isAddedSuccessful = ProjectAccess.CreateNewProject(projectToAddandUpdate);
             Assert.That(isAddedSuccessful, Is.True, $"Adding project should be successful {Messages.Display(projectToAddandUpdate)}.");
 
-            projectToAddandUpdate.ProjectColor = "#fff000";
+            projectToAddandUpdate.ProjectColor = "#87ad92";
             var isUpdatedSuccessful = ProjectAccess.UpdateProject(projectToAddandUpdate);
             var updatedProject = ProjectAccess.GetProjectByName(projectToAddandUpdate.ProjectName);
 
@@ -296,7 +296,7 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
             var projectToAddandUpdate = new ProjectModel
             {
                 ProjectName = "addTestProject".WithUniqueName(),
-                ProjectColor = "#ff0000"
+                ProjectColor = "#288cca"
             };
             var projectWithTheSameName = ProjectAccess.GetProjectByName(projectToAddandUpdate.ProjectName);
             Assert.That(projectWithTheSameName.IsDeepEqual(new ProjectModel()), Is.True, "Project should not exist.");
@@ -304,13 +304,13 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
             var isAddedSuccessful = ProjectAccess.CreateNewProject(projectToAddandUpdate);
             Assert.That(isAddedSuccessful, Is.True, $"Adding project should be successful {Messages.Display(projectToAddandUpdate)}.");
 
-            projectToAddandUpdate = new ProjectModel();
+            var emptyProject = new ProjectModel();
             var isUpdatedSuccessful = false;
 
-            Assert.Throws<ArgumentNullException>(delegate { isUpdatedSuccessful = ProjectAccess.UpdateProject(projectToAddandUpdate); },
+            Assert.Throws<ArgumentNullException>(delegate { isUpdatedSuccessful = ProjectAccess.UpdateProject(emptyProject); },
                 "Exception should be thrown, because it should not be possible to update project to empty project.");
 
-            Assert.That(isUpdatedSuccessful, Is.False, $"Updating project should not be successful {Messages.Display(projectToAddandUpdate)}.");
+            Assert.That(isUpdatedSuccessful, Is.False, $"Updating project should not be successful {Messages.Display(emptyProject)}.");
 
             Setup.RegisterToDeleteAfterTestExecution(projectToAddandUpdate);
         }
@@ -321,7 +321,7 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
             var projectToAddandUpdate = new ProjectModel
             {
                 ProjectName = "addTestProject".WithUniqueName(),
-                ProjectColor = "#ff0000"
+                ProjectColor = "#827f2f"
             };
             var projectWithTheSameName = ProjectAccess.GetProjectByName(projectToAddandUpdate.ProjectName);
             Assert.That(projectWithTheSameName.IsDeepEqual(new ProjectModel()), Is.True, "Project should not exist.");
@@ -346,7 +346,7 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
             var projectToAddandUpdate = new ProjectModel
             {
                 ProjectName = "addTestProject".WithUniqueName(),
-                ProjectColor = "#ff0000"
+                ProjectColor = "#652aaa"
             };
             var projectWithTheSameName = ProjectAccess.GetProjectByName(projectToAddandUpdate.ProjectName);
             Assert.That(projectWithTheSameName.IsDeepEqual(new ProjectModel()), Is.True, "Project should not exist.");
@@ -401,7 +401,7 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
             var projectToAdd = new ProjectModel
             {
                 ProjectName = "addTestProject".WithUniqueName(),
-                ProjectColor = "#ff0000"
+                ProjectColor = "#f72f96"
             };
 
             var projectWithTheSameName = ProjectAccess.GetProjectByName(projectToAdd.ProjectName);
@@ -472,7 +472,7 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
             var projectToAdd = new ProjectModel
             {
                 ProjectName = "addTestProject".WithUniqueName(),
-                ProjectColor = "#ff0000"
+                ProjectColor = "#827f02"
             };
             ProjectAccess.CreateNewProject(projectToAdd);
 

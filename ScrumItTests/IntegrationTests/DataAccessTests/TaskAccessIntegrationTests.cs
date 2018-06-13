@@ -38,7 +38,7 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
             _project = new ProjectModel
             {
                 ProjectName = "TestProject".WithUniqueName(),
-                ProjectColor = "#ff0000"
+                ProjectColor = "#2299fc"
             };
 
             ProjectAccess.CreateNewProject(_project);
