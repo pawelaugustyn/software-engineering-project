@@ -85,7 +85,6 @@ namespace ScrumIt.Forms
                     {
                         TaskName = taskName,
                         TaskDesc = taskDescription,
-                        TaskType = "T",
                         TaskPriority = taskPriority,
                         TaskEstimatedTime = taskEstimatedTime,
                         TaskStage = TaskModel.TaskStages.ToDo,
