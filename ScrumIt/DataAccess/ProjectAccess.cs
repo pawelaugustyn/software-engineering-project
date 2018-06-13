@@ -240,6 +240,24 @@ namespace ScrumIt.DataAccess
             if (AppStateProvider.Instance.CurrentUser.Role != UserRoles.ScrumMaster)
                 throw new UnauthorizedAccessException("Brak uprawnien.");
 
+            // wszyscy użytkownicy danego projektu przed zmianą
+            var allAssignUsers = UserAccess.GetUsersByProjectId(projectToAssignTo.ProjectId);
+            // id uzytkowników do przypisania
+            //Contains nie dzialal na UserModel, moze da sie to jakos przerobic zeby ladniej wygladalo
+            var idUsersToAssign = new List<int>();
+            foreach (var user in usersToAssign)
+                idUsersToAssign.Add(user.UserId);
+            //usunięci użytkownicy
+            var deletedUsers = new List<UserModel>();
+            foreach (var user in allAssignUsers)
+            {
+                if (!idUsersToAssign.Contains(user.UserId))
+                    deletedUsers.Add(user);
+            }
+
+            // usuwamy połączenie między zadaniami z danego projektu a usuniętymi użytkownikami
+            TaskAccess.DeassignUserFromProjectTasks(projectToAssignTo.ProjectId, deletedUsers);
+
             using (new Connection())
             {
                 var cmd = new NpgsqlCommand("DELETE FROM projects_has_users WHERE project_id = @project_id;")
@@ -263,7 +281,7 @@ namespace ScrumIt.DataAccess
                     cmd.ExecuteNonQuery();
                 }
             }
-
+            
             return true;
         }
 

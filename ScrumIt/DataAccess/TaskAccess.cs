@@ -298,7 +298,27 @@ namespace ScrumIt.DataAccess
 
             }
         }
-
+        // new
+        public static void DeassignUserFromProjectTasks(int projectid, List<UserModel> users)
+        {
+            if (AppStateProvider.Instance.CurrentUser.Role == UserRoles.Guest)
+                throw new ArgumentException("Brak uprawnien.");
+            using (new Connection())
+            {
+                foreach (var user in users)
+                {
+                    var cmd = new NpgsqlCommand("DELETE FROM tasks_assigned_users WHERE task_id IN (SELECT projectTasks.* FROM (SELECT task_id FROM tasks WHERE project_id=@projectId) projectTasks JOIN tasks_assigned_users AS tasksUsers USING (task_id) WHERE uid=@userId) AND uid=@userId;")
+                    {
+                        Connection = Connection.Conn
+                    };
+                    cmd.Parameters.AddWithValue("projectId", projectid);
+                    cmd.Parameters.AddWithValue("userId", user.UserId);
+                    cmd.ExecuteNonQuery();
+                   
+                }
+            }
+        }
+        //
         public static void RemoveTask(int taskid)
         {
             if (AppStateProvider.Instance.CurrentUser.Role == UserRoles.Guest)
