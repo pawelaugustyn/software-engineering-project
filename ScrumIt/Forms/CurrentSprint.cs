@@ -469,8 +469,7 @@ namespace ScrumIt.Forms
 
             _sprintId = sprintId;
             progressBar.Refresh();
-
-            // TO DO sprawdzić czy jest ok
+            
             if (taskList.Count == 0)
             {
                 if (endDate < DateTime.Now)
