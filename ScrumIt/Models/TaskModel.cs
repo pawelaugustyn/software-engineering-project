@@ -7,7 +7,6 @@ namespace ScrumIt.Models
     {
         public int TaskId { get; set; } = 0;
         public int SprintId { get; set; }
-        public string TaskType{ get; set; }
         public string TaskName { get; set; }
         public string TaskDesc { get; set; }
         public int TaskPriority { get; set; }
