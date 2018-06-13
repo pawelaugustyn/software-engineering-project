@@ -171,7 +171,6 @@ namespace ScrumIt.Forms
                         b.BackColor = ColorTranslator.FromHtml("#cccccc");
                     }
                     b.ForeColor = Color.White;
-                    b.Dock = System.Windows.Forms.DockStyle.Fill;
                     b.FlatAppearance.BorderColor = Color.White;
                     b.FlatAppearance.BorderSize = 0;
                     b.Click += delegate
@@ -188,7 +187,7 @@ namespace ScrumIt.Forms
 
                     var projectColor = new Button
                     {
-                        Dock = System.Windows.Forms.DockStyle.Fill,
+                        Size = new Size(41,41),
                         Enabled = false,
                         BackColor = ColorTranslator.FromHtml(project.ProjectColor)
                     };
