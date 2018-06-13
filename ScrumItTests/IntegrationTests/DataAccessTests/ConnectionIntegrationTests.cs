@@ -23,20 +23,20 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
             Assert.That(isConnectionAvailable, Is.True, "Connection to DB is not available");
         }
 
-        //[Test]
-        //public void ConnExcl()
-        //{
-        //    bool isConnectionAvailable = false;
-        //    using (var c = new Connection(true))
-        //    {
-        //        var cmd = new NpgsqlCommand("select * from projects")
-        //        {
-        //            Connection = c.ConnExcl
-        //        };
-        //    }
+        [Test]
+        public void ConnExcl()
+        {
+            bool isConnectionAvailable = false;
+            using (var c = new Connection(true))
+            {
+                var cmd = new NpgsqlCommand("select * from projects")
+                {
+                    Connection = c.ConnExcl
+                };
+            }
 
-        //    isConnectionAvailable = true;
-        //    Assert.That(isConnectionAvailable, Is.True, "Exclusive connection to DB is not available");
-        //}
+            isConnectionAvailable = true;
+            Assert.That(isConnectionAvailable, Is.True, "Exclusive connection to DB is not available");
+        }
     }
 }

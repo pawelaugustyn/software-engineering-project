@@ -137,96 +137,114 @@ Tasks:
 
 1. UserAccessIntegrationTests
     ```
-     AddEmptyUserShouldThrow [0:00.400] Success
-     AddUserThatAlreadyExistShouldThrow [0:00.819] Success
-     AddUserWithUniqueUsername [0:00.567] Success
-     DeleteEmptyOrInvalidUserShouldDoNothing [0:00.236] Success
-     DeleteUserWithUniqueUsername [0:00.776] Success
-     DeleteYourselfShouldThrow [0:00.281] Success
-     GetAllUsersShouldReturnCorrectUsers [0:01.618] Success
-     GetUserByIdShouldNotReturnCorrectUser [0:00.084] Success
-     GetUserByIdShouldReturnCorrectUser [0:00.050] Success
-     GetUserByUsernameShouldNotReturnCorrectUser [0:00.054] Success
-     GetUserByUsernameShouldReturnCorrectUser [0:00.080] Success
-     GetUserPicture [0:00.674] Success
-     GetUsersByLastNameShouldNotReturnCorrectUser [0:00.049] Success
-     GetUsersByLastNameShouldReturnCorrectUser [0:00.332] Success
-     GetUsersByProjectIdShouldNotReturnCorrectUsers [0:00.048] Success
-     GetUsersByProjectIdShouldReturnCorrectUsers [0:00.048] Success
-     GetUsersByTaskIdShoulNotReturnCorrectUsers [0:01.064] Success
-     GetUsersByTaskIdShouldReturnCorrectUsers [0:01.237] Success
-     LoginAsWithCorrectCredentialsShouldPass [0:00.049] Success
-     LoginAsWithEmptyCredentialsShouldFail (3 tests) [0:00.262] Success
-     LoginAsWithIncorrectCredentialsShouldFail (3 tests) [0:00.171] Success
-     SetUserPicture [0:00.570] Success
-     UpdateUserDataAsGuestShouldThrow [0:00.187] Success
-     UpdateUserDataAsScrumMasterShouldBePossible [0:00.259] Success
-     X_AddEmptyUserWhenUnauthorizedShouldThrow [0:00.050] Success
-     X_DeleteUserWhenUnauthorizedShouldThrow [0:00.605] Success
-     X_UpdateUserPasswordShouldBePossible [0:00.487] Success
+     AddEmptyUserShouldThrow [0:00.000] Success
+     AddUserThatAlreadyExistShouldThrow [0:00.321] Success
+     AddUserWithUniqueUsername [0:00.293] Success
+     DeleteEmptyOrInvalidUserShouldDoNothing [0:00.080] Success
+     DeleteUserWithUniqueUsername [0:00.352] Success
+     DeleteYourselfShouldThrow [0:00.126] Success
+     GetAllUsersShouldReturnCorrectUsers [0:00.271] Success
+     GetUserByIdShouldNotReturnCorrectUser [0:00.032] Success
+     GetUserByIdShouldReturnCorrectUser [0:00.030] Success
+     GetUserByUsernameShouldNotReturnCorrectUser [0:00.035] Success
+     GetUserByUsernameShouldReturnCorrectUser [0:00.029] Success
+     GetUserPicture [0:00.282] Success
+     GetUsersByLastNameShouldNotReturnCorrectUser [0:00.032] Success
+     GetUsersByLastNameShouldReturnCorrectUser [0:00.029] Success
+     GetUsersByProjectIdShouldNotReturnCorrectUsers [0:00.034] Success
+     GetUsersByProjectIdShouldReturnCorrectUsers [0:00.030] Success
+     GetUsersByTaskIdShoulNotReturnCorrectUsers [0:00.520] Success
+     GetUsersByTaskIdShouldReturnCorrectUsers [0:00.577] Success
+     LoginAsWithCorrectCredentialsShouldPass [0:00.032] Success
+     LoginAsWithEmptyCredentialsShouldFail (3 tests) [0:00.107] Success
+     LoginAsWithIncorrectCredentialsShouldFail (3 tests) [0:00.106] Success
+     SetUserPicture [0:00.274] Success
+     UpdateUserDataAsGuestShouldThrow [0:00.096] Success
+     UpdateUserDataAsScrumMasterShouldBePossible [0:00.170] Success
+     X_AddEmptyUserWhenUnauthorizedShouldThrow [0:00.032] Success
+     X_DeleteUserWhenUnauthorizedShouldThrow [0:00.296] Success
+     X_UpdateUserPasswordShouldBePossible [0:00.282] Success
     
 3. TaskAccessIntegrationTests 
 	```
-     AssignFromBacklogToSprint [0:00.456] Success
-     AssignUsersToTaskWhenAssignNewUser [0:00.123] Success
-     AssignUsersToTaskWhenAssignNewUserAndDeassignOldUser [0:00.875] Success
-     GetProjectBacklogTasksReturnCorrectTasks [0:00.049] Success
-     GetProjectTasksByProjectIdShouldReturnCorrectTasks [0:00.074] Success
-     GetProjectTasksBySprintIdReturnCorrectTasks [0:00.050] Success
-     GetTaskByIdShouldReturnCorrectTasks [0:00.050] Success
-     RemoveTask [0:00.326] Success
-     SetNewColour [0:00.277] Success
-     UpdateTask [0:00.342] Success
-     UpdateTaskStage [0:00.240] Success
+     AssignFromBacklogToSprint [0:00.192] Success
+     AssignUsersToTaskWhenAssignNewUser [0:00.076] Success
+     AssignUsersToTaskWhenAssignNewUserAndDeassignOldUser [0:00.359] Success
+     AssignUsersToTaskWhenUserIdsGivenWhenAssignNewUserAndDeassignOldUser [0:00.358] Success
+     GetProjectBacklogTasksReturnCorrectTasks [0:00.238] Success
+     GetProjectTasksByProjectIdShouldReturnCorrectTasks [0:00.031] Success
+     GetProjectTasksBySprintIdReturnCorrectTasks [0:00.153] Success
+     GetTaskByIdShouldReturnCorrectTasks [0:00.034] Success
+     RemoveTask [0:00.163] Success
+     SetNewColour [0:00.126] Success
+     UpdateTask [0:00.126] Success
+     UpdateTaskStage [0:00.122] Success
+     X_AssignFromBacklogToSprintAsGuestShouldThrow [0:00.101] Success
+     X_AssignUsersToTaskAsGuestShouldThrow [0:00.095] Success
+     X_AssignUsersToTaskByIdAsGuestShouldThrow [0:00.099] Success
+     X_CreateNewTaskAsGuestShouldThrow [0:00.092] Success
+     X_RemoveTasktAsGuestShouldThrow [0:00.097] Success
+     X_SetNewColourAsGuestShouldThrow [0:00.098] Success
+     X_UpdateTaskAsGuestShouldThrow [0:00.117] Success
+     X_UpdateTaskStageAsGuestShouldThrow [0:00.096] Success
 	```
 
 4. SprintAccessIntegrationTests 
     ```
-    AddEmptySprintToProjectShouldThrow [0:00.016] Success
-     AddSprintToProject [0:00.763] Success
-     AddSprintToProjectBeforeLastSprintEndDateShouldThrow [0:00.002] Succes
-     AddSprintToProjectWhenUnauthorizedShouldThrow [0:00.001] Success
-     AddSprintWithWrongDatesToProjectShouldThrow [0:00.264] Success
-     CreatingSprintWithWrongDateFormatShouldThrow [0:00.028] Success
-     GetEndOfLastSprintByProjectIdShouldReturnCorrectDate [0:00.077] Success
-     GetMostRecentSprintByProjectIdShouldReturnCorrectLastFinishedSprint [0:00.261] Success
-     GetMostRecentSprintByProjectIdShouldReturnCorrectNextSprint [0:00.0121] Success
-     GetMostRecentSprintByProjectIdShouldReturnCorrectRecentSprint [0:00.049] Success
-     GetOldSprintsByProjectIdShouldNotReturnCorrectSprints [0:00.052] Success
-     GetOldSprintsByProjectIdShouldReturnCorrectSprints [0:00.144] Success
-     GetSprintByIdShouldNotReturnCorrectSprint [0:00.048] Success
-     GetSprintByIdShouldReturnCorrectSprint [0:00.079] Success
-     GetSprintByProjectIdAndDateShouldNotReturnCorrectSprint [0:00.055] Success
-     GetSprintByProjectIdAndDateShouldReturnCorrectSprint [0:00.048] Success
-     GetSprintByProjectIdAndDateWithWrongDateShouldNotReturnCorrectSprint [0:00.076] Success
+     AddEmptySprintToProjectShouldThrow [0:00.001] Success
+     AddSprintToProject [0:00.293] Success
+     AddSprintToProjectWhenUnauthorizedShouldThrow [0:00.000] Success
+     AddSprintToProjectWithDatesOverlapingAnotherSprintShouldThrow (7 tests) [0:02.531] Success
+     AddSprintWithWrongDatesToProjectShouldThrow [0:00.170] Success
+     CreatingSprintWithWrongDateFormatShouldThrow [0:00.001] Success
+     GetAllSprintsByProjectIdShouldReturnCorrectSprints [0:00.037] Success
+     GetEndOfLastSprintByProjectIdShouldReturnCorrectDate [0:00.033] Success
+     GetMostRecentSprintByProjectIdShouldReturnCorrectLastFinishedSprint [0:00.095] Success
+     GetMostRecentSprintByProjectIdShouldReturnCorrectNextSprint [0:00.061] Success
+     GetMostRecentSprintByProjectIdShouldReturnCorrectRecentSprint [0:00.031] Success
+     GetNotActiveSprintsByProjectIdShouldReturnCorrectSprints [0:00.068] Success
+     GetNotNotifiedEndingSprintsShouldReturnCorrectSprints [0:00.295] Success
+     GetOldSprintsByProjectIdShouldNotReturnCorrectSprints [0:00.035] Success
+     GetOldSprintsByProjectIdShouldReturnCorrectSprints [0:00.030] Success
+     GetSprintByIdShouldNotReturnCorrectSprint [0:00.029] Success
+     GetSprintByIdShouldReturnCorrectSprint [0:00.034] Success
+     GetSprintByProjectIdAndDateShouldNotReturnCorrectSprint [0:00.034] Success
+     GetSprintByProjectIdAndDateShouldReturnCorrectSprint [0:00.030] Success
+     GetSprintByProjectIdAndDateWithWrongDateShouldNotReturnCorrectSprint [0:00.030] Success
     ```
 5. ProjectAccessIntegrationTests 
     ```
-     AddEmptyProjectShouldThrow [0:00.024] Success
-     AddNewUserToProjectThatAlreadyExistsShouldThrow [0:01.522] Success
-     AddNewUserToProjectWhenUnauthorizedShouldThrow [0:00.575] Success
-     AddNewUserToProjectWithUniqueUserame [0:00.799] Success
-     AddProjectThatAlreadyExistShouldThrow [0:00.165] Success
-     AddProjectWhenUnauthorizedShouldThrow [0:00.049] Success
-     AddProjectWithUniqueName [0:00.467] Success
-     AddProjectWithWrongColourShouldThrow [0:00.050] Success
-     DeleteEmptyOrInvalidProjectShouldDoNothing [0:00.206] Success
-     DeleteProjectWhenUnauthorizedShouldThrow [0:00.375] Success
-     DeleteProjectWithUniqueName [0:00.685] Success
-     GetProjectByIdShouldNotReturnCorrectProject [0:00.094] Success
-     GetProjectByIdShouldReturnCorrectProject [0:00.048] Success
-     GetProjectByNameShouldNotReturnCorrectProject [0:00.048] Success
-     GetProjectByNameShouldReturnCorrectProject [0:00.068] Success
-     GetProjectsByUserIdShouldNotReturnCorrectProjects [0:00.049] Success
-     GetProjectsByUserIdShouldReturnCorrectProjects [0:00.049] Success
-     UpdateProjectToEmptyProjectShouldThrow [0:00.422] Success
-     UpdateProjectWhenUnauthorizedShouldThrow [0:00.533] Success
-     UpdateProjectWithSameOrNewName [0:00.926] Success
-     UpdateProjectWithWrongColourShouldThrow [0:00.287] Success
+     AddEmptyProjectShouldThrow [0:00.014] Success
+     AddNewUserToProjectThatAlreadyExistsShouldThrow [0:00.696] Success
+     AddNewUserToProjectWhenUnauthorizedShouldThrow [0:00.256] Success
+     AddNewUserToProjectWithUniqueUsername [0:00.326] Success
+     AddProjectThatAlreadyExistShouldThrow [0:00.097] Success
+     AddProjectWhenUnauthorizedShouldThrow [0:00.032] Success
+     AddProjectWithUniqueName [0:00.221] Success
+     AddProjectWithWrongColourShouldThrow [0:00.033] Success
+     AddProjectWitwNotUniqueColourShouldThrow [0:00.287] Success
+     AssignUsersToProject [0:01.011] Success
+     AssignUsersToProjectWhenUnauthorizedShouldThrow [0:00.253] Success
+     DeleteEmptyOrInvalidProjectShouldDoNothing [0:00.063] Success
+     DeleteProjectWhenUnauthorizedShouldThrow [0:00.236] Success
+     DeleteProjectWithUniqueName [0:00.287] Success
+     GetAllProjectsShouldReturnCorrectProjects [0:00.034] Success
+     GetProjectByIdShouldNotReturnCorrectProject [0:00.030] Success
+     GetProjectByIdShouldReturnCorrectProject [0:00.033] Success
+     GetProjectByNameShouldNotReturnCorrectProject [0:00.031] Success
+     GetProjectByNameShouldReturnCorrectProject [0:00.034] Success
+     GetProjectsByUserIdShouldNotReturnCorrectProjects [0:00.033] Success
+     GetProjectsByUserIdShouldReturnCorrectProjects [0:00.032] Success
+     NotifyUsersAboutEndOfSprint [0:03.978] Success
+     UpdateProjectToEmptyProjectShouldThrow [0:00.192] Success
+     UpdateProjectWhenUnauthorizedShouldThrow [0:00.190] Success
+     UpdateProjectWithSameOrNewName [0:00.542] Success
+     UpdateProjectWithWrongColourShouldThrow [0:00.231] Success
     ```
 6. ConnectionIntegrationTests
     ```
-    Connect [0:01.192] Success
+     ConnExcl [0:00.000] Success
+     Connect [0:00.001] Success
     ```
     
     

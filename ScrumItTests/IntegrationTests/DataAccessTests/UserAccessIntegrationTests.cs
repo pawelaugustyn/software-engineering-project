@@ -525,6 +525,8 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
         [Test]
         public void X_UpdateUserPasswordShouldBePossible()
         {
+            AppStateProvider.Instance.CurrentUser = _user;
+
             var userToUpdate = new UserModel
             {
                 Username = "updatePasswordDeveloper".WithUniqueName(),
