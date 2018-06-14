@@ -173,26 +173,6 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
         }
 
         [Test]
-        public void GetOldSprintsByProjectIdShouldReturnCorrectSprints()
-        {
-            var sprints = SprintAccess.GetOldSprintsByProjectId(_project.ProjectId);
-
-            sprints.ListContains(_oldSprint);
-            sprints.ListNotContains(_sprint);
-            sprints.ListNotContains(_futureSprint);
-        }
-
-        [Test]
-        public void GetOldSprintsByProjectIdShouldNotReturnCorrectSprints()
-        {
-            var sprints = SprintAccess.GetOldSprintsByProjectId(-1);
-
-            sprints.ListNotContains(_oldSprint);
-            sprints.ListNotContains(_sprint);
-            sprints.ListNotContains(_futureSprint);
-        }
-
-        [Test]
         public void AddSprintToProject()
         {
             var project = new ProjectModel

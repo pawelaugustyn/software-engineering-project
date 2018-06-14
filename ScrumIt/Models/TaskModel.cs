@@ -27,24 +27,6 @@ namespace ScrumIt.Models
         {
             return TaskAccess.GetTaskById(taskid);
         }
- 
-        public static TaskModel GetTaskByName(string taskname)
-        {
-            return new TaskModel();
-            //return TaskAccess.GetTaskByName(taskname);
-        }
- 
-        public static List<TaskModel> GetTasksByPriority(int priority)
-        {
-            return new List<TaskModel>();
-            //return TaskAccess.GetTasksByPriority(priority);
-        }
- 
-        public static List<TaskModel> GetTasksByStage(int stage)
-        {
-            return new List<TaskModel>();
-            //return TaskAccess.GetTasksByStage(stage);
-        }
 
         public static List<TaskModel> GetTasksBySprintId(int sprintid)
         {
@@ -80,11 +62,6 @@ namespace ScrumIt.Models
         public static void RemoveTask(int taskid)
         {
             TaskAccess.RemoveTask(taskid);
-        }
-
-        public static void AssignUsersToTask(TaskModel taskToAssignTo, List<UserModel> usersToAssign)
-        {
-            TaskAccess.AssignUsersToTask(taskToAssignTo, usersToAssign);
         }
 
         public static void AssignUsersToTask(TaskModel taskToAssignTo, IEnumerable<int> usersIdsToAssign)

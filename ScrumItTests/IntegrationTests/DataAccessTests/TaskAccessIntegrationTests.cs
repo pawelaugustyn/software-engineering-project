@@ -103,14 +103,6 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
         }
 
         [Test]
-        public void GetProjectTasksByProjectIdShouldReturnCorrectTasks()
-        {
-            var tasks = TaskAccess.GetProjectTasksByProjectId(_project.ProjectId);
-
-            tasks.ListContains(_task);
-        }
-
-        [Test]
         public void GetTaskByIdShouldReturnCorrectTasks()
         {
             var task = TaskAccess.GetTaskById(_task.TaskId);
