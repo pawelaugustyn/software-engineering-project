@@ -9,41 +9,6 @@ namespace ScrumIt.DataAccess
 {
     internal class TaskAccess
     {
-        public static List<TaskModel> GetProjectTasksByProjectId(int projectid)
-        {
-            var tasks = new List<TaskModel>();
-            using (new Connection())
-            {
-                var cmd = new NpgsqlCommand("select tsk.task_id, tsk.sprint_id, tsk.task_name, tsk.task_desc, tsk.task_priority, tsk.task_estimated_time, tsk.task_stage, tsk.task_color, tsk.project_id from tasks tsk join projects pr using(project_id) where pr.project_id = @projectid order by pr.project_id;")
-                {
-                    Connection = Connection.Conn
-                };
-                cmd.Parameters.AddWithValue("projectid", projectid);
-                using (var reader = cmd.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-
-                        tasks.Add(new TaskModel
-                        {
-                            TaskId = (int)reader[0],
-                            SprintId = reader[1] == DBNull.Value ? 0 : (int)reader[1],
-                            TaskName = (string)reader[2],
-                            TaskDesc = reader[3] != DBNull.Value ? (string)reader[3] : "",
-                            TaskPriority = (int)reader[4],
-                            TaskEstimatedTime = (int)reader[5],
-                            TaskStage = (TaskModel.TaskStages)reader[6],
-                            TaskColor = reader[7] != DBNull.Value ? (string)reader[7] : "#ffffff",
-                            BacklogProjectId = reader[8] == DBNull.Value ? 0 : (int)reader[8]
-                        });
-
-                    }
-                }
-            }
-
-            return tasks;
-        }
-
         public static TaskModel GetTaskById(int taskid)
         {
             var task = new TaskModel();
@@ -80,6 +45,7 @@ namespace ScrumIt.DataAccess
             return task;
         }
         //zaktualizuj w bazie dane zadanie nadajac mu nowy stage (przeciagniecia miedzy kolumnami w sprincie)
+
         public static bool UpdateTaskStage(int taskid, TaskModel.TaskStages newstage)
         {
             if (AppStateProvider.Instance.CurrentUser.Role == UserRoles.Guest)
@@ -98,7 +64,7 @@ namespace ScrumIt.DataAccess
                 var howManyAffected = cmd.ExecuteNonQuery();
                 if (howManyAffected == 1)
                     return true;
-                else return false;
+                return false;
             }
         }
 
@@ -278,21 +244,6 @@ namespace ScrumIt.DataAccess
             }
         }
 
-        private static void DeassignUsersFromTask(int taskid)
-        {
-            if (AppStateProvider.Instance.CurrentUser.Role == UserRoles.Guest)
-                throw new ArgumentException("Brak uprawnien.");
-            using (new Connection())
-            {
-                var cmd = new NpgsqlCommand("DELETE FROM tasks_assigned_users WHERE task_id = @task_id;")
-                {
-                    Connection = Connection.Conn
-                };
-                cmd.Parameters.AddWithValue("task_id", taskid);
-                cmd.ExecuteNonQuery();
-
-            }
-        }
         // new
         public static void DeassignUserFromProjectTasks(int projectid, List<UserModel> users)
         {
@@ -309,7 +260,7 @@ namespace ScrumIt.DataAccess
                     cmd.Parameters.AddWithValue("projectId", projectid);
                     cmd.Parameters.AddWithValue("userId", user.UserId);
                     cmd.ExecuteNonQuery();
-                   
+
                 }
             }
         }
@@ -374,6 +325,22 @@ namespace ScrumIt.DataAccess
                 if (result != 1) return false;
             }
             return true;
+        }
+
+        private static void DeassignUsersFromTask(int taskid)
+        {
+            if (AppStateProvider.Instance.CurrentUser.Role == UserRoles.Guest)
+                throw new ArgumentException("Brak uprawnien.");
+            using (new Connection())
+            {
+                var cmd = new NpgsqlCommand("DELETE FROM tasks_assigned_users WHERE task_id = @task_id;")
+                {
+                    Connection = Connection.Conn
+                };
+                cmd.Parameters.AddWithValue("task_id", taskid);
+                cmd.ExecuteNonQuery();
+
+            }
         }
 
         private static void ValidateNewTask(TaskModel addedTask)

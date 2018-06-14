@@ -25,7 +25,6 @@ namespace ScrumIt.Models
 
         public SprintModel()
         {
-
         }
 
         public SprintModel(int sprintid, int parentProjectId, string startDate, string endDate)
@@ -41,11 +40,6 @@ namespace ScrumIt.Models
             return SprintAccess.GetSprintById(sprintid);
         }
 
-        public static SprintModel GetCurrentSprintForProject(int projectid)
-        {
-            return SprintAccess.GetSprintByProjectIdAndDate(projectid, DateTime.Now);
-        }
-
         public static SprintModel GetMostRecentSprintForProject(int projectid)
         {
             return SprintAccess.GetMostRecentSprintByProjectId(projectid, DateTime.Now);
@@ -53,18 +47,12 @@ namespace ScrumIt.Models
 
         public static List<SprintModel> GetNotActiveSprintModels(int projectId)
         {
-            //return SprintAccess.GetOldSprintsByProjectId(projectId);
             return SprintAccess.GetNotActiveSprintsByProjectId(projectId);
         }
 
         public static void CreateNewSprint(SprintModel sprint)
         {
             SprintAccess.CreateNewSprintForProject(sprint);
-        }
-
-        public static DateTime? GetEndOfLastSprint(int projectId)
-        {
-            return SprintAccess.GetEndOfLastSprintByProjectId(projectId);
         }
 
         public static Dictionary<string, int> GetSprintCompletionData(int sprintId)

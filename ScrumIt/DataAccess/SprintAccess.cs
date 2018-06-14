@@ -39,7 +39,7 @@ namespace ScrumIt.DataAccess
 
         public static SprintModel GetSprintByProjectIdAndDate(int projectid, DateTime time)
         {
-            SprintModel sprint = null;// = new SprintModel();
+            SprintModel sprint = null;
             using (new Connection())
             {
                 var cmd = new NpgsqlCommand("select * from sprints where project_id = @projectid and sprint_start < @datestart::timestamp and sprint_end > @dateend::timestamp;")
@@ -91,7 +91,7 @@ namespace ScrumIt.DataAccess
                         Connection = Connection.Conn
                     };
                     cmd.Parameters.AddWithValue("projectid", projectid);
-                    string datetime = time.ToString("yyyy-MM-dd hh:mm:ss");
+                    var datetime = time.ToString("yyyy-MM-dd hh:mm:ss");
                     cmd.Parameters.AddWithValue("currentdate", datetime);
                     using (var reader = cmd.ExecuteReader())
                     {
@@ -228,37 +228,7 @@ namespace ScrumIt.DataAccess
 
             return true;
         }
-        // pobiera wszystkie sprinty, ktorych data zakonczenia jest wczesniejsza niz obecna data
-        public static List<SprintModel> GetOldSprintsByProjectId(int projectid)
-        {
-            var sprints = new List<SprintModel>();
-            var time = DateTime.Now;
-            using (new Connection())
-            {
-                var cmd = new NpgsqlCommand("select * from sprints where project_id = @projectid and sprint_end < @currentdate::timestamp;")
-                {
-                    Connection = Connection.Conn
-                };
-                cmd.Parameters.AddWithValue("projectid", projectid);
-                string datetime = time.ToString("yyyy-MM-dd hh:mm:ss");
-                cmd.Parameters.AddWithValue("currentdate", datetime);
-                using (var reader = cmd.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        sprints.Add(new SprintModel
-                        {
-                            SprintId = (int)reader[0],
-                            ParentProjectId = (int)reader[1],
-                            StartDateTime = (DateTime)reader[2],
-                            EndDateTime = (DateTime)reader[3]
-                        });
-                    }
-                }
-            }
-            return sprints;
-        }
-        
+
         public static DateTime? GetEndOfLastSprintByProjectId(int projectId)
         {
             DateTime? endDate = null;
@@ -307,21 +277,21 @@ namespace ScrumIt.DataAccess
         }
               
               
-        public static List<SprintModel> GetNotNotifiedEndingSprints(int days_till_end, bool exclusive = false)
+        public static List<SprintModel> GetNotNotifiedEndingSprints(int daysTillEnd, bool exclusive = false)
         {
             var sprints = new List<SprintModel>();
-            var end_time = DateTime.Now.AddDays(days_till_end);
-            var current_time = DateTime.Now;
+            var endTime = DateTime.Now.AddDays(daysTillEnd);
+            var currentTime = DateTime.Now;
             using (var c = new Connection(exclusive))
             {
                 var cmd = new NpgsqlCommand("select * from sprints where sprint_end < @enddate::timestamp and sprint_end > @currentdate::timestamp and emails_sent='false';")
                 {
                     Connection = exclusive ? c.ConnExcl : Connection.Conn
                 };
-                string end_datetime = end_time.ToString("yyyy-MM-dd hh:mm:ss");
-                string current_datetime = current_time.ToString("yyyy-MM-dd hh:mm:ss");
-                cmd.Parameters.AddWithValue("currentdate", current_datetime);
-                cmd.Parameters.AddWithValue("enddate", end_datetime);
+                string endDatetime = endTime.ToString("yyyy-MM-dd hh:mm:ss");
+                string currentDatetime = currentTime.ToString("yyyy-MM-dd hh:mm:ss");
+                cmd.Parameters.AddWithValue("currentdate", currentDatetime);
+                cmd.Parameters.AddWithValue("enddate", endDatetime);
                 using (var reader = cmd.ExecuteReader())
                 {
                     while (reader.Read())

@@ -54,24 +54,6 @@ namespace ScrumIt
             return UserAccess.GetUserPicture(uid);
         }
 
-        public void SetUserPicture(List<int> uids, bool skipExisting=true)
-        {
-            var imgs = UserAccess.GetUserPicture(uids);
-            foreach (var uPic in imgs)
-            {
-                try
-                {
-                    SetUserPicture(uPic.Key, uPic.Value);
-                }
-                catch (ArgumentException)
-                {
-                    if (skipExisting) continue;
-                    _userPics.Remove(uPic.Key);
-                    SetUserPicture(uPic.Key, uPic.Value);
-                }
-            }
-        }
-
         public static Image LoadImage(string filePath)
         {
             try

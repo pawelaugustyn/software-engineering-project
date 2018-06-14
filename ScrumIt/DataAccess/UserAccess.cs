@@ -81,36 +81,6 @@ namespace ScrumIt.DataAccess
             return user;
         }
 
-        public static List<UserModel> GetUsersByLastName(string lastname)
-        {
-            var users = new List<UserModel>();
-            using (new Connection())
-            {
-                var cmd = new NpgsqlCommand("select * from users where lower(last_name) like @lastname;")
-                {
-                    Connection = Connection.Conn
-                };
-                cmd.Parameters.AddWithValue("lastname", lastname?.ToLower() + '%');
-                using (var reader = cmd.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        users.Add(new UserModel
-                        {
-                            UserId = (int)reader[0],
-                            Username = (string)reader[1],
-                            Firstname = (string)reader[3],
-                            Lastname = (string)reader[4],
-                            Role = (UserRoles)reader[5],
-                            Email = (string)reader[6]
-                        });
-                    }
-                }
-            }
-
-            return users;
-        }
-
         public static UserModel GetUserByUsername(string username)
         {
             var user = new UserModel();
@@ -216,13 +186,6 @@ namespace ScrumIt.DataAccess
             return dict;
         }
 
-        public static bool GetUserPicture(UserModel user)
-        {
-            user.Avatar = GetUserPicture(user.UserId);
-
-            return !user.Avatar.Equals(Image.FromStream(Stream.Null));
-        }
-
         public static Image GetUserPicture(int uid)
         {
             var picture = _defaultPic;
@@ -270,11 +233,6 @@ namespace ScrumIt.DataAccess
             return picture;
         }
 
-        public static bool SetUserPicture(UserModel user)
-        {
-            return SetUserPicture(user.UserId, user.Avatar);
-        }
-
         public static bool SetUserPicture(int uid, Image img)
         {
             using (new Connection())
@@ -291,13 +249,6 @@ namespace ScrumIt.DataAccess
 
                 return res == 1;
             }
-        }
-
-        private static byte[] ImageToByte(Image img)
-        {
-            var converter = new ImageConverter();
-
-            return (byte[])converter.ConvertTo(img, typeof(byte[]));
         }
 
         public static List<UserModel> GetAllUsers()
@@ -434,6 +385,12 @@ namespace ScrumIt.DataAccess
                 if (result != 1) return false;
             }
             return true;
+        }
+        private static byte[] ImageToByte(Image img)
+        {
+            var converter = new ImageConverter();
+
+            return (byte[])converter.ConvertTo(img, typeof(byte[]));
         }
 
         private static void ValidateUser(UserModel addedUser, string password)

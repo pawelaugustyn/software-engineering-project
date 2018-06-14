@@ -41,14 +41,9 @@ namespace ScrumIt.Models
             ProjectAccess.AssignUsersToProject(projectToAssignTo, usersToAssign);
         }
 
-        public static void AddNewUserToProject(int userId, int projectId)
+        public static bool NotifyUsersAboutEndOfSprint(int daysTillEnd)
         {
-            ProjectAccess.AddNewUserToProject(userId, projectId);
-        }
-
-        public static bool NotifyUsersAboutEndOfSprint(int days_till_end)
-        {
-            return ProjectAccess.NotifyUsersAboutEndOfSprint(days_till_end);
+            return ProjectAccess.NotifyUsersAboutEndOfSprint(daysTillEnd);
         }
 
         public static void NotifyUsersAboutEndOfSprint()
