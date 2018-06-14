@@ -184,6 +184,7 @@ namespace ScrumIt.Forms
         {
             try
             {
+                this.Activate();
                 var sprint = SprintModel.GetMostRecentSprintForProject(_projectId);
                 _sprintId = sprint.SprintId;
                 var taskList = TaskModel.GetTasksBySprintId(_sprintId);

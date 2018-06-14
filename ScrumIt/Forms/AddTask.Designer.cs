@@ -60,7 +60,7 @@
             this.addTaskTableLayoutPanel.Controls.Add(this.taskNameTextBox, 1, 0);
             this.addTaskTableLayoutPanel.Controls.Add(this.taskNameLabel, 0, 0);
             this.addTaskTableLayoutPanel.Location = new System.Drawing.Point(39, 75);
-            this.addTaskTableLayoutPanel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.addTaskTableLayoutPanel.Margin = new System.Windows.Forms.Padding(4);
             this.addTaskTableLayoutPanel.Name = "addTaskTableLayoutPanel";
             this.addTaskTableLayoutPanel.RowCount = 4;
             this.addTaskTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
@@ -98,7 +98,7 @@
             this.taskPriorityLabel.Name = "taskPriorityLabel";
             this.taskPriorityLabel.Size = new System.Drawing.Size(216, 31);
             this.taskPriorityLabel.TabIndex = 12;
-            this.taskPriorityLabel.Text = "Stopień skomplikowania";
+            this.taskPriorityLabel.Text = "Priorytet";
             this.taskPriorityLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // taskDescriptionLabel
@@ -120,7 +120,7 @@
             this.estimatedTimeTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.estimatedTimeTextBox.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.estimatedTimeTextBox.Location = new System.Drawing.Point(230, 291);
-            this.estimatedTimeTextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.estimatedTimeTextBox.Margin = new System.Windows.Forms.Padding(4);
             this.estimatedTimeTextBox.Name = "estimatedTimeTextBox";
             this.estimatedTimeTextBox.Size = new System.Drawing.Size(364, 20);
             this.estimatedTimeTextBox.TabIndex = 8;
@@ -131,7 +131,7 @@
             this.priorityTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.priorityTextBox.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.priorityTextBox.Location = new System.Drawing.Point(230, 259);
-            this.priorityTextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.priorityTextBox.Margin = new System.Windows.Forms.Padding(4);
             this.priorityTextBox.Name = "priorityTextBox";
             this.priorityTextBox.Size = new System.Drawing.Size(364, 20);
             this.priorityTextBox.TabIndex = 7;
@@ -142,7 +142,7 @@
             this.taskDescriptionTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.taskDescriptionTextBox.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.taskDescriptionTextBox.Location = new System.Drawing.Point(230, 37);
-            this.taskDescriptionTextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.taskDescriptionTextBox.Margin = new System.Windows.Forms.Padding(4);
             this.taskDescriptionTextBox.Multiline = true;
             this.taskDescriptionTextBox.Name = "taskDescriptionTextBox";
             this.taskDescriptionTextBox.Size = new System.Drawing.Size(364, 208);
@@ -153,7 +153,7 @@
             this.taskNameTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.taskNameTextBox.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.taskNameTextBox.Location = new System.Drawing.Point(230, 5);
-            this.taskNameTextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.taskNameTextBox.Margin = new System.Windows.Forms.Padding(4);
             this.taskNameTextBox.Name = "taskNameTextBox";
             this.taskNameTextBox.Size = new System.Drawing.Size(364, 20);
             this.taskNameTextBox.TabIndex = 5;
@@ -180,7 +180,7 @@
             this.addTaskButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.addTaskButton.ForeColor = System.Drawing.Color.White;
             this.addTaskButton.Location = new System.Drawing.Point(39, 449);
-            this.addTaskButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.addTaskButton.Margin = new System.Windows.Forms.Padding(4);
             this.addTaskButton.Name = "addTaskButton";
             this.addTaskButton.Size = new System.Drawing.Size(600, 38);
             this.addTaskButton.TabIndex = 1;
@@ -201,7 +201,7 @@
             this.currentSprintRadio.AutoSize = true;
             this.currentSprintRadio.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.currentSprintRadio.Location = new System.Drawing.Point(39, 406);
-            this.currentSprintRadio.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.currentSprintRadio.Margin = new System.Windows.Forms.Padding(4);
             this.currentSprintRadio.Name = "currentSprintRadio";
             this.currentSprintRadio.Size = new System.Drawing.Size(155, 32);
             this.currentSprintRadio.TabIndex = 2;
@@ -214,7 +214,7 @@
             this.backlogRadio.AutoSize = true;
             this.backlogRadio.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.backlogRadio.Location = new System.Drawing.Point(269, 406);
-            this.backlogRadio.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.backlogRadio.Margin = new System.Windows.Forms.Padding(4);
             this.backlogRadio.Name = "backlogRadio";
             this.backlogRadio.Size = new System.Drawing.Size(102, 32);
             this.backlogRadio.TabIndex = 3;
@@ -231,7 +231,7 @@
             this.Controls.Add(this.currentSprintRadio);
             this.Controls.Add(this.addTaskButton);
             this.Controls.Add(this.addTaskTableLayoutPanel);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "AddTask";
