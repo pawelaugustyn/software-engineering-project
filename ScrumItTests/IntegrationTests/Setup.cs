@@ -41,8 +41,7 @@ namespace ScrumItTests.IntegrationTests
             {
                 foreach (var sprint in _sprintModelList)
                 {
-                    //TODO: Delete sprint
-                    //SprintModel.Delete(sprint);
+                    //Sprint is deleted when their project is deleted
                 }
             }
             if (_projectList.Any())

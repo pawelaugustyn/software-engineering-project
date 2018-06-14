@@ -45,10 +45,6 @@ namespace ScrumIt.Models
             return UserAccess.GetUserById(userid);
         }
 
-        public static List<UserModel> GetUsersByLastName(string lastname)
-        {
-            return UserAccess.GetUsersByLastName(lastname);
-        }
         public static UserModel GetUserByUsername(string username)
         {
             return UserAccess.GetUserByUsername(username);
@@ -57,11 +53,6 @@ namespace ScrumIt.Models
         public static List<UserModel> GetUsersByProjectId(int projectid)
         {
             return UserAccess.GetUsersByProjectId(projectid);
-        }
-
-        public static List<UserModel> GetUserByTaskId(int taskId)
-        {
-            return UserAccess.GetUsersByTaskId(taskId);
         }
 
         public static bool Add(UserModel addedUser, string password)

@@ -99,22 +99,6 @@ namespace ScrumItTests.IntegrationTests.DataAccessTests
         }
 
         [Test]
-        public void GetUsersByLastNameShouldReturnCorrectUser()
-        {
-            var users = UserAccess.GetUsersByLastName(_user.Lastname);
-
-            users.ListContains(_user);
-        }
-
-        [Test]
-        public void GetUsersByLastNameShouldNotReturnCorrectUser()
-        {
-            var users = UserAccess.GetUsersByLastName("incorrectLastname");
-
-            users.ListNotContains(_user);
-        }
-
-        [Test]
         public void GetUserByUsernameShouldReturnCorrectUser()
         {
             var user = UserAccess.GetUserByUsername(_user.Username);
