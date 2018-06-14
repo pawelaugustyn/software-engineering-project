@@ -9,11 +9,13 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using MetroFramework;
 using MetroFramework.Forms;
+using ScrumIt.Models;
 
 namespace ScrumIt.Forms
 {
     public partial class Login : MetroForm
     {
+        private readonly Color _panelColor = ColorTranslator.FromHtml("#4AC1C1");
         public Login()
         {
             InitializeComponent();
@@ -31,23 +33,57 @@ namespace ScrumIt.Forms
 
         private void loginButton_Click(object sender, EventArgs e)
         {
-            //jeśli użytkownik znajduje sie w bazie to ukrywamy formularz Login i wchodzimy do mainView
-            if (Models.UserModel.LoginAs(loginTextBox.Text, passwordTextBox.Text))
+            try
             {
+                //jeśli użytkownik znajduje sie w bazie to ukrywamy formularz Login i wchodzimy do mainView
+                if (Models.UserModel.LoginAs(loginTextBox.Text, passwordTextBox.Text))
+                {
+                    this.Hide();
+                    var view = new MainView();
+                    //view.ShowDialog();
+                    view.Show();
+                }
+                else
+                {
+                    MessageBox.Show("Niepoprawne dane logowania");
+                }
+            }
+            catch (Exception err)
+            {
+                MessageBox.Show(err.Message);
+            }
+        }
+        
+
+        private void Login_Load(object sender, EventArgs e)
+        {
+            loginButton.BackColor = _panelColor;
+        }
+
+        private void guestButton_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var state = AppStateProvider.Instance;
+                state.CurrentUser = new UserModel();
                 this.Hide();
                 var view = new MainView();
                 //view.ShowDialog();
                 view.Show();
             }
-            else
+            catch (Exception err)
             {
-                MessageBox.Show("Niepoprawne dane logowania");
+                MessageBox.Show(err.Message);
             }
+
         }
-        
-        private void GuestmetroLink_Click(object sender, EventArgs e)
+
+        private void Login_KeyDown(object sender, KeyEventArgs e)
         {
-            MessageBox.Show("zalogowano jako gość");
+            if (e.KeyCode == Keys.Enter)
+            {
+                loginButton_Click(sender, e);
+            }
         }
     }
 }

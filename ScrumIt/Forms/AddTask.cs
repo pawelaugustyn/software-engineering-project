@@ -25,10 +25,6 @@ namespace ScrumIt.Forms
         private void TaskForm_Load(object sender, EventArgs e)
         {
             addTaskButton.BackColor = _panelColor;
-
-            var allUsers = UserModel.GetUsersByProjectId(_projectId);
-
-            userListMenuStrip.Items.AddRange(createUsersListMenu(allUsers));
         }
 
         private void addTaskButton_Click(object sender, EventArgs e)
@@ -42,65 +38,75 @@ namespace ScrumIt.Forms
             }
 
             var taskDescription = taskDescriptionTextBox.Text;
-            var taskPriority = priorityTextBox.Text;
-            if (taskPriority == "")
+            short taskPriority = -1;
+            if (priorityTextBox.Text == "" || !Int16.TryParse(priorityTextBox.Text, out taskPriority))
             {
                 MessageBox.Show(@"Uzupełnij stopień skomplikowania zadania");
                 validationFlag = false;
             }
             else
-            if (Int16.Parse(taskPriority) > 101 || Int16.Parse(taskPriority) < 0)
+            if (taskPriority > 100 || taskPriority < 1)
             {
                 MessageBox.Show(@"Możliwa wartość stopnia skomplikowania to liczba całkownita między 0 a 100");
                 validationFlag = false;
             }
 
-            var taskEstimatedTime = estimatedTimeTextBox.Text;
-            if (taskEstimatedTime == "")
+            short taskEstimatedTime = -1;
+            if (estimatedTimeTextBox.Text == "" || !Int16.TryParse(estimatedTimeTextBox.Text, out taskEstimatedTime))
             {
                 MessageBox.Show(@"Uzupełnij przewidywany czas zadania");
                 validationFlag = false;
             }
             else
-            if (Int16.Parse(taskEstimatedTime) > 101 || Int16.Parse(taskEstimatedTime) < 0)
+            if (taskEstimatedTime > 100 || taskEstimatedTime < 1)
             {
                 MessageBox.Show(@"Możliwa wartość przewidywanego czasu zadania to liczba całkownita między 0 a 100");
                 validationFlag = false;
             }
 
-            var usersList = userListMenuStrip.Items;
-            var userNames = new List<string>();
-            foreach (ToolStripMenuItem user in usersList)
+            if (!currentSprintRadio.Checked && !backlogRadio.Checked)
             {
-                if (user.Checked)
-                {
-                    var userName = user.Name;
-                    userNames.Add(userName);
-                    //przypisz uzytkownika do zadania do bazki
-                }
+                MessageBox.Show(@"Zadanie musi być dodane do sprintu bądź backlogu!");
+                validationFlag = false;
             }
+
+            var sprintId = 0;
+            var projectId = _projectId;
+            if (currentSprintRadio.Checked)
+            {
+                sprintId = _sprintId;
+            }
+
             if (validationFlag)
             {
-                var task = new TaskModel
+                try
                 {
-                    TaskName = taskName,
-                    TaskDesc = taskDescription,
-                    TaskType = "T",
-                    TaskPriority = Int16.Parse(taskPriority),
-                    TaskEstimatedTime = Int16.Parse(taskEstimatedTime),
-                    TaskStage = TaskModel.TaskStages.ToDo,
-                    SprintId = _sprintId
-                };
-                TaskModel.CreateNewTask(task, new List<UserModel>());
-                //add task to db
-                Close();
+                    var task = new TaskModel
+                    {
+                        TaskName = taskName,
+                        TaskDesc = taskDescription,
+                        TaskPriority = taskPriority,
+                        TaskEstimatedTime = taskEstimatedTime,
+                        TaskStage = TaskModel.TaskStages.ToDo,
+                        SprintId = sprintId,
+                        TaskColor = "#ffffff",
+                        BacklogProjectId = projectId
+                    };
+                    TaskModel.CreateNewTask(task, new List<UserModel>());
+                    CurrentSprint.refresh = true;
+                    Close();
+                }
+                catch (Exception err)
+                {
+                    MessageBox.Show(err.Message);
+                }
+
             }
         }
 
         private void priorityTextBox_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) &&
-                (e.KeyChar != '.'))
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
             {
                 e.Handled = true;
             }
@@ -108,36 +114,10 @@ namespace ScrumIt.Forms
 
         private void estimatedTimeTextBox_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) &&
-                (e.KeyChar != '.'))
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
             {
                 e.Handled = true;
             }
-        }
-
-        private void addUsersButton_Click(object sender, EventArgs e)
-        {
-            userListMenuStrip.Show(addUsersButton, new Point(0, addUsersButton.Height));
-        }
-
-        private ToolStripItem[] createUsersListMenu(List<UserModel> userList)
-        {
-            var toolStripItems = new ToolStripItem[userList.Count];
-            for (var i = 0; i < userList.Count; i++)
-            {
-                var toolStripMenuItemName = userList[i].Username;
-                var toolStripMenuItemText = userList[i].Firstname + " " + userList[i].Lastname + " ";
-                var toolStripMenuItem = new ToolStripMenuItem
-                {
-                    Name = toolStripMenuItemName,
-                    Text = toolStripMenuItemText,
-                    Image = Properties.Resources.cat2,
-                    CheckOnClick = true
-                };
-                toolStripItems[i] = toolStripMenuItem;
-            }
-
-            return toolStripItems;
         }
 
         private void userListMenuStrip_Closing(object sender, ToolStripDropDownClosingEventArgs e)
@@ -147,5 +127,6 @@ namespace ScrumIt.Forms
                 e.Cancel = true;
             }
         }
+        
     }
 }

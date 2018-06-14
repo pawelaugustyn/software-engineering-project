@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 using System.Drawing;
 using System.Windows.Forms;
 using MetroFramework;
@@ -14,15 +15,29 @@ namespace ScrumIt.Forms
         private readonly int _projectId;
         private int _sprintId;
         private bool createMenuflag = true;
+        private string _userRole;
+        //flaga do sprawdzania czy mamy odświeżać currentSprint
+        public static bool refresh = false;
 
         public CurrentSprint()
         {
+            _userRole = AppStateProvider.Instance.CurrentUser.Role.ToString();
             InitializeComponent();
         }
 
         public CurrentSprint(int projectId)
         {
             _projectId = projectId;
+            try
+            {
+                _userRole = AppStateProvider.Instance.CurrentUser.Role.ToString();
+                var sprintModel = SprintModel.GetMostRecentSprintForProject(_projectId);
+                _sprintId = sprintModel.SprintId;
+            }
+            catch (Exception err)
+            {
+                MessageBox.Show(err.Message);
+            }
             InitializeComponent();
         }
 
@@ -32,61 +47,116 @@ namespace ScrumIt.Forms
 
         private void CurrentSprint_Load(object sender, EventArgs e)
         {
-            var sprintModel = SprintModel.GetCurrentSprintForProject(_projectId);
-            _sprintId = sprintModel.SprintId;
-            
-            var taskList = TaskModel.GetTasksBySprintId(_sprintId);
-            
-            var index = 0;
-            foreach (var task in taskList)
+            try
             {
-                CreateTaskPanel(task, index++);
+                var project = ProjectModel.GetProjectById(_projectId);
+                projectNameTextBox.Text = project.ProjectName;
+                var sprint = SprintModel.GetMostRecentSprintForProject(_projectId);
+                DateTextBox.Text = sprint.StartDateTime.ToShortDateString() + " / " + sprint.EndDateTime.ToShortDateString();
+
+                this.Activate();
+                historyMenuStrip.Items.Clear();
+                backlogMenuStrip.Items.Clear();
+                userListMenuStrip.Items.Clear();
+                propertiesComboBox.Items.Clear();
+
+                var taskList = TaskModel.GetTasksBySprintId(_sprintId);
+                var startDate = SprintModel.GetSprintById(_sprintId).StartDateTime;
+                var endDate = SprintModel.GetSprintById(_sprintId).EndDateTime;
+                if (taskList.Count == 0)
+                {
+                    if (endDate < DateTime.Now)
+                    {
+                        backlogButton.Enabled = false;
+                        addTaskButton.Enabled = false;
+                    }
+                    else
+                    {
+                        backlogButton.Enabled = true;
+                        addTaskButton.Enabled = true;
+                    }
+                }
+                else
+                {
+                    for (var i = 0; i < taskList.Count; i++)
+                    {
+                        if (startDate < DateTime.Now)
+                        {
+                            CreateTaskPanel(taskList[i], i);
+                        }
+                        else if (endDate < DateTime.Now)
+                        {
+                            CreateHistoryTaskPanel(taskList[i], i);
+                        }
+                        else
+                        {
+                            CreateFutureTaskPanel(taskList[i], i);
+                        }
+                    }
+                }
+
+                if (createMenuflag)
+                {
+                    propertiesComboBox.Items.Add("Wybierz opcję...");
+                    propertiesComboBox.Items.Add("Lista Projektów");
+                    if (_userRole == "ScrumMaster")
+                    {
+                        propertiesComboBox.Items.Add("Dane użytkownika");
+                        propertiesComboBox.Items.Add("Stwórz konto");
+                        propertiesComboBox.Items.Add("Usuń użytkownika");
+                        propertiesComboBox.Items.Add("Zarządzaj projektem");
+                        propertiesComboBox.Items.Add("Wyloguj");
+                    }
+                    else if (_userRole == "Developer")
+                    {
+                        propertiesComboBox.Items.Add("Dane użytkownika");
+                        propertiesComboBox.Items.Add("Wyloguj");
+                    }
+                    else
+                    {
+                        propertiesComboBox.Items.Add("Zaloguj się");
+                    }
+
+                    propertiesComboBox.SelectedIndex = 0;
+                    try
+                    {
+                        var projectColorString = ProjectModel.GetProjectById(_projectId).ProjectColor;
+                        var projectColor = ColorTranslator.FromHtml(projectColorString);
+                        scrumBoardPanel.BackColor = projectColor;
+
+
+                        var historicalSprints = SprintModel.GetNotActiveSprintModels(_projectId);
+                        var backlogTasks = TaskModel.GetProjectBacklogTasks(_projectId);
+
+                        var users = UserModel.GetUsersByProjectId(_projectId);
+
+                        historyMenuStrip.Items.AddRange(CreateHistoryMenu(historicalSprints));
+                        backlogMenuStrip.Items.AddRange(createBacklogMenu(backlogTasks));
+                        userListMenuStrip.Items.AddRange(createUserListMenu(users));
+                        createMenuflag = false;
+                    }
+                    catch (Exception err)
+                    {
+                        MessageBox.Show(err.Message);
+                    }
+                }
             }
-
-            if (createMenuflag)
+            catch (Exception err)
             {
-                propertiesComboBox.Items.Add("Wybierz opcję...");
-                propertiesComboBox.Items.Add("Lista Projektów");
-                propertiesComboBox.Items.Add("Dane użytkownika");
-                propertiesComboBox.Items.Add("Wyloguj");
-                propertiesComboBox.SelectedIndex = 0;
-
-                var projectColorString = ProjectModel.GetProjectById(_projectId).ProjectColor;
-                var projectColor = ColorTranslator.FromHtml(projectColorString);
-                scrumBoardPanel.BackColor = projectColor;
-
-                //pobierz historyczne sprinty
-                var historicalSprints = new List<SprintModel>
-                {
-                    new SprintModel()
-                    {
-                        StartDateTime = DateTime.Parse("2018-04-21"),
-                        EndDateTime = DateTime.Parse("2018-05-09")
-
-                    }
-                };
-
-                //Pobierz backlog
-                var backlogTasks = new List<TaskModel>
-                {
-                    new TaskModel()
-                    {
-                        TaskName = "Task z backlogu1",
-                    }
-                };
-
-                var users = UserModel.GetUsersByProjectId(_projectId);
-
-                historyMenuStrip.Items.AddRange(CreateHistoryMenu(historicalSprints));
-                backlogMenuStrip.Items.AddRange(createBacklogMenu(backlogTasks));
-                userListMenuStrip.Items.AddRange(createUserListMenu(users));
-                createMenuflag = false;
+                MessageBox.Show(err.Message);
             }
 
         }
 
         private void panel1_Paint(object sender, PaintEventArgs e)
         {
+            if (_userRole == "Guest")
+            {
+                addTaskButton.BackColor = ColorTranslator.FromHtml("#eeeeee");
+                addTaskButton.ForeColor = Color.DarkGray;
+                var addTaskToolTip = new ToolTip();
+                addTaskToolTip.SetToolTip(addTaskButton, "Zaloguj się aby dodać zadanie");
+            }
             PrepareLayout(e);
         }
 
@@ -112,13 +182,42 @@ namespace ScrumIt.Forms
 
         private void currentSprintButton_Click(object sender, EventArgs e)
         {
-            var taskList = TaskModel.GetTasksBySprintId(_sprintId);
-            scrumBoardPanel.Controls.Clear();
-
-            var index = 0;
-            foreach (var task in taskList)
+            try
             {
-                CreateTaskPanel(task, index++);
+                this.Activate();
+                var sprint = SprintModel.GetMostRecentSprintForProject(_projectId);
+                _sprintId = sprint.SprintId;
+                var taskList = TaskModel.GetTasksBySprintId(_sprintId);
+                scrumBoardPanel.Controls.Clear();
+                var endDate = sprint.EndDateTime;
+
+                var index = 0;
+                if (taskList.Count == 0)
+                {
+                    if (endDate < DateTime.Now)
+                    {
+                        backlogButton.Enabled = false;
+                        addTaskButton.Enabled = false;
+                    }
+                    else
+                    {
+                        backlogButton.Enabled = true;
+                        addTaskButton.Enabled = true;
+                    }
+                }
+                else
+                {
+                    foreach (var task in taskList)
+                    {
+                        CreateTaskPanel(task, index++);
+                    }
+                }
+                progressBar.Refresh();
+                DateTextBox.Text = sprint.StartDateTime.ToShortDateString() + " / " + sprint.EndDateTime.ToShortDateString();
+            }
+            catch (Exception err)
+            {
+                MessageBox.Show(err.Message);
             }
         }
 
@@ -143,57 +242,144 @@ namespace ScrumIt.Forms
         private void panel_MouseUp(object sender, MouseEventArgs e, TaskModel task)
         {
             var width = scrumBoardPanel.ClientRectangle.Width;
+            var newStage = task.TaskStage;
             if (_mouseUpLocation.X < width / 4)
             {
                 ((Panel)sender).Location = new Point(width / 40, ((Panel)sender).Location.Y);
-                //update task stage
+                newStage = TaskModel.TaskStages.ToDo;
             }
 
             if (_mouseUpLocation.X > width / 4 && _mouseUpLocation.X < 7 * width / 12)
             {
                 ((Panel)sender).Location = new Point(width / 40 + width / 3, ((Panel)sender).Location.Y);
+                newStage = TaskModel.TaskStages.Doing;
             }
             if (_mouseUpLocation.X > 7 * width / 12)
             {
                 ((Panel)sender).Location = new Point(width / 40 + 2 * width / 3, ((Panel)sender).Location.Y);
+                newStage = TaskModel.TaskStages.Completed;
             }
-            //change task stage
+
+            try
+            {
+                bool checkIfRecordAffected = TaskModel.UpdateTaskStage(task.TaskId, newStage);
+                if(checkIfRecordAffected)
+                    progressBar.Refresh();
+            }
+
+            catch (Exception err)
+            {
+                MessageBox.Show(err.Message);
+            }
+
+
         }
 
         private void panel_DoubleClick(int taskId)
         {
             EditTask editTask = new EditTask(taskId, _projectId);
-            editTask.FormClosed += delegate { editTask_FormClosed(); };
+            editTask.FormClosing += new FormClosingEventHandler(editTask_FormClosing);
+            //editTask.FormClosed += delegate { editTask_FormClosed(); };
             editTask.Show();
         }
 
-        private void editTask_FormClosed()
+        private void editTask_FormClosing(object sender, FormClosingEventArgs e)
         {
-            scrumBoardPanel.Controls.Clear();
-            CurrentSprint_Load(null, EventArgs.Empty);
+            if (refresh)
+            {
+                scrumBoardPanel.Controls.Clear();
+                createMenuflag = true;
+                CurrentSprint_Load(null, EventArgs.Empty);
+                progressBar.Refresh();
+                refresh = false;
+            }
+            else
+            {
+                this.Activate();
+            }
         }
 
-        private void addTask_FormClosed()
+        private void proj_FormClosing(object sender, FormClosingEventArgs e)
         {
-            scrumBoardPanel.Controls.Clear();
-            CurrentSprint_Load(null, EventArgs.Empty);
+            try
+            {
+                var proj = ProjectModel.GetProjectById(_projectId);
+                if (proj.ProjectId == 0)
+                {
+                    Close();
+                }
+                var users = UserModel.GetUsersByProjectId(_projectId);
+
+                if (refresh)
+                {
+                    userListMenuStrip.Items.Clear();
+                    userListMenuStrip.Items.AddRange(createUserListMenu(users));
+                    scrumBoardPanel.BackColor = ColorTranslator.FromHtml(proj.ProjectColor);
+                    scrumBoardPanel.Controls.Clear();
+                    createMenuflag = true;
+                    CurrentSprint_Load(null, EventArgs.Empty);
+                    refresh = false;
+                }
+                else
+                {
+                    this.Activate();
+                }
+            }
+            catch (Exception err)
+            {
+                MessageBox.Show(err.Message);
+            }
         }
 
-        private void addTaskFromBacklog_FormClosed()
+        private void addTask_FormClosing(object sender, FormClosingEventArgs e)
         {
-            scrumBoardPanel.Controls.Clear();
-            CurrentSprint_Load(null, EventArgs.Empty);
+            if (refresh)
+            {
+                scrumBoardPanel.Controls.Clear();
+                createMenuflag = true;
+                CurrentSprint_Load(null, EventArgs.Empty);
+                progressBar.Refresh();
+                refresh = false;
+            }
+            else
+            {
+                this.Activate();
+            }
+        }
+
+        private void addTaskFromBacklog_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (refresh)
+            {
+                scrumBoardPanel.Controls.Clear();
+                createMenuflag = true;
+                CurrentSprint_Load(null, EventArgs.Empty);
+                progressBar.Refresh();
+                refresh = false;
+            }
+            else
+            {
+                this.Activate();
+            }
         }
 
 
         private void backlogToolStripMenuItem_Click(int taskId)
         {
+
             AddTaskFromBacklog addTask = new AddTaskFromBacklog(taskId, _sprintId);
-            addTask.FormClosed += delegate { addTaskFromBacklog_FormClosed(); };
+            addTask.FormClosing += new FormClosingEventHandler(addTaskFromBacklog_FormClosing);
+            //addTask.FormClosed += delegate { addTaskFromBacklog_FormClosed(); };
             addTask.Show();
         }
 
-        private void changeColorButton_Click(Panel taskPanel, MetroTextBox textBox)
+        private void toolStripMenuItem_Click(UserModel user)
+        {
+            var info = new UserInfo(user);
+            info.Show();
+        }
+
+        private void changeColorButton_Click(Panel taskPanel, MetroTextBox textBox, TaskModel task)
         {
             var color = new Color();
             if (colorDialog1.ShowDialog() == DialogResult.OK)
@@ -201,7 +387,14 @@ namespace ScrumIt.Forms
                 color = colorDialog1.Color;
             }
             taskPanel.BackColor = color;
-            textBox.BackColor = color;
+            try
+            {
+                TaskModel.SetNewColour(task, ToHexValue(color));
+            }
+            catch (Exception err)
+            {
+                MessageBox.Show(err.Message);
+            }
         }
 
         private void taskDescriptionButton_Click(string description)
@@ -259,53 +452,51 @@ namespace ScrumIt.Forms
 
         private void addTaskButton_Click(object sender, EventArgs e)
         {
-            AddTask addTask = new AddTask(_projectId, _sprintId);
-            addTask.FormClosed += delegate { addTask_FormClosed(); };
-            addTask.Show();
+            if (_userRole != "Guest")
+            {
+                AddTask addTask = new AddTask(_projectId, _sprintId);
+                addTask.FormClosing += new FormClosingEventHandler(addTask_FormClosing);
+                //addTask.FormClosed += delegate { addTask_FormClosed(); };
+                addTask.Show();
+            }
         }
 
-        private void historyToolStripMenuItem_Click(int sprintId)
+        private void historyToolStripMenuItem_Click(int sprintId, DateTime endDate)
         {
-            //pobierz taski z historycznego sprintu
-
-            var taskList = new[]
-            {
-                new
-                {
-                    taskName = "Stary Task",
-                    taskDescription = "Task Description",
-                    taskPriority = 2,
-                    estimatedTime = 10,
-                    users = new[] {"Nowak1"},
-                    taskStage = 1,
-                    Color = Color.Aquamarine
-                },
-                new
-                {
-                    taskName = "Stary Task",
-                    taskDescription = "Task Description",
-                    taskPriority = 4,
-                    estimatedTime = 10,
-                    users = new[] {"Nowak1","Nowak2"},
-                    taskStage = 2,
-                    Color = Color.Aqua
-                },
-                new
-                {
-                    taskName = "Stary Task",
-                    taskDescription = "Task Description",
-                    taskPriority = 10,
-                    estimatedTime = 10,
-                    users = new[] {"Nowak1","Nowak2","Nowak3"},
-                    taskStage = 3,
-                    Color = Color.Bisque
-                }
-            };
+            var taskList = TaskModel.GetTasksBySprintId(sprintId);
             scrumBoardPanel.Controls.Clear();
+            var sprint = SprintModel.GetSprintById(sprintId);
+            DateTextBox.Text = sprint.StartDateTime.ToShortDateString() + " / " + sprint.EndDateTime.ToShortDateString();
 
-            for (var i = 0; i < taskList.Length; i++)
+            _sprintId = sprintId;
+            progressBar.Refresh();
+            
+            if (taskList.Count == 0)
             {
-                CreateHistoryTaskPanel(taskList[i], i);
+                if (endDate < DateTime.Now)
+                {
+                    backlogButton.Enabled = false;
+                    addTaskButton.Enabled = false;
+                }
+                else
+                {
+                    backlogButton.Enabled = true;
+                    addTaskButton.Enabled = true;
+                }
+            }
+            else
+            {
+                for (var i = 0; i < taskList.Count; i++)
+                {
+                    if (endDate < DateTime.Now)
+                    {
+                        CreateHistoryTaskPanel(taskList[i], i);
+                    }
+                    else
+                    {
+                        CreateFutureTaskPanel(taskList[i], i);
+                    }
+                }
             }
         }
 
@@ -330,6 +521,7 @@ namespace ScrumIt.Forms
             for (var i = 0; i < history.Count; i++)
             {
                 var sprintId = history[i].SprintId;
+                var endDate = history[i].EndDateTime;
                 var sprintName = history[i].StartDateTime.ToShortDateString() + " - " + history[i].EndDateTime.ToShortDateString();
                 var toolStripMenuItemName = sprintName + "ToolStripMenuItem";
                 var toolStripMenuItem = new ToolStripMenuItem
@@ -337,9 +529,12 @@ namespace ScrumIt.Forms
                     Name = toolStripMenuItemName,
                     Text = sprintName
                 };
+                if (endDate < DateTime.Now)
+                    toolStripMenuItem.BackColor = Color.Gray;
+
                 toolStripMenuItem.Click += delegate
                 {
-                    historyToolStripMenuItem_Click(sprintId);
+                    historyToolStripMenuItem_Click(sprintId, endDate);
                 };
                 toolStripItems[i] = toolStripMenuItem;
             }
@@ -353,6 +548,7 @@ namespace ScrumIt.Forms
             for (var i = 0; i < backlog.Count; i++)
             {
                 var toolStripMenuItemName = backlog[i].TaskName + "ToolStripMenu";
+                var taskId = backlog[i].TaskId;
                 var toolStripMenuItem = new ToolStripMenuItem
                 {
                     Name = toolStripMenuItemName,
@@ -360,11 +556,10 @@ namespace ScrumIt.Forms
                 };
                 toolStripMenuItem.Click += delegate
                 {
-                    backlogToolStripMenuItem_Click(0);
+                    backlogToolStripMenuItem_Click(taskId);
                 };
                 toolStripItems[i] = toolStripMenuItem;
             }
-
             return toolStripItems;
         }
 
@@ -380,8 +575,9 @@ namespace ScrumIt.Forms
                 {
                     Name = toolStripMenuItemName,
                     Text = toolStripMenuItemText,
-                    Image = Properties.Resources.cat2
+                    Image = user.Avatar
                 };
+                toolStripMenuItem.Click += delegate { toolStripMenuItem_Click(user); };
                 toolStripItems[index++] = toolStripMenuItem;
             }
 
@@ -390,11 +586,15 @@ namespace ScrumIt.Forms
 
         private void CreateTaskPanel(TaskModel task, int index)
         {
+            addTaskButton.Enabled = true;
+            backlogButton.Enabled = true;
             var height = GetScrumBoardPanelHeight();
             var width = GetScrumBoardPanelWidth();
             var stageTemp = task.TaskStage;
             var taskPanelName = "taskPanel" + index;
+            var taskId = task.TaskId;
             var positionX = width / 40;
+
             switch (stageTemp)
             {
                 case TaskModel.TaskStages.Doing:
@@ -406,7 +606,7 @@ namespace ScrumIt.Forms
             }
             var taskPanel = new Panel
             {
-                BackColor = Color.White,
+                BackColor = ColorTranslator.FromHtml(task.TaskColor),
                 BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle,
                 Location = new Point(positionX, height / 24 + index * 90),
                 Name = taskPanelName,
@@ -414,14 +614,16 @@ namespace ScrumIt.Forms
                 TabIndex = 0,
                 Dock = DockStyle.None
             };
-            taskPanel.MouseDown += (sender, e) => panel_MouseDown(e);
-            taskPanel.MouseMove += panel_MouseMove;
-            taskPanel.MouseUp += (sender, e) => panel_MouseUp(sender, e, task); ;
-            taskPanel.DoubleClick += delegate
+            if (_userRole != "Guest")
             {
-                panel_DoubleClick(0);
-            };
-
+                taskPanel.MouseDown += (sender, e) => panel_MouseDown(e);
+                taskPanel.MouseMove += panel_MouseMove;
+                taskPanel.MouseUp += (sender, e) => panel_MouseUp(sender, e, task); ;
+                taskPanel.DoubleClick += delegate
+                {
+                    panel_DoubleClick(taskId);
+                };
+            }
             var taskNameTextBox = new MetroTextBox()
             {
                 BackColor = Color.White,
@@ -470,16 +672,15 @@ namespace ScrumIt.Forms
                 TextAlign = ContentAlignment.MiddleRight
             };
 
-            var userPhotos = new[] { "Nowak1", "Nowak2", "Nowak3", "Nowak4" };
             var pictureBoxes = new List<PictureBox>();
             var location = 15;
-            foreach (var user in userPhotos)
+
+            foreach (var user in task.UsersAssignedToTask)
             {
-                var pictureBoxName = user.ToString() + "PhotoBox";
+                var pictureBoxName = user.Username + "PhotoBox";
                 var pictureBox = new PictureBox
                 {
-                    //get picture by user id
-                    Image = Properties.Resources.cat2,
+                    Image = user.Avatar,
                     Location = new Point(location, 49),
                     Name = pictureBoxName,
                     Size = new Size(23, 25),
@@ -499,10 +700,13 @@ namespace ScrumIt.Forms
                 TabIndex = 0,
                 BackColor = Color.Red
             };
-            changeColorButton.Click += delegate
+            if (_userRole != "Guest")
             {
-                changeColorButton_Click(taskPanel, taskNameTextBox);
-            };
+                changeColorButton.Click += delegate
+                {
+                    changeColorButton_Click(taskPanel, taskNameTextBox, task);
+                };
+            }
 
             taskPanel.Controls.Add(priorityPanel);
             foreach (var pictureBox in pictureBoxes)
@@ -516,11 +720,13 @@ namespace ScrumIt.Forms
             scrumBoardPanel.Controls.Add(taskPanel);
         }
 
-        private void CreateHistoryTaskPanel(dynamic taskList, int index)
+        private void CreateHistoryTaskPanel(TaskModel taskList, int index)
         {
+            addTaskButton.Enabled = false;
+            backlogButton.Enabled = false;
             var height = GetScrumBoardPanelHeight();
             var width = GetScrumBoardPanelWidth();
-            var stageTemp = (TaskModel.TaskStages)taskList.taskStage;
+            var stageTemp = taskList.TaskStage;
             var taskPanelName = "taskPanel" + index;
             var positionX = width / 40;
             switch (stageTemp)
@@ -534,7 +740,6 @@ namespace ScrumIt.Forms
             }
             var taskPanel = new Panel
             {
-                BackColor = Color.White,
                 BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle,
                 Location = new Point(positionX, height / 24 + index * 90),
                 Name = taskPanelName,
@@ -552,13 +757,13 @@ namespace ScrumIt.Forms
                 Name = "taskNameTextBox",
                 Size = new Size(340, 43),
                 TabIndex = 5,
-                Text = taskList.taskName,
+                Text = taskList.TaskName,
                 Enabled = false
             };
 
             var priorityPanel = new Panel
             {
-                BackColor = getPriorityColor(taskList.taskPriority),
+                BackColor = getPriorityColor(taskList.TaskPriority),
                 Location = new Point(-1, -1),
                 Name = "priorityPanel",
                 Size = new Size(10, 79),
@@ -575,7 +780,7 @@ namespace ScrumIt.Forms
             };
             taskDescriptionButton.Click += delegate
             {
-                taskDescriptionButton_Click(taskList.taskDescription);
+                taskDescriptionButton_Click(taskList.TaskDesc);
             };
 
             var taskTimeLabel = new MetroLabel
@@ -587,20 +792,23 @@ namespace ScrumIt.Forms
                 Name = "taskTimeLabel",
                 Size = new Size(13, 15),
                 TabIndex = 3,
-                Text = (taskList.estimatedTime).ToString(),
+                Text = (taskList.TaskEstimatedTime).ToString(),
                 TextAlign = ContentAlignment.MiddleRight
             };
 
-            var userPhotos = taskList.users;
+            var userPhotos = new[]
+            {
+                new{user = 1},
+                new{user = 2}
+            };
             var pictureBoxes = new List<PictureBox>();
             var location = 15;
-            foreach (var user in userPhotos)
+            foreach (var user in taskList.UsersAssignedToTask)
             {
-                var pictureBoxName = user.ToString() + "PhotoBox";
+                var pictureBoxName = user.Username + "PhotoBox";
                 var pictureBox = new PictureBox
                 {
-                    //get picture by user id
-                    Image = Properties.Resources.cat2,
+                    Image = user.Avatar,
                     Location = new Point(location, 49),
                     Name = pictureBoxName,
                     Size = new Size(23, 25),
@@ -612,10 +820,9 @@ namespace ScrumIt.Forms
                 location += 29;
             }
 
-            taskPanel.BackColor = taskList.Color;
-            taskNameTextBox.BackColor = taskList.Color;
+            taskPanel.BackColor = ColorTranslator.FromHtml(taskList.TaskColor);
 
-            if ((TaskModel.TaskStages)taskList.taskStage < TaskModel.TaskStages.Completed)
+            if (taskList.TaskStage < TaskModel.TaskStages.Completed)
             {
                 var notFinishedTask = new Label
                 {
@@ -629,6 +836,120 @@ namespace ScrumIt.Forms
                 };
                 taskPanel.Controls.Add(notFinishedTask);
             }
+
+            taskPanel.Controls.Add(priorityPanel);
+            foreach (var pictureBox in pictureBoxes)
+            {
+                taskPanel.Controls.Add(pictureBox);
+            }
+            taskPanel.Controls.Add(taskNameTextBox);
+            taskPanel.Controls.Add(taskTimeLabel);
+            taskPanel.Controls.Add(taskDescriptionButton);
+            scrumBoardPanel.Controls.Add(taskPanel);
+        }
+
+        private void CreateFutureTaskPanel(TaskModel taskList, int index)
+        {
+            addTaskButton.Enabled = true;
+            backlogButton.Enabled = true;
+            var height = GetScrumBoardPanelHeight();
+            var width = GetScrumBoardPanelWidth();
+            var stageTemp = taskList.TaskStage;
+            var taskPanelName = "taskPanel" + index;
+            var positionX = width / 40;
+            switch (stageTemp)
+            {
+                case TaskModel.TaskStages.Doing:
+                    positionX += width / 3;
+                    break;
+                case TaskModel.TaskStages.Completed:
+                    positionX += 2 * width / 3;
+                    break;
+            }
+            var taskPanel = new Panel
+            {
+                BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle,
+                Location = new Point(positionX, height / 24 + index * 90),
+                Name = taskPanelName,
+                Size = new Size(384, 80),
+                TabIndex = 0,
+                Dock = DockStyle.None
+            };
+
+            var taskNameTextBox = new MetroTextBox()
+            {
+                BackColor = Color.White,
+                CustomBackground = true,
+                Location = new Point(15, 3),
+                Multiline = true,
+                Name = "taskNameTextBox",
+                Size = new Size(340, 43),
+                TabIndex = 5,
+                Text = taskList.TaskName,
+                Enabled = false
+            };
+
+            var priorityPanel = new Panel
+            {
+                BackColor = getPriorityColor(taskList.TaskPriority),
+                Location = new Point(-1, -1),
+                Name = "priorityPanel",
+                Size = new Size(10, 79),
+                TabIndex = 1,
+            };
+
+            var taskDescriptionButton = new MetroButton
+            {
+                Location = new Point(361, 3),
+                Name = "taskDescriptionButton",
+                Size = new Size(12, 22),
+                TabIndex = 0,
+                Text = @"?"
+            };
+            taskDescriptionButton.Click += delegate
+            {
+                taskDescriptionButton_Click(taskList.TaskDesc);
+            };
+
+            var taskTimeLabel = new MetroLabel
+            {
+                AutoSize = true,
+                FontSize = MetroLabelSize.Small,
+                FontWeight = MetroLabelWeight.Regular,
+                Location = new Point(360, 30),
+                Name = "taskTimeLabel",
+                Size = new Size(13, 15),
+                TabIndex = 3,
+                Text = (taskList.TaskEstimatedTime).ToString(),
+                TextAlign = ContentAlignment.MiddleRight
+            };
+
+            var userPhotos = new[]
+            {
+                new{user = 1},
+                new{user = 2}
+            };
+            var pictureBoxes = new List<PictureBox>();
+            var location = 15;
+            foreach (var user in taskList.UsersAssignedToTask)
+            {
+                var pictureBoxName = user.Username + "PhotoBox";
+                var pictureBox = new PictureBox
+                {
+                    Image = user.Avatar,
+                    Location = new Point(location, 49),
+                    Name = pictureBoxName,
+                    Size = new Size(23, 25),
+                    SizeMode = PictureBoxSizeMode.StretchImage,
+                    TabIndex = 4,
+                    TabStop = false
+                };
+                pictureBoxes.Add(pictureBox);
+                location += 29;
+            }
+
+            taskPanel.BackColor = ColorTranslator.FromHtml(taskList.TaskColor);
+
 
             taskPanel.Controls.Add(priorityPanel);
             foreach (var pictureBox in pictureBoxes)
@@ -676,35 +997,194 @@ namespace ScrumIt.Forms
         {
             if (e.CloseReason == CloseReason.UserClosing)
             {
-                UserModel.Logout();
-                Application.Exit();
+                var mainView = new MainView();
+                mainView.Show();
             }
         }
 
         private void propertiesComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (propertiesComboBox.SelectedIndex == 1)
+            if (_userRole == "ScrumMaster")
             {
-                MainView mainView = new MainView();
-                Hide();
-                mainView.Show();
-            }
-            //opcja dane uzytkownika
-            if (propertiesComboBox.SelectedIndex == 2)
-            {
-                UserPanel userPanel = new UserPanel();
-                userPanel.Show();
-            }
-            //opcja wyloguj
-            if (propertiesComboBox.SelectedIndex == 3)
-            {
-                MessageBox.Show(@"wylogowano");
-                UserModel.Logout();
-                Hide();
-                var l = new Login();
-                l.Show();
+                if (propertiesComboBox.SelectedIndex == 1)
+                {
+                    MainView mainView = new MainView();
+                    Hide();
+                    mainView.Show();
+                }
+                if (propertiesComboBox.SelectedIndex == 2)
+                {
+                    UserPanel userPanel = new UserPanel();
+                    userPanel.Show();
+                }
 
+                if (propertiesComboBox.SelectedIndex == 3)
+                {
+                    var reg = new Register();
+                    reg.Show();
+                }
+                if (propertiesComboBox.SelectedIndex == 4)
+                {
+                    var del = new DeleteUser();
+                    del.Show();
+                }
+                if (propertiesComboBox.SelectedIndex == 5)
+                {
+                    var proj = new ManageProject(_projectId);
+                    proj.FormClosing += new FormClosingEventHandler(proj_FormClosing);
+
+                    //proj.FormClosed += delegate { proj_FormClosed(); };
+                    proj.Show();
+                }
+                if (propertiesComboBox.SelectedIndex == 6)
+                {
+                    MessageBox.Show("wylogowano");
+                    UserModel.Logout();
+
+                    Application.Restart();
+
+                }
             }
+
+            else if (_userRole == "Developer")
+            {
+                if (propertiesComboBox.SelectedIndex == 1)
+                {
+                    MainView mainView = new MainView();
+                    Hide();
+                    mainView.Show();
+                }
+                //opcja dane uzytkownika
+                if (propertiesComboBox.SelectedIndex == 2)
+                {
+                    UserPanel userPanel = new UserPanel();
+                    userPanel.Show();
+                }
+                //opcja wyloguj
+                if (propertiesComboBox.SelectedIndex == 3)
+                {
+                    MessageBox.Show("wylogowano");
+                    UserModel.Logout();
+
+
+                    Application.Restart();
+                }
+            }
+            else
+            {
+                if (propertiesComboBox.SelectedIndex == 1)
+                {
+                    MainView mainView = new MainView();
+                    Hide();
+                    mainView.Show();
+                }
+                if (propertiesComboBox.SelectedIndex == 2)
+                {
+
+                    Application.Restart();
+                }
+            }
+        }
+
+        private static string ToHexValue(Color color)
+        {
+            return "#" + color.R.ToString("X2") +
+                   color.G.ToString("X2") +
+                   color.B.ToString("X2");
+        }
+
+        private void progressBar_Paint(object sender, PaintEventArgs e)
+        {
+            var width = progressBar.ClientRectangle.Width;
+            var height = progressBar.ClientRectangle.Height;
+            Graphics g = e.Graphics;
+            ToolTip tooltip = new ToolTip
+            {
+                InitialDelay = 500,
+                ShowAlways = true
+            };
+            tooltip.SetToolTip(this.progressBar, "kolor czerwony - zadania nierozpoczęte" + Environment.NewLine
+                                                + "kolor żółty - zadania w trakcie realizacji" + Environment.NewLine
+                                                + "kolor zielony - zadania ukończone");
+            try
+            {
+                var sprintData = SprintModel.GetSprintCompletionData(_sprintId);
+                int sum, done, todo, doing;
+                if (!sprintData.TryGetValue("total", out sum) || !sprintData.TryGetValue("inprogress", out doing)
+                                                              || !sprintData.TryGetValue("todo", out todo) ||
+                                                              !sprintData.TryGetValue("done", out done))
+                    throw new Exception();
+
+
+                SolidBrush greenBrush = new SolidBrush(Color.GreenYellow);
+                SolidBrush yellowBrush = new SolidBrush(Color.Yellow);
+                SolidBrush redBrush = new SolidBrush(Color.Red);
+                g.FillRectangle(redBrush, new Rectangle(0, 0, width * todo / sum, height));
+                g.FillRectangle(yellowBrush,
+                    new Rectangle(width * todo / sum, 0, width * doing / sum + width * todo / sum, height));
+                g.FillRectangle(greenBrush, new Rectangle(width * doing / sum + width * todo / sum, 0, width, height));
+                greenBrush.Dispose();
+                yellowBrush.Dispose();
+                redBrush.Dispose();
+                g.Dispose();
+                toDoTextBox.Text = todo.ToString();
+                doingTextBox.Text = doing.ToString();
+                doneTextBox.Text = done.ToString();
+                maxTextBox.Text = sum.ToString();
+            }
+            catch (Exception)
+            {
+                // MessageBox.Show(err.Message)
+                SolidBrush brush = new SolidBrush(Color.Gray);
+                g.FillRectangle(brush, new Rectangle(0, 0, width, height));
+                brush.Dispose();
+                g.Dispose();
+
+                toDoTextBox.Text = "0";
+                doingTextBox.Text = "0";
+                doneTextBox.Text = "0";
+                maxTextBox.Text = "0";
+            }
+        }
+
+        private void toDoTextBox_MouseEnter(object sender, EventArgs e)
+        {
+            ToolTip tooltip = new ToolTip
+            {
+                InitialDelay = 500,
+                ShowAlways = true
+            };
+            tooltip.SetToolTip(toDoTextBox, "To do - suma punktów zadań do zrobienia");
+        }
+
+        private void doingTextBox_MouseEnter(object sender, EventArgs e)
+        {
+            ToolTip tooltip = new ToolTip
+            {
+                InitialDelay = 500,
+                ShowAlways = true
+            };
+            tooltip.SetToolTip(doingTextBox, "In progress - suma punktów zadań rozpoczętych");
+        }
+
+        private void doneTextBox_MouseEnter(object sender, EventArgs e)
+        {
+            ToolTip tooltip = new ToolTip
+            {
+                InitialDelay = 500,
+                ShowAlways = true
+            };
+            tooltip.SetToolTip(doneTextBox, "Done - suma punktów zadań zakończonych");
+        }
+
+        private void maxTextBox_MouseEnter(object sender, EventArgs e)
+        {
+            ToolTip tooltip = new ToolTip
+            {
+                InitialDelay = 500,
+                ShowAlways = true
+            };
+            tooltip.SetToolTip(maxTextBox, "Suma punktów wszystkich zadań w tym sprincie");
         }
     }
 }

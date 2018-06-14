@@ -19,24 +19,66 @@ namespace ScrumIt.Forms
             InitializeComponent();
         }
 
+        private readonly Color _panelColor = ColorTranslator.FromHtml("#4AC1C1");
 
-        private void newProjectMetroButton_Click(object sender, EventArgs e)
+        private void addProjectButton_Click(object sender, EventArgs e)
         {
-            var name = newProjectNameMetroTextBox.Text;
-            var color = SelectProjectColorButton.BackColor;
-            
+            var name = projectNameTextBox.Text;
+            var color = changeColorButton.BackColor;
+            var endSprintDate = endSprintDatePicker.Value;
+            DateTime startDateFormat = DateTime.Now;
+            var validationFlag = false;
             if (name != "")
             {
-                ProjectModel.CreateNewProject(name, ToHexValue(color));
-                MessageBox.Show("Pomyślnie dodano nowy projekt");
-                this.Close();
+
+                if (endSprintDate <= startDateFormat)
+                {
+                    MessageBox.Show(@"Data rozpoczęcia powinna być wcześniejszą datą niż data zakończenia");
+                    validationFlag = true;
+                }
+                else
+                if (endSprintDate.Month * 31 + endSprintDate.Day - startDateFormat.Month * 31 - startDateFormat.Day < 3)
+                {
+                    MessageBox.Show(@"Sprint musi być dłuższy niż 3 dni");
+                    validationFlag = true;
+                }
+                else
+                if (endSprintDate.Month * 31 + endSprintDate.Day - startDateFormat.Month * 31 - startDateFormat.Day >= 31)
+                {
+                    MessageBox.Show(@"Sprint musi być krótszy niż 31 dni");
+                    validationFlag = true;
+                }
+
+
+                if (!validationFlag)
+                {
+                    try
+                    {
+                        ProjectModel.CreateNewProject(new ProjectModel
+                        {
+                            ProjectName = name,
+                            ProjectColor = ToHexValue(color)
+                        });
+                        var projectId = ProjectModel.GetProjectByName(name).ProjectId;
+                        var sprint = new SprintModel(0, projectId, DateTime.Now.ToString(), endSprintDate.ToString());
+                        SprintModel.CreateNewSprint(sprint);
+
+                        MessageBox.Show("Pomyślnie dodano nowy projekt");
+                        this.Close();
+                    }
+                    catch (ArgumentException err)
+                    {
+                        MessageBox.Show(err.Message);
+                    }
+                }
+
             }
             else
             {
                 MessageBox.Show("Podaj nazwe projektu");
             }
         }
-        
+
         private void SelectProjectColorButton_Click(object sender, EventArgs e)
         {
             var c = new Color();
@@ -44,7 +86,7 @@ namespace ScrumIt.Forms
             {
                 c = newProjectColorDialog.Color;
             }
-            SelectProjectColorButton.BackColor = c;
+            changeColorButton.BackColor = c;
         }
 
         private static string ToHexValue(Color color)
@@ -52,6 +94,11 @@ namespace ScrumIt.Forms
             return "#" + color.R.ToString("X2") +
                    color.G.ToString("X2") +
                    color.B.ToString("X2");
+        }
+
+        private void AddProject_Load(object sender, EventArgs e)
+        {
+            addProjectButton.BackColor = _panelColor;
         }
     }
 }

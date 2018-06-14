@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 using MetroFramework.Forms;
+using ScrumIt.DataAccess;
 using ScrumIt.Models;
 
 namespace ScrumIt.Forms
@@ -11,9 +13,11 @@ namespace ScrumIt.Forms
     {
         private int _taskId;
         private int _projectId;
+        private string _userRole;
 
         public EditTask(int taskId, int projectId)
         {
+            _userRole = AppStateProvider.Instance.CurrentUser.Role.ToString();
             _taskId = taskId;
             _projectId = projectId;
             InitializeComponent();
@@ -24,73 +28,66 @@ namespace ScrumIt.Forms
         private void EditTask_Load(object sender, System.EventArgs e)
         {
             editTaskButton.BackColor = _panelColor;
-
-            //pobierz dany task z bazki
-            var task = new
+            try
             {
-                taskName = "Nowy Task",
-                taskType = "High",
-                taskDescription = "Task Description",
-                taskPriority = 5,
-                estimatedTime = 10,
-                users = new[]
-                {
-                    new
-                    {
-                        UserName ="BM1",
-                        FirstName = "Bartosz",
-                        LastName = "Nowak"
-                    },
-                    new
-                    {
-                        UserName ="BM2",
-                        FirstName = "Bartosz",
-                        LastName = "Nowak"
-                    }
-                }
-            };
+                var task = TaskModel.GetTaskById(_taskId);
 
-            taskNameTextBox.Text = task.taskName;
-            taskDescriptionTextBox.Text = task.taskDescription;
-            priorityTextBox.Text = task.taskPriority.ToString();
-            estimatedTimeTextBox.Text = task.estimatedTime.ToString();
+                taskNameTextBox.Text = task.TaskName;
+                taskDescriptionTextBox.Text = task.TaskDesc;
+                priorityTextBox.Text = task.TaskPriority.ToString();
+                estimatedTimeTextBox.Text = task.TaskEstimatedTime.ToString();
 
-            taskNameTextBox.BackColor = Color.White;
-            taskDescriptionTextBox.BackColor = Color.White;
-            priorityTextBox.BackColor = Color.White;
-            estimatedTimeTextBox.BackColor = Color.White;
+                taskNameTextBox.BackColor = Color.White;
+                taskDescriptionTextBox.BackColor = Color.White;
+                priorityTextBox.BackColor = Color.White;
+                estimatedTimeTextBox.BackColor = Color.White;
 
-            userListMenuStrip.Items.AddRange(createUsersListMenu(task.users));
+                var users = UserModel.GetUsersByTaskId(_taskId);
+                userListMenuStrip.Items.AddRange(createUsersListMenu(users));
+            }
+            catch (Exception err)
+            {
+                MessageBox.Show(err.Message);
+            }
         }
 
-        private ToolStripItem[] createUsersListMenu(dynamic userList)
+        private ToolStripItem[] createUsersListMenu(List<UserModel> userList)
         {
-            //pobierz wszystkich uzytkownikow z bazki
-            var allUsers = UserModel.GetUsersByProjectId(_projectId);
-            
-            var toolStripItems = new ToolStripItem[allUsers.Count];
-            for (var i = 0; i < allUsers.Count; i++)
+            try
             {
-                var toolStripMenuItemName = allUsers[i].Username;
-                var toolStripMenuItemText = allUsers[i].Firstname + " " + allUsers[i].Lastname + " ";
-                var toolStripMenuItem = new ToolStripMenuItem
+                var allUsers = UserModel.GetUsersByProjectId(_projectId);
+
+                var toolStripItems = new ToolStripItem[allUsers.Count];
+                for (var i = 0; i < allUsers.Count; i++)
                 {
-                    Name = toolStripMenuItemName,
-                    Text = toolStripMenuItemText,
-                    Image = Properties.Resources.cat2,
-                    CheckOnClick = true
-                };
-                foreach (var user in userList)
-                {
-                    if (user.UserName == allUsers[i].Username)
+                    var toolStripMenuItemName = allUsers[i].UserId;
+                    var toolStripMenuItemText = allUsers[i].Firstname + " " + allUsers[i].Lastname + " ";
+                    var toolStripMenuItem = new ToolStripMenuItem
                     {
-                        toolStripMenuItem.Checked = true;
+                        Name = toolStripMenuItemName.ToString(),
+                        Text = toolStripMenuItemText,
+                        Image = allUsers[i].Avatar,
+                        CheckOnClick = true
+                    };
+                    foreach (var user in userList)
+                    {
+                        if (user.Username == allUsers[i].Username)
+                        {
+                            toolStripMenuItem.Checked = true;
+                        }
                     }
+
+                    toolStripItems[i] = toolStripMenuItem;
                 }
-                toolStripItems[i] = toolStripMenuItem;
+
+                return toolStripItems;
+            }
+            catch (Exception err)
+            {
+                MessageBox.Show(err.Message);
+                return null;
             }
 
-            return toolStripItems;
         }
 
         private void editTaskButton_Click(object sender, System.EventArgs e)
@@ -111,9 +108,9 @@ namespace ScrumIt.Forms
                 validationFlag = false;
             }
             else
-            if (Int16.Parse(taskPriority) > 11 || Int16.Parse(taskPriority) < 0)
+            if (Int16.Parse(taskPriority) > 101 || Int16.Parse(taskPriority) < 0)
             {
-                MessageBox.Show(@"Możliwa wartość stopnia skomplikowania to liczba całkownita między 0 a 10");
+                MessageBox.Show(@"Możliwa wartość stopnia skomplikowania to liczba całkownita między 0 a 100");
                 validationFlag = false;
             }
 
@@ -124,27 +121,46 @@ namespace ScrumIt.Forms
                 validationFlag = false;
             }
             else
-            if (Int16.Parse(taskEstimatedTime) > 11 || Int16.Parse(taskEstimatedTime) < 0)
+            if (Int16.Parse(taskEstimatedTime) > 101 || Int16.Parse(taskEstimatedTime) < 0)
             {
                 MessageBox.Show(@"Możliwa wartość przewidywanego czasu zadania to liczba całkownita między 0 a 100");
                 validationFlag = false;
             }
 
             var usersList = userListMenuStrip.Items;
-            var userNames = new List<string>();
+            var usersIds = new List<string>();
             foreach (ToolStripMenuItem user in usersList)
             {
                 if (user.Checked)
                 {
-                    var userName = user.Name;
-                    userNames.Add(userName);
-                    //przypisz uzytkownika do zadania do bazki
+                    var userId = user.Name;
+                    usersIds.Add(userId);
                 }
             }
+
+            var usersIdsParsed = usersIds.Select(int.Parse).ToList();
+
             if (validationFlag)
             {
-                //add task to db
-                
+                try
+                {
+                    var task = TaskModel.GetTaskById(_taskId);
+                    TaskModel.AssignUsersToTask(task, usersIdsParsed);
+                    task.TaskName = taskName;
+                    task.TaskDesc = taskDescription;
+                    task.TaskPriority = Int32.Parse(taskPriority);
+                    task.TaskEstimatedTime = Int32.Parse(taskEstimatedTime);
+                    if (TaskModel.UpdateTask(task))
+                    {
+                        MessageBox.Show(@"Zaktualizowano zmiany zadania");
+                        CurrentSprint.refresh = true;
+                    }
+                }
+                catch (Exception err)
+                {
+                    MessageBox.Show(err.Message);
+                }
+
                 this.Close();
             }
         }
@@ -156,8 +172,7 @@ namespace ScrumIt.Forms
 
         private void priorityTextBox_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) &&
-                (e.KeyChar != '.'))
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
             {
                 e.Handled = true;
             }
@@ -177,6 +192,33 @@ namespace ScrumIt.Forms
             if (e.CloseReason == ToolStripDropDownCloseReason.ItemClicked)
             {
                 e.Cancel = true;
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (_userRole == "ScrumMaster")
+            {
+                try
+                {
+                    DialogResult dialogResult = MessageBox.Show("Jesteś pewny, że chcesz usunąć to zadanie? ",
+                        "Usuń zadanie", MessageBoxButtons.YesNo);
+                    if (dialogResult == DialogResult.Yes)
+                    {
+                        TaskModel.RemoveTask(_taskId);
+                        CurrentSprint.refresh = true;
+                        Close();
+                    }
+                }
+                catch (Exception err)
+                {
+                    MessageBox.Show(err.Message);
+                }
+            }
+            else
+            {
+                var tooltip = new ToolTip();
+                tooltip.SetToolTip(button1, "Tylko Scrum Master może usuwać zadania");
             }
         }
     }

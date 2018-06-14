@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
 using ScrumIt.DataAccess;
 
 namespace ScrumIt.Models
@@ -12,6 +14,16 @@ namespace ScrumIt.Models
         public UserRoles Role { get; set; } = UserRoles.Guest;
         public string Email { get; set; }
         
+        public Image Avatar
+        {
+            get { return AppStateProvider.Instance.GetUserPicture(UserId); }
+            set
+            {
+                if (value == null) throw new ArgumentNullException(nameof(value));
+                AppStateProvider.Instance.SetUserPicture(UserId, value, false);
+            }
+        }
+
 
         public static bool LoginAs(string username, string password)
         {
@@ -37,9 +49,9 @@ namespace ScrumIt.Models
         {
             return UserAccess.GetUsersByLastName(lastname);
         }
-        public static UserModel GetUserByLogin(string login)
+        public static UserModel GetUserByUsername(string username)
         {
-            return UserAccess.GetUserByLogin(login);
+            return UserAccess.GetUserByUsername(username);
         }
 
         public static List<UserModel> GetUsersByProjectId(int projectid)
@@ -47,19 +59,45 @@ namespace ScrumIt.Models
             return UserAccess.GetUsersByProjectId(projectid);
         }
 
-        public static bool Add(ref UserModel addedUser, string password)
+        public static List<UserModel> GetUserByTaskId(int taskId)
         {
-            return UserAccess.Add(ref addedUser, password);
+            return UserAccess.GetUsersByTaskId(taskId);
         }
 
-        //pobierz userow przypisanych do tasku
+        public static bool Add(UserModel addedUser, string password)
+        {
+            return UserAccess.Add(addedUser, password);
+        }
+
+        public static bool Delete(UserModel deletedUser)
+        {
+            return UserAccess.Delete(deletedUser);
+        }
+        public static List<UserModel> GetUsersByTaskId(int projectid)
+        {
+            return UserAccess.GetUsersByTaskId(projectid);
+        }
+
+        public static void UpdateUserPassword(string password)
+        {
+            UserAccess.UpdateUserPassword(password);
+        }
+
+        public static void UpdateUserData(UserModel user)
+        {
+            UserAccess.UpdateUserData(user);
+        }
+
+        public static List<UserModel> GetAllUser()
+        {
+            return UserAccess.GetAllUsers();
+        }
     }
 
     public enum UserRoles
     {
         Guest,
         Developer,
-        ScrumMaster,
-        Admin
+        ScrumMaster
     }
 }

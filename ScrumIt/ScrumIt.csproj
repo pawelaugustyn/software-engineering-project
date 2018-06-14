@@ -33,6 +33,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DeepEqual, Version=1.6.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\DeepEqual.1.6.0.0\lib\net40\DeepEqual.dll</HintPath>
+    </Reference>
     <Reference Include="MetroFramework, Version=1.2.0.3, Culture=neutral, PublicKeyToken=5f91a84759bf584a, processorArchitecture=MSIL">
       <HintPath>packages\MetroFramework.RunTime.1.2.0.3\lib\net40-Client\MetroFramework.dll</HintPath>
     </Reference>
@@ -76,6 +79,18 @@
     <Compile Include="Forms\AddProject.Designer.cs">
       <DependentUpon>AddProject.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\AddSprint.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\AddSprint.Designer.cs">
+      <DependentUpon>AddSprint.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\DeleteUser.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\DeleteUser.Designer.cs">
+      <DependentUpon>DeleteUser.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Login.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -112,6 +127,24 @@
     <Compile Include="Forms\AddTask.Designer.cs">
       <DependentUpon>AddTask.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\ManageProject.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ManageProject.Designer.cs">
+      <DependentUpon>ManageProject.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Register.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Register.Designer.cs">
+      <DependentUpon>Register.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\UserInfo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\UserInfo.Designer.cs">
+      <DependentUpon>UserInfo.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\UserPanel.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -126,6 +159,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Forms\AddProject.resx">
       <DependentUpon>AddProject.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\AddSprint.resx">
+      <DependentUpon>AddSprint.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\DeleteUser.resx">
+      <DependentUpon>DeleteUser.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Login.resx">
       <DependentUpon>Login.cs</DependentUpon>
@@ -144,6 +183,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\AddTask.resx">
       <DependentUpon>AddTask.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\manageProject.resx">
+      <DependentUpon>ManageProject.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Register.resx">
+      <DependentUpon>Register.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\UserInfo.resx">
+      <DependentUpon>UserInfo.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\UserPanel.resx">
       <DependentUpon>UserPanel.cs</DependentUpon>
@@ -174,12 +222,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="MetroFramework.txt" />
+    <None Include="Resources\sample.png" />
     <None Include="Resources\cat2.png" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="MetroFramework.txt" />
   </ItemGroup>
-
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
