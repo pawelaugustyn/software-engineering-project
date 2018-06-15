@@ -63,6 +63,7 @@ namespace ScrumIt.Forms
 
         private void deleteUserButton_Click(object sender, EventArgs e)
         {
+            CurrentSprint.refresh = true;
             DialogResult dialogResult = MessageBox.Show(@"Jesteś pewny, że chcesz usunąć tych użytkowników? ", @"Usuń użytkowników", MessageBoxButtons.YesNo);
             if (dialogResult == DialogResult.Yes)
             {

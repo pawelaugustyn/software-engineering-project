@@ -283,6 +283,22 @@ namespace ScrumIt.Forms
             editTask.Show();
         }
 
+        private void deleteUser_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (refresh)
+            {
+                scrumBoardPanel.Controls.Clear();
+                createMenuflag = true;
+                CurrentSprint_Load(null, EventArgs.Empty);
+                progressBar.Refresh();
+                refresh = false;
+            }
+            else
+            {
+                this.Activate();
+            }
+        }
+
         private void editTask_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (refresh)
@@ -1026,6 +1042,7 @@ namespace ScrumIt.Forms
                 if (propertiesComboBox.SelectedIndex == 4)
                 {
                     var del = new DeleteUser();
+                    del.FormClosing += new FormClosingEventHandler(deleteUser_FormClosing);
                     del.Show();
                 }
                 if (propertiesComboBox.SelectedIndex == 5)
