@@ -35,13 +35,13 @@ namespace ScrumIt.Forms
                 validationFlag = true;
             }
             else
-            if (endDate.Month * 31 + endDate.Day - startDate.Month * 31 - startDate.Day < 3)
+            if (endDate.Year * 365 + endDate.Month * 31 + endDate.Day - startDate.Year * 365 - startDate.Month * 31 - startDate.Day < 3)
             {
                 MessageBox.Show(@"Sprint musi być dłuższy niż 3 dni");
                 validationFlag = true;
             }
             else
-            if (endDate.Month * 31 + endDate.Day - startDate.Month * 31 - startDate.Day >= 31)
+            if (endDate.Year * 365 + endDate.Month * 31 + endDate.Day - startDate.Year * 365 - startDate.Month * 31 - startDate.Day >= 31)
             {
                 MessageBox.Show(@"Sprint nie może być dłuższy niż 31 dni");
                 validationFlag = true;
