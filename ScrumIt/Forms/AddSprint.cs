@@ -55,8 +55,8 @@ namespace ScrumIt.Forms
                     SprintModel.CreateNewSprint(sprint);
                     MessageBox.Show("Pomyślnie dodano sprint");
                     Close();
-                    var manageProj = new ManageProject(_projectId);
-                    manageProj.Show();
+                    //var manageProj = new ManageProject(_projectId);
+                    //manageProj.Show();
                 }
                 catch (Exception err)
                 {
