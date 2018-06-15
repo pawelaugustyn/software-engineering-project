@@ -149,8 +149,6 @@ namespace ScrumIt.Forms
                     var project = ProjectModel.GetProjectById(_projectId);
                     ProjectModel.DeleteProject(project);
                     Close();
-                    var mainView = new MainView();
-                    mainView.Show();
                 }
                 catch (Exception err)
                 {
@@ -162,7 +160,13 @@ namespace ScrumIt.Forms
         private void addSprintButton_Click(object sender, System.EventArgs e)
         {
             var addSprint = new AddSprint(_projectId);
+            addSprint.FormClosing += new FormClosingEventHandler(addSprint_FormClosing);
             addSprint.Show();
+        }
+
+        private void addSprint_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            this.Activate();
         }
 
         private static string ToHexValue(Color color)
