@@ -149,8 +149,6 @@ namespace ScrumIt.Forms
                     var project = ProjectModel.GetProjectById(_projectId);
                     ProjectModel.DeleteProject(project);
                     Close();
-                    //var mainView = new MainView();
-                    //mainView.Show();
                 }
                 catch (Exception err)
                 {
