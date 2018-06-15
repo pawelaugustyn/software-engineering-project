@@ -108,7 +108,7 @@ namespace ScrumIt.Forms
                 validationFlag = false;
             }
             else
-            if (Int16.Parse(taskPriority) > 101 || Int16.Parse(taskPriority) < 0)
+            if (Int16.Parse(taskPriority) > 100 || Int16.Parse(taskPriority) < 0)
             {
                 MessageBox.Show(@"Możliwa wartość stopnia skomplikowania to liczba całkownita między 0 a 100");
                 validationFlag = false;
@@ -121,7 +121,7 @@ namespace ScrumIt.Forms
                 validationFlag = false;
             }
             else
-            if (Int16.Parse(taskEstimatedTime) > 101 || Int16.Parse(taskEstimatedTime) < 0)
+            if (Int16.Parse(taskEstimatedTime) > 100 || Int16.Parse(taskEstimatedTime) < 0)
             {
                 MessageBox.Show(@"Możliwa wartość przewidywanego czasu zadania to liczba całkownita między 0 a 100");
                 validationFlag = false;

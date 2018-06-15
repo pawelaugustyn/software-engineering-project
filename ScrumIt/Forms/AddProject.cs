@@ -37,13 +37,13 @@ namespace ScrumIt.Forms
                     validationFlag = true;
                 }
                 else
-                if (endSprintDate.Month * 31 + endSprintDate.Day - startDateFormat.Month * 31 - startDateFormat.Day < 3)
+                if (endSprintDate.Year * 365 + endSprintDate.Month * 31 + endSprintDate.Day - startDateFormat.Year * 365 - startDateFormat.Month * 31 - startDateFormat.Day < 3)
                 {
                     MessageBox.Show(@"Sprint musi być dłuższy niż 3 dni");
                     validationFlag = true;
                 }
                 else
-                if (endSprintDate.Month * 31 + endSprintDate.Day - startDateFormat.Month * 31 - startDateFormat.Day >= 31)
+                if (endSprintDate.Year * 365 + endSprintDate.Month * 31 + endSprintDate.Day - startDateFormat.Year * 365 - startDateFormat.Month * 31 - startDateFormat.Day >= 31)
                 {
                     MessageBox.Show(@"Sprint musi być krótszy niż 31 dni");
                     validationFlag = true;
